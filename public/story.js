@@ -6,6 +6,7 @@ import {extendCast,dayFor} from './days.js?v=0.15.0';
 import {extendFirstHalf} from './day-scenes.js?v=0.15.0';
 import {extendSecondHalf} from './day-scenes-late.js?v=0.15.0';
 import {extendOfficeRomance} from './day-office.js?v=0.15.0';
+import {extendMaskedPatrol} from './day-mask.js?v=0.15.0';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
@@ -668,6 +669,7 @@ extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
 extendFirstHalf({NODES,JOURNAL,n,scene});
 extendSecondHalf({NODES,JOURNAL,n,scene});
 extendOfficeRomance({NODES,JOURNAL,n,scene});
+extendMaskedPatrol({NODES,JOURNAL,n,scene});
 extendCast({NODES});
 // Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
 {
