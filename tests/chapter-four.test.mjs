@@ -8,15 +8,15 @@ assert.equal(chapter.start,'third_morning');
 assert.equal(NODES.chapter_three_close.pages.length,4,'Existing saved page indices remain valid');
 assert.equal(NODES.chapter_three_close.next,chapter.start);
 assert.equal(NODES[chapter.start].chapterId,'work');
-assert.equal(NODES.chapter_three_close.chapterId,'bank','Chapter boundary must not absorb the previous evening');
+assert.equal(NODES.chapter_three_close.chapterId,'districts','Chapter boundary must not absorb the previous evening');
 assert.equal(NODES.chapter_four_close.chapterId,'work');
-assert.equal(NODES.chapter_four_close.next,'fourth_morning');
+assert.equal(NODES.chapter_four_close.next,'d3_start');
 assert.equal(NODES.chapter_four_close.effectOnEnter.chapterFourComplete,true);
 
 for(const [gender,nameId]of [['male','dmitry'],['female','anna']])for(const companion of ['milica','nikola'])for(const workRoute of ['business','employment','explore']){
  const old=normalizeProgress({formatVersion:1,storyVersion:1,profile:{gender,nameId},node:'end',index:0,flags:{chapterThreeComplete:true,chapterOneComplete:true,companion,workRoute,host:'jelena',district:'vracar',districtOwner:'dragan',eveningIntent:'friendship'},journal:['bank_appointment'],log:[{speaker:'Ася',text:'По работе договоримся завтра.'}],rewind:[],updatedAt:1});
  assert.equal(old.completed,true);
- assert.equal(chapterFor(old,NODES).id,'bank','An old ending still belongs to its completed chapter');
+ assert.equal(chapterFor(old,NODES).id,'districts','An old ending still belongs to its completed chapter');
  assert.equal(restartChapter(old,'work',NODES),false,'A new chapter must not appear as already visited');
  const next=continuationFor(old);
  assert.equal(next,chapter.start,'Old completed demos can continue without restarting');
@@ -32,7 +32,7 @@ for(const [gender,nameId]of [['male','dmitry'],['female','anna']])for(const comp
  saved.node='end';saved.completed=true;
  saved.log.push({speaker:'Лука',text:'Позже в главе'});
  saved.rewind=[{node:'chapter_four_close'}];
- assert.equal(continuationFor(saved),'fourth_morning','A completed fourth chapter continues into the new fifth chapter');
+ assert.equal(continuationFor(saved),'d3_start','A completed work day continues into day 3');
  assert.equal(restartChapter(saved,'work',NODES),true);
  assert.equal(saved.node,next);
  assert.equal(saved.flags.workRoute,workRoute,'Replaying work restores the route selected before the chapter');

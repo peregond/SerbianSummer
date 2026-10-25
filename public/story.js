@@ -1,19 +1,20 @@
-import {registerLukaSport} from './luka-redesign.js?v=0.14.0';
-import {extendFifthChapter} from './chapter-five.js?v=0.14.0';
-import {extendSixthChapter} from './chapter-six.js?v=0.14.0';
-import {extendSeventhChapter} from './chapter-seven.js?v=0.14.0';
-import {registerNikolaRedesign} from './nikola-redesign.js?v=0.14.0';
-import {extendFourthChapter} from './chapter-four.js?v=0.14.0';
-import {extendHostCoffee} from './host-coffee.js?v=0.14.0';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.14.0';
-import {assignChapters} from './chapters.js?v=0.14.0';
-import {extendNextChapter} from './chapter-three.js?v=0.14.0';
-import {extendFastPrologue} from './prologue-fast.js?v=0.14.0';
-import {editPrologue} from './prologue-edit.js?v=0.14.0';
-import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.14.0';
-import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.14.0';
+import {registerLukaSport} from './luka-redesign.js?v=0.15.0';
+import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
+import {extendSixthChapter} from './chapter-six.js?v=0.15.0';
+import {extendSeventhChapter} from './chapter-seven.js?v=0.15.0';
+import {extendDays,dayFor} from './days.js?v=0.15.0';
+import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
+import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
+import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.15.0';
+import {assignChapters} from './chapters.js?v=0.15.0';
+import {extendNextChapter} from './chapter-three.js?v=0.15.0';
+import {extendFastPrologue} from './prologue-fast.js?v=0.15.0';
+import {editPrologue} from './prologue-edit.js?v=0.15.0';
+import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.15.0';
+import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.15.0';
 export {beatActionAt};
-import {extendChapter} from './chapter-one.js?v=0.14.0';
+import {extendChapter} from './chapter-one.js?v=0.15.0';
 // Original story for the playable prototype. Text is kept separate from the player.
 const n = text => ({ speaker: 'narrator', text });
 const m = text => ({ speaker: 'milica', text });
@@ -661,6 +662,14 @@ extendFourthChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,msg,scene})
 extendFifthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSixthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
+extendDays({NODES,JOURNAL,n,msg,scene});
+// Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
+{
+  const link=(from,day,relabel=true)=>{NODES[from].next=dayFor(day).start;if(relabel)NODES[from].exitAction={kind:'tap',label:'Продолжить · День '+day,object:'Продолжить · День '+day};};
+  link('chapter_four_close',3);link('bank_send',13,false);link('chapter_five_close',17);link('chapter_six_close',22);
+  for(const [id,done]of Object.entries({third_morning:1,fourth_morning:11,bank_approved:14,document_evening:15,courtyard_invite:20,decision_morning:28,decision_plan:29}))NODES[id].effectOnEnter={...NODES[id].effectOnEnter,dayDone:done};
+  for(const id of ['epilogue_stay','epilogue_leave','epilogue_return'])NODES[id].effectOnEnter={...NODES[id].effectOnEnter,dayDone:30};
+}
 applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES});
 registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);

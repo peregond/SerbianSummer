@@ -1,18 +1,18 @@
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.14.0';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.14.0';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.14.0';
-import {drawBeatAction} from './beat-action.js?v=0.14.0';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.14.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.14.0';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
+import {drawBeatAction} from './beat-action.js?v=0.15.0';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.14.0';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.0';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.14.0';
-import {appendChoiceContents} from './choice-ui.js?v=0.14.0';
-import {mountBaggageInteraction} from './interaction.js?v=0.14.0';
-import {APP_VERSION} from './release.js?v=0.14.0';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.0';
+import {appendChoiceContents} from './choice-ui.js?v=0.15.0';
+import {mountBaggageInteraction} from './interaction.js?v=0.15.0';
+import {APP_VERSION} from './release.js?v=0.15.0';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -59,7 +59,7 @@ function validateSave(input) {
   if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл сохранения не подходит к версии пролога.');
   if (input.node!=='end' && !Object.hasOwn(NODES,input.node)) throw new Error('Неизвестная сцена в сохранении.');
   if (!Number.isInteger(input.index) || input.index<0 || (input.node!=='end' && input.index>=NODES[input.node].pages.length)) throw new Error('Не удалось восстановить реплику.');
-  if (!Array.isArray(input.log) || input.log.length>800 || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
+  if (!Array.isArray(input.log) || input.log.length>1500 || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
   if (!Array.isArray(input.journal) || input.journal.some(id=>!Object.hasOwn(JOURNAL,id))) throw new Error('Повреждён дневник.');
   if(!input.flags || typeof input.flags!=='object' || Array.isArray(input.flags)) throw new Error('Повреждены данные выборов.');
   return { formatVersion:1, storyVersion:STORY_VERSION, profile:{gender:input.profile.gender,nameId:input.profile.nameId,namesCatalogVersion:catalog.version}, node:input.node,index:input.node==='end'?0:input.index, flags:{...input.flags},journal:[...new Set(input.journal)],log:input.log.map(e=>({speaker:e.speaker,text:e.text,choice:!!e.choice,...logVoice(e)})),updatedAt:Number(input.updatedAt)||Date.now(),completed:input.node==='end',chapterMarks:readChapterMarks(input.chapterMarks,NODES,JOURNAL,input.log.length),rewind:readRewind(input.rewind,NODES,JOURNAL,input.log.length) };
@@ -328,7 +328,7 @@ function renderEnding() {
   $('ending-rewind').disabled=!state.rewind?.length;
   const continuation=continuationFor(state);
   $('continue-story').hidden=!continuation;
-  $('continue-story').textContent=t(continuation==='fourth_morning'?'Продолжить · Право на завтра':continuation==='decision_morning'?'Продолжить · Ответ на лето':continuation==='courtyard_invite'?'Продолжить · Свет во дворе':continuation==='third_morning'?'Продолжить · Своё дело':continuation==='next_steps'?'Продолжить · Счёт на себя':'Продолжить · Своя дверь');
+  $('continue-story').textContent=(()=>{const day=CHAPTERS.find(c=>c.start===continuation);return day?.day?t('Продолжить · День '+day.day):t(continuation==='next_steps'?'Продолжить · Счёт на себя':'Продолжить · Своя дверь');})();
   $('ending-title').innerHTML=html(state.flags.chapterOneComplete?'Уже не только<br><em>адрес</em>':'Пока только<br><em>адрес</em>');
   const finalBackground={dorcol:'dorcol-apartment',vracar:'vracar-apartment',newbelgrade:'new-belgrade-apartment'}[state.flags.district]??'first-room';
   $('ending').style.backgroundImage=state.flags.chapterOneComplete?`linear-gradient(#164d5d55,#123d49ed),url('./assets/${finalBackground}.webp')`:'';
