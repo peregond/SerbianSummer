@@ -1,0 +1,34 @@
+export const PEOPLE = {
+  milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена',
+  asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
+  ivana: 'Ивана', strahinja: 'Страхиня', milos: 'Милош'
+};
+export const EMOTIONS = { friendly: 'Приветливость', thoughtful: 'Задумчивость', laughing: 'Смех', flirty: 'Флирт', shy: 'Смущение', surprised: 'Удивление', confident: 'Уверенность' };
+export const CORE_EMOTIONS = ['friendly', 'thoughtful', 'laughing', 'flirty'];
+export function acceptsWorkshopCode(value) {
+  return typeof value === 'string' && value.normalize('NFKC').trim().toLocaleLowerCase('ru') === 'грызуны';
+}
+export function buildArtCatalog(files, sprites, backgrounds) {
+  const active = new Set(Object.values(sprites).flatMap(moods => Object.values(moods).map(v => v.file + '.webp')));
+  for (const name of Object.keys(backgrounds)) active.add(name + '.webp');
+  const entries = files.map(file => {
+    const base = file.split('/').at(-1);
+    const person = Object.keys(PEOPLE).find(id => base === id + '.webp' || base.startsWith(id + '-'));
+    const image = /\.(webp|png|svg|jpe?g)$/i.test(file);
+    const icon = /icon|poster|sketch/.test(base);
+    const character = image && !icon ? person : undefined;
+    const draft = file.startsWith('workshop/');
+    const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
+    const look = /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
+    const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
+    return { file, character, category, image, emotion, look, status: draft ? 'draft' : active.has(file) ? 'active' : character ? 'archive' : 'asset' };
+  });
+  const people = Object.entries(PEOPLE).map(([id, name]) => {
+    const art = entries.filter(e => e.character === id);
+    // Archived versions must not hide gaps in the current design. Drafts are visible but not marked as in-game.
+    const current = art.filter(e => ['active', 'draft'].includes(e.status) && ['Основной образ', 'В форме и без формы'].includes(e.look));
+    const missing = CORE_EMOTIONS.filter(mood => !current.some(e => e.emotion === mood));
+    return { id, name, art, missing };
+  });
+  return { entries, people };
+}

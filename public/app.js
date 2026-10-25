@@ -1,3 +1,4 @@
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
@@ -99,7 +100,7 @@ function showInstallGuide() {
 }
 function showScreenInfo(){
   $('panel-title').textContent=t('Экран устройства');
-  const content=$('panel-content');content.replaceChildren();
+  const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const probe=document.createElement('div');probe.style.cssText='position:fixed;visibility:hidden;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)';document.body.append(probe);const safe=getComputedStyle(probe);
   const rows=[['Режим',document.documentElement.dataset.standalone==='true'?'PWA / полный экран':'Вкладка браузера'],['Экран устройства',screen.width+' × '+screen.height],['Окно игры',innerWidth+' × '+innerHeight],['Видимая область',Math.round(visualViewport?.width??innerWidth)+' × '+Math.round(visualViewport?.height??innerHeight)],['Безопасные отступы',safe.paddingTop+' сверху / '+safe.paddingBottom+' снизу']];
   for(const [title,value]of rows){const p=document.createElement('p');p.className='screen-info-row';const label=document.createElement('strong');label.textContent=t(title);const detail=document.createElement('span');detail.textContent=t(value);p.append(label,detail);content.append(p);}probe.remove();
@@ -355,7 +356,7 @@ function openChapters() {
   if(panel.open)panel.close();
   const source=['game','ending'].includes(view)?state:saved;
   $('panel-title').textContent=t('Главы');
-  const content=$('panel-content');content.replaceChildren();
+  const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const intro=document.createElement('p');intro.className='journal-intro';
   intro.textContent=t(source?'Возвращайся к открытым главам. При переигрывании дальнейшие выборы будут сделаны заново.':'Главы открываются по мере прохождения. Сначала выбери своего персонажа.');content.append(intro);
   const current=source?chapterFor(source,NODES):null;
@@ -373,7 +374,7 @@ function openChapters() {
 }
 function confirmChapter(chapter,source){
   $('panel-title').textContent=t('Вернуться к главе?');
-  const content=$('panel-content');content.replaceChildren();
+  const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const p=document.createElement('p');p.className='confirm-copy';p.textContent=t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
   const actions=document.createElement('div');actions.className='confirm-actions';
   const start=document.createElement('button');start.className='primary';start.textContent=t('Перейти к главе');start.addEventListener('click',()=>{
@@ -387,7 +388,7 @@ function confirmChapter(chapter,source){
 function openPanel(kind) {
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
-  const content=$('panel-content');content.replaceChildren();
+  const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   if(kind==='game-menu') {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
@@ -416,6 +417,12 @@ function openPanel(kind) {
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
     $('menu-home').addEventListener('click',()=>{panel.close();home();});
+    mountWorkshopEntry(content,()=>{
+      $('panel-title').textContent=t('Мастерская');
+      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,back:()=>{
+        content.classList.remove('workshop');panel.close();openPanel('settings');
+      }});
+    });
   }
   panel.showModal();
   if(kind==='history')requestAnimationFrame(()=>panel.scrollTop=panel.scrollHeight);
@@ -429,7 +436,7 @@ function saveDescription(progress) {
 function openAccount() {
   if(panel.open)panel.close();
   $('panel-title').textContent=t('Мой прогресс');
-  const content=$('panel-content');content.replaceChildren();
+  const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const description=document.createElement('p');description.className='account-description';description.textContent=t(saveDescription(saved));content.append(description);
   if(saved){
     const milestones=[['Знакомство',saved.log.length>0],['Заселение',saved.journal.includes('chapter_arrived')],['Первый вечер',saved.journal.includes('asya')],['Район',!!saved.flags.district],['Просмотр',saved.journal.includes('viewing_done')]];
