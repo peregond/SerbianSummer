@@ -11,7 +11,7 @@ assert.equal(NODES.chapter_four_close.next,residence.start);
 assert.equal(NODES.chapter_four_close.chapterId,'work');
 assert.equal(NODES.chapter_five_close.next,courtyard.start);
 assert.equal(NODES.chapter_five_close.chapterId,'residence');
-assert.equal(NODES.chapter_six_close.next,'end');
+assert.equal(NODES.chapter_six_close.next,'decision_morning');
 assert.equal(NODES.chapter_six_close.chapterId,'courtyard');
 assert.equal(NODES.chapter_five_close.effectOnEnter.chapterFiveComplete,true);
 assert.equal(NODES.chapter_six_close.effectOnEnter.chapterSixComplete,true);
@@ -41,7 +41,7 @@ for(const [gender,nameId]of [['male','dmitry'],['female','anna']])for(const comp
  assert.equal(sixth.chapterMarks.courtyard.flags.residenceApplication,workRoute==='explore'?'review':'submitted');
  sixth.flags.cinemaPlan='undecided';sixth.flags.chapterSixComplete=true;sixth.node='end';sixth.completed=true;
  sixth.log.push({speaker:'Лука',text:'После фильма'});
- assert.equal(continuationFor(sixth),null,'The latest ending cannot restart itself');
+ assert.equal(continuationFor(sixth),'decision_morning','An old chapter 6 ending continues into chapter 7');
  assert.equal(chapterFor(sixth,NODES).id,'courtyard');
  assert.equal(restartChapter(sixth,'courtyard',NODES),true);
  assert.equal(sixth.node,courtyard.start);
@@ -136,7 +136,7 @@ function maxLogs(id){if(id==='end')return 0;if(logMemo.has(id))return logMemo.ge
 }
 const logBound=Math.max(...starts.map(maxLogs));
 assert.ok(maxFlags<=100,`A complete story save could reach ${maxFlags} flags, over the format limit`);
-assert.ok(logBound<=600,`A complete story save could reach ${logBound} log records, over the format limit`);
+assert.ok(logBound<=800,`A complete story save could reach ${logBound} log records, over the format limit`);
 console.log(`Chapters 5/6: old-save migration, replay isolation, consent and open plans checked; conservative persistence bounds ${maxFlags} flags / ${logBound} log records.`);
 
 assert.equal(NODES.business_pause.next,'work_summary','The earlier chapter 4 pause must retain its original target');

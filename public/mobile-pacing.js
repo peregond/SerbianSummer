@@ -73,7 +73,7 @@ const internal={
   host_evening:{2:tap('Убрать телефон и идти рядом','Телефон в карман')},
   host_evening_close:{3:tap('Обнять на прощание','Обнять',{effect:{hostHug:true}})}
 };
-function semanticMood(page,text,index){
+function semanticMood(page,text){
   if(/сме[ёе]т|сме[ёе]м|шут|смайл|смеш|засме|смеясь/iu.test(text))return 'laughing';
   if(/свидан|поцел|обнять|объят|рука.*мо|нравится.*тоб|посмотреть.*глаз|чуть дольше|флирт|румян|кофе.*без.*квартир/iu.test(text))return 'flirty';
   if(/не отвеч|молчи|дума|задум|план|договор|регистрац|вопрос|срок|плат[её]ж|шум|связь/iu.test(text)||page.speaker==='player')return 'thoughtful';
@@ -96,10 +96,10 @@ export function applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES}){
     for(const [index,action]of Object.entries(node.actions)){node.pages[Number(index)].action=action;}
     const staged=node.hostPortrait?['dragan','jelena']:node.districtPortrait?['dragan','jelena']:node.companionPortrait?['milica','nikola-evening']:node.character?[node.character]:(node.portrait?['milica']:[]);
     const candidates=[...new Set([...staged,...node.pages.map(page=>page.character).filter(Boolean)])];
-    for(const character of candidates){let previousMood=null;node.pages.forEach((page,index)=>{
+    for(const character of candidates){let previousMood=null;node.pages.forEach(page=>{
       if(page.portrait===false)return;
       const text=page.hostText?.[character]??page.districtText?.[character]??page.contactText?.[character==='nikola-evening'?'nikola':character]??page.text;
-      let mood=page.emotion??((page.daydream??node.daydream)?node.emotion:semanticMood(page,text,index));
+      let mood=page.emotion??((page.daydream??node.daydream)?node.emotion:semanticMood(page,text));
       if(!(page.daydream??node.daydream)&&mood===previousMood)mood=mood==='friendly'?'thoughtful':mood==='flirty'&&CHARACTER_SPRITES[character].shy?'shy':'friendly';
       if(!CHARACTER_SPRITES[character][mood])mood='friendly';
       page.reactions??={};page.reactions[character]=mood;previousMood=mood;

@@ -1,4 +1,4 @@
-import {t,html} from './i18n.js?v=0.13.1';
+import {t} from './i18n.js?v=0.14.0';
 const PEOPLE = {
   luka: { id:'luka', name:'Лука', gender:'male' },
   milica: { id:'milica', name:'Милица', gender:'female' },

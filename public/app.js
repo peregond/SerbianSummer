@@ -1,18 +1,18 @@
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.13.1';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.13.1';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.13.1';
-import {drawBeatAction} from './beat-action.js?v=0.13.1';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.13.1';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.13.1';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.14.0';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.14.0';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.14.0';
+import {drawBeatAction} from './beat-action.js?v=0.14.0';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.14.0';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.14.0';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.13.1';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.14.0';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.13.1';
-import {appendChoiceContents} from './choice-ui.js?v=0.13.1';
-import {mountBaggageInteraction} from './interaction.js?v=0.13.1';
-import {APP_VERSION} from './release.js?v=0.13.1';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.14.0';
+import {appendChoiceContents} from './choice-ui.js?v=0.14.0';
+import {mountBaggageInteraction} from './interaction.js?v=0.14.0';
+import {APP_VERSION} from './release.js?v=0.14.0';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -59,7 +59,7 @@ function validateSave(input) {
   if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл сохранения не подходит к версии пролога.');
   if (input.node!=='end' && !Object.hasOwn(NODES,input.node)) throw new Error('Неизвестная сцена в сохранении.');
   if (!Number.isInteger(input.index) || input.index<0 || (input.node!=='end' && input.index>=NODES[input.node].pages.length)) throw new Error('Не удалось восстановить реплику.');
-  if (!Array.isArray(input.log) || input.log.length>600 || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
+  if (!Array.isArray(input.log) || input.log.length>800 || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
   if (!Array.isArray(input.journal) || input.journal.some(id=>!Object.hasOwn(JOURNAL,id))) throw new Error('Повреждён дневник.');
   if(!input.flags || typeof input.flags!=='object' || Array.isArray(input.flags)) throw new Error('Повреждены данные выборов.');
   return { formatVersion:1, storyVersion:STORY_VERSION, profile:{gender:input.profile.gender,nameId:input.profile.nameId,namesCatalogVersion:catalog.version}, node:input.node,index:input.node==='end'?0:input.index, flags:{...input.flags},journal:[...new Set(input.journal)],log:input.log.map(e=>({speaker:e.speaker,text:e.text,choice:!!e.choice,...logVoice(e)})),updatedAt:Number(input.updatedAt)||Date.now(),completed:input.node==='end',chapterMarks:readChapterMarks(input.chapterMarks,NODES,JOURNAL,input.log.length),rewind:readRewind(input.rewind,NODES,JOURNAL,input.log.length) };
@@ -328,7 +328,7 @@ function renderEnding() {
   $('ending-rewind').disabled=!state.rewind?.length;
   const continuation=continuationFor(state);
   $('continue-story').hidden=!continuation;
-  $('continue-story').textContent=t(continuation==='fourth_morning'?'Продолжить · Право на завтра':continuation==='courtyard_invite'?'Продолжить · Свет во дворе':continuation==='third_morning'?'Продолжить · Своё дело':continuation==='next_steps'?'Продолжить · Счёт на себя':'Продолжить · Своя дверь');
+  $('continue-story').textContent=t(continuation==='fourth_morning'?'Продолжить · Право на завтра':continuation==='decision_morning'?'Продолжить · Ответ на лето':continuation==='courtyard_invite'?'Продолжить · Свет во дворе':continuation==='third_morning'?'Продолжить · Своё дело':continuation==='next_steps'?'Продолжить · Счёт на себя':'Продолжить · Своя дверь');
   $('ending-title').innerHTML=html(state.flags.chapterOneComplete?'Уже не только<br><em>адрес</em>':'Пока только<br><em>адрес</em>');
   const finalBackground={dorcol:'dorcol-apartment',vracar:'vracar-apartment',newbelgrade:'new-belgrade-apartment'}[state.flags.district]??'first-room';
   $('ending').style.backgroundImage=state.flags.chapterOneComplete?`linear-gradient(#164d5d55,#123d49ed),url('./assets/${finalBackground}.webp')`:'';
@@ -339,8 +339,10 @@ function renderEnding() {
   if(state.flags.chapterFourComplete){$('ending-title').innerHTML=html('Больше, чем<br><em>планы</em>');$('ending-memory').textContent=t('Завтра — новые вопросы. В субботу — кино во дворе.');}
   if(state.flags.chapterFiveComplete){$('ending-title').innerHTML=html('Право<br><em>на завтра</em>');$('ending-memory').textContent=t('Следующий шаг понятен. Суббота уже в календаре.');}
   if(state.flags.chapterSixComplete){$('ending-title').innerHTML=html('Свет<br><em>во дворе</em>');$('ending-memory').textContent=t('Здесь есть люди, которые оставят тебе место.');}
-  if(state.flags.chapterFiveComplete)document.querySelector('.ending-inner .demo-note').innerHTML=html(state.flags.chapterSixComplete?'Продолжение следует.<br>Дальше — новые решения и встречи.':'Продолжение следует.<br>Дальше — кино во дворе и вечер с близкими.');
-  document.querySelector('.ending-inner>p:not(.eyebrow):not(.demo-note)').innerHTML=html(state.flags.chapterSixComplete?'У этой жизни уже есть люди.<br>Дальше ты выберешь, куда она приведёт.':state.flags.chapterFiveComplete?'Одни дела завершены.<br>Для остальных выбран следующий шаг.':state.flags.chapterFourComplete?'Первые ответы получены.<br>А у новых знакомств появился свой вечер.':state.flags.chapterThreeComplete?'Вопросы для банка готовы.<br>А у новой встречи уже есть продолжение.':state.flags.chapterOneComplete?'У тебя есть ключ, первый вечер<br>и свой маршрут по Белграду.':'Сегодня у тебя появился адрес.<br>И человек, которому можно написать.');
+  document.querySelector('.ending-inner .eyebrow').textContent=t(state.flags.chapterSevenComplete?'КОНЕЦ ИСТОРИИ':'ПРОДОЛЖЕНИЕ СЛЕДУЕТ');
+  if(state.flags.chapterSevenComplete){const f=state.flags.finalChoice;$('ending-title').innerHTML=html(f==='stay'?'Остаюсь<br><em>в Белграде</em>':f==='leave'?'Домой<br><em>с летом</em>':'До осени<br><em>по плану</em>');$('ending-memory').textContent=t(f==='stay'?'У этого города теперь есть твой стул.':f==='leave'?'Лето осталось с тобой, куда бы ты ни летел.':'Дверь приоткрыта. Войти в неё решишь ты.');}
+  if(state.flags.chapterFiveComplete)document.querySelector('.ending-inner .demo-note').innerHTML=html(state.flags.chapterSevenComplete?'Конец истории.<br>Спасибо за это лето в Сербии.':state.flags.chapterSixComplete?'Продолжение следует.<br>Дальше — новые решения и встречи.':'Продолжение следует.<br>Дальше — кино во дворе и вечер с близкими.');
+  document.querySelector('.ending-inner>p:not(.eyebrow):not(.demo-note)').innerHTML=html(state.flags.chapterSevenComplete?'Это был твой ответ.<br>Любой из них был честным.':state.flags.chapterSixComplete?'У этой жизни уже есть люди.<br>Дальше ты выберешь, куда она приведёт.':state.flags.chapterFiveComplete?'Одни дела завершены.<br>Для остальных выбран следующий шаг.':state.flags.chapterFourComplete?'Первые ответы получены.<br>А у новых знакомств появился свой вечер.':state.flags.chapterThreeComplete?'Вопросы для банка готовы.<br>А у новой встречи уже есть продолжение.':state.flags.chapterOneComplete?'У тебя есть ключ, первый вечер<br>и свой маршрут по Белграду.':'Сегодня у тебя появился адрес.<br>И человек, которому можно написать.');
 }
 function goBack() {
   if(panel.open||transitionLock||!state||!['game','ending'].includes(view))return;

@@ -5,7 +5,8 @@ export const CHAPTERS=[
  {id:'bank',number:'Глава 3',title:'Счёт на себя',start:'next_steps',description:'Решение о квартире, банк и встреча без чемодана.'},
  {id:'work',number:'Глава 4',title:'Своё дело',start:'third_morning',description:'Визит в банк, новые знакомства и первый рабочий план.'},
  {id:'residence',number:'Глава 5',title:'Право на завтра',start:'fourth_morning',description:'Документы, ответ из банка и решение о следующем шаге.'},
- {id:'courtyard',number:'Глава 6',title:'Свет во дворе',start:'courtyard_invite',description:'Дворовой кинопоказ, близкие люди и планы на будущее.'}
+ {id:'courtyard',number:'Глава 6',title:'Свет во дворе',start:'courtyard_invite',description:'Дворовой кинопоказ, близкие люди и планы на будущее.'},
+ {id:'decision',number:'Глава 7',title:'Ответ на лето',start:'decision_morning',description:'Последний вечер, билет и ваше решение: остаться, уехать или вернуться по плану.'}
 ];
 export function assignChapters(nodes){
  const boundaries=new Set(CHAPTERS.map(c=>c.start));
@@ -18,7 +19,7 @@ export function assignChapters(nodes){
   };visit(chapter.start);
  }
 }
-export function chapterFor(state,nodes){return CHAPTERS.find(c=>c.id===nodes[state?.node]?.chapterId)??(state?.flags?.chapterSixComplete?CHAPTERS[6]:state?.flags?.chapterFiveComplete?CHAPTERS[5]:state?.flags?.chapterFourComplete?CHAPTERS[4]:state?.flags?.chapterThreeComplete?CHAPTERS[3]:state?.flags?.chapterOneComplete?CHAPTERS[2]:CHAPTERS[0]);}
+export function chapterFor(state,nodes){return CHAPTERS.find(c=>c.id===nodes[state?.node]?.chapterId)??(state?.flags?.chapterSevenComplete?CHAPTERS[7]:state?.flags?.chapterSixComplete?CHAPTERS[6]:state?.flags?.chapterFiveComplete?CHAPTERS[5]:state?.flags?.chapterFourComplete?CHAPTERS[4]:state?.flags?.chapterThreeComplete?CHAPTERS[3]:state?.flags?.chapterOneComplete?CHAPTERS[2]:CHAPTERS[0]);}
 const validFlags=flags=>flags&&typeof flags==='object'&&!Array.isArray(flags)&&Object.keys(flags).length<=100&&Object.values(flags).every(v=>['boolean','number','string'].includes(typeof v)&&(typeof v!=='string'||v.length<=200));
 export function readChapterMarks(input,nodes,journal,logLength){
  const result={};if(!input||typeof input!=='object'||Array.isArray(input))return result;
@@ -42,4 +43,4 @@ export function restartChapter(state,id,nodes){
  Object.assign(state,{node:mark.node,index:mark.index,flags:{...mark.flags},journal:[...mark.journal],log:state.log.slice(0,mark.logLength),rewind:[],completed:false});
  rememberChapter(state,nodes);return true;
 }
-export function continuationFor(state){return state?.flags?.chapterSixComplete?null:state?.flags?.chapterFiveComplete?'courtyard_invite':state?.flags?.chapterFourComplete?'fourth_morning':state?.flags?.chapterThreeComplete?'third_morning':state?.flags?.chapterOneComplete?'next_steps':'road_start';}
+export function continuationFor(state){return state?.flags?.chapterSevenComplete?null:state?.flags?.chapterSixComplete?'decision_morning':state?.flags?.chapterFiveComplete?'courtyard_invite':state?.flags?.chapterFourComplete?'fourth_morning':state?.flags?.chapterThreeComplete?'third_morning':state?.flags?.chapterOneComplete?'next_steps':'road_start';}

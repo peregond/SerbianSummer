@@ -1,18 +1,19 @@
-import {registerLukaSport} from './luka-redesign.js?v=0.13.1';
-import {extendFifthChapter} from './chapter-five.js?v=0.13.1';
-import {extendSixthChapter} from './chapter-six.js?v=0.13.1';
-import {registerNikolaRedesign} from './nikola-redesign.js?v=0.13.1';
-import {extendFourthChapter} from './chapter-four.js?v=0.13.1';
-import {extendHostCoffee} from './host-coffee.js?v=0.13.1';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.13.1';
-import {assignChapters} from './chapters.js?v=0.13.1';
-import {extendNextChapter} from './chapter-three.js?v=0.13.1';
-import {extendFastPrologue} from './prologue-fast.js?v=0.13.1';
-import {editPrologue} from './prologue-edit.js?v=0.13.1';
-import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.13.1';
-import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.13.1';
+import {registerLukaSport} from './luka-redesign.js?v=0.14.0';
+import {extendFifthChapter} from './chapter-five.js?v=0.14.0';
+import {extendSixthChapter} from './chapter-six.js?v=0.14.0';
+import {extendSeventhChapter} from './chapter-seven.js?v=0.14.0';
+import {registerNikolaRedesign} from './nikola-redesign.js?v=0.14.0';
+import {extendFourthChapter} from './chapter-four.js?v=0.14.0';
+import {extendHostCoffee} from './host-coffee.js?v=0.14.0';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.14.0';
+import {assignChapters} from './chapters.js?v=0.14.0';
+import {extendNextChapter} from './chapter-three.js?v=0.14.0';
+import {extendFastPrologue} from './prologue-fast.js?v=0.14.0';
+import {editPrologue} from './prologue-edit.js?v=0.14.0';
+import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.14.0';
+import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.14.0';
 export {beatActionAt};
-import {extendChapter} from './chapter-one.js?v=0.13.1';
+import {extendChapter} from './chapter-one.js?v=0.14.0';
 // Original story for the playable prototype. Text is kept separate from the player.
 const n = text => ({ speaker: 'narrator', text });
 const m = text => ({ speaker: 'milica', text });
@@ -659,6 +660,7 @@ extendHostCoffee({NODES,JOURNAL,BACKGROUNDS});
 extendFourthChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,msg,scene});
 extendFifthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSixthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
+extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
 applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES});
 registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);
@@ -667,7 +669,7 @@ assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 export function pageText(page,flags={},locale=getLanguage()) {
-  let text=page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  let text=page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
   return resolveStoryText(text,flags,locale);
 }
