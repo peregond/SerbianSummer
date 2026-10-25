@@ -31,6 +31,16 @@ for (const id of ['lazar', 'teodora', 'ivana', 'strahinja', 'milos']) {
 assert.equal(entry('workshop/milos-two-looks-draft.webp').status, 'archive');
 assert.equal(entry('workshop/milos-masked-friendly-v2-draft.webp').look, 'На службе · riot-экипировка');
 assert.equal(entry('workshop/milos-casual-friendly-draft.webp').look, 'Без формы');
+const summerVariants = catalog.entries.filter(e => e.file.includes('-dream-summer-'));
+assert.equal(summerVariants.length, 9);
+for (const id of ['milica', 'nikola', 'dragan', 'jelena', 'asya', 'luka', 'lazar', 'ivana', 'milos']) {
+  const variant = summerVariants.find(e => e.character === id);
+  assert.ok(variant, id);
+  assert.equal(variant.look, 'Фантазия');
+  assert.equal(variant.status, 'draft', 'Wardrobe variants are not automatically used in scenes');
+}
+const fantasyOnly = buildArtCatalog(['workshop/luka-dream-summer-flirty-draft.webp'], {}, {}).people.find(p => p.id === 'luka');
+assert.ok(fantasyOnly.missing.includes('flirty'), 'Fantasy artwork must not hide a missing regular expression');
 const archiveOnly = buildArtCatalog(['luka-friendly.webp'], {}, {}).people.find(p => p.id === 'luka');
 assert.ok(archiveOnly.missing.includes('friendly'), 'An archived portrait must not hide missing current artwork');
 const translations = JSON.parse(fs.readFileSync(new URL('../public/locales/en.json', import.meta.url)));
