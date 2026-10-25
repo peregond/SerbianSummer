@@ -23,8 +23,14 @@ assert.equal(entry('prologue-theme.m4a').category, 'audio');
 for (const id of ['lazar', 'teodora', 'ivana', 'strahinja', 'milos']) {
   const person = catalog.people.find(p => p.id === id);
   assert.ok(person.art.some(e => e.status === 'draft'), id);
-  assert.deepEqual(person.missing, ['thoughtful', 'laughing', 'flirty']);
+  assert.deepEqual(person.missing, [], id + ': all four base expressions have artwork');
+  for (const mood of ['friendly', 'thoughtful', 'laughing', 'flirty']) {
+    assert.ok(person.art.some(e => e.status === 'draft' && e.emotion === mood && e.look !== 'На службе · riot-экипировка'), id + '/' + mood);
+  }
 }
+assert.equal(entry('workshop/milos-two-looks-draft.webp').status, 'archive');
+assert.equal(entry('workshop/milos-masked-friendly-v2-draft.webp').look, 'На службе · riot-экипировка');
+assert.equal(entry('workshop/milos-casual-friendly-draft.webp').look, 'Без формы');
 const archiveOnly = buildArtCatalog(['luka-friendly.webp'], {}, {}).people.find(p => p.id === 'luka');
 assert.ok(archiveOnly.missing.includes('friendly'), 'An archived portrait must not hide missing current artwork');
 const translations = JSON.parse(fs.readFileSync(new URL('../public/locales/en.json', import.meta.url)));

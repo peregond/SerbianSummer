@@ -1,4 +1,4 @@
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=1';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=2';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';

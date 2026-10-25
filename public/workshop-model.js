@@ -19,14 +19,15 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const character = image && !icon ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
+    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
     const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
-    return { file, character, category, image, emotion, look, status: draft ? 'draft' : active.has(file) ? 'active' : character ? 'archive' : 'asset' };
+    const retired = file === 'workshop/milos-two-looks-draft.webp';
+    return { file, character, category, image, emotion, look, status: retired ? 'archive' : draft ? 'draft' : active.has(file) ? 'active' : character ? 'archive' : 'asset' };
   });
   const people = Object.entries(PEOPLE).map(([id, name]) => {
     const art = entries.filter(e => e.character === id);
     // Archived versions must not hide gaps in the current design. Drafts are visible but not marked as in-game.
-    const current = art.filter(e => ['active', 'draft'].includes(e.status) && ['Основной образ', 'В форме и без формы'].includes(e.look));
+    const current = art.filter(e => ['active', 'draft'].includes(e.status) && ['Основной образ', 'Без формы'].includes(e.look));
     const missing = CORE_EMOTIONS.filter(mood => !current.some(e => e.emotion === mood));
     return { id, name, art, missing };
   });
