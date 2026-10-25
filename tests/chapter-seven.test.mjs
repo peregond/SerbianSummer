@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {NODES,JOURNAL,pageText} from '../public/story.js';
-import {CHAPTERS,continuationFor,chapterFor} from '../public/chapters.js';
+import {CHAPTERS,continuationFor,chapterFor,rememberChapter,restartChapter} from '../public/chapters.js';
 import {normalizeProgress} from '../lib/save-format.js';
 const decision=CHAPTERS.find(c=>c.id==='decision');
 assert.equal(decision.start,'decision_morning');
@@ -39,4 +39,10 @@ assert.equal(continuationFor(base),'decision_morning');
 const done=normalizeProgress({...base,flags:{...base.flags,chapterSevenComplete:true,finalChoice:'stay'},log:Array.from({length:700},()=>({speaker:'Ты',text:'x'}))});
 assert.equal(continuationFor(done),null);assert.equal(chapterFor(done,NODES).id,'decision');
 assert.throws(()=>normalizeProgress({...base,log:Array.from({length:801},()=>({speaker:'Ты',text:'x'}))}));
+// Chapter 7 can be replayed from its entrance, discarding the final decision but keeping chapter 6 history.
+const play={...normalizeProgress({...base,node:'decision_morning',flags:{chapterSixComplete:true},log:[{speaker:'Ты',text:'x'}]})};
+play.chapterMarks={};rememberChapter(play,NODES);
+Object.assign(play.flags,{finalWith:'luka',finalBond:'friendship',finalChoice:'leave',chapterSevenComplete:true});play.node='end';play.log.push({speaker:'Ты',text:'y'});
+assert.equal(restartChapter(play,'decision',NODES),true);
+assert.equal(play.node,'decision_morning');assert.equal(play.flags.finalChoice,undefined);assert.equal(play.flags.chapterSevenComplete,undefined);assert.equal(play.flags.chapterSixComplete,true);
 console.log('Chapter 7: three player-owned endings, voluntary closeness, honest document wording, six epilogue variants and save limits checked.');
