@@ -2,7 +2,8 @@
 // a morning, one small choice and its consequence, the middle of the day, a turn with the second person, and an evening.
 // Facts stay general (see DAYS.md): outcomes are fictional and the player is told to check official sources.
 import {T,STAGES,dayFor,castHelpers} from './days.js?v=0.15.0';
-export function extendFirstHalf({NODES:N,JOURNAL:J,n,scene}){
+// The shared day builder: dayKit() gives build(), opt() and the cast helpers for one set of nodes.
+export function dayKit({NODES:N,JOURNAL:J,n,scene}){
  const out=label=>({kind:'tap',label,object:label});
  const {A,L,contact,counter,owner,neighbour,route,note}=castHelpers(n);
  // build(): start (choice) -> option scene -> middle -> turn -> evening; the evening keeps the d<N>_end id.
@@ -19,6 +20,10 @@ export function extendFirstHalf({NODES:N,JOURNAL:J,n,scene}){
  };
  const opt=(label,tone,effect,pages,exit)=>({label,tone,effect,pages,exit});
 
+ return {build,opt,note,A,L,contact,counter,owner,neighbour,route};
+}
+export function extendFirstHalf({NODES:N,JOURNAL:J,n,scene}){
+ const {build,opt,note,A,L,contact,counter,owner,neighbour,route}=dayKit({NODES:N,JOURNAL:J,n,scene});
  // Day 3: phone, transport, money. Airport pair.
  build(3,{bg:'belgrade-morning-cafe',time:'09:00',midTime:'12:10',turnTime:'17:30',
   start:[
@@ -195,7 +200,7 @@ export function extendFirstHalf({NODES:N,JOURNAL:J,n,scene}){
    note('Я записываю три правила: все деньги — через отдельный счёт, все чеки — в одну папку, все сроки — в один календарь.','I write down three rules: all money through one account, all receipts in one folder, all deadlines in one calendar.'),
    note('Правила кажутся скучными, но от них становится спокойнее. Я впервые чувствую, что налоги — это не угроза.','The rules seem dull, but they make me calmer. For the first time I feel that taxes are not a threat.')],midExit:['Поблагодарить Луку','Thank Luka'],
   mid2:[
-   opt(['Показать Луке черновой бюджет','Show Luka a draft budget'],'practical',{budgetCheck:'draft'},[note('Я показываю таблицу с предполагаемыми доходами и расходами. Лука находит две строки, которых я не учёл{a}, и одну, которую можно убрать.','I show a table of expected income and spending. Luka finds two lines I had not counted and one that can be removed.'),note('Он не правит текст, а задаёт вопросы. После них таблица выглядит честнее.','He does not correct the text but asks questions. After them the table looks more honest.')],['Сохранить таблицу','Save the table']),
+   opt(['Показать Луке черновой бюджет','Show Luka a draft budget'],'practical',{budgetCheck:'draft'},[note('Я показываю таблицу с предполагаемыми доходами и расходами. Лука находит две строки, которых я не учитывал{a}, и одну, которую можно убрать.','I show a table of expected income and spending. Luka finds two lines I had not counted and one that can be removed.'),note('Он не правит текст, а задаёт вопросы. После них таблица выглядит честнее.','He does not correct the text but asks questions. After them the table looks more honest.')],['Сохранить таблицу','Save the table']),
    opt(['Спросить, как он начинал сам','Ask how he started himself'],'personal',{budgetCheck:'story'},[note('Лука усмехается: первую декларацию он заполнял всю ночь и всё равно ошибся в дате.','Luka smiles: he filled in his first return all night and still got the date wrong.'),note('Мне становится легче: ошибки здесь исправляют, а не наказывают.','I feel better: mistakes here are corrected, not punished.')],['Записать его совет','Note his advice'])],
   turn:[
    note('В дверь заглядывает Ася с пакетом печенья: она заходила мимо и решила, что мы забыли поесть.','Asya looks in at the door with a bag of biscuits: she was passing and decided we had forgotten to eat.'),

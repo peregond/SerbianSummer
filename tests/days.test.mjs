@@ -33,14 +33,13 @@ for(const id of ['epilogue_stay','epilogue_leave','epilogue_return'])assert.equa
 for(const d of DAYS.filter(d=>d.n>=2)){const done=NODES[d.start].effectOnEnter?.dayDone;assert.equal(done,d.n-1,'dayDone on the start of day '+d.n);}
 for(let k=1;k<30;k++)assert.equal(continuationFor({flags:{dayDone:k}}),DAYS[k].start);
 assert.equal(continuationFor({flags:{dayDone:30}}),null);assert.equal(continuationFor({flags:{}}),'road_start');assert.equal(dayProgress({chapterFiveComplete:true}),16);assert.equal(chapterFor({node:'end',flags:{dayDone:17}},NODES).id,'day-17');
-// Short skeleton days stay within five lines before the action and carry a journal note.
-for(const d of DAYS.filter(d=>d.status==='skeleton')){
- for(const id of [d.start,'d'+d.n+'_end']){assert.ok(NODES[id].pages.length<=5);assert.equal(NODES[id].day,'ДЕНЬ '+d.n);}
+// No new day announces an approval of the application, and every one of them has a journal note and a day label.
+for(const d of DAYS.filter(d=>![1,2,12,15,16,21,29,30].includes(d.n))){
+ const nodes=Object.entries(NODES).filter(([,node])=>node.chapterId===d.id);
+ assert.ok(nodes.length>=5,'Day '+d.n);
+ for(const [id,node] of nodes){assert.ok(node.pages.length<=5,id);assert.equal(node.day,'ДЕНЬ '+d.n);assert.ok(!/одобрен|получил[аи]? (вид на жительство|разрешение)/iu.test(JSON.stringify(node.pages)),'No day announces an approval: '+id);}
  assert.ok(JOURNAL['day_'+d.n].text.length>10);
- const text=JSON.stringify([NODES[d.start],NODES['d'+d.n+'_end']]);
- assert.ok(!/одобрен|получил[аи]? (вид на жительство|разрешение)/iu.test(text),'No skeleton day announces an approval: day '+d.n);
 }
-
 // Every day shows two people of different genders on every path (the prologue and day 0 are one prelude, since the prologue
 // is where the player meets one of two airport people).
 const GENDER={nikola:'m',milica:'f',dragan:'m',jelena:'f',asya:'f',luka:'m','nikola-evening':'m','Никола':'m','Милица':'f','Драган':'m','Йелена':'f','Ася':'f','Лука':'m'};
@@ -65,8 +64,8 @@ for(const companion of ['nikola','milica'])for(const host of ['dragan','jelena']
   assert.ok(people.has('f')&&people.has('m'),`${chapter.id} needs a woman and a man on every path (${companion}/${host}/${districtOwner}/${workRoute}): ${[...people].join('')||'none'}`);
  }
 }
-// Expanded preparation days (3-11, 13, 14) are at least five scenes and two decisions on every path.
-for(const d of DAYS.filter(d=>d.status==='written'&&(d.n>=3&&d.n<=14)&&d.n!==12)){
+// Days written for the thirty-day structure (all except the ones assembled from older chapters) have at least five scenes and two decisions on every path.
+for(const d of DAYS.filter(d=>d.status==='written'&&![1,2,12,15,16,21,29,30].includes(d.n))){
  const memo=new Map();
  const shape=id=>{
   if(id==='end'||NODES[id].chapterId!==d.id)return {scenes:0,choices:0};

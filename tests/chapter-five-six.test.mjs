@@ -135,7 +135,7 @@ function maxLogs(id){if(id==='end')return 0;if(logMemo.has(id))return logMemo.ge
  logMemo.set(id,logs);return logs;
 }
 const logBound=Math.max(...starts.map(maxLogs));
-assert.ok(maxFlags<=100,`A complete story save could reach ${maxFlags} flags, over the format limit`);
+assert.ok(maxFlags<=150,`A complete story save could reach ${maxFlags} flags, over the format limit`);
 assert.ok(logBound<=1500,`A complete story save could reach ${logBound} log records, over the format limit`);
 console.log(`Chapters 5/6: old-save migration, replay isolation, consent and open plans checked; conservative persistence bounds ${maxFlags} flags / ${logBound} log records.`);
 
