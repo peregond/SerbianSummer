@@ -1,0 +1,11 @@
+/* One icon and the actual answer; category and recipient remain accessible. */
+:root{--choice-surface:#fffaf0;--choice-hover:#f2eadb;--choice-neutral:#08786f;--choice-female:#ad3b73;--choice-male:#2868b2}
+:root[data-theme=dark]{--choice-surface:#23353b;--choice-hover:#2b4548;--choice-neutral:#82d8bd;--choice-female:#f4b0cd;--choice-male:#9cc9ff}
+.choices{gap:7px;margin-top:12px}
+.choice,:root[data-theme] .choice[data-tone]{display:grid;grid-template-columns:22px minmax(0,1fr);align-items:center;gap:10px;min-height:48px;padding:10px 12px;background:var(--choice-surface);border:1px solid var(--line);border-radius:9px;color:var(--ink);text-align:left;line-height:1.45}
+.choice:hover,:root[data-theme] .choice[data-tone]:hover{background:var(--choice-hover)}
+.choice::before,.choice::after,.choice .choice-tone{display:none}
+.choice .choice-icon{display:block;align-self:center;width:22px;height:22px;color:var(--choice-neutral);pointer-events:none}
+.choice[data-recipient-gender=female] .choice-icon{color:var(--choice-female)}
+.choice[data-recipient-gender=male] .choice-icon{color:var(--choice-male)}
+.choice .choice-label{display:block;min-width:0;font-size:14px;line-height:1.45;font-weight:600;overflow-wrap:break-word}
