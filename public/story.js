@@ -5,6 +5,7 @@ import {extendSeventhChapter} from './chapter-seven.js?v=0.15.0';
 import {extendCast,dayFor} from './days.js?v=0.15.0';
 import {extendFirstHalf} from './day-scenes.js?v=0.15.0';
 import {extendSecondHalf} from './day-scenes-late.js?v=0.15.0';
+import {extendOfficeRomance} from './day-office.js?v=0.15.0';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
@@ -666,6 +667,7 @@ extendSixthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
 extendFirstHalf({NODES,JOURNAL,n,scene});
 extendSecondHalf({NODES,JOURNAL,n,scene});
+extendOfficeRomance({NODES,JOURNAL,n,scene});
 extendCast({NODES});
 // Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
 {
@@ -682,7 +684,8 @@ assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 export function pageText(page,flags={},locale=getLanguage()) {
-  let text=page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  const picked=page.byFlag?(()=>{const{flag,text}=page.byFlag;const key=Array.isArray(flag)?flag.map(f=>flags[f]).join(':'):flags[flag];return text[key]??text.default;})():undefined;
+  let text=picked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
   return resolveStoryText(text,flags,locale);
 }
