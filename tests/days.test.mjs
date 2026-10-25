@@ -65,6 +65,21 @@ for(const companion of ['nikola','milica'])for(const host of ['dragan','jelena']
   assert.ok(people.has('f')&&people.has('m'),`${chapter.id} needs a woman and a man on every path (${companion}/${host}/${districtOwner}/${workRoute}): ${[...people].join('')||'none'}`);
  }
 }
+// Expanded preparation days (3-11, 13, 14) are at least five scenes and two decisions on every path.
+for(const d of DAYS.filter(d=>d.status==='written'&&(d.n>=3&&d.n<=14)&&d.n!==12)){
+ const memo=new Map();
+ const shape=id=>{
+  if(id==='end'||NODES[id].chapterId!==d.id)return {scenes:0,choices:0};
+  if(memo.has(id))return memo.get(id);
+  const node=NODES[id],targets=node.choices?node.choices.map(c=>c.next):[node.next];
+  const parts=targets.map(shape);
+  const result={scenes:1+Math.min(...parts.map(p=>p.scenes)),choices:(node.choices?1:0)+Math.min(...parts.map(p=>p.choices))};
+  memo.set(id,result);return result;
+ };
+ const {scenes,choices}=shape(d.start);
+ assert.ok(scenes>=5,`Day ${d.n} has only ${scenes} scenes on its shortest path`);
+ assert.ok(choices>=2,`Day ${d.n} has only ${choices} decisions on its shortest path`);
+}
 // Plan document lists every day.
 const plan=fs.readFileSync(new URL('../DAYS.md',import.meta.url),'utf8');
 for(const d of DAYS)assert.ok(plan.includes(d.title),'DAYS.md misses "'+d.title+'"');

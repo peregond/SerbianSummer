@@ -3,7 +3,7 @@
 // Structure follows https://www.srb.guide/ (stages 2-7); real administrative details are checked against
 // official sources before being written into a day, and outcomes in the game are fictional.
 export const DAYS_TRANSLATIONS={};
-const T=(ru,en)=>(DAYS_TRANSLATIONS[ru]=en,ru);
+export const T=(ru,en)=>(DAYS_TRANSLATIONS[ru]=en,ru);
 export const STAGES={
  arrival:T('Первые дни','First days'),
  clock:T('Счёт времени','Counting the time'),
@@ -22,18 +22,18 @@ export const PRELUDE=[
 export const DAYS=[
  {n:1,id:'districts',title:'Район для жизни',start:'morning_start',stage:'arrival',status:'written',description:'Карта Белграда, квартира, первый план по счёту и работе и вечер после.'},
  {n:2,id:'work',title:'Счёт и своё дело',start:'third_morning',stage:'arrival',status:'written',description:'Визит в банк, знакомство с Асей и Лукой, рабочее направление.'},
- {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'skeleton',description:'Местная связь, проездная карта и обмен денег.'},
- {n:4,id:'day-4',title:'Регистрация места пребывания',start:'d4_start',stage:'arrival',status:'skeleton',description:'Подтверждение регистрации и заявление хозяина о жилье.'},
- {n:5,id:'day-5',title:'Сколько у меня дней',start:'d5_start',stage:'clock',status:'skeleton',description:'Срок пребывания без заявления и тридцатый день как дедлайн.'},
- {n:6,id:'day-6',title:'Выбор основания',start:'d6_start',stage:'basis',status:'skeleton',description:'На каком основании просить временное проживание.'},
- {n:7,id:'day-7',title:'Форма дела или работодатель',start:'d7_start',stage:'prepare',status:'skeleton',description:'Форма предпринимательства, письмо работодателю или сравнение маршрутов.'},
- {n:8,id:'day-8',title:'Бухгалтер и налоги',start:'d8_start',stage:'prepare',status:'skeleton',description:'Разговор с Лукой о налогах и о том, когда нужен бухгалтер.'},
- {n:9,id:'day-9',title:'Адрес для заявления',start:'d9_start',stage:'prepare',status:'skeleton',description:'Домашний адрес или коворкинг как подтверждаемый адрес.'},
- {n:10,id:'day-10',title:'Документы из дома',start:'d10_start',stage:'prepare',status:'skeleton',description:'Справки, апостиль и переводы, которые нужно заказать заранее.'},
- {n:11,id:'day-11',title:'Подготовка основания',start:'d11_start',stage:'prepare',status:'skeleton',description:'Сбор данных под выбранное основание.'},
+ {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'written',description:'Местная связь, проездная карта и обмен денег.'},
+ {n:4,id:'day-4',title:'Регистрация места пребывания',start:'d4_start',stage:'arrival',status:'written',description:'Подтверждение регистрации и заявление хозяина о жилье.'},
+ {n:5,id:'day-5',title:'Сколько у меня дней',start:'d5_start',stage:'clock',status:'written',description:'Срок пребывания без заявления и тридцатый день как дедлайн.'},
+ {n:6,id:'day-6',title:'Выбор основания',start:'d6_start',stage:'basis',status:'written',description:'На каком основании просить временное проживание.'},
+ {n:7,id:'day-7',title:'Форма дела или работодатель',start:'d7_start',stage:'prepare',status:'written',description:'Форма предпринимательства, письмо работодателю или сравнение маршрутов.'},
+ {n:8,id:'day-8',title:'Бухгалтер и налоги',start:'d8_start',stage:'prepare',status:'written',description:'Разговор с Лукой о налогах и о том, когда нужен бухгалтер.'},
+ {n:9,id:'day-9',title:'Адрес для заявления',start:'d9_start',stage:'prepare',status:'written',description:'Домашний адрес или коворкинг как подтверждаемый адрес.'},
+ {n:10,id:'day-10',title:'Документы из дома',start:'d10_start',stage:'prepare',status:'written',description:'Справки, апостиль и переводы, которые нужно заказать заранее.'},
+ {n:11,id:'day-11',title:'Подготовка основания',start:'d11_start',stage:'prepare',status:'written',description:'Сбор данных под выбранное основание.'},
  {n:12,id:'residence',title:'Папка документов',start:'fourth_morning',stage:'filing',status:'written',description:'Жилье, адрес и заявка в банк.'},
- {n:13,id:'day-13',title:'Медицинская страховка',start:'d13_start',stage:'filing',status:'skeleton',description:'Выбор полиса и сохранение договора.'},
- {n:14,id:'day-14',title:'Госуслуги онлайн',start:'d14_start',stage:'filing',status:'skeleton',description:'Регистрация на портале электронных услуг.'},
+ {n:13,id:'day-13',title:'Медицинская страховка',start:'d13_start',stage:'filing',status:'written',description:'Выбор полиса и сохранение договора.'},
+ {n:14,id:'day-14',title:'Госуслуги онлайн',start:'d14_start',stage:'filing',status:'written',description:'Регистрация на портале электронных услуг.'},
  {n:15,id:'filing',title:'Ответ банка и подача',start:'bank_approved',stage:'submit',status:'written',description:'Ответ банка, итог рабочего маршрута и заявление.'},
  {n:16,id:'after-filing',title:'Вечер после подачи',start:'document_evening',stage:'submit',status:'written',description:'Вечер с близкими людьми после подачи документов.'},
  {n:17,id:'day-17',title:'Квитанция и ожидание',start:'d17_start',stage:'waiting',status:'skeleton',description:'Сохранённые подтверждения и честное ожидание ответа.'},
@@ -91,11 +91,9 @@ export const dayFor=n=>DAYS.find(d=>d.n===n);
 // Every day has two speaking people of different genders: Asya and Luka, the airport person and their counterpart
 // (Nikola/Milica), or the flat's owner and their counterpart (Dragan/Jelena). The counterparts are always the other gender.
 // Variants reuse workText (route), contactText (keyed by the airport person) and districtText (keyed by the owner).
-export function extendDays({NODES:N,JOURNAL:J,n,scene}){
- const out=label=>({kind:'tap',label,object:label});
+export function castHelpers(n){
  const A=(ru,en,emotion='friendly')=>({speaker:'Ася',character:'asya',emotion,text:T(ru,en)});
  const L=(ru,en,emotion='friendly')=>({speaker:'Лука',character:'luka',emotion,text:T(ru,en)});
- const AM=(ru,en)=>({...A(ru,en),message:true}),LM=(ru,en)=>({...L(ru,en),message:true});
  // Airport person (variants keyed by the companion) and the other airport person: always the other gender.
  const contact=(nikola,milica,extra={})=>({speaker:'contact',cameo:true,emotion:'friendly',text:T(...milica),contactText:{nikola:T(...nikola),milica:T(...milica)},...extra});
  const counter=(whenNikola,whenMilica,extra={})=>({speaker:'contactCounterpart',cameo:true,emotion:'friendly',text:T(...whenMilica),contactText:{nikola:T(...whenNikola),milica:T(...whenMilica)},...extra});
@@ -104,6 +102,12 @@ export function extendDays({NODES:N,JOURNAL:J,n,scene}){
  const neighbour=(whenDragan,whenJelena,extra={})=>({speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...whenDragan),districtText:{dragan:T(...whenDragan),jelena:T(...whenJelena)},...extra});
  const route=(business,employment,explore)=>({speaker:'narrator',text:business,workText:{business,employment,explore}});
  const note=(ru,en)=>n(T(ru,en));
+ return {A,L,contact,counter,owner,neighbour,route,note};
+}
+export function extendDays({NODES:N,JOURNAL:J,n,scene}){
+ const out=label=>({kind:'tap',label,object:label});
+ const {A,L,contact,counter,owner,neighbour,route,note}=castHelpers(n);
+ const AM=(ru,en)=>({...A(ru,en),message:true}),LM=(ru,en)=>({...L(ru,en),message:true});
  // The last two pages open the evening scene; the rest belong to the morning scene.
  const day=(d,bg,time,pages,extra={})=>{
   const meta=dayFor(d),start='d'+d+'_start',close='d'+d+'_end',place='БЕЛГРАД · '+meta.title.toUpperCase();
@@ -112,71 +116,6 @@ export function extendDays({NODES:N,JOURNAL:J,n,scene}){
   N[close]=scene(pages.slice(-2),dayFor(d+1).start,{bg,time:'21:00',location:place,day:'ДЕНЬ '+d,lighting:'night',exitAction:out('Продолжить · День '+(d+1)),journal:['day_'+d],...extra});
   J['day_'+d]={title:meta.title,tag:'ДЕНЬ '+d+' · '+STAGES[meta.stage].toUpperCase(),text:last.text};
  };
- day(3,'belgrade-morning-cafe','09:00',[
-  note('Город перестаёт быть картой: сегодня мне нужны местная связь, проездная карта и немного динаров.','The city stops being a map: today I need local mobile service, a transport card and a little cash.'),
-  note('Я сравниваю тарифы без спешки, пополняю карту проезда и меняю часть денег в обменнике. Курс проверяю до обмена, а чек оставляю.','I compare plans without rushing, top up a transport card and change some money at an exchange office. I check the rate before changing and keep the receipt.'),
-  contact(['Проездную карту удобнее пополнять в киоске: очередь короче, чем у автомата.','It is easier to top up the transport card at a kiosk: the queue is shorter than at the machine.'],['Проездную карту я пополняю в киоске: очередь там короче, чем у автомата.','I top up my transport card at a kiosk: the queue is shorter than at the machine.']),
-  counter(['А обменник выбирай тот, где курс висит на витрине и чек дают сразу.','And pick an exchange office where the rate is on display and you get a receipt at once.'],['Курс на витрине и чек в руки — вот и всё, что нужно знать про обменник.','A rate on display and a receipt in hand: that is all you need to know about an exchange office.']),
-  note('К вечеру телефон работает, карта пополнена, а дорога до дома занимает на пять минут меньше.','By evening the phone works, the card is topped up, and the way home takes five minutes less.')]);
- day(4,'document-desk','09:00',[
-  note('Утром я перечитываю заметки: место пребывания нужно зарегистрировать в первые сутки после въезда, и проверить это лучше сразу.','In the morning I reread my notes: a place of stay has to be registered within the first day after entry, and it is better to check at once.'),
-  note('Я спрашиваю владельца жилья, оформлена ли регистрация и где лежит подтверждение. Заодно прошу письменное заявление владельца о жилье: оно пригодится для заявления на проживание. Форму и сроки я проверяю по официальным источникам.','I ask the owner whether the registration is done and where the confirmation is kept. I also ask for the owner’s written statement about the housing, which I will need for the residence application. I check the form and deadlines against official sources.'),
-  owner(['Регистрацию оформили в первые сутки, подтверждение лежит в папке на комоде. Заявление о жилье подпишу, когда скажешь.','The registration was done within the first day, and the confirmation is in the folder on the chest of drawers. I will sign the housing statement whenever you say.'],['Регистрацию оформила в первые сутки, подтверждение лежит в папке на комоде. Заявление о жилье подпишу, когда скажешь.','I did the registration within the first day, and the confirmation is in the folder on the chest of drawers. I will sign the housing statement whenever you say.']),
-  neighbour(['Я тоже когда-то проходила это. Если будут вопросы по бумагам, спрашивай.','I went through this too once. If you have questions about the papers, ask.'],['Я тоже когда-то проходил это. Если будут вопросы по бумагам, спрашивай.','I went through this too once. If you have questions about the papers, ask.']),
-  note('Копия подтверждения лежит в папке. Скучная бумага оказывается самой спокойной частью дня.','A copy of the confirmation is in the folder. The dull paper turns out to be the calmest part of the day.')],{districtBg:true});
- day(5,'document-desk','09:00',[
-  note('Сегодня я считаю то, что раньше только чувствовал{a}: сколько дней я могу находиться в стране без заявления.','Today I count what I used to only feel: how many days I may stay in the country without an application.'),
-  note('Срок зависит от гражданства, поэтому я проверяю его в официальном калькуляторе, а не по чужим рассказам. В этой истории мой срок заканчивается на тридцатый день. О поездке через границу, которая обновляет срок, я слышал{a}, но не хочу строить на ней план.','The period depends on citizenship, so I check it in the official calculator rather than in other people’s stories. In this story my period ends on day thirty. I have heard of a border trip that renews the period, but I do not want to build a plan on it.'),
-  A('Когда я считала дни, первое число всегда пугало. Потом оно превратилось в обычную строку в календаре.','When I counted my days, the first number always frightened me. Then it became an ordinary line in the calendar.','thoughtful'),
-  L('Калькулятор — только начало. Я бы сверил срок ещё и со штампом в паспорте.','The calculator is only the beginning. I would check the period against the stamp in the passport as well.','thoughtful'),
-  note('Тридцатый день отмечен в календаре. Это не приговор, а дедлайн, и его можно спланировать.','Day thirty is marked in the calendar. It is not a sentence, but a deadline, and a deadline can be planned for.')]);
- day(6,'workshop-office','10:00',[
-  note('Главный вопрос недели: на каком основании я прошу временное проживание. От ответа зависит весь список документов.','The main question of the week: on what basis do I ask for temporary residence? The whole list of documents depends on the answer.'),
-  route(T('Мой путь — своё дело. Я записываю, что понадобится для регистрации предпринимателя и как подтвердить, что дело действует.','My route is my own business. I write down what registration needs and how to show that the business really operates.'),T('Мой путь — работа по договору. Мне понадобятся работодатель и подтверждение образования, а значит, и время на признание диплома.','My route is a work contract. I will need an employer and proof of my education, which means time to have the diploma recognised.'),T('Я ещё сравниваю маршруты: работа, своё дело, недвижимость, семья, учёба. Не все мне подходят, и это нормально: я ищу то, что могу честно подтвердить.','I am still comparing routes: employment, my own business, property, family, study. Not all of them suit me, and that is fine: I am looking for what I can honestly prove.')),
-  L('Основание выбирают не по красоте, а по тому, что можно подтвердить документами.','A basis is chosen not for how it looks but for what can be proved with documents.','thoughtful'),
-  A('И не по тому, что выбрали все знакомые. У каждого свой набор бумаг.','And not by what all your acquaintances chose. Everyone has their own set of papers.','laughing'),
-  note('Основание — не мечта, а рабочая рамка. С ней список дел наконец перестаёт быть тревожным.','A basis is not a dream but a working frame. With it, the to-do list at last stops being anxious.')]);
- day(7,'document-desk','09:30',[
-  note('Сегодня я перехожу от «что я хочу» к «как это оформить».','Today I move from “what I want” to “how it gets arranged”.'),
-  route(T('Я сравниваю формы для малого дела: паушальный режим, режим с книгой учёта и общество с ограниченной ответственностью. Выбираю по своим доходам, а не по чужому совету.','I compare forms for a small business: the flat-rate regime, the bookkeeping regime and a limited company. I choose by my own income, not by someone else’s advice.'),T('Я пишу работодателю: кто я, какие документы мне нужны от компании и сколько займёт оформление. Прошу прислать проект договора и подтверждение условий заранее.','I write to the employer: who I am, which documents I need from the company and how long the paperwork takes. I ask for a draft contract and confirmation of the terms in advance.'),T('Я составляю таблицу для трёх маршрутов: что нужно, сколько стоит, сколько времени займёт. Пустые клетки превращаются в вопросы.','I build a table for three routes: what is needed, what it costs, how long it takes. Empty cells turn into questions.')),
-  contact(['Я бы начал с одной формы и одного вопроса. Остальное станет понятно, когда пойдёт первый доход.','I would start with one form and one question. The rest will become clear once the first income arrives.'],['Я бы начала с одной формы и одного вопроса. Остальное станет понятно, когда пойдёт первый доход.','I would start with one form and one question. The rest will become clear once the first income arrives.']),
-  counter(['Записывай вопросы в блокнот: потом их проще сверять с официальными источниками.','Write your questions in a notebook: it is easier to check them against official sources later.'],['Записывай вопросы в блокнот: потом их проще сверять с официальными источниками.','Write your questions in a notebook: it is easier to check them against official sources later.']),
-  note('К вечеру в блокноте один ясный следующий шаг, а не три размытых.','By evening my notebook holds one clear next step instead of three blurred ones.')]);
- day(8,'workshop-office','11:00',[
-  note('С Лукой мы встречаемся в его кабинете. Он не торопит и сразу говорит, что бухгалтер нужен не всем.','I meet Luka in his office. He does not hurry me, and he says at once that not everyone needs an accountant.'),
-  L('При паушальном режиме налог считают проще, и бухгалтер нужен не всегда. Но договариваться о правилах лучше до первого дохода, а не после.','Under the flat-rate regime the tax is simpler to calculate, and an accountant is not always needed. But it is better to agree on the rules before the first income, not after.','thoughtful'),
-  A('Я приношу на такие встречи печенье. Цифры лучше идут с чаем.','I bring biscuits to meetings like this. Numbers go down better with tea.','laughing'),
-  note('Я записываю три вопроса к официальным источникам. Простота налога — не повод не читать правила.','I write down three questions for the official sources. A simple tax is no reason not to read the rules.')]);
- day(9,'document-desk','09:30',[
-  note('Для дела и для заявления нужен адрес, который можно подтвердить.','For the business and for the application I need an address that can be confirmed.'),
-  note('Я проверяю, можно ли использовать адрес нашей квартиры: что говорит договор и согласен ли владелец. Если нет, смотрю коворкинг, где можно оформить юридический адрес.','I check whether the address of our flat can be used: what the lease says and whether the owner agrees. If not, I look at a coworking space that offers a legal address.'),
-  owner(['Адрес квартиры можно использовать, если договор это допускает. Давай перечитаем его вместе.','The flat’s address can be used if the lease allows it. Let us reread it together.'],['Адрес квартиры можно использовать, если договор это допускает. Давай перечитаем его вместе.','The flat’s address can be used if the lease allows it. Let us reread it together.']),
-  neighbour(['Если нужен запасной вариант, поспрашивай про коворкинги: многие знакомые так и делали.','If you need a fallback, ask about coworking spaces: many people I know did it that way.'],['Если нужен запасной вариант, поспрашивай про коворкинги: многие знакомые так и делали.','If you need a fallback, ask about coworking spaces: many people I know did it that way.']),
-  note('У меня два варианта и один вопрос владельцу. Остальное подождёт до завтра.','I have two options and one question for the owner. The rest can wait until tomorrow.')],{districtBg:true});
- day(10,'document-desk','10:00',[
-  note('Часть бумаг можно получить только дома: справки, нотариальные документы, апостиль.','Some papers can only be obtained at home: certificates, notarised documents, an apostille.'),
-  note('Я составляю список: какие документы нужны, какие требуют апостиля и какие должен переводить судебный переводчик. Заказываю то, что можно запросить удалённо, и записываю сроки.','I make a list: which documents are needed, which need an apostille and which must be translated by a court translator. I order what can be requested remotely and note the lead times.'),
-  contact(['Справку из дома лучше заказывать заранее: письма идут дольше, чем кажется.','Order the certificate from home in advance: letters take longer than they seem to.'],['Справку из дома лучше заказывать заранее: письма идут дольше, чем кажется.','Order the certificate from home in advance: letters take longer than they seem to.']),
-  counter(['Переводчика ищи по списку судебных переводчиков, а не по объявлению.','Look for a translator in the list of court translators, not in an advert.'],['Переводчика ищи по списку судебных переводчиков, а не по объявлению.','Look for a translator in the list of court translators, not in an advert.']),
-  note('Бюрократия неожиданно приятна, когда она — таблица со столбцом «срок».','Bureaucracy is oddly pleasant when it is a table with a “deadline” column.')]);
- day(11,'document-desk','09:30',[
-  note('Подготовка — самый невидимый и самый нужный день.','Preparation is the most invisible and most necessary day.'),
-  route(T('Я собираю данные для регистрации предпринимателя: адрес, вид деятельности, паспорт, подтверждения. Сама регистрация — отдельный день, сегодня только подготовка.','I gather the details for registering as an entrepreneur: address, line of business, passport, supporting papers. The registration itself is a separate day; today is only preparation.'),T('Я прошу у работодателя проект договора и проверяю, чего не хватает: диплом требует признания, документы — перевода.','I ask the employer for a draft contract and check what is missing: the diploma needs recognition, the papers need translation.'),T('Я выбираю основание для второго шага и записываю условия. Это не отказ от других путей, а способ сравнить цены, сроки и риски.','I pick a basis for the second step and write down its conditions. It is not giving up the other routes but a way to compare costs, timing and risks.')),
-  A('Я разложила бумаги по цветам. Это необязательно, но помогает не паниковать.','I sorted my papers by colour. It is not necessary, but it helps me not to panic.','laughing'),
-  L('А я нумерую страницы. Скучно, зато ничего не теряется.','And I number the pages. Dull, but nothing gets lost.','laughing'),
-  note('Папка стала толще. Мне спокойнее, когда она растёт по плану.','The folder has grown thicker. I feel calmer when it grows according to plan.')]);
- day(13,'registry-lobby','10:00',[
-  note('Для заявления мне пригодится подтверждение, что на лечение хватит средств или что у меня есть полис. Я выбираю полис, потому что хочу спокойствия.','For the application I will need proof that I can pay for treatment or that I hold a policy. I choose a policy because I want peace of mind.'),
-  note('Я сравниваю частные полисы: покрытие, срок, цена, язык поддержки. Выбираю тот, чьи условия могу объяснить своими словами, и сохраняю договор.','I compare private policies: coverage, term, price, support language. I choose the one whose terms I can explain in my own words and save the contract.'),
-  contact(['Полис выбирай не по цене, а по тому, что в нём написано про лечение.','Choose a policy not by its price but by what it says about treatment.'],['Полис выбирай не по цене, а по тому, что в нём написано про лечение.','Choose a policy not by its price but by what it says about treatment.']),
-  counter(['И сохрани телефон поддержки: он нужен как раз тогда, когда не до поисков.','And save the support number: you need it exactly when you have no time to search.'],['И сохрани телефон поддержки: он нужен как раз тогда, когда не до поисков.','And save the support number: you need it exactly when you have no time to search.']),
-  note('Полис оплачен. Теперь, если станет плохо, у меня есть номер, по которому звонят.','The policy is paid. Now, if I feel ill, I have a number to call.')]);
- day(14,'document-desk','09:30',[
-  note('Многое можно подать онлайн, но сначала нужен вход в государственный портал.','A lot can be filed online, but first I need to get into the government portal.'),
-  note('Я регистрируюсь на портале электронных услуг, настраиваю доступ и проверяю, что данные совпадают с паспортом. Пароли храню не в заметке с названием «пароли».','I register on the e-government portal, set up access and check that my details match my passport. I keep passwords somewhere other than a note called “passwords”.'),
-  L('Пароль от портала — в менеджере паролей, не в заметке и не в чате.','Keep the portal password in a password manager, not in a note or a chat.','thoughtful'),
-  A('Второй способ входа настрой сразу. Иначе в самый нужный день он сломается.','Set up a second way to sign in straight away. Otherwise it will break on the day you need it most.','laughing'),
-  note('Вход работает. Страница выглядит скучно, но это ворота к заявлению.','Sign-in works. The page looks dull, but it is the gateway to the application.')]);
  day(17,'dorcol-apartment','09:30',[
   note('После подачи наступает странная пауза: заявление принято, но ответа ещё нет.','After filing there is a strange pause: the application has been accepted, but there is no answer yet.'),
   note('Я сохраняю квитанцию об оплате пошлины и подтверждение подачи, отмечаю дату и записываю, как проверять статус. Ожидание — не обещание результата.','I save the receipt for the fee and the confirmation of filing, note the date and write down how to check the status. Waiting is not a promise of a result.'),

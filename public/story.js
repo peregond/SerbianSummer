@@ -3,6 +3,7 @@ import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
 import {extendSixthChapter} from './chapter-six.js?v=0.15.0';
 import {extendSeventhChapter} from './chapter-seven.js?v=0.15.0';
 import {extendDays,extendCast,dayFor} from './days.js?v=0.15.0';
+import {extendFirstHalf} from './day-scenes.js?v=0.15.0';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
@@ -663,6 +664,7 @@ extendFifthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSixthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
 extendDays({NODES,JOURNAL,n,msg,scene});
+extendFirstHalf({NODES,JOURNAL,n,scene});
 extendCast({NODES});
 // Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
 {
