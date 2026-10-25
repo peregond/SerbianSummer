@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {NODES,JOURNAL,START} from '../public/story.js';
+import {NODES,JOURNAL,START,presentationFor} from '../public/story.js';
 import {DAYS,STAGES,PRELUDE} from '../public/days.js';
 import {CHAPTERS,continuationFor,dayProgress,chapterFor} from '../public/chapters.js';
 // Thirty days, in order, each one chapter.
@@ -39,6 +39,31 @@ for(const d of DAYS.filter(d=>d.status==='skeleton')){
  assert.ok(JOURNAL['day_'+d.n].text.length>10);
  const text=JSON.stringify([NODES[d.start],NODES['d'+d.n+'_end']]);
  assert.ok(!/одобрен|получил[аи]? (вид на жительство|разрешение)/iu.test(text),'No skeleton day announces an approval: day '+d.n);
+}
+
+// Every day shows two people of different genders on every path (the prologue and day 0 are one prelude, since the prologue
+// is where the player meets one of two airport people).
+const GENDER={nikola:'m',milica:'f',dragan:'m',jelena:'f',asya:'f',luka:'m','nikola-evening':'m','Никола':'m','Милица':'f','Драган':'m','Йелена':'f','Ася':'f','Лука':'m'};
+const group=id=>id==='arrival'?'prologue':id;
+for(const companion of ['nikola','milica'])for(const host of ['dragan','jelena'])for(const districtOwner of ['dragan','jelena'])for(const workRoute of ['business','employment','explore']){
+ const flags={companion,host,districtOwner,workRoute,district:'dorcol'};
+ for(const chapter of CHAPTERS.filter(c=>c.id!=='arrival')){
+  const memo=new Map();
+  const present=id=>{
+   if(memo.has(id))return memo.get(id);
+   const node=NODES[id],own=new Set();
+   for(const page of node.pages){
+    const character=presentationFor(node,page,flags).character;if(character)own.add(GENDER[character]);
+    const speaker=page.speaker;const g=speaker==='contact'?GENDER[companion]:speaker==='contactCounterpart'?GENDER[companion==='nikola'?'milica':'nikola']:speaker==='host'?GENDER[host]:speaker==='districtHost'?GENDER[districtOwner]:speaker==='ownerCounterpart'?GENDER[districtOwner==='jelena'?'dragan':'jelena']:GENDER[speaker];
+    if(g)own.add(g);
+   }
+   const next=(node.choices?node.choices.map(c=>c.next):[node.next]).filter(x=>x!=='end'&&group(NODES[x].chapterId)===chapter.id);
+   let all=null;for(const x of next){const s=present(x);all=all?new Set([...all].filter(v=>s.has(v))):new Set(s);}
+   const result=new Set([...own,...(all??[])]);memo.set(id,result);return result;
+  };
+  const people=present(chapter.start);
+  assert.ok(people.has('f')&&people.has('m'),`${chapter.id} needs a woman and a man on every path (${companion}/${host}/${districtOwner}/${workRoute}): ${[...people].join('')||'none'}`);
+ }
 }
 // Plan document lists every day.
 const plan=fs.readFileSync(new URL('../DAYS.md',import.meta.url),'utf8');

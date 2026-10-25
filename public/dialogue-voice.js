@@ -10,6 +10,8 @@ export function speakerIdentity(page,flags={}){
  if(id==='contact')return flags.companion??'milica';
  if(id==='host')return flags.host??'dragan';
  if(id==='districtHost')return flags.districtOwner??'jelena';
+ if(id==='contactCounterpart')return flags.companion==='nikola'?'milica':'nikola';
+ if(id==='ownerCounterpart')return flags.districtOwner==='jelena'?'dragan':'jelena';
  for(const [key,name]of Object.entries({milica:'Милица',nikola:'Никола',dragan:'Драган',jelena:'Йелена',asya:'Ася',luka:'Лука'}))if(id===key||id.startsWith(name))return key;
  return 'other';
 }

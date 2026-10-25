@@ -108,8 +108,7 @@ export function extendSeventhChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    n(T('Это не конец поиска, а начало обычных дней: платить, работать, ошибаться и спрашивать дорогу.','This is not the end of the search, but the start of ordinary days: paying, working, making mistakes and asking for directions.'))
   ],'epilogue_stay',{bg:'belgrade-courtyard',time:'10:30',exitAction:out(T('Принять записку','Take the note'))}),
   epilogue_stay:s([
-   n(T('Через несколько недель Белград перестаёт быть местом, где я учусь. Он становится местом, где я живу.','A few weeks later Belgrade stops being a place where I am learning. It becomes a place where I live.')),
-   n(T('Я знаю, где купить хлеб, у какого подъезда соседский кот, и какой тон нужен для разговора с банком.','I know where to buy bread, which entrance the neighbours’ cat guards, and what tone suits a conversation with the bank.')),
+   n(T('Через несколько недель Белград перестаёт быть местом, где я учусь. Он становится местом, где я живу: я знаю, где купить хлеб и какой тон нужен для разговора с банком.','A few weeks later Belgrade stops being a place where I am learning. It becomes a place where I live: I know where to buy bread and what tone suits a conversation with the bank.')),
    fin(T('В субботу двор снова собирается. Мне оставляют стул, и я больше не удивляюсь этому.','On Saturday the courtyard gathers again. They keep a chair for me, and I am no longer surprised.'),{
     nikola:T('Никола присылает: «Я оставил тебе кифлу на завтра». Я улыбаюсь и отвечаю: «Тогда приду пораньше».','Nikola writes: “I saved you a kifla for tomorrow.” I smile and answer: “Then I will come early.”'),
     milica:T('Милица присылает фото страницы блокнота: набросок двора и подпись «твой стул». Я отвечаю: «Тогда приду пораньше».','Milica sends a photo of a notebook page: a sketch of the courtyard captioned “your chair”. I answer: “Then I will come early.”'),

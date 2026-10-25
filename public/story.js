@@ -2,7 +2,7 @@ import {registerLukaSport} from './luka-redesign.js?v=0.15.0';
 import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
 import {extendSixthChapter} from './chapter-six.js?v=0.15.0';
 import {extendSeventhChapter} from './chapter-seven.js?v=0.15.0';
-import {extendDays,dayFor} from './days.js?v=0.15.0';
+import {extendDays,extendCast,dayFor} from './days.js?v=0.15.0';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
@@ -663,6 +663,7 @@ extendFifthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSixthChapter({NODES,JOURNAL,BACKGROUNDS,n,y,msg,scene});
 extendSeventhChapter({NODES,JOURNAL,n,y,msg,scene});
 extendDays({NODES,JOURNAL,n,msg,scene});
+extendCast({NODES});
 // Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
 {
   const link=(from,day,relabel=true)=>{NODES[from].next=dayFor(day).start;if(relabel)NODES[from].exitAction={kind:'tap',label:'Продолжить · День '+day,object:'Продолжить · День '+day};};
@@ -688,12 +689,15 @@ export function presentationFor(node,page,flags={}) {
   const kitchenStage=page.kitchenStage??node.kitchenStage;
   const kitchenPerson=(node.districtPortrait?flags.districtOwner:flags.host)==='jelena'?'jelena':'dragan';
   const seated=page.seatedMilica??node.seatedMilica;
+  // A cameo shows the speaking person even in scenes that have no portrait of their own. The counterpart of the airport
+  // person or of the owner is always the other gender, so a day never lacks one of them.
+  const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:flags.districtOwner==='jelena'?'jelena':'dragan',ownerCounterpart:flags.districtOwner==='jelena'?'dragan':'jelena'}[page.speaker]??null):null;
   const seatedMood=page.reactions?.milica??page.emotion??'friendly';
   const bg=kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
   const metadata=BACKGROUNDS[bg];
   const daydream=page.daydream??node.daydream??false;
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
-  const character=kitchenStage||seated||page.portrait===false?null:(page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=kitchenStage||seated||page.portrait===false?null:(cameo??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   return {
     bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage,composite:!!kitchenStage||!!seated,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg?metadata.label:node.location??metadata.label),

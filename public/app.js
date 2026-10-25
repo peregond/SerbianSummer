@@ -181,7 +181,7 @@ function startGame() {
   enterNode(START);recordPage();save();renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
-  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
+  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
   return t(names[page.speaker]??page.speaker,locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
