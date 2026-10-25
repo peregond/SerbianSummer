@@ -46,14 +46,16 @@
       "prompt": "Create ONE separate new wardrobe variant of the supplied adult fictional Serbian Summer character, keeping the exact face identity, age, hair, eye colour and distinctive build. This is a non-explicit casual summer wardrobe portrait for a visual novel, with a friendly expression and natural relaxed standing pose. Match the existing semi-realistic hand-painted art, delicate line work, detailed cloth and warm softly shaded skin. No sexual action or explicit posing. Portrait from the entire crown of the head with a clear margin through mid thighs, both shoulders elbows and hands fully visible, no head crop. TRUE transparent background, clean alpha silhouette, no scenery, gradient or halo. No text, labels or watermark. Identity: an adult man aged 30; preserve short dark curls, brown eyes, light stubble and athletic build. Wardrobe: Bare male torso, keep dark jeans fully fastened and his small signet ring. No mask, uniform, tactical equipment, coffee cup or shirt. Pose: Warm playful smile, slight three-quarter stance with his head turned toward viewer, left hand resting lightly at his own waist, right hand giving a small friendly wave below shoulder level. Lower body remains clothed; no exposed female breasts or genitals."
     }
   ],
-  "unavailable": [
+  "previously_rejected_requests": [
     {
       "character": "teodora",
-      "reason": "Image generation rejected at output moderation stage; no image created."
+      "reason": "Image generation rejected at output moderation stage; no image created.",
+      "resolved_by": "public/assets/workshop/teodora-dream-summer-friendly-draft.webp"
     },
     {
       "character": "strahinja",
-      "reason": "Image generation rejected at output moderation stage; no image created."
+      "reason": "Image generation rejected at output moderation stage; no image created.",
+      "resolved_by": "public/assets/workshop/strahinja-dream-summer-friendly-draft.webp"
     }
   ]
 }

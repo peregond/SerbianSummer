@@ -32,8 +32,8 @@ assert.equal(entry('workshop/milos-two-looks-draft.webp').status, 'archive');
 assert.equal(entry('workshop/milos-masked-friendly-v2-draft.webp').look, 'На службе · riot-экипировка');
 assert.equal(entry('workshop/milos-casual-friendly-draft.webp').look, 'Без формы');
 const summerVariants = catalog.entries.filter(e => e.file.includes('-dream-summer-'));
-assert.equal(summerVariants.length, 9);
-for (const id of ['milica', 'nikola', 'dragan', 'jelena', 'asya', 'luka', 'lazar', 'ivana', 'milos']) {
+assert.equal(summerVariants.length, 11);
+for (const id of Object.keys(PEOPLE)) {
   const variant = summerVariants.find(e => e.character === id);
   assert.ok(variant, id);
   assert.equal(variant.look, 'Фантазия');
