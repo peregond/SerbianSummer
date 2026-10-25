@@ -1,5 +1,5 @@
 // Chapter one: the address becomes a place, and acquaintances become choices.
-export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,m,k,y,msg,scene}) {
+export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,msg,scene}) {
   Object.assign(BACKGROUNDS,{
     'belgrade-drive':{label:'БЕЛГРАД · ПО ДОРОГЕ',description:'Дорога через город и река за окном машины',position:'50% 53%'},
     'belgrade-courtyard':{label:'БЕЛГРАД · ПЕРВЫЙ ДВОР',description:'Тихий жилой двор Белграда с балконами и входной дверью',position:'50% 58%'},

@@ -11,7 +11,7 @@ assert.equal(NODES.host_practical.next,'room_alone');
 assert.equal(NODES.host_coffee_borrowed.next,'room_alone');
 assert.equal(NODES.host_coffee_stay.next,'room_alone');
 assert.equal(NODES.host_coffee_comfort.choices.length,2,'The player can leave or release the hand');
-for(const host of ['dragan','jelena'])for(const [id,node]of Object.entries(NODES))for(const page of node.pages){
+for(const host of ['dragan','jelena'])for(const node of Object.values(NODES))for(const page of node.pages){
  const p=presentationFor(node,page,{host,districtOwner:host});
  if(p.composite){assert.ok(ART_FRAMES[p.bg],p.bg+' needs protected head bounds');assert.equal(p.character,null,'Composite frames must not have a second standing portrait');}
 }
