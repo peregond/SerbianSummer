@@ -33,7 +33,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
   ],{districtBg:true,districtPortrait:true,next:'bank_plan',journal:['housing_reply'],exitAction:out('Добавить квартиру в сравнение')}),
   housing_other:s([
    y('Хочу ещё посмотреть. Район нравится, а квартиру пока не чувствую своей.'),
-   owner('Тогда поищем другое. Обещаю не обижаться за стены.','Значит, хорошо, что посмотрели. Заодно узнали, что тебе важно.'),
+   owner('Понимаю. Лучше сразу сказать, что квартира не твоя, чем жить среди чужих стен.','Значит, хорошо, что посмотрели. Заодно узнали, что тебе важно.'),
    n('Ася ставит в заметке маленький плюс: «Первый отказ без катастрофы. Отлично идём». ')
   ],{districtBg:true,districtPortrait:true,next:'bank_plan',journal:['housing_reply'],exitAction:out('Записать, чего не хватило квартире')}),
   bank_plan:s([
@@ -80,7 +80,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
   ],{next:'afternoon_invite',journal:['work_route'],exitAction:out('Сохранить направления для изучения')}),
   afternoon_invite:s([
    contact('Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.','Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.'),
-   n('Время на экране — 18:40. Сегодня у меня было достаточно серьёзное лицо.'),
+   n('Время на экране — 18:40. Пишет {who.airport}: мы обменялись номерами ещё в аэропорту. Сегодня у меня было достаточно серьёзное лицо.'),
    n('Теперь можно решить, каким будет вечер.')
   ],{time:'18:40',choices:[
    {label:'Предложить свидание у реки',tone:'romance',next:'date_river',effect:{eveningIntent:'romance'}},

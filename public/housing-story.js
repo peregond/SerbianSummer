@@ -199,7 +199,7 @@ export function extendHousing({NODES,JOURNAL,BACKGROUNDS}){
   finish('flat_settle',[
     N('Чемодан раскрывается на кровати. Рубашки на плечики, документы в верхний ящик, зарядка к розетке у стола.','The suitcase opens on the bed. Shirts onto hangers, documents into the top drawer, the charger to the socket by the desk.'),
     N('Роутер мигает зелёным. Я ввожу пароль, и телефон сообщает, что сеть теперь моя.','The router blinks green. I type the password and the phone says the network is mine now.'),
-    N('Над дверью появляется крючок для ключей. Сегодня у моих вещей впервые есть постоянные места.','A hook for keys goes up by the door. Today my things have permanent places for the first time.',{action:{kind:'checklist',label:T('Обустроиться в новой квартире','Settle into the new flat'),items:[T('Разобрать чемодан','Unpack the suitcase'),T('Подключить роутер','Connect the router'),T('Повесить ключ у двери','Hang the key by the door')],effect:{rentalContract:'yes',rentalMoved:true},feedback:T('Теперь это мой дом.','This is my home now.')}})
+    N('Над дверью появляется крючок для ключей. Сегодня у моих вещей впервые есть постоянные места.','A hook for keys goes up by the door. Today my things have permanent places for the first time.',{action:{kind:'checklist',label:T('Обустроиться в новой квартире','Settle into the new flat'),items:[T('Разобрать чемодан','Unpack the suitcase'),T('Подключить роутер','Connect the router'),T('Повесить ключ у двери','Hang the key by the door')],effect:{rentalContract:'yes',rentalMoved:true,chapterOneComplete:true},feedback:T('Теперь это мой дом.','This is my home now.')}})
   ],'bank_plan',{time:'16:00',journal:['flat_home'],bg:'room-window',districtPortrait:false});
 }
 

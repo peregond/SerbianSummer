@@ -108,6 +108,6 @@ export function rentalRedirect(from,target,flags={}){
  if(flags.rentalCast!=='new'||!people[flags.districtOwner]||!from||from.startsWith('rental_'))return target;
  if(['epilogue_stay','epilogue_leave','epilogue_return'].includes(target))return 'rental_'+target;
  const chapter=CHAPTERS.find(c=>c.start===target&&Object.hasOwn(beats,c.day));
- return chapter&&!(flags.flatSettled&&SKIPPED_BEAT_DAYS.includes(chapter.day))?'rental_day_'+chapter.day:target;
+ return chapter&&!(flags.rentalMoved===true&&SKIPPED_BEAT_DAYS.includes(chapter.day))?'rental_day_'+chapter.day:target;
 }
 export function registerRentalBeats(NODES,scene){extendRentalBeats(NODES,scene);}

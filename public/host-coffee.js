@@ -29,7 +29,7 @@ export function extendHostCoffee({NODES:N,JOURNAL:J,BACKGROUNDS:B}){
  for(const person of ['dragan','jelena'])for(const [stage,[label,description]]of Object.entries(stageLabels))B[`${person}-kitchen-${stage}`]={label,description,position:'50% 34%'};
  J.host_spark={...J.host_spark,title:stageLabels.coffee[0],text:T('Получилось предложить кофе прямо в квартире. Разговор постепенно перестал быть только про ключи и жильё.','I managed to suggest coffee right in the flat. The conversation gradually became about more than keys and housing.')};
  J.host_coffee={title:stageLabels.spill[0],tag:T('ЛЮДИ · ДОВЕРИЕ','PEOPLE · TRUST'),text:T('На кухне пролился уже остывший кофе. Вместо упрёков — спокойный голос и ладонь, которая помогла перестать волноваться.','Some lukewarm coffee spilled in the kitchen. Instead of reproaches, a calm voice and a hand helped me stop worrying.')};
- J.borrowed_top={title:stageLabels.borrowed[0],tag:T('МАЛЕНЬКИЙ ПОВОД УВИДЕТЬСЯ','A LITTLE REASON TO MEET AGAIN'),text:T('В чемодане нашлась сухая одежда на замену мокрой. Теперь есть ещё один повод увидеться — вернуть вещь и спокойно допить кофе.','There were dry clothes in my suitcase to replace the wet ones. Now there is another reason to meet: returning them and finishing our coffee in peace.')};
+ J.borrowed_top={title:stageLabels.borrowed[0],tag:T('МАЛЕНЬКИЙ ПОВОД УВИДЕТЬСЯ','A LITTLE REASON TO MEET AGAIN'),text:T('У меня нашлась сухая вещь на замену мокрой одежде. Теперь есть ещё один повод увидеться — вернуть её и спокойно допить кофе.','I had something dry to replace the wet clothes. Now there is another reason to meet: returning it and finishing our coffee in peace.')};
  N.keys_room.choices[0].label=T('«Может, выпьем кофе здесь, на кухне? Я угощаю»','‘Shall we have coffee here in the kitchen? My treat’');
  N.host_flirt.pages=[
   n(T('Я киваю в сторону кухни. После всех разговоров о ключах хочется задержаться ещё ненадолго.','I nod toward the kitchen. After all the talk about keys, I want to stay together a little longer.')),
@@ -67,7 +67,7 @@ export function extendHostCoffee({NODES:N,JOURNAL:J,BACKGROUNDS:B}){
  N.host_coffee_wait=scene([
   h(T('А я бы согласился и без представления. Но половица решила помочь.','I would have agreed without the performance. But the floorboard decided to help.')),
   n(T('Рубашка сохнет на стуле. Мы сидим за столом чуть ближе, чем раньше. Теперь пауза между нами уже не пугает.','The shirt dries on a chair. We sit a little closer at the table. The silence between us no longer frightens me.')),
-  n(T('В чемодане есть чистые вещи. Можно предложить что-нибудь сухое — или просто остаться рядом, пока одежда сохнет.','There are clean things in my suitcase. I could offer something dry, or simply stay together while the clothes dry.'))
+  n(T('В шкафу лежат чистые вещи. Можно предложить что-нибудь сухое — или просто остаться рядом, пока одежда сохнет.','There are clean things in the wardrobe. I could offer something dry, or simply stay together while the clothes dry.'))
  ],null,'dry',{choices:[
   {label:T('«У меня есть сухая одежда. Давай найду тебе что-нибудь»','‘I have some dry clothes. Let me find you something’'),tone:'friendship',next:'host_coffee_lend'},
   {label:T('«Посидим ещё немного. Мне хорошо с тобой»','‘Let us sit a little longer. I like being with you’'),tone:'romance',next:'host_coffee_stay'}
@@ -76,7 +76,7 @@ export function extendHostCoffee({NODES:N,JOURNAL:J,BACKGROUNDS:B}){
  N.host_coffee_lend=scene([
   both('player',T('У меня есть чистая облегающая футболка Under Armour. Серая или белая — какую принести?','I have a clean, close-fitting Under Armour T-shirt. Grey or white: which one shall I bring?'),T('У меня есть мягкая толстовка с надписью «СПБГУ 2008». Серая или белая — какую принести?','I have a soft hoodie that says “СПБГУ 2008”. Grey or white: which one shall I bring?')),
   topReply(),
-  n(T('Я достаю вещь из чемодана и ненадолго оставляю кухню, чтобы можно было спокойно переодеться.','I take it from the suitcase and leave the kitchen for a moment so they can change comfortably.'))
+  n(T('Я достаю вещь из шкафа и ненадолго оставляю кухню, чтобы можно было спокойно переодеться.','I take it from the wardrobe and leave the kitchen for a moment so they can change comfortably.'))
  ],'host_coffee_borrowed','dry',{exitAction:action(T('Вернуться на кухню с новой чашкой кофе','Return to the kitchen with fresh coffee'))});
  N.host_coffee_borrowed=scene([
   topBorrowed(),
