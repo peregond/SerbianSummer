@@ -17,7 +17,7 @@
   <link rel="icon" type="image/png" href="./assets/nikola-icon-32-buzz-v3.png">
   <link rel="apple-touch-icon" href="./assets/nikola-icon-180-buzz-v3.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./style.css?v=0.15.0"><link rel="stylesheet" href="./theme.css?v=0.7.0"><link rel="stylesheet" href="./viewport.css?v=0.15.0"><link rel="stylesheet" href="./choice-ui.css?v=0.15.0"><link rel="stylesheet" href="./mobile-shell.css?v=0.15.0">
+  <link rel="stylesheet" href="./style.css?v=0.15.0"><link rel="stylesheet" href="./theme.css?v=0.7.0"><link rel="stylesheet" href="./viewport.css?v=0.15.0"><link rel="stylesheet" href="./chapter-card.css?v=0.15.0"><link rel="stylesheet" href="./choice-ui.css?v=0.15.0"><link rel="stylesheet" href="./mobile-shell.css?v=0.15.0">
   <link rel="preload" as="font" type="font/ttf" href="./assets/fonts/onest-variable.ttf" crossorigin>
   <link rel="preload" as="font" type="font/ttf" href="./assets/fonts/lora-variable.ttf" crossorigin>
   <link rel="preload" as="image" href="./assets/ensemble-poster-buzz-v3.webp">
@@ -48,6 +48,7 @@
       <footer class="game-footer"><span id="save-status" role="status">Прогресс сохраняется на этом устройстве</span></footer>
     </section>
     <section id="ending" class="screen ending" hidden aria-labelledby="ending-title"><div class="ending-inner"><p class="eyebrow">ПРОДОЛЖЕНИЕ СЛЕДУЕТ</p><h2 id="ending-title">Пока только<br><em>адрес</em></h2><p>Сегодня у тебя появился адрес.<br>И человек, которому можно написать.</p><blockquote id="ending-memory"></blockquote><div class="ending-actions"><button class="primary" id="continue-story">Продолжить · первый вечер</button><button class="secondary" id="ending-rewind" disabled>← Назад к истории</button><button class="primary" id="replay">Начать заново</button><button class="secondary" data-action="chapters">Выбрать главу</button><button class="secondary" id="ending-journal">Открыть дневник</button><button class="text-button" data-action="home">На главный экран</button></div><p class="demo-note">Продолжение следует.<br>Дальше — визит в банк, своё дело и новые встречи.</p></div></section>
+    <section id="chapter-card" class="screen chapter-card" hidden aria-labelledby="chapter-card-title"></section>
     <div id="toast" role="status" class="toast" hidden></div>
   </main>
   <dialog id="panel"><div class="panel-heading"><h2 id="panel-title"></h2><button id="close-panel" class="close-button" aria-label="Закрыть панель">×</button></div><div id="panel-content"></div></dialog>
