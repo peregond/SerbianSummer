@@ -1,5 +1,5 @@
 import {familySpeaker} from './family-contact.js?v=1';
-import { CHAT_SCENES, MESSENGER_CONFIG } from './messenger-config.js?v=2';
+import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.15.2';
 
 const names = { milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
 export function contactName(value, flags = {}) {
@@ -22,7 +22,7 @@ export function messageAt(sceneId, node, index, flags = {}) {
   const direction = config.direction ?? (page.speaker === 'player' || /^Ты\s*→/u.test(page.speaker) ? 'outgoing' : 'incoming');
   const previous = node.pages.slice(0, index).findLast(p => p.message && p.speaker !== 'player' && !/^Ты\s*→/u.test(p.speaker));
   const person = config.contact ?? scene.contact ?? node.chat?.contact ?? (direction === 'incoming' ? page.speaker : /^Ты\s*→/u.test(page.speaker) ? page.speaker : previous?.speaker ?? 'Близкий человек');
-  return { direction, contact: contactName(person, flags), quotedBody: !!config.quotedBody, time: config.time ?? page.time ?? node.time ?? '', quote: config.quote };
+  return { direction, contact: contactName(person, flags), quotedBody: !!config.quotedBody, time: config.time ?? page.time ?? node.time ?? '', quote: config.quote, attachment: config.attachment };
 }
 export function stripMessageQuotes(value) {
   const text = value.trim();
@@ -43,7 +43,7 @@ function messageBody(page, meta, text) {
   }
   return { text: stripMessageQuotes(full), context: '' };
 }
-export function messengerFrame({ sceneId, node, index, flags = {}, action, text, choiceText }) {
+export function messengerFrame({ sceneId, node, index, flags = {}, journal = [], action, text, choiceText }) {
   let current = messageAt(sceneId, node, index, flags);
   // A phone reply may follow a narrated thought on the same legacy page.
   if (!current && action?.kind === 'reply') {
@@ -55,19 +55,23 @@ export function messengerFrame({ sceneId, node, index, flags = {}, action, text,
   for (let i = 0; i <= index; i++) {
     const meta = messageAt(sceneId, node, i, flags);
     if (!meta || meta.contact !== current.contact || (i === index && meta.direction === 'outgoing')) continue;
-    messages.push({ direction: meta.direction, time: meta.time, quote: meta.quote, ...messageBody(node.pages[i], meta, text) });
+    messages.push({ direction: meta.direction, time: meta.time, quote: meta.quote, attachment: meta.attachment, ...messageBody(node.pages[i], meta, text) });
   }
-  const choices = action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
+  const meetingChoice = sceneId==='courtyard_arrival'&&index===2;
+  const choices = meetingChoice ? node.choices : action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
+  const inline = !choices?.length && actual?.direction === 'incoming' ? INLINE_CHAT_REPLIES[sceneId]?.[index] : null;
   const draft = actual?.direction === 'outgoing' ? messageBody(node.pages[index], actual, text) : null;
   return {
     contact: current.contact,
+    hideAvatar: current.contact==='Драган'&&!journal.includes('dragan'),
     time: actual?.time ?? node.time ?? '',
     draftQuote: actual?.quote,
+    draftAttachment: actual?.attachment,
     messages: messages.slice(-MESSENGER_CONFIG.historyLimit),
     draft: draft?.text ?? null,
     context: draft?.context || (!actual ? text(node.pages[index]) : ''),
-    replies: choices?.map(option => ({ option, text: stripMessageQuotes(choiceText(option.chatText ?? option.label)), tone: option.tone })) ?? [],
-    replyKind: action?.kind === 'reply' ? 'action' : 'choice',
+    replies: (inline?[inline]:choices)?.map(option => ({ option, text: stripMessageQuotes(choiceText(meetingChoice?(option.next==='meet_dragan'?'Подожду вас во дворе. До встречи!':'Тогда попрошу Йелену встретить меня сейчас. Спасибо!'):option.chatText ?? option.label)), tone: option.tone })) ?? [],
+    replyKind: inline ? 'inline' : action?.kind === 'reply' ? 'action' : 'choice',
     physicalAction: !!action && action.kind !== 'tap' && action.kind !== 'reply',
     continueLabel: choiceText(action?.label ?? 'К истории')
   };

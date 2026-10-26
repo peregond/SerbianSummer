@@ -13,3 +13,5 @@ assert.notEqual(scene('nikola_questions',2).bg,'nikola-elder-bread-handover-v1')
 for(const i of [0,1,2,3,4])assert.equal(scene('nikola_last',i).bg,'nikola-bakery-lookback-v1');
 assert.notEqual(scene('nikola_last',5).bg,'nikola-bakery-lookback-v1','The actual exit keeps its outdoor background');
 console.log('Fantasy, handover and look-back framing follow legacy page identities, returning to reality at the original point.');
+
+assert.equal(scene('road_start',1).bg,'taxi-navigation-v1');assert.equal(scene('road_start',1).contactPortrait,null);assert.notEqual(scene('road_start',2).bg,'taxi-navigation-v1');

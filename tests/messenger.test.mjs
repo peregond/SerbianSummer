@@ -3,10 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
 import { messengerFrame, messageAt, stripMessageQuotes } from '../public/messenger-model.js';
-import { configureTranslations, setLanguage } from '../public/i18n.js?v=0.15.1';
+import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.15.2';
 
 const before = JSON.stringify(NODES);
-const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => s });
+const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => t(s) });
 let count = 0;
 for (const [id, node] of Object.entries(NODES)) for (const [index, page] of node.pages.entries()) {
   if (!page.message) continue;
@@ -62,3 +62,14 @@ assert.match(NODES.d23_start.pages[0].text,/^Мама присылает/);
 assert.equal(familyText('Близкому человеку отвечаю: «Пока в аэропорту. Пью кофе. Всё нормально».'),NODES.host.pages[2].text);
 assert.equal(familyText('Дом присылает подробное письмо: обычные новости, смешная история про соседа и осторожный вопрос о планах.'),NODES.d23_start.pages[0].text);
 assert.equal(familyText('Дом — это люди'),'Дом — это люди');
+
+// Direct questions at the airport must offer a written answer immediately.
+for(const [id,index]of [['nikola_phone',1],['phone',1],['phone',3],['messages',0]]){
+ const question=frame(id,index);assert.equal(question.replyKind,'inline');assert.equal(question.replies.length,1);assert.ok(question.replies[0].option.label);assert.ok(!question.replies[0].option.next,'Inline answers keep the original continuation');
+}
+assert.match(frame('nikola_phone',1).replies[0].text,/Скоро выезжаю/);
+setLanguage('en');assert.match(frame('nikola_phone',1).replies[0].text,/leaving soon/);setLanguage('ru');
+
+assert.equal(frame('nikola_phone',1).hideAvatar,true);
+const met=messengerFrame({sceneId:'nikola_phone',node:NODES.nikola_phone,index:1,journal:['dragan'],text:p=>pageText(p,{}),choiceText:s=>s});assert.equal(met.hideAvatar,false);
+assert.ok(frame('road_contact',0,{companion:'nikola'}).draftAttachment);assert.match(frame('road_contact',0,{companion:'nikola'}).draft,/Кажется/);assert.equal(frame('road_contact',0,{companion:'nikola'}).contact,'Никола');

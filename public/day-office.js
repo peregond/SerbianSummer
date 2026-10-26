@@ -4,7 +4,7 @@
 // Rules of these threads: closeness is the player's choice and always has a friendly or purely professional alternative; nobody
 // who handles the player's papers decides anything; the staff say so plainly, and the application is decided elsewhere.
 // In-person portraits are selected by bankSpark/mupSpark in living-art.js; messages use the messenger template.
-import {T,castHelpers} from './days.js?v=0.15.1';
+import {T,castHelpers} from './days.js?v=0.15.2';
 export function extendOfficeRomance({NODES:N,JOURNAL:J,n,scene}){
  const {note}=castHelpers(n);
  const out=label=>({kind:'tap',label,object:label});

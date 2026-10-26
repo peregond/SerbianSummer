@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=0.15.1';
+import {t} from './i18n.js?v=0.15.2';
 const PEOPLE = {
   luka: { id:'luka', name:'Лука', gender:'male' },
   milica: { id:'milica', name:'Милица', gender:'female' },
@@ -35,6 +35,7 @@ function person(value) {
 }
 
 function recipientFor(choice,node,flags) {
+  if(choice.next==='road_contact')return person(flags.companion??'milica');
   // A destination selected by this answer takes priority over the current scene.
   for(const key of ['companion','host','districtOwner','rainWith','chapterFiveWith','eveningWith']){
     const selected=person(choice.effect?.[key]==='companion'?flags.companion:choice.effect?.[key]==='host'?flags.districtOwner:choice.effect?.[key]);
@@ -50,10 +51,10 @@ function recipientFor(choice,node,flags) {
 }
 
 export function choicePresentation(choice,{text=value=>value,tones={},node={},flags={}}={}) {
-  const tone=Object.hasOwn(ICONS,choice.tone)?choice.tone:'personal';
-  const category=tones[choice.tone]?.label??LABELS[tone];
-  const label=text(choice.label);
   const recipient=recipientFor(choice,node,flags);
+  const tone=choice.next==='road_contact'?(flags[(recipient?.id??'milica')+'Bond']==='romance'?'romance':'friendship'):Object.hasOwn(ICONS,choice.tone)?choice.tone:'personal';
+  const category=tones[tone]?.label??LABELS[tone];
+  const label=choice.next==='road_contact'?text(recipient?.id==='nikola'?'Написать Николе':'Написать Милице'):text(choice.label);
   return {
     tone, category, label, recipient:recipient?.id??null,
     recipientName:recipient?.name??null, gender:recipient?.gender??'neutral',

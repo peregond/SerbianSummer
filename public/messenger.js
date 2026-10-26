@@ -1,6 +1,6 @@
-import { t } from './i18n.js?v=0.15.1';
-import { appendChoiceContents } from './choice-ui.js?v=0.15.1';
-import { MESSENGER_CONFIG } from './messenger-config.js?v=2';
+import { t } from './i18n.js?v=0.15.2';
+import { appendChoiceContents } from './choice-ui.js?v=0.15.2';
+import { MESSENGER_CONFIG } from './messenger-config.js?v=0.15.2';
 
 const icons = {
   back: ['m14 4-8 8 8 8'],
@@ -42,7 +42,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
   const back = button('← Назад', onBack, 'chat-back'); back.disabled = !canRewind; back.append(icon('back'));
   const identity = el('div', '', 'chat-identity');
   const avatar = el('span', '', 'chat-avatar'); avatar.setAttribute('aria-hidden', 'true');
-  const avatarFile = theme.avatars?.[frame.contact];
+  const avatarFile = !frame.hideAvatar && theme.avatars?.[frame.contact];
   if (avatarFile) {
     const image = el('img'); image.alt = ''; image.src = './assets/' + avatarFile;
     listen(image, 'error', () => { image.hidden = true; avatar.textContent = t(frame.contact)[0]; }); avatar.append(image);
@@ -65,6 +65,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
     if (message.quote) {
       const quote = el('blockquote', '', 'chat-quote'); quote.append(el('strong', message.quote.author ?? frame.contact), el('p', message.quote.text)); article.append(quote);
     }
+    if(message.attachment){const attachment=el('div','','chat-attachment');attachment.append(icon('photo'),el('strong',message.attachment.label),el('small',message.attachment.description));article.append(attachment);}
     article.append(el('p', message.text));
     const meta = el('span', '', 'chat-meta');
     if (message.time || frame.time) meta.append(el('time', message.time || frame.time));
@@ -90,7 +91,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
     sent = true; replyButtons.forEach(node => { node.disabled = true; });
     if (!onSend(reply)) { sent = false; replyButtons.forEach(node => { node.disabled = false; }); return; }
     back.disabled = false;
-    bubble({ direction: 'outgoing', text, time: frame.time, quote });
+    bubble({ direction: 'outgoing', text, time: frame.time, quote, attachment:frame.draftAttachment });
     const next = continueButton('Продолжить историю');
     footer.replaceChildren(next, notice);
     notice.textContent = t('Сообщение отправлено');
@@ -106,7 +107,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
   frame.replies.forEach(reply => addReply(reply.text, reply));
   if (!frame.replies.length && frame.draft !== null) addReply(frame.draft, null, frame.draftQuote);
   if (replyButtons.length) footer.append(replies);
-  else footer.append(continueButton(frame.physicalAction ? 'К действию' : 'Вернуться к разговору'));
+  else footer.append(continueButton(frame.physicalAction ? 'К действию' : 'Продолжить историю'));
   footer.append(notice); root.append(header, feed, footer);
   listen(root, 'click', event => { if (!menu.contains(event.target) && !menuToggle.contains(event.target)) { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });
   listen(root, 'keydown', event => { if (event.key === 'Escape') { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });

@@ -1,29 +1,31 @@
 import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=1';
+import {renderEpisodeContact} from './episode-contact.js?v=0.15.2';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=7';
-import {mountMessenger} from './messenger.js?v=3';
-import {messengerFrame,messageAt} from './messenger-model.js?v=3';
-import {MESSENGER_CONFIG} from './messenger-config.js?v=2';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.1';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.1';
-import {STAGES} from './days.js?v=0.15.1';
-import {cueFor} from './music-cues.js?v=0.15.1';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.1';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.1';
-import {drawBeatAction} from './beat-action.js?v=0.15.1';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.1';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.1-guests1';
+import {drawChapterMap} from './chapter-map.js?v=0.15.2';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.2';
+import {mountRoomInteraction} from './room-interaction.js?v=1';
+import {renderArrivalPhone} from './arrival-phone.js?v=1';
+import {mountMessenger} from './messenger.js?v=0.15.2';
+import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.2';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=0.15.2';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.2';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.2';
+import {STAGES} from './days.js?v=0.15.2';
+import {cueFor} from './music-cues.js?v=0.15.2';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.2';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.2';
+import {drawBeatAction} from './beat-action.js?v=0.15.2';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.2';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.2';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.1';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.2';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.1';
-import {appendChoiceContents} from './choice-ui.js?v=0.15.1';
-import {mountBaggageInteraction} from './interaction.js?v=0.15.1';
-import {APP_VERSION} from './release.js?v=0.15.1';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.2';
+import {appendChoiceContents} from './choice-ui.js?v=0.15.2';
+import {mountBaggageInteraction} from './interaction.js?v=0.15.2';
+import {APP_VERSION} from './release.js?v=0.15.2';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -39,7 +41,7 @@ settings.music = settings.music === true;
 settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
+function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':['interaction','room-interaction'].includes(document.body.dataset.screen)?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
 setVolume(settings.volume);
@@ -49,7 +51,7 @@ let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
-let interactionDispose=null,messengerDispose=null;
+let interactionDispose=null,messengerDispose=null,roomDispose=null;
 let lastChapterId=null,wantCard=false,cardContext=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
@@ -126,6 +128,7 @@ async function requestImmersiveMode() {
   showInstallGuide();
 }
 function showScreen(id) {
+  if(view==='room-interaction'){roomDispose?.();roomDispose=null;}
   if(view==='interaction'&&id!=='interaction'){interactionDispose?.();interactionDispose=null;}
   if(view==='messenger'){messengerDispose?.();messengerDispose=null;}
   view=id;
@@ -220,10 +223,11 @@ function renderGame({skipMessenger=false}={}) {
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
+  if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
   setMusicScene(cueFor(node));
-  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
+  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
     if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
@@ -232,6 +236,7 @@ function renderGame({skipMessenger=false}={}) {
   showScreen('game');
   const presentation=presentationFor(node,page,state.flags);
   const sceneElement=$('scene');
+  renderArrivalPhone(sceneElement,state.node,state.index);
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
   sceneElement.style.backgroundPosition=presentation.position;
   sceneElement.dataset.background=presentation.bg;
@@ -241,6 +246,11 @@ function renderGame({skipMessenger=false}={}) {
   sceneElement.classList.toggle('is-insert',presentation.insert);
   sceneElement.classList.toggle('is-seated',presentation.seated);
   sceneElement.classList.toggle('has-composite',presentation.composite);
+  sceneElement.classList.toggle('has-kitchen-layers',!!presentation.kitchenLayers);
+  sceneElement.dataset.kitchenMood=presentation.kitchenLayers?presentation.emotion:'';
+  let kitchenTable=sceneElement.querySelector('.kitchen-table');
+  if(presentation.kitchenLayers&&!kitchenTable){kitchenTable=document.createElement('div');kitchenTable.className='kitchen-table';sceneElement.append(kitchenTable);}
+  if(kitchenTable)kitchenTable.hidden=!presentation.kitchenLayers||!presentation.occludeTable;
   currentArtFrame=ART_FRAMES[presentation.bg];
   const cg=$('scene-cg');cg.hidden=!presentation.composite;
   if(presentation.composite)cg.src=`./assets/${presentation.bg}.webp`;
@@ -341,7 +351,7 @@ function renderMessenger(frame) {
     onMenu:()=>openPanel('game-menu'),
     onSettings:()=>openPanel('settings'),
     onSend:reply=>{
-      const ok=reply?(frame.replyKind==='action'?performBeat(reply.option,{render:false}):choose(reply.option,{render:false})):advance({render:false});
+      const ok=reply?(frame.replyKind==='inline'?advance({render:false,message:reply.option.label}):frame.replyKind==='action'?performBeat(reply.option,{render:false}):choose(reply.option,{render:false})):advance({render:false});
       committed=!!ok;return committed;
     },
     onContinue:()=>{
@@ -356,24 +366,30 @@ function fitScene() {
   // Very short viewports and enlarged type remain readable through natural page scrolling.
   requestAnimationFrame(()=>{
     const game=$('game');if(game.hidden)return;
+    if($('scene').classList.contains('has-kitchen-layers')){const scale=Math.max($('scene').clientWidth/1024,$('scene').clientHeight/1536);$('scene').style.setProperty('--kitchen-table-top',Math.min($('scene').clientHeight,1536*.70*scale)+'px');}
     const sceneMinimum=parseFloat(getComputedStyle($('scene')).minHeight)||145;
     const minimum=document.querySelector('.dialogue').offsetHeight+document.querySelector('.game-footer').offsetHeight+sceneMinimum;
     game.style.minHeight=minimum+'px';
     if(!$('scene-cg').hidden)positionArtwork($('scene-cg'),$('scene'),currentArtFrame,{top:parseFloat(getComputedStyle(document.querySelector('.game-header')).paddingTop)+2,bottom:8,left:8,right:8});
   });
 }
-function advance({render=true}={}) {
+function advance({render=true,message=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
   if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
   if((state.index===node.pages.length-1&&node.choices)||action)return;
   rememberStep(state);
+  if(message)state.log.push({speaker:speakerName({speaker:'player'},'ru'),text:interpolate(resolveStoryText(message,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:'message'});
   transitionLock=true;setTimeout(()=>transitionLock=false,120);
   if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
   wantCard=true;save();if(render)renderGame();return true;
+}
+function openRoomInteraction(){
+  showScreen('room-interaction');
+  roomDispose=mountRoomInteraction($('room-interaction'),{mask:state.flags.roomSettlingMask??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags.roomSettlingMask=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:{roomSettlingMask:7}});toast('Теперь можно выдохнуть. Всё на своих местах.');}});
 }
 function openBaggage(){
   const origin={node:state.node,index:state.index};
@@ -438,7 +454,7 @@ function renderEnding() {
   drawEndingPrompt();
 }
 function goBack() {
-  if(panel.open||transitionLock||!state||!['game','messenger','ending'].includes(view))return;
+  if(panel.open||transitionLock||!state||!['game','messenger','room-interaction','ending'].includes(view))return;
   if(!rewindStep(state))return;
   state.chapterMarks=readChapterMarks(state.chapterMarks,NODES,JOURNAL,state.log.length);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
@@ -496,7 +512,7 @@ function openPanel(kind) {
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
     $('font-size').addEventListener('input',event=>{settings.textSize=Number(event.target.value);$('font-label').textContent=t(settings.textSize+' px');document.documentElement.style.setProperty('--text-size',settings.textSize+'px');writeLocal('settings',settings);fitScene();});
     $('music-toggle').addEventListener('change',event=>applyMusic(event.target.checked));
-    $('adult-toggle').addEventListener('change',event=>{if(event.target.checked&&!window.confirm(t('Тебе есть 18 лет? Взрослые сцены показывают близость без подробностей и всегда спрашивают согласия.'))){event.target.checked=false;return;}settings.adult=event.target.checked;writeLocal('settings',settings);});
+    $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
     $('music-volume').addEventListener('input',event=>{settings.volume=Number(event.target.value)/100;setVolume(settings.volume);$('volume-label').textContent=t(event.target.value+'%');writeLocal('settings',settings);});
     $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
     $('screen-info').addEventListener('click',showScreenInfo);
@@ -571,7 +587,7 @@ document.querySelectorAll('[data-action]').forEach(button=>button.addEventListen
 window.addEventListener('ss-music-state',refreshMusicControls);
 $('new-game').addEventListener('click',confirmNewGame);$('replay').addEventListener('click',confirmNewGame);
 $('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
-$('adult-choice-toggle').addEventListener('change',event=>{if(event.target.checked&&!window.confirm(t('Тебе есть 18 лет? Взрослые сцены показывают близость без подробностей и всегда спрашивают согласия.'))){event.target.checked=false;return;}settings.adult=event.target.checked;writeLocal('settings',settings);});
+$('adult-choice-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
 $('creation-back').addEventListener('click',()=>{if(creationStep===1){creationStep=0;renderCreation();}else home();});
 $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.gender)return;creationStep=1;renderCreation();}else startGame();});
 $('chapter-progress').addEventListener('click',openChapters);

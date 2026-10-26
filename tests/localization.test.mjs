@@ -59,6 +59,6 @@ for(const p of NODES.road_contact.pages)assert.ok(!/пал(?:ец|ьца)/i.test
 assert.equal(NODES.road_contact.pages.length,4);
 setLanguage('en');
 assert.match(interpolate(pageText(NODES.nikola_last.pages[1],{nikolaBond:'romance'}),dmitry,catalog),/Dima,/);
-assert.match(interpolate(pageText(NODES.road_contact.pages[1],{companion:'nikola',nikolaBond:'romance'}),dmitry,catalog),/dangerous smile/);
+assert.match(interpolate(pageText(NODES.road_contact.pages[1],{companion:'nikola',nikolaBond:'romance'}),dmitry,catalog),/distracting me from work/);
 assert.match(interpolate(pageText(NODES.road_contact.pages[1],{companion:'nikola',nikolaBond:'friendship'}),dmitry,catalog),/long day/);
 setLanguage('ru');
