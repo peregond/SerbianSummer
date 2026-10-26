@@ -1,7 +1,7 @@
 // Original local cues. Audio is enabled only after the player's explicit gesture.
 let context,master,active=false,volume=.55,desired='prologue',current=null,revision=0;
 const players=new Map();
-const files={prologue:'prologue-theme.m4a',encounter:'encounter-theme.m4a'};
+const files={prologue:'prologue-theme.m4a',encounter:'encounter-theme.m4a',arrival:'arrival-theme.m4a',district:'district-theme.m4a',bank:'bank-theme.m4a',daily:'daily-theme.m4a',rain:'rain-theme.m4a'};
 function notify(){window.dispatchEvent(new CustomEvent('ss-music-state'));}
 function prepare(){
  if(players.size)return;

@@ -9,6 +9,7 @@ import {MESSENGER_CONFIG} from './messenger-config.js?v=2';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {STAGES} from './days.js?v=0.15.0';
+import {cueFor} from './music-cues.js?v=0.15.0';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
@@ -214,7 +215,7 @@ function renderGame({skipMessenger=false}={}) {
   const node=NODES[state.node],page=currentPage();
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
-  setMusicScene(node.music??(['airport-cafe','bakery','cafe-table','bakery-display','bakery-corner'].includes(node.bg)?'encounter':'prologue'));
+  setMusicScene(cueFor(node));
   const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
