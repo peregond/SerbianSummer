@@ -19,7 +19,7 @@ const byOwner=(speaker,fn,extra={})=>{
 const priced=(speaker,fn,extra={})=>{
   const text={};
   for(const owner of OWNERS)for(const discount of DISCOUNTS)text[owner+':'+discount]=T(...fn(owner,rentOf(owner,discount),discount));
-  for(const owner of OWNERS)text[owner+':undefined']=text[owner+':0'];
+  for(const owner of OWNERS)text[owner+':']=text[owner+':0'];
   return {speaker,text:text['ana:0'],byFlag:{flag:['districtOwner','flatDiscount'],text:{...text,default:text['ana:0']}},...extra};
 };
 const tap=(label,en,extra={})=>({kind:'tap',label:T(label,en),object:T(label,en),...extra});

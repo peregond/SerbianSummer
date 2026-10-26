@@ -20,6 +20,7 @@ export const MESSENGER_CONFIG = {
 // Indices are presentation overrides; do not insert or reorder story pages.
 export const CHAT_SCENES = {
   afternoon_invite: { contact:'contact', pages:{0:{direction:'incoming'}} },
+  date_messages: { contact:'contact', pages:{0:{direction:'outgoing'},1:{direction:'incoming'}} },
   nikola_phone: { contact:'dragan', pages:{2:{direction:'incoming'},3:{direction:'incoming'}} },
   road_contact: { contact:'contact', pages:{0:{direction:'outgoing',quotedBody:true,attachment:{label:'Селфи из такси',description:'У окна, на фоне реки и вечернего Белграда'}}} },
   evening_contact_plan: { contact: 'contact', pages: { 1: { direction: 'outgoing' } } },

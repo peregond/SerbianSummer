@@ -6,6 +6,19 @@ export function extendHostCoffee({NODES:N,JOURNAL:J,BACKGROUNDS:B}){
  const both=(speaker,dragan,jelena)=>({speaker,text:dragan,hostText:{dragan,jelena}});
  const action=label=>({kind:'tap',label,object:label});
  const scene=(pages,next,stage,extra={})=>({pages,next,bg:'first-room',location:T('КВАРТИРА · КОФЕ НА КУХНЕ','FLAT · COFFEE IN THE KITCHEN'),time:'18:50',music:'encounter',hostPortrait:true,kitchenStage:stage,exitAction:action(T('Продолжить разговор на кухне','Continue the kitchen conversation')),...extra});
+ // The lent top is a choice of the player: a grey or a white close-fitting Under Armour T-shirt (a hoodie for Jelena).
+ const hostTop=pairs=>{const text={};for(const host of ['dragan','jelena']){for(const top of ['grey','white'])text[host+':'+top]=T(...pairs[host][top]);text[host+':']=text[host+':grey'];}return {flag:['host','hostTop'],text:{...text,default:text['dragan:grey']}};};
+ const thanks=['Спасибо. Тогда у меня появится официальный повод зайти ещё раз — вернуть после стирки.','Thank you. Then I will have an official excuse to come by again: returning it after a wash.'];
+ const topReply=()=>({...h(T(...thanks)),
+  byFlag:hostTop({
+   dragan:{grey:['Серую давай. Спасибо. Тогда у меня появится официальный повод зайти ещё раз — вернуть после стирки.','The grey one, then. Thank you. That gives me an official excuse to come by again: returning it after a wash.'],white:['Белую? Рядом с кофе это смелый выбор. Спасибо, буду осторожнее. И у меня появится повод зайти ещё раз — вернуть после стирки.','The white one? Brave, next to coffee. Thank you, I will be careful. And it gives me a reason to come by again: returning it after a wash.']},
+   jelena:{grey:['Серую, пожалуйста. Спасибо. Тогда у меня появится официальный повод зайти ещё раз — вернуть после стирки.','The grey one, please. Thank you. That gives me an official excuse to come by again: returning it after a wash.'],white:['Белую, пожалуй. Только подальше от кофе, обещаю. Спасибо: у меня появится повод зайти ещё раз — вернуть после стирки.','The white one, I think. Away from the coffee, I promise. Thank you; it gives me a reason to come by again: returning it after a wash.']}
+  })});
+ const topBorrowed=()=>({speaker:'narrator',text:T('Серая футболка Under Armour сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.','The grey Under Armour T-shirt fits Dragan more closely than I expected. He adjusts a sleeve and returns to the table with a smile.'),
+  byFlag:hostTop({
+   dragan:{grey:['Серая футболка Under Armour сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.','The grey Under Armour T-shirt fits Dragan more closely than I expected. He adjusts a sleeve and returns to the table with a smile.'],white:['Белая футболка Under Armour облегает Драгана плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.','The white Under Armour T-shirt hugs Dragan more closely than I expected. He adjusts a sleeve and returns to the table with a smile.']},
+   jelena:{grey:['Йелена прячет пальцы в длинных рукавах серой толстовки. Надпись «СПБГУ 2008» выглядит на ней неожиданно уютно. Она улыбается, заметив, что я смотрю.','Jelena tucks her fingers into the long sleeves of the grey hoodie. The “СПБГУ 2008” print looks unexpectedly cosy on her. She smiles when she catches me looking.'],white:['Йелена прячет пальцы в длинных рукавах белой толстовки. Надпись «СПБГУ 2008» выглядит на ней неожиданно уютно. Она улыбается, заметив, что я смотрю.','Jelena tucks her fingers into the long sleeves of the white hoodie. The “СПБГУ 2008” print looks unexpectedly cosy on her. She smiles when she catches me looking.']}
+  })});
  const stageLabels={
   coffee:[T('Кофе на кухне','Coffee in the kitchen'),T('За кухонным столом с двумя чашками кофе','At a kitchen table with two cups of coffee')],
   spill:[T('Неловкая чашка','An awkward cup'),T('Большое пятно кофе на одежде и удивлённое выражение лица','A large coffee stain on the clothes and a surprised expression')],
@@ -61,12 +74,12 @@ export function extendHostCoffee({NODES:N,JOURNAL:J,BACKGROUNDS:B}){
  ]});
  N.host_coffee_wait.pages[0].hostText={dragan:N.host_coffee_wait.pages[0].text,jelena:T('А я бы согласилась и без представления. Но у половицы явно были свои планы.','I would have agreed without the performance. But the floorboard clearly had its own plans.')};
  N.host_coffee_lend=scene([
-  both('player',T('У меня есть чистая спортивная футболка. Чёрная Under Armour. Кажется, должна подойти.','I have a clean sports T-shirt. Black Under Armour. I think it should fit.'),T('У меня есть мягкая толстовка. С надписью «СПБГУ 2008». Можешь взять, пока рубашка сохнет.','I have a soft hoodie. It says “СПБГУ 2008”. You can borrow it while your shirt dries.')),
-  h(T('Спасибо. Тогда у меня появится официальный повод зайти ещё раз — вернуть после стирки.','Thank you. Then I will have an official excuse to come by again: returning it after a wash.')),
+  both('player',T('У меня есть чистая облегающая футболка Under Armour. Серая или белая — какую принести?','I have a clean, close-fitting Under Armour T-shirt. Grey or white: which one shall I bring?'),T('У меня есть мягкая толстовка с надписью «СПБГУ 2008». Серая или белая — какую принести?','I have a soft hoodie that says “СПБГУ 2008”. Grey or white: which one shall I bring?')),
+  topReply(),
   n(T('Я достаю вещь из чемодана и ненадолго оставляю кухню, чтобы можно было спокойно переодеться.','I take it from the suitcase and leave the kitchen for a moment so they can change comfortably.'))
  ],'host_coffee_borrowed','dry',{exitAction:action(T('Вернуться на кухню с новой чашкой кофе','Return to the kitchen with fresh coffee'))});
  N.host_coffee_borrowed=scene([
-  both('narrator',T('Чёрная футболка сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.','The black T-shirt fits Dragan more closely than I expected. He adjusts a sleeve and returns to the table with a smile.'),T('Йелена прячет пальцы в длинных рукавах толстовки. Надпись «СПБГУ 2008» выглядит на ней неожиданно уютно. Она улыбается, заметив, что я смотрю.','Jelena tucks her fingers into the hoodie’s long sleeves. The “СПБГУ 2008” print looks unexpectedly cosy on her. She smiles when she catches me looking.')),
+  topBorrowed(),
   h(T('Вторую чашку понесём вместе? На всякий случай.','Shall we carry the second cup together? Just in case.')),
   y(T('Вместе. Но за руку можно взять меня и без помощи половицы.','Together. But you can take my hand without the floorboard’s help too.')),
   n(T('Мы допиваем кофе без происшествий. У этого неловкого знакомства появился очень хороший повод продолжиться.','We finish our coffee without another mishap. This awkward encounter has found a very good reason to continue.'))

@@ -30,6 +30,17 @@ const AVAILABLE={
  mup:f=>f.mupBond==='spark'&&f.mupDate==='asked',
  milos:f=>f.maskEnd==='spark'
 };
+// How a character addresses the hero: the full name at first, the short form once they have grown close.
+// Romance always counts; friends switch after a few days. Pages write {call} and the speaker decides.
+const SPEAKER_IDENTITY={contact:f=>f.companion==='nikola'?'nikola':'milica','Милица':()=>'milica',milica:()=>'milica','Никола':()=>'nikola',nikola:()=>'nikola','Ася':()=>'asya',asya:()=>'asya','Лука':()=>'luka',luka:()=>'luka',host:f=>f.host==='jelena'?'jelena':'dragan',districtHost:f=>f.districtOwner};
+export function addressIdentity(speaker,flags={}){return SPEAKER_IDENTITY[speaker]?.(flags)??null;}
+export function callsByShortName(speaker,flags={}){
+ const who=addressIdentity(speaker,flags);if(!who)return false;
+ const days=Number.isInteger(flags.dayDone)?flags.dayDone:0;
+ const bond=({nikola:flags.nikolaBond,milica:flags.milicaBond,asya:flags.asyaBond,luka:flags.lukaBond,dragan:flags.hostBond==='romance'&&flags.host==='dragan'?'romance':flags.draganBond,jelena:flags.hostBond==='romance'&&flags.host==='jelena'?'romance':flags.jelenaBond})[who]??flags['rentalBond_'+who];
+ if(bond==='romance')return true;
+ return days>=(who==='nikola'||who==='milica'?3:5)&&bond!=='practical';
+}
 export const identityOf=(slot,flags={})=>IDENTITY[slot]?.(flags);
 export const nameOf=(slot,flags={})=>NAMES[identityOf(slot,flags)]??'';
 export const isAvailable=(slot,flags={})=>!!AVAILABLE[slot]?.(flags);

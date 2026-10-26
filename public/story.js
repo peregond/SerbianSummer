@@ -1,6 +1,7 @@
 import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=1';
 import {extendHousing} from './housing-story.js?v=1';
 import {extendBank} from './bank-story.js?v=1';
+import {extendHostEvening} from './host-evening.js?v=1';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=1';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.15.4';
@@ -18,7 +19,7 @@ import {extendSecondHalf} from './day-scenes-late.js?v=0.15.4';
 import {extendOfficeRomance} from './day-office.js?v=0.15.4';
 import {extendMaskedPatrol} from './day-mask.js?v=0.15.4';
 import {extendRomance} from './romance-scenes.js?v=0.15.4';
-import {SLOTS,identityOf,SPRITES} from './romance.js?v=0.15.4';
+import {SLOTS,identityOf,SPRITES,callsByShortName} from './romance.js?v=0.15.4';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.4';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.4';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.4';
@@ -714,16 +715,21 @@ assignChapters(NODES);
 registerRentalBeats(NODES,scene);
 extendHousing({NODES,JOURNAL,BACKGROUNDS});
 extendBank({NODES,JOURNAL});
+extendHostEvening({NODES,JOURNAL});
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
+// Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
+// gender, with the text of the matching gender: Ana as Jelena, the three men as Dragan.
+const RENTAL_TEXT_KEY={ana:'jelena',stefan:'dragan',marko:'dragan',vuk:'dragan'};
 export function pageText(page,flags={},locale=getLanguage()) {
   const picked=page.byFlag?(()=>{const{flag,text}=page.byFlag;const key=Array.isArray(flag)?flag.map(f=>flags[f]).join(':'):flags[flag];return text[key]??text.default;})():undefined;
   const partnerPicked=page.byPartner?(page.byPartner[SLOTS.includes(flags.lastPartner)?identityOf(flags.lastPartner,flags):'']??page.byPartner.default):undefined;
   const rentalVariants=page.byRentalStep?.[flags.districtOwner];
   const rentalPicked=rentalVariants?.[flags['rentalStep_'+flags.districtOwner]]??rentalVariants?.default;
-  let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  const callToken=value=>typeof value==='string'&&value.includes('{call}')?value.replaceAll('{call}',callsByShortName(page.speaker,flags)?'{short}':'{full}'):value;
+  let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.districtText?.[RENTAL_TEXT_KEY[flags.districtOwner]]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
-  return resolveStoryText(text,flags,locale);
+  return resolveStoryText(callToken(text),flags,locale);
 }
 
 export function presentationFor(node,page,flags={}) {

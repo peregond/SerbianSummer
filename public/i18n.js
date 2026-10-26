@@ -72,9 +72,12 @@ export function translateHistory(text,profile,catalog){
   if(!historyCache.has(key)){
     const rendered=new Map();
     for(const [ru,en]of Object.entries(dictionary)){
+      // {call} is the address form a speaker picks (full or short name) when the page is shown.
+      for(const form of ru.includes('{call}')?['{short}','{full}']:[null])
       for(const host of ['dragan','jelena'])for(const districtOwner of ['dragan','jelena','marko','vuk','stefan','ana']){
         const flags={host,districtOwner};
-        rendered.set(interpolateText(resolvePeople(ru,flags,'ru'),profile,catalog,'ru'),interpolateText(resolvePeople(en,flags,'en'),profile,catalog,'en'));
+        const pick=value=>form?value.replaceAll('{call}',form):value;
+        rendered.set(interpolateText(resolvePeople(pick(ru),flags,'ru'),profile,catalog,'ru'),interpolateText(resolvePeople(pick(en),flags,'en'),profile,catalog,'en'));
       }
     }
     historyCache.set(key,rendered);
