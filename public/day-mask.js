@@ -4,7 +4,7 @@
 // the tune of four notes and the signet ring that the owner has at home. The reveal is on day 20 in the owner's kitchen.
 // He is an ordinary patrol officer: he does not decide cases and never offers favours. The mask is part of the street uniform;
 // he is friendly, the player can leave the mystery alone, and every step toward closeness is the player's choice.
-import {T} from './days.js?v=0.15.0';
+import {T} from './days.js?v=0.15.1';
 export function extendMaskedPatrol({NODES:N,JOURNAL:J,n,scene}){
  const out=label=>({kind:'tap',label,object:label});
  const note=(ru,en)=>n(T(ru,en));

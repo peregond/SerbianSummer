@@ -1,30 +1,31 @@
+import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=1';
 import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=1';
 import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=2';
 import {applyLivingArt,additionalPortrait} from './living-art.js?v=1';
 import {applyArtExpansion} from './art-expansion.js?v=1';
-import {registerLukaSport} from './luka-redesign.js?v=0.15.0';
-import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
-import {extendSixthChapter} from './chapter-six.js?v=0.15.0';
-import {extendSeventhChapter} from './chapter-seven.js?v=0.15.0';
-import {extendCast,dayFor} from './days.js?v=0.15.0';
-import {extendFirstHalf} from './day-scenes.js?v=0.15.0';
-import {extendSecondHalf} from './day-scenes-late.js?v=0.15.0';
-import {extendOfficeRomance} from './day-office.js?v=0.15.0';
-import {extendMaskedPatrol} from './day-mask.js?v=0.15.0';
-import {extendRomance} from './romance-scenes.js?v=0.15.0';
-import {SLOTS,identityOf,SPRITES} from './romance.js?v=0.15.0';
-import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
-import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
-import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.15.0';
-import {assignChapters} from './chapters.js?v=0.15.0';
-import {extendNextChapter} from './chapter-three.js?v=0.15.0';
-import {extendFastPrologue} from './prologue-fast.js?v=0.15.0';
-import {editPrologue} from './prologue-edit.js?v=0.15.0';
-import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.15.0';
-import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.15.0';
+import {registerLukaSport} from './luka-redesign.js?v=0.15.1';
+import {extendFifthChapter} from './chapter-five.js?v=0.15.1';
+import {extendSixthChapter} from './chapter-six.js?v=0.15.1';
+import {extendSeventhChapter} from './chapter-seven.js?v=0.15.1';
+import {extendCast,dayFor} from './days.js?v=0.15.1';
+import {extendFirstHalf} from './day-scenes.js?v=0.15.1';
+import {extendSecondHalf} from './day-scenes-late.js?v=0.15.1';
+import {extendOfficeRomance} from './day-office.js?v=0.15.1';
+import {extendMaskedPatrol} from './day-mask.js?v=0.15.1';
+import {extendRomance} from './romance-scenes.js?v=0.15.1';
+import {SLOTS,identityOf,SPRITES} from './romance.js?v=0.15.1';
+import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.1';
+import {extendFourthChapter} from './chapter-four.js?v=0.15.1';
+import {extendHostCoffee} from './host-coffee.js?v=0.15.1';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.15.1';
+import {assignChapters} from './chapters.js?v=0.15.1';
+import {extendNextChapter} from './chapter-three.js?v=0.15.1';
+import {extendFastPrologue} from './prologue-fast.js?v=0.15.1';
+import {editPrologue} from './prologue-edit.js?v=0.15.1';
+import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.15.1';
+import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.15.1';
 export {beatActionAt};
-import {extendChapter} from './chapter-one.js?v=0.15.0';
+import {extendChapter} from './chapter-one.js?v=0.15.1';
 // Original story for the playable prototype. Text is kept separate from the player.
 const n = text => ({ speaker: 'narrator', text });
 const m = text => ({ speaker: 'milica', text });
@@ -692,6 +693,7 @@ for(const id of ['decision_weigh_work','decision_weigh_people','decision_weigh_h
   for(const [id,done]of Object.entries({third_morning:1,fourth_morning:11,bank_approved:14,document_evening:15,courtyard_invite:20,decision_morning:28,decision_plan:29}))NODES[id].effectOnEnter={...NODES[id].effectOnEnter,dayDone:done};
   for(const id of ['epilogue_stay','epilogue_leave','epilogue_return'])NODES[id].effectOnEnter={...NODES[id].effectOnEnter,dayDone:30};
 }
+registerPrologueVisuals(NODES,BACKGROUNDS);
 applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES});
 registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);
@@ -720,16 +722,18 @@ export function presentationFor(node,page,flags={}) {
   // person or of the owner is always the other gender, so a day never lacks one of them.
   const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:flags.districtOwner==='jelena'?'jelena':'dragan',ownerCounterpart:flags.districtOwner==='jelena'?'dragan':'jelena',lovePartner:SLOTS.includes(flags.lastPartner)?(SPRITES[identityOf(flags.lastPartner,flags)]??null):null}[page.speaker]??null):null;
   const seatedMood=page.reactions?.milica??page.emotion??'friendly';
-  const bg=kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
-  const metadata=BACKGROUNDS[bg];
+  const baseBg=kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
   const daydream=page.daydream??node.daydream??false;
+  const visual=prologueVisualFor(node,page,daydream);
+  const bg=visual?.bg??baseBg;
+  const metadata=BACKGROUNDS[bg];
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
   const extra=extraVisualFor(page,flags);
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
-  const character=episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   return {
-    bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage,composite:!!kitchenStage||!!seated,
+    bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:episode?.mode==='contact'?episode:null,

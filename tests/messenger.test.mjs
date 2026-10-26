@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
 import { messengerFrame, messageAt, stripMessageQuotes } from '../public/messenger-model.js';
-import { configureTranslations, setLanguage } from '../public/i18n.js?v=0.15.0';
+import { configureTranslations, setLanguage } from '../public/i18n.js?v=0.15.1';
 
 const before = JSON.stringify(NODES);
 const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => s });
