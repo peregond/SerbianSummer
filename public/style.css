@@ -144,3 +144,5 @@ html:fullscreen .game{height:100dvh}
 .district-map{top:calc(var(--safe-top) + 102px)}
 
 .chapter-heading{color:var(--wine);font-size:11px;line-height:1.6;font-weight:600;letter-spacing:.5px;margin:0 0 12px}.chapter-footer-button{font-size:12px}
+
+.more-settings{border-top:1px solid var(--line);margin-top:18px;padding-top:6px}.more-settings summary{min-height:44px;display:flex;align-items:center;font-size:13px;color:var(--muted);cursor:pointer}.more-settings .settings-actions{border-top:0;padding-top:6px}.settings-actions .primary{min-height:50px}.workshop-code{margin-top:22px;opacity:.7}
