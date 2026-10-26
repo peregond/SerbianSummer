@@ -1,6 +1,7 @@
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {STAGES} from './days.js?v=0.15.0';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
@@ -183,12 +184,14 @@ function startGame() {
   enterNode(START);recordPage();save();renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
-  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
+  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
   return t(names[page.speaker]??page.speaker,locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
 function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:dialogueVoice(page)});}
 function enterNode(id) {
+  // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
+  if(NODES[id]?.adult&&!settings.adult)id=NODES[id].skipTo;
   state.node=id;state.index=0;
   if(id==='end') {state.completed=true;return;}
   Object.assign(state.flags,NODES[id].effectOnEnter??{});
@@ -249,7 +252,7 @@ function renderGame() {
   $('rewind').disabled=!state.rewind?.length;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
-  if(isChoice)for(const choice of node.choices) {
+  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags))) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
     button.addEventListener('click',()=>choose(choice));$('choices').append(button);
@@ -342,6 +345,7 @@ function applyEffects(effect={}) {
   if(['romance','friendship'].includes(effect.cinemaAirportBond)&&state.flags.companion)state.flags[state.flags.companion+'Bond']=effect.cinemaAirportBond;
   if(effect.hostBond&&state.flags.host)state.flags[state.flags.host+'Bond']=effect.hostBond;
   if(effect.districtBond&&state.flags.districtOwner)state.flags[state.flags.districtOwner+'Bond']=effect.districtBond;
+  applyRomanceEffect(state.flags,effect);
 }
 function performBeat(option={}) {
   if(view!=='game'||panel.open||transitionLock)return;
@@ -449,10 +453,11 @@ function openPanel(kind) {
     else for(const id of state.journal) {const entry=JOURNAL[id];const article=document.createElement('article');article.className='journal-entry';const tag=document.createElement('p');tag.className='entry-tag';tag.textContent=t(entry.tag);const title=document.createElement('h3');title.textContent=t(entry.title);const body=document.createElement('p');body.textContent=t(entry.text);article.append(tag,title,body);if(entry.link){const a=document.createElement('a');a.href=entry.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t(entry.linkText);article.append(a);}content.append(article);}
   } else {
     $('panel-title').textContent=t('Немного удобства');
-    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема<small>Как в системе — по настройке телефона</small></span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">В системе</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка<small>Меняется вместе со сценой</small></span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting"><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><div class="settings-actions"><button id="account-settings" class="secondary">Мой прогресс · аккаунт</button><button id="screen-info" class="secondary">Сведения об экране</button><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button class="text-button" id="menu-home">На главный экран</button></div><p class="settings-about">Сербское лето · первое знакомство<br>Прогресс сохраняется на устройстве. После входа можно синхронизировать его с аккаунтом или перенести файлом.<br><br>Персонажи и разговоры вымышлены. В истории уже есть аэропорт, заселение, первый вечер и просмотр квартиры. Играй в своём темпе.</p>`);
+    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема<small>Как в системе — по настройке телефона</small></span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">В системе</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка<small>Меняется вместе со сценой</small></span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting"><span>Взрослые сцены · 18+<small>Интимные моменты без подробностей, только по взаимному согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><label class="setting"><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><div class="settings-actions"><button id="account-settings" class="secondary">Мой прогресс · аккаунт</button><button id="screen-info" class="secondary">Сведения об экране</button><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button class="text-button" id="menu-home">На главный экран</button></div><p class="settings-about">Сербское лето · первое знакомство<br>Прогресс сохраняется на устройстве. После входа можно синхронизировать его с аккаунтом или перенести файлом.<br><br>Персонажи и разговоры вымышлены. В истории уже есть аэропорт, заселение, первый вечер и просмотр квартиры. Играй в своём темпе.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
     $('font-size').addEventListener('input',event=>{settings.textSize=Number(event.target.value);$('font-label').textContent=t(settings.textSize+' px');document.documentElement.style.setProperty('--text-size',settings.textSize+'px');writeLocal('settings',settings);fitScene();});
     $('music-toggle').addEventListener('change',event=>applyMusic(event.target.checked));
+    $('adult-toggle').addEventListener('change',event=>{if(event.target.checked&&!window.confirm(t('Тебе есть 18 лет? Взрослые сцены показывают близость без подробностей и всегда спрашивают согласия.'))){event.target.checked=false;return;}settings.adult=event.target.checked;writeLocal('settings',settings);});
     $('music-volume').addEventListener('input',event=>{settings.volume=Number(event.target.value)/100;setVolume(settings.volume);$('volume-label').textContent=t(event.target.value+'%');writeLocal('settings',settings);});
     $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
     $('screen-info').addEventListener('click',showScreenInfo);

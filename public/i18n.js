@@ -1,3 +1,4 @@
+import {SLOTS,nameOf,nameCase,loveNames,joinNames} from './romance.js?v=0.15.0';
 // Russian remains the canonical language of story data and saves.
 // Only rendered strings change, so language never changes choices or checkpoints.
 let language='ru', dictionary={}, phrases=null;
@@ -48,7 +49,10 @@ export function html(markup){
 export function resolvePeople(text,flags={},locale=language){
   const host=flags.host==='jelena'?'Йелена':'Драган';
   const owner=flags.districtOwner==='jelena'?'Йелена':'Драган';
-  return t(text,locale).replaceAll('{host.dative}',locale==='en'?t(host,'en'):host==='Йелена'?'Йелене':'Драгану').replaceAll('{host}',t(host,locale)).replaceAll('{districtHost}',t(owner,locale));
+  return t(text,locale).replaceAll('{host.dative}',locale==='en'?t(host,'en'):host==='Йелена'?'Йелене':'Драгану').replaceAll('{host}',t(host,locale)).replaceAll('{districtHost}',t(owner,locale))
+    .replace(/\{who\.([a-z]+)(?:\.(acc|ins))?\}/g,(match,slot,grammarCase)=>SLOTS.includes(slot)?(locale==='en'?t(nameOf(slot,flags),'en'):nameCase(slot,flags,grammarCase)):'')
+    .replaceAll('{partner}',t(SLOTS.includes(flags.lastPartner)?nameOf(flags.lastPartner,flags):'Ася',locale))
+    .replaceAll('{loveList}',joinNames(loveNames(flags).map(name=>t(name,locale)),locale==='en'?'and':'и'));
 }
 export function interpolateText(text,profile,catalog,locale=language){
   const entry=catalog.genders[profile.gender].names.find(n=>n.id===profile.nameId);
