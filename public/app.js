@@ -156,6 +156,12 @@ function save() {
     $('save-status').classList.toggle('save-warning',!ok);
   });
 }
+function renderAdultChoice(visible) {
+  const box=$('adult-choice');box.hidden=!visible;if(!visible)return;
+  const title=$('adult-choice-title');title.replaceChildren(t('Взрослые сцены · 18+'));
+  const note=document.createElement('small');note.textContent=t('Близость без подробностей, только по взаимному согласию. Это можно изменить в настройках в любой момент.');title.append(note);
+  $('adult-choice-toggle').checked=!!settings.adult;
+}
 function beginCreation() { creationStep=0;expandedNames=false;renderCreation(); }
 function renderCreation() {
   showScreen('creation');
@@ -164,6 +170,7 @@ function renderCreation() {
   $('creation-title').textContent=t(creationStep===0?'Кем ты будешь?':'Как тебя зовут?');
   $('creation-description').textContent=t(creationStep===0?'Начнём с главного героя.':'Выбери имя, с которым начнётся это лето.');
   $('name-preview').hidden=true;
+  renderAdultChoice(creationStep===1);
   $('creation-next').textContent=t(creationStep===0?'Дальше →':'Начать историю →');
   $('creation-next').disabled=creationStep===0?!draft.gender:!validProfile(draft);
   if(creationStep===0) {
@@ -564,6 +571,7 @@ document.querySelectorAll('[data-action]').forEach(button=>button.addEventListen
 window.addEventListener('ss-music-state',refreshMusicControls);
 $('new-game').addEventListener('click',confirmNewGame);$('replay').addEventListener('click',confirmNewGame);
 $('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
+$('adult-choice-toggle').addEventListener('change',event=>{if(event.target.checked&&!window.confirm(t('Тебе есть 18 лет? Взрослые сцены показывают близость без подробностей и всегда спрашивают согласия.'))){event.target.checked=false;return;}settings.adult=event.target.checked;writeLocal('settings',settings);});
 $('creation-back').addEventListener('click',()=>{if(creationStep===1){creationStep=0;renderCreation();}else home();});
 $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.gender)return;creationStep=1;renderCreation();}else startGame();});
 $('chapter-progress').addEventListener('click',openChapters);
