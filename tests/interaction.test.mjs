@@ -23,3 +23,26 @@ for(let i=2;i<=7;i++){
 }
 assert.equal(NODES.sketch.actions[2].label,'Рассмотреть рисунок');
 console.log('Interactive baggage hit area remains over the suitcase; speaker identity, seated Milica and sketch inserts checked.');
+
+// All six visible objects must be selectable and the target must not have a
+// fixed position that lets a repeat player skip the visual search.
+const {BAGGAGE_ITEMS,BAGGAGE_TARGET,baggageLayout}=await import('../public/baggage-model.js');
+const fs=await import('node:fs');
+const dictionary=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json',import.meta.url)));
+assert.equal(BAGGAGE_ITEMS.length,6);assert.equal(new Set(BAGGAGE_ITEMS.map(item=>item.id)).size,6);
+assert.equal(BAGGAGE_ITEMS.filter(item=>item.id===BAGGAGE_TARGET).length,1);
+assert.ok(BAGGAGE_ITEMS.some(item=>item.id==='blue-plain'));assert.ok(BAGGAGE_ITEMS.some(item=>item.id==='red-yellow'));
+const original=JSON.stringify(BAGGAGE_ITEMS),positions=new Set();
+for(let seed=1;seed<=100;seed++){
+ let value=Math.imul(seed,2654435761)>>>0;const random=()=>{value=(Math.imul(value,1664525)+1013904223)>>>0;return value/4294967296;};
+ const layout=baggageLayout(random);
+ assert.deepEqual(layout.map(item=>item.id).sort(),BAGGAGE_ITEMS.map(item=>item.id).sort());
+ positions.add(layout.findIndex(item=>item.id===BAGGAGE_TARGET));
+}
+assert.equal(positions.size,6);assert.equal(JSON.stringify(BAGGAGE_ITEMS),original);
+for(const item of BAGGAGE_ITEMS){
+ assert.ok(Object.hasOwn(dictionary,item.label),item.label);
+ assert.ok(fs.existsSync(new URL('../public/assets/baggage/'+item.id+'.webp',import.meta.url)),item.id);
+}
+for(const label of ['Найди синий чемодан с жёлтой лентой.','Чужой чемодан. Ищу синий, с жёлтой лентой.','Это мой. Забираю!','Твой чемодан! Багаж собран.'])assert.ok(Object.hasOwn(dictionary,label));
+console.log('Baggage search: six distinct selectable bags, similar distractors, shuffled target in every position, complete artwork and RU/EN labels checked.');

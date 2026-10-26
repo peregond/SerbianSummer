@@ -394,10 +394,14 @@ function openRoomInteraction(){
 function openBaggage(){
   const origin={node:state.node,index:state.index};
   showScreen('interaction');fitScene();
-  interactionDispose=mountBaggageInteraction({canvas:$('interaction-canvas'),image:$('interaction-image'),hotspot:$('interaction-hotspot'),onComplete:()=>{
+  const complete=()=>{
     if(view!=='interaction'||state.node!==origin.node||state.index!==origin.index)return;
+    // A settings dialog may have opened while the suitcase was flying.
+    if(panel.open){panel.addEventListener('close',complete,{once:true});return;}
     showScreen('game');performBeat();
-  }});
+  };
+  const dispose=mountBaggageInteraction({canvas:$('interaction-canvas'),image:$('interaction-image'),board:$('baggage-board'),slot:$('baggage-slot'),status:$('baggage-status'),text:t,onComplete:complete});
+  interactionDispose=()=>{dispose();panel.removeEventListener('close',complete);};
   $('interaction-title').focus({preventScroll:true});
 }
 function applyEffects(effect={}) {
