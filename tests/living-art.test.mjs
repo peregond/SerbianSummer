@@ -8,7 +8,7 @@ import {PEOPLE,buildArtCatalog} from '../public/workshop-model.js';
 // Only background selection, reaction metadata and the explicitly approved
 // mother-contact edits in fixtures/mother-edits.json may differ.
 const canonical=JSON.parse(JSON.stringify(NODES),(key,value)=>['bg','districtBg','reactions'].includes(key)?undefined:value);
-for(const edit of JSON.parse(fs.readFileSync(new URL('./fixtures/mother-edits.json',import.meta.url)))){
+for(const edit of [...JSON.parse(fs.readFileSync(new URL('./fixtures/mother-edits.json',import.meta.url))),...JSON.parse(fs.readFileSync(new URL('./fixtures/prologue-ui-edits.json',import.meta.url)))]){
  assert.equal(canonical[edit.id].pages[edit.index][edit.field],edit.after,edit.id+': approved mother edit');
  canonical[edit.id].pages[edit.index][edit.field]=edit.before;
 }
