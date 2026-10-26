@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="./chapter-map.css?v=1">
   <link rel="stylesheet" href="./episode-contact.css?v=1">
   <link rel="stylesheet" href="./home-hero.css?v=1">
+  <link rel="stylesheet" href="./baggage.css?v=1">
 </head>
 <body data-screen="home">
   <div class="ios-scroll-edge-guard" aria-hidden="true"></div>
@@ -39,7 +40,8 @@
     </section>
     <section id="interaction" class="screen interaction" hidden aria-labelledby="interaction-title">
       <header class="interaction-header"><nav class="interaction-tools"><button id="interaction-back" class="text-button">← К тексту</button><button data-action="settings" class="text-button">Настройки</button></nav><h2 id="interaction-title" tabindex="-1">Найди свой чемодан</h2><p>Синий, с жёлтой лентой. Коснись его на картинке.</p></header>
-      <div id="interaction-canvas" class="interaction-canvas"><img id="interaction-image" alt="Багажная лента с синим чемоданом с жёлтой лентой"><button id="interaction-hotspot" type="button" aria-label="Забрать синий чемодан с жёлтой лентой"></button></div>
+      <div id="interaction-canvas" class="interaction-canvas"><img id="interaction-image" alt="Багажная лента в аэропорту"><div id="baggage-board" class="baggage-board" role="group" aria-label="Чемоданы на ленте"></div></div>
+      <div class="baggage-hud"><p id="baggage-status" class="baggage-status" role="status" aria-live="polite" aria-atomic="true"></p><div id="baggage-slot" class="baggage-slot" role="group" aria-label="Собранный багаж"><svg viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="7" width="16" height="17" rx="3"/><path d="M8 7V3h8v4M9 11v9m6-9v9M7 24v2m10-2v2"/></svg><span>Багаж</span><span data-baggage-count>0/1</span></div></div>
 
     </section>
     <section id="creation" class="screen creation" hidden aria-labelledby="creation-title">
@@ -59,6 +61,6 @@
     <div id="toast" role="status" class="toast" hidden></div>
   </main>
   <dialog id="panel"><div class="panel-heading"><h2 id="panel-title"></h2><button id="close-panel" class="close-button" aria-label="Закрыть панель">×</button></div><div id="panel-content"></div></dialog>
-  <script type="module" src="./app.js?v=0.15.0-home1"></script>
+  <script type="module" src="./app.js?v=0.15.0-baggage2"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=7';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=8';
 import {mountMessenger} from './messenger.js?v=2';
 import {messengerFrame,messageAt} from './messenger-model.js?v=3';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=2';
@@ -22,7 +22,7 @@ import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.0';
 import {appendChoiceContents} from './choice-ui.js?v=0.15.0';
-import {mountBaggageInteraction} from './interaction.js?v=0.15.0';
+import {mountBaggageInteraction} from './interaction.js?v=0.15.0-baggage2';
 import {APP_VERSION} from './release.js?v=0.15.0';
 
 const $ = id => document.getElementById(id);
@@ -378,10 +378,14 @@ function advance({render=true}={}) {
 function openBaggage(){
   const origin={node:state.node,index:state.index};
   showScreen('interaction');fitScene();
-  interactionDispose=mountBaggageInteraction({canvas:$('interaction-canvas'),image:$('interaction-image'),hotspot:$('interaction-hotspot'),onComplete:()=>{
+  const complete=()=>{
     if(view!=='interaction'||state.node!==origin.node||state.index!==origin.index)return;
+    // A settings dialog may have opened while the suitcase was flying.
+    if(panel.open){panel.addEventListener('close',complete,{once:true});return;}
     showScreen('game');performBeat();
-  }});
+  };
+  const dispose=mountBaggageInteraction({canvas:$('interaction-canvas'),image:$('interaction-image'),board:$('baggage-board'),slot:$('baggage-slot'),status:$('baggage-status'),text:t,onComplete:complete});
+  interactionDispose=()=>{dispose();panel.removeEventListener('close',complete);};
   $('interaction-title').focus({preventScroll:true});
 }
 function applyEffects(effect={}) {

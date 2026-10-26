@@ -64,8 +64,6 @@
 .interaction-header p{font-size:13px;line-height:1.5;color:#fff7e6}
 .interaction-canvas{position:absolute;z-index:0;inset:0;overflow:hidden;background:#b7a07c}
 .interaction-canvas img{display:block;width:100%;height:100%;position:absolute;inset:0;object-fit:cover}
-#interaction-hotspot{position:absolute;min-width:44px;min-height:44px;padding:0;border:2px solid #fff2b1aa;border-radius:18%;background:transparent;box-shadow:0 0 0 3px #1d777c30;cursor:pointer}
-#interaction-hotspot:hover,#interaction-hotspot:focus-visible{background:#ffe39a22;border-color:#ffe39a;outline:3px solid #ffe39a;outline-offset:4px}
 .interaction-footer{position:relative;z-index:1;margin-top:auto;padding:30px 22px calc(var(--safe-bottom) + 8px);flex-shrink:0;background:linear-gradient(transparent,#192e3a99 35%,#192e3acc);text-shadow:0 1px 6px #13252a}
 .interaction-footer>div{display:flex;justify-content:space-between;gap:20px}
 @media(max-width:600px),(hover:none),(pointer:coarse){

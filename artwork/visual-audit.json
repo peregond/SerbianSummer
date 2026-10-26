@@ -1,4 +1,13 @@
 {
+  "interactiveAssets": [
+    "baggage/search-carousel.webp",
+    "baggage/blue-yellow.webp",
+    "baggage/blue-plain.webp",
+    "baggage/red-yellow.webp",
+    "baggage/blue-white.webp",
+    "baggage/olive.webp",
+    "baggage/burgundy.webp"
+  ],
   "homeAssets": [
     "home/milica-casual.webp",
     "home/nikola-casual.webp",
@@ -11,7 +20,7 @@
     "home/belgrade-day.webp",
     "home/belgrade-evening.webp"
   ],
-  "scenes": 545,
+  "scenes": 548,
   "backgrounds": 71,
   "stagedBackgrounds": 71,
   "registeredPortraits": 132,
