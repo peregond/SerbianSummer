@@ -23,6 +23,7 @@ for(const[id,index,character,mode,channel]of EPISODIC_STAGES){
  if(mode==='contact'){
   assert.equal(frame.character,null,id+': remote speakers must not stand in the player’s location');
   assert.equal(frame.contactPortrait.character,character);assert.equal(frame.contactPortrait.channel,channel);assert.ok(files.includes(frame.contactPortrait.file));
+ }else if(id==='nikola_questions'){assert.equal(frame.character,null);assert.equal(frame.bg,'nikola-elder-bread-handover-v1');assert.ok(frame.composite);
  }else{assert.equal(frame.character,character,id+':'+index);assert.equal(frame.emotion,'friendly');assert.equal(frame.contactPortrait,null);}
 }
 assert.equal(presentationFor(NODES.d3_o2,NODES.d3_o2.pages[1]).character,null,'The kiosk seller must not follow the player to the bus stop');

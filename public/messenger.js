@@ -1,4 +1,5 @@
-import { t } from './i18n.js?v=0.15.0';
+import { t } from './i18n.js?v=0.15.1';
+import { appendChoiceContents } from './choice-ui.js?v=0.15.1';
 import { MESSENGER_CONFIG } from './messenger-config.js?v=2';
 
 const icons = {
@@ -73,52 +74,44 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
     row.append(article, reaction); feed.append(row);
   };
   frame.messages.forEach(bubble);
-  if (frame.context) feed.append(el('p', frame.context, 'chat-context'));
+  // Narration belongs to the scene; only actual messages belong in the chat.
   const footer = el('footer', '', 'chat-footer');
-  const replies = el('div', '', 'chat-replies'); replies.hidden = true; replies.setAttribute('role', 'group'); replies.setAttribute('aria-label', t('Выбери ответ'));
-  const suggested = button('Варианты ответов', () => { replies.hidden = !replies.hidden; suggested.setAttribute('aria-expanded', String(!replies.hidden)); }, 'chat-suggested');
-  suggested.setAttribute('aria-expanded', 'false'); suggested.hidden = !frame.replies.length;
-  suggested.append(el('span', '✦', 'chat-suggested-star'), el('span', 'Варианты ответов'), icon('edit'));
-  const form = el('form', '', 'chat-compose');
-  const attach = el('span', '', 'chat-attach'); attach.setAttribute('aria-hidden', 'true'); attach.append(icon('plus'));
-  const field = el('div', '', 'chat-compose-field');
-  const label = el('label', 'Черновик сообщения', 'chat-sr-only'); label.htmlFor = 'chat-draft';
-  const draft = el('textarea'); draft.id = 'chat-draft'; draft.readOnly = true; draft.rows = 1; draft.value = frame.draft ?? ''; draft.placeholder = t('Сообщение...');
-  const extras = el('span', '', 'chat-compose-icons'); extras.setAttribute('aria-hidden', 'true'); extras.append(icon('smile'), icon('photo'));
-  const send = el('button', '', 'chat-send'); send.type = 'submit'; send.setAttribute('aria-label', t('Отправить')); send.title = t('Отправить');
-  const next = button(frame.physicalAction ? 'К действию' : frame.continueLabel, onContinue, 'chat-continue'); next.append(icon('down'));
+  const replies = el('div', '', 'chat-replies');
+  replies.setAttribute('role', 'group'); replies.setAttribute('aria-label', t('Выбери ответ'));
   const notice = el('p', '', 'chat-notice chat-sr-only'); notice.setAttribute('role', 'status');
-  let selected = null, sent = false;
+  let sent = false;
   const replyButtons = [];
-  const resizeDraft = () => { draft.style.height = 'auto'; draft.style.height = Math.min(draft.scrollHeight, root.clientHeight * .18) + 'px'; };
-  const sendIcon = () => { send.replaceChildren(icon(send.disabled ? 'microphone' : 'send')); send.classList.toggle('is-microphone', send.disabled); };
-  for (const reply of frame.replies) {
-    const node = button(reply.text, () => {
-      if (sent) return;
-      selected = reply; draft.value = reply.text; send.disabled = false; sendIcon(); resizeDraft();
-      replyButtons.forEach(b => b.setAttribute('aria-pressed', String(b === node)));
-      replies.hidden = true; suggested.setAttribute('aria-expanded', 'false');
-    }, 'chat-reply'); node.textContent = t(reply.text); node.setAttribute('aria-pressed', 'false');
-    if (reply.tone) node.append(el('small', { romance: 'Флирт', friendship: 'Дружба', practical: 'По делу', personal: 'Личное', explore: 'Осмотреться', dream: 'Воображение' }[reply.tone] ?? reply.tone));
-    replies.append(node); replyButtons.push(node);
-  }
-  const composing = frame.draft !== null || frame.replies.length > 0;
-  send.disabled = frame.replies.length > 0 || frame.draft === null; sendIcon(); next.hidden = composing;
-  field.append(label, draft, extras); form.append(attach, field, send); footer.append(replies, suggested, form, notice); root.append(header, feed, footer, next);
-  listen(form, 'submit', event => {
-    event.preventDefault(); if (sent || send.disabled) return;
-    send.disabled = true;
-    if (!onSend(selected)) { send.disabled = false; return; }
-    sent = true; back.disabled = false;
-    bubble({ direction: 'outgoing', text: draft.value, time: frame.time, quote: frame.draftQuote });
-    draft.value = ''; draft.placeholder = t('Сообщение...'); sendIcon(); resizeDraft(); replies.hidden = true; suggested.hidden = true; next.hidden = false;
-    next.setAttribute('aria-label', t('Продолжить историю')); next.title = t('Продолжить историю'); notice.textContent = t('Сообщение отправлено');
+  const continueButton = label => {
+    const next = button(label, onContinue, 'chat-next'); next.textContent = t(label); return next;
+  };
+  const submit = (reply, text, quote) => {
+    if (sent) return;
+    // Latch before invoking the callback, including synchronous repeated taps.
+    sent = true; replyButtons.forEach(node => { node.disabled = true; });
+    if (!onSend(reply)) { sent = false; replyButtons.forEach(node => { node.disabled = false; }); return; }
+    back.disabled = false;
+    bubble({ direction: 'outgoing', text, time: frame.time, quote });
+    const next = continueButton('Продолжить историю');
+    footer.replaceChildren(next, notice);
+    notice.textContent = t('Сообщение отправлено');
     feed.scrollTop = feed.scrollHeight; next.focus({ preventScroll: true });
-  });
+  };
+  const addReply = (text, reply, quote) => {
+    const node = button(text, () => submit(reply, text, quote), 'chat-reply');
+    if (reply?.tone) {
+      appendChoiceContents(node, { tone: reply.tone, label: text });
+      node.dataset.tone = reply.tone;
+    } else node.append(el('span', text, 'chat-reply-text')); replies.append(node); replyButtons.push(node);
+  };
+  frame.replies.forEach(reply => addReply(reply.text, reply));
+  if (!frame.replies.length && frame.draft !== null) addReply(frame.draft, null, frame.draftQuote);
+  if (replyButtons.length) footer.append(replies);
+  else footer.append(continueButton(frame.physicalAction ? 'К действию' : 'Вернуться к разговору'));
+  footer.append(notice); root.append(header, feed, footer);
   listen(root, 'click', event => { if (!menu.contains(event.target) && !menuToggle.contains(event.target)) { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });
   listen(root, 'keydown', event => { if (event.key === 'Escape') { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });
   const measure = () => { root.style.setProperty('--chat-header-height', header.offsetHeight + 'px'); root.style.setProperty('--chat-footer-height', footer.offsetHeight + 'px'); };
   const observer = new ResizeObserver(measure); observer.observe(header); observer.observe(footer);
-  const focus = requestAnimationFrame(() => { resizeDraft(); measure(); title.focus({ preventScroll: true }); feed.scrollTop = feed.scrollHeight; });
+  const focus = requestAnimationFrame(() => { measure(); title.focus({ preventScroll: true }); feed.scrollTop = feed.scrollHeight; });
   return () => { events.abort(); observer.disconnect(); cancelAnimationFrame(focus); };
 }

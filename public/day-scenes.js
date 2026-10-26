@@ -1,7 +1,7 @@
 // Days 3-11, 13 and 14: the preparation days of the thirty-day story. Each day is five scenes on any path:
 // a morning, one small choice and its consequence, the middle of the day, a turn with the second person, and an evening.
 // Facts stay general (see DAYS.md): outcomes are fictional and the player is told to check official sources.
-import {T,STAGES,dayFor,castHelpers} from './days.js?v=0.15.0';
+import {T,STAGES,dayFor,castHelpers} from './days.js?v=0.15.1';
 // The shared day builder: dayKit() gives build(), opt() and the cast helpers for one set of nodes.
 export function dayKit({NODES:N,JOURNAL:J,n,scene}){
  const out=label=>({kind:'tap',label,object:label});

@@ -33,7 +33,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline-color:var(--sea
 .setting input[type=range],.setting input[type=checkbox]{accent-color:var(--sea)}
 .journal-entry .entry-tag,.history-entry small{color:var(--sea)}
 .toast{background:var(--sea-dark)}
-.scene.is-daydream .scene-shade{background:linear-gradient(135deg,#f8b8be38,#ffde9a1c 50%,#e9c4ef33);box-shadow:inset 0 0 75px 24px #fff0dfb3}
+.scene.is-daydream .scene-shade{background:linear-gradient(180deg,#130b1c22,transparent 65%,#12081944);box-shadow:inset 0 0 50px #12081933}
 .scene.is-daydream .location{background:#8d4866f0;border:1px solid #ffe4c580}
 .scene.is-daydream .character{filter:drop-shadow(0 0 18px #ffe4b380)}
 .scene.is-daydream .scene-caption>span:first-child{font-style:italic}
