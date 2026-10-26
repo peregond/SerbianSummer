@@ -7,6 +7,8 @@ import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=0.15.4';
 import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.4';
 import {mountRoomInteraction} from './room-interaction.js?v=1';
+import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=1';
+import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
 import {mountMessenger} from './messenger.js?v=0.15.4';
 import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.4';
@@ -44,7 +46,7 @@ settings.music = settings.music === true;
 settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':['interaction','room-interaction'].includes(document.body.dataset.screen)?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
+function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':['interaction','room-interaction','scene-quest'].includes(document.body.dataset.screen)?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
 setVolume(settings.volume);
@@ -54,7 +56,7 @@ let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
-let interactionDispose=null,messengerDispose=null,roomDispose=null;
+let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
 let lastChapterId=null,wantCard=false,cardContext=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
@@ -134,6 +136,7 @@ function showScreen(id) {
   if(view==='room-interaction'){roomDispose?.();roomDispose=null;}
   if(view==='interaction'&&id!=='interaction'){interactionDispose?.();interactionDispose=null;}
   if(view==='messenger'){messengerDispose?.();messengerDispose=null;}
+  if(view==='scene-quest'&&id!=='scene-quest'){questDispose?.();questDispose=null;}
   view=id;
   $('home-art').hidden=id!=='home';
   document.body.dataset.screen=id;
@@ -220,7 +223,7 @@ function enterNode(id) {
   if(NODES[id]?.adult&&!settings.adult)id=NODES[id].skipTo;
   state.node=id;state.index=0;
   if(id==='end') {state.completed=true;return;}
-  Object.assign(state.flags,NODES[id].effectOnEnter??{});
+  Object.assign(state.flags,NODES[id].effectOnEnter??{});applyFlatEffect(state.flags,NODES[id].effectOnEnter);
   for(const entry of NODES[id].journal??[]) if(!state.journal.includes(entry))state.journal.push(entry);
   rememberChapter(state,NODES);
 }
@@ -241,6 +244,8 @@ function renderGame({skipMessenger=false}={}) {
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
+  if(node.map)return openDistrictMap();
+  if(page.action?.quest==='viewing')return openViewingQuest();
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
@@ -424,6 +429,17 @@ function openRoomInteraction(mode='arrival'){
   showScreen('room-interaction');
   roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});toast(mode==='bedtime'?'Всё готово ко сну.':'Теперь можно выдохнуть. Всё на своих местах.');}});
 }
+function openDistrictMap(){
+  showScreen('scene-quest');
+  const node=NODES[state.node];
+  questDispose=mountDistrictMap($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags)),flags:state.flags,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openViewingQuest(){
+  showScreen('scene-quest');
+  questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat({feedback:'Осмотр закончен.'});}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
 function openBaggage(){
   const origin={node:state.node,index:state.index};
   showScreen('interaction');fitScene();
@@ -438,7 +454,7 @@ function openBaggage(){
   $('interaction-title').focus({preventScroll:true});
 }
 function applyEffects(effect={}) {
-  Object.assign(state.flags,effect);
+  Object.assign(state.flags,effect);applyFlatEffect(state.flags,effect);
   if(['romance','friendship'].includes(effect.eveningIntent)&&state.flags.companion)state.flags[state.flags.companion+'Bond']=effect.eveningIntent;
   if(['romance','friendship'].includes(effect.cinemaAirportBond)&&state.flags.companion)state.flags[state.flags.companion+'Bond']=effect.cinemaAirportBond;
   if(effect.hostBond&&state.flags.host)state.flags[state.flags.host+'Bond']=effect.hostBond;
@@ -462,7 +478,7 @@ function performBeat(option={}, {render=true}={}) {
   return true;
 }
 function choose(choice, {render=true}={}) {
-  if(transitionLock||panel.open||!['game','messenger'].includes(view)||!choiceVisible(choice,state.flags))return false;
+  if(transitionLock||panel.open||!['game','messenger','scene-quest'].includes(view)||!choiceVisible(choice,state.flags))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
@@ -492,7 +508,7 @@ function renderEnding() {
   drawEndingPrompt();
 }
 function goBack() {
-  if(panel.open||transitionLock||!state||!['game','messenger','room-interaction','ending'].includes(view))return;
+  if(panel.open||transitionLock||!state||!['game','messenger','room-interaction','scene-quest','ending'].includes(view))return;
   if(!rewindStep(state))return;
   state.chapterMarks=readChapterMarks(state.chapterMarks,NODES,JOURNAL,state.log.length);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);

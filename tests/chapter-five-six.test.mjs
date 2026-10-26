@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {NODES,JOURNAL,START} from '../public/story.js';
 import {CHAPTERS,chapterFor,continuationFor,rememberChapter,restartChapter,readChapterMarks} from '../public/chapters.js';
 import {normalizeProgress} from '../lib/save-format.js';
+import {forwardTargets} from './graph-helpers.mjs';
 
 const residence=CHAPTERS.find(c=>c.id==='residence'),courtyard=CHAPTERS.find(c=>c.id==='courtyard');
 assert.equal(residence.start,'fourth_morning');
@@ -98,6 +99,8 @@ const maskFor=effect=>{
  // The player resolves these generic effects to the selected person's bond.
  // Include both possible recipients to keep this structural audit conservative.
  if(['romance','friendship'].includes(effect?.eveningIntent)||['romance','friendship'].includes(effect?.cinemaAirportBond)){keys.add('nikolaBond');keys.add('milicaBond');}
+ // Signing a lease turns the viewing's generic bond into exactly one landlord's rentalBond_* flag.
+ if(effect?.flatPick)keys.add('rentalBond_pick');
  if(effect?.hostBond||effect?.districtBond){keys.add('draganBond');keys.add('jelenaBond');}
  let mask=0n;for(const key of keys){if(!keyIndex.has(key))keyIndex.set(key,keyIndex.size);mask|=1n<<BigInt(keyIndex.get(key));}return mask;
 };
@@ -108,12 +111,19 @@ for(const[id,node]of Object.entries(NODES)){
  for(const action of Object.values(node.actions??{})){mask|=maskFor(action.effect);for(const option of action.options??[])mask|=maskFor(option.effect);}
  localMasks.set(id,mask);choiceMasks.set(id,(node.choices??[]).map(c=>maskFor(c.effect)));
 }
+// The flat-hunting map is a deliberate loop (see another district, come back), so reachability is a fixed point
+// rather than a recursion.
 const futureMemo=new Map();
-function futureMask(id){if(id==='end')return 0n;if(futureMemo.has(id))return futureMemo.get(id);
- const node=NODES[id];let mask=localMasks.get(id);
- if(node.choices)node.choices.forEach((c,i)=>{mask|=choiceMasks.get(id)[i]|futureMask(c.next);});else mask|=futureMask(node.next);
- futureMemo.set(id,mask);return mask;
+for(const id of Object.keys(NODES))futureMemo.set(id,localMasks.get(id));
+futureMemo.set('end',0n);
+for(let changed=true;changed;){changed=false;
+ for(const[id,node]of Object.entries(NODES)){
+  let mask=futureMemo.get(id);
+  if(node.choices)node.choices.forEach((c,i)=>{mask|=choiceMasks.get(id)[i]|futureMemo.get(c.next);});else mask|=futureMemo.get(node.next);
+  if(mask!==futureMemo.get(id)){futureMemo.set(id,mask);changed=true;}
+ }
 }
+const futureMask=id=>futureMemo.get(id);
 const starts=[START,...Object.entries(NODES).filter(([,n])=>n.legacyOnly).map(([id])=>id)];
 starts.forEach(futureMask);
 const inputs=new Map(),queue=[];let maxFlags=0;
@@ -130,13 +140,15 @@ for(let cursor=0;cursor<queue.length;cursor++){const[id,before,finished]=queue[c
 }
 const logMemo=new Map();
 function maxLogs(id){if(id==='end')return 0;if(logMemo.has(id))return logMemo.get(id);
- const node=NODES[id],next=node.choices?node.choices.map(c=>c.next):[node.next];
+ const node=NODES[id],next=forwardTargets(id);
  const logs=node.pages.length+Object.keys(node.actions??{}).length+(node.choices?1:0)+Math.max(...next.map(maxLogs));
  logMemo.set(id,logs);return logs;
 }
+// Looking at every flat once more and returning to the map is allowed; the loop is bounded by the number of flats.
+const FLAT_LOOP_ALLOWANCE=100;
 // The visual room interaction stores one extra mask; inline chat acknowledgements add at most four records.
 maxFlags+=1;
-const logBound=Math.max(...starts.map(maxLogs))+4;
+const logBound=Math.max(...starts.map(maxLogs))+4+FLAT_LOOP_ALLOWANCE;
 assert.ok(maxFlags<=150,`A complete story save could reach ${maxFlags} flags, over the format limit`);
 assert.ok(logBound<=1500,`A complete story save could reach ${logBound} log records, over the format limit`);
 console.log(`Chapters 5/6: old-save migration, replay isolation, consent and open plans checked; conservative persistence bounds ${maxFlags} flags / ${logBound} log records.`);

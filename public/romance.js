@@ -41,6 +41,9 @@ export function joinNames(names,and){return names.length<2?names.join(''):names.
 // A choice may carry a condition: {partner,stage} (stage null = nothing has happened yet) or {minPartners:{stage,count}}.
 export function choiceVisible(choice,flags={}){
  const when=choice.when;if(!when)return true;
+ if(when.all)return when.all.every(each=>choiceVisible({when:each},flags));
+ if(Object.hasOwn(when,'bit')&&!((flags[when.flag]??0)&when.bit))return false;
+ if(Object.hasOwn(when,'notBit')&&((flags[when.flag]??0)&when.notBit))return false;
  if(when.flag){
   if(Object.hasOwn(when,'equals')&&flags[when.flag]!==when.equals)return false;
   if(Object.hasOwn(when,'notEquals')&&flags[when.flag]===when.notEquals)return false;

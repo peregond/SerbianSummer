@@ -1,4 +1,5 @@
 import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=1';
+import {extendHousing} from './housing-story.js?v=1';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=1';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.15.4';
@@ -710,6 +711,7 @@ applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyEpisodicCast(NODES,CHARACTER_SPRITES);
 assignChapters(NODES);
 registerRentalBeats(NODES,scene);
+extendHousing({NODES,JOURNAL,BACKGROUNDS});
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 export function pageText(page,flags={},locale=getLanguage()) {

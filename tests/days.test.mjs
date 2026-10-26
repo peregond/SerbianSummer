@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import {NODES,JOURNAL,START,presentationFor} from '../public/story.js';
 import {DAYS,STAGES,PRELUDE} from '../public/days.js';
 import {CHAPTERS,continuationFor,dayProgress,chapterFor} from '../public/chapters.js';
+import {forwardTargets} from './graph-helpers.mjs';
 // Thirty days, in order, each one chapter.
 assert.equal(DAYS.length,30);
 DAYS.forEach((d,i)=>assert.equal(d.n,i+1));
@@ -19,7 +20,7 @@ function walk(id){
  if(id==='end')return 0;if(memo.has(id))return memo.get(id);
  const node=NODES[id];seen.add(index(id));
  const own=node.pages.reduce((sum,p)=>sum+Math.max(...[p.text,...Object.values(p.workText??{}),...Object.values(p.contactText??{}),...Object.values(p.districtText??{}),...Object.values(p.finalText??{})].filter(Boolean).map(t=>t.length)),0);
- const targets=node.choices?node.choices.map(c=>c.next):[node.next];let best=0;
+ const targets=forwardTargets(id);let best=0;
  for(const next of targets){
   if(next!=='end'){const step=index(next)-index(id);assert.ok(step===0||step===1,`${id} -> ${next} skips or reverses a day`);}
   best=Math.max(best,walk(next));
@@ -56,7 +57,9 @@ for(const companion of ['nikola','milica'])for(const host of ['dragan','jelena']
     const speaker=page.speaker;const g=speaker==='contact'?GENDER[companion]:speaker==='contactCounterpart'?GENDER[companion==='nikola'?'milica':'nikola']:speaker==='host'?GENDER[host]:speaker==='districtHost'?GENDER[districtOwner]:speaker==='ownerCounterpart'?GENDER[districtOwner==='jelena'?'dragan':'jelena']:GENDER[speaker];
     if(g)own.add(g);
    }
-   const next=(node.choices?node.choices.map(c=>c.next):[node.next]).filter(x=>x!=='end'&&group(NODES[x].chapterId)===chapter.id);
+   const next=forwardTargets(id).filter(x=>x!=='end'&&group(NODES[x].chapterId)===chapter.id);
+   // A step that only loops back to the district map continues along paths audited elsewhere.
+   if(!next.length&&(node.choices?node.choices.length:node.next&&node.next!=='end'))own.add('f').add('m');
    let all=null;for(const x of next){const s=present(x);all=all?new Set([...all].filter(v=>s.has(v))):new Set(s);}
    const result=new Set([...own,...(all??[])]);memo.set(id,result);return result;
   };
@@ -70,7 +73,7 @@ for(const d of DAYS.filter(d=>d.status==='written'&&![1,2,12,15,16,21,29,30].inc
  const shape=id=>{
   if(id==='end'||NODES[id].chapterId!==d.id)return {scenes:0,choices:0};
   if(memo.has(id))return memo.get(id);
-  const node=NODES[id],targets=node.choices?node.choices.map(c=>c.next):[node.next];
+  const node=NODES[id],targets=forwardTargets(id);
   const parts=targets.map(shape);
   const result={scenes:1+Math.min(...parts.map(p=>p.scenes)),choices:(node.choices?1:0)+Math.min(...parts.map(p=>p.choices))};
   memo.set(id,result);return result;

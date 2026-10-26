@@ -33,14 +33,17 @@ for(const edit of upstream.changes.filter(edit=>edit.afterMissing)){
 }
 // New rental introductions are separate scenes; their routes and translations
 // are checked in rental-story-integrity.test.mjs. The original three choices
-// receive exactly one eligibility condition, and four new ones are added.
+// receive exactly one eligibility condition; the four earlier new-version choices are retired from the map
+// (kept in the data for saves) and three district choices replace them.
 const rentalChoices=canonical.district_map.choices;
-assert.equal(rentalChoices.length,7);
+assert.equal(rentalChoices.length,10);
 for(const choice of rentalChoices.slice(0,3))assert.deepEqual(choice.when,{flag:'rentalCast',notEquals:'new'});
-for(const choice of rentalChoices.slice(3))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
-assert.deepEqual(rentalChoices.slice(3).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
+for(const choice of rentalChoices.slice(3,7))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'retired'});
+for(const choice of rentalChoices.slice(7))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
+assert.deepEqual(rentalChoices.slice(3,7).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
+assert.deepEqual(rentalChoices.slice(7).map(choice=>choice.effect.districtOwner),['ana','marko','vuk']);
 canonical.district_map.choices=rentalChoices.slice(0,3).map(({when,...choice})=>choice);
-for(const id of Object.keys(canonical))if(id.startsWith('rental_'))delete canonical[id];
+for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_'))delete canonical[id];
 assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
 canonical.d20_nephew.pages[1].speaker='districtHost';
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
