@@ -134,7 +134,9 @@ function maxLogs(id){if(id==='end')return 0;if(logMemo.has(id))return logMemo.ge
  const logs=node.pages.length+Object.keys(node.actions??{}).length+(node.choices?1:0)+Math.max(...next.map(maxLogs));
  logMemo.set(id,logs);return logs;
 }
-const logBound=Math.max(...starts.map(maxLogs));
+// The visual room interaction stores one extra mask; inline chat acknowledgements add at most four records.
+maxFlags+=1;
+const logBound=Math.max(...starts.map(maxLogs))+4;
 assert.ok(maxFlags<=150,`A complete story save could reach ${maxFlags} flags, over the format limit`);
 assert.ok(logBound<=1500,`A complete story save could reach ${logBound} log records, over the format limit`);
 console.log(`Chapters 5/6: old-save migration, replay isolation, consent and open plans checked; conservative persistence bounds ${maxFlags} flags / ${logBound} log records.`);

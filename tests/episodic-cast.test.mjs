@@ -20,7 +20,8 @@ for(const[id,person]of Object.entries(EPISODIC_CAST)){
 }
 for(const[id,index,character,mode,channel]of EPISODIC_STAGES){
  const node=NODES[id],page=node.pages[index];const frame=presentationFor(node,page,{companion:'milica',host:'dragan'});
- if(mode==='contact'){
+ if(id==='road_start'&&index===1){assert.equal(frame.bg,'taxi-navigation-v1');assert.equal(frame.contactPortrait,null);assert.equal(frame.composite,true);
+ }else if(mode==='contact'){
   assert.equal(frame.character,null,id+': remote speakers must not stand in the player’s location');
   assert.equal(frame.contactPortrait.character,character);assert.equal(frame.contactPortrait.channel,channel);assert.ok(files.includes(frame.contactPortrait.file));
  }else if(id==='nikola_questions'){assert.equal(frame.character,null);assert.equal(frame.bg,'nikola-elder-bread-handover-v1');assert.ok(frame.composite);

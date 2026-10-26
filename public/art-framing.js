@@ -4,6 +4,7 @@
 const mark=(head,detail)=>({head,detail});
 export const ART_FRAMES={
  'nikola-elder-bread-handover-v1':mark([.07,.12,.88,.37],[.27,.39,.78,.58]),
+ 'taxi-navigation-v1':mark([.13,.07,.46,.31],[.59,.32,.9,.53]),
  'nikola-bakery-lookback-v1':mark([.43,.30,.74,.45],[.39,.39,.76,.52]),
  'ensemble-poster-buzz-v3':mark([.12,.32,.94,.60]),
  'dragan-kitchen-coffee':mark([.16,.06,.73,.37],[.08,.58,.96,.84]),

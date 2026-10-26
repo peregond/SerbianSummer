@@ -25,3 +25,5 @@
 .chat-reply .choice-icon{width:23px;height:23px;flex:none;color:var(--chat-accent)}
 .chat-reply[data-tone=romance] .choice-icon{color:#c95686}
 .chat-reply .choice-label{min-width:0;overflow-wrap:anywhere}
+
+.chat-attachment{display:grid;grid-template-columns:25px 1fr;gap:4px 8px;margin:0 0 8px;padding:12px;border-radius:10px;background:#ffffff22;border:1px solid #ffffff55}.chat-attachment svg{grid-row:span 2}.chat-attachment strong{font-size:14px}.chat-attachment small{font-size:12px;line-height:1.35;opacity:.85}

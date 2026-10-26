@@ -19,6 +19,7 @@ export const MESSENGER_CONFIG = {
 // Legacy written replies that were authored as ordinary player lines.
 // Indices are presentation overrides; do not insert or reorder story pages.
 export const CHAT_SCENES = {
+  road_contact: { contact:'contact', pages:{0:{direction:'outgoing',quotedBody:true,attachment:{label:'Селфи из такси',description:'У окна, на фоне реки и вечернего Белграда'}}} },
   evening_contact_plan: { contact: 'contact', pages: { 1: { direction: 'outgoing' } } },
   host_evening_invite: { contact: 'host', pages: { 0: { direction: 'outgoing' } } },
   room_rest: { contact: 'contact', pages: { 2: { direction: 'outgoing', quotedBody: true } } },
@@ -28,4 +29,11 @@ export const CHAT_SCENES = {
   viewing_money: { contact: 'Ася', pages: { 0: { direction: 'outgoing' } } },
   viewing_documents: { contact: 'Ася', pages: { 0: { direction: 'outgoing' } } },
   viewing_life: { contact: 'Ася', pages: { 0: { direction: 'outgoing' } } }
+};
+
+// Immediate acknowledgements of direct questions, without inserting legacy pages.
+export const INLINE_CHAT_REPLIES = {
+ nikola_phone:{1:{label:'Пока ещё в аэропорту. Скоро выезжаю. Напишу, когда буду рядом.',tone:'practical'}},
+ phone:{1:{label:'Я ещё в аэропорту. Постараюсь приехать до семи. Напишу, когда буду рядом.',tone:'practical'},3:{label:'Пока ещё в аэропорту. Всё хорошо, сейчас пью кофе. Как доберусь, напишу.',tone:'friendship'}},
+ messages:{0:{label:'Долетел{a} хорошо! Пока ещё в аэропорту. Как доберусь, напишу.',tone:'friendship'}}
 };

@@ -4,7 +4,7 @@
 // switched off in the settings (adult scenes): then the story simply moves on to the morning. Several people can be romanced;
 // with at least two who have reached the kiss the player may bring them together for one evening, again only by shared consent.
 // Nothing here changes the application, the bank account or the lease.
-import {T} from './days.js?v=0.15.1';
+import {T} from './days.js?v=0.15.2';
 const SLOT_IDENTITIES={airport:['nikola','milica'],asya:['asya'],luka:['luka'],owner:['dragan','jelena'],bank:['lazar','teodora'],mup:['ivana','strahinya'],milos:['milos']};
 const SLOT_BG={airport:'riverside-evening',asya:'courtyard-after-film',luka:'belgrade-morning-cafe',owner:'dorcol-apartment',bank:'belgrade-morning-cafe',mup:'belgrade-morning-cafe',milos:'riverside-evening'};
 // For each person: d = date, k = kiss, n = night. [Russian, English]; x1 is the narration, x2 what the person says.

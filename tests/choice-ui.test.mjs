@@ -42,3 +42,5 @@ for(const tone of ['explore','romance','friendship','practical','dream','persona
   appendChoiceContents(button,choice(tone));assert.equal(button.children.length,2,'Reusing a button does not duplicate its contents');
 }
 console.log('Compact choices: recipient identity, destination priority, neutral scenes, translated labels, SVG icons and accessible categories checked.');
+
+for(const companion of ['nikola','milica'])for(const bond of ['romance','friendship']){const p=choicePresentation({label:'Написать человеку из аэропорта',tone:'friendship',next:'road_contact'},{flags:{companion,[companion+'Bond']:bond}});assert.equal(p.tone,bond);assert.equal(p.recipient,companion);assert.equal(p.label,companion==='nikola'?'Написать Николе':'Написать Милице');}
