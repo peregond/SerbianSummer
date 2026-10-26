@@ -1,12 +1,15 @@
+import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=6';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=7';
 import {mountMessenger} from './messenger.js?v=2';
 import {messengerFrame,messageAt} from './messenger-model.js?v=3';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=2';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
+import {STAGES} from './days.js?v=0.15.0';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
@@ -35,7 +38,7 @@ settings.music = settings.music === true;
 settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):dark?'#182a31':'#fff3d8';}
+function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
 setVolume(settings.volume);
@@ -46,6 +49,7 @@ const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null;
+let lastChapterId=null,wantCard=false,cardContext=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -132,6 +136,7 @@ function showScreen(id) {
   window.scrollTo(0,0);
 }
 function home() {
+  renderHomeHero($('home'),$('home-art'),$('home-cast'),saved);
   setMusicScene('prologue');
   $('new-game').disabled=false;
   $('resume').hidden=!saved;
@@ -189,12 +194,14 @@ function startGame() {
   enterNode(START);recordPage();save();renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
-  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
+  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
   return t(familySpeaker(names[page.speaker]??page.speaker),locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
 function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
 function enterNode(id) {
+  // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
+  if(NODES[id]?.adult&&!settings.adult)id=NODES[id].skipTo;
   state.node=id;state.index=0;
   if(id==='end') {state.completed=true;return;}
   Object.assign(state.flags,NODES[id].effectOnEnter??{});
@@ -205,9 +212,15 @@ function renderGame({skipMessenger=false}={}) {
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
+  const chapter=chapterFor(state,NODES);
+  const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
   setMusicScene(node.music??(['airport-cafe','bakery','cafe-table','bakery-display','bakery-corner'].includes(node.bg)?'encounter':'prologue'));
   const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
-  if(frame)return renderMessenger(frame);
+  if(frame){
+    renderMessenger(frame);
+    if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
+    return;
+  }
   showScreen('game');
   const presentation=presentationFor(node,page,state.flags);
   const sceneElement=$('scene');
@@ -258,18 +271,58 @@ function renderGame({skipMessenger=false}={}) {
   $('rewind').disabled=!state.rewind?.length;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
-  if(isChoice)for(const choice of node.choices) {
+  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags))) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
     button.addEventListener('click',()=>choose(choice));$('choices').append(button);
   }
   $('journal-dot').hidden=state.journal.length===0;
-  const chapter=chapterFor(state,NODES);
+
   $('chapter-progress').textContent=t(chapter.number+' · Главы ↗');
   $('chapter-heading').hidden=state.node!==chapter.start||state.index!==0;
   $('chapter-heading').textContent=t(chapter.number+' · '+chapter.title);
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
+  // A step that crosses into a new chapter gets a title card (and a reminder to save progress for guests).
+
+  if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
+}
+// A guest is somebody the cloud has finished checking who is not signed in; nobody is nagged while the check is still running.
+function isGuest(){return !!cloud?.ready&&!cloud.user;}
+function drawSavePrompt(){
+  const box=document.createElement('div');box.className='save-prompt';
+  const title=document.createElement('strong');title.textContent=t('Сохрани прогресс');
+  const text=document.createElement('p');text.textContent=t('Сейчас история хранится только на этом устройстве. Создай аккаунт, чтобы не потерять её и продолжить с другого телефона.');
+  const create=document.createElement('button');create.type='button';create.className='secondary';create.textContent=t('Создать аккаунт');create.addEventListener('click',()=>{authMode='register';openAccount();});
+  const login=document.createElement('button');login.type='button';login.className='text-button';login.textContent=t('Уже есть аккаунт? Войти');login.addEventListener('click',()=>{authMode='login';openAccount();});
+  box.append(title,text,create,login);return box;
+}
+function drawEndingPrompt(){
+  document.querySelector('#ending .save-prompt')?.remove();
+  if(isGuest())document.querySelector('#ending .ending-inner').insertBefore(drawSavePrompt(),document.querySelector('#ending .ending-actions'));
+}
+function drawChapterCard(previous,next){
+  const card=$('chapter-card');card.replaceChildren();
+  const inner=document.createElement('div');inner.className='chapter-card-inner';
+  const add=(tag,className,text)=>{const element=document.createElement(tag);element.className=className;element.textContent=text;inner.append(element);return element;};
+  if(previous?.day||previous?.id==='arrival')add('p','chapter-card-done','✓ '+t(previous.number)+' '+t('завершён')+' · '+t(previous.title));
+  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 30')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
+  const heading=add('h2','chapter-card-number',t(next.number));heading.id='chapter-card-title';
+  add('p','chapter-card-title',t(next.title));
+  add('p','chapter-card-description',t(next.description));
+  if(next.day){
+    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 30')}`);
+    for(let day=1;day<=30;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
+    inner.append(progress);
+  }
+  if(isGuest())inner.append(drawSavePrompt());
+  const start=document.createElement('button');start.type='button';start.id='chapter-card-start';start.className='primary';start.textContent=next.day?`${t('Начать день')} ${next.day}`:t('Начать');
+  start.addEventListener('click',()=>{cardContext=null;renderGame();});
+  inner.append(start);card.append(inner);
+}
+function showChapterCard(previous,next){
+  cardContext={previous,next};drawChapterCard(previous,next);showScreen('chapter-card');
+  $('chapter-card-start').focus({preventScroll:true});
 }
 function renderMessenger(frame) {
   showScreen('messenger');
@@ -294,7 +347,6 @@ function fitScene() {
   document.documentElement.dataset.standalone=String(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||!!navigator.standalone);
   // Very short viewports and enlarged type remain readable through natural page scrolling.
   requestAnimationFrame(()=>{
-    if(!$('home').hidden){const home=$('home'),title=document.querySelector('.home-title').getBoundingClientRect(),buttons=document.querySelector('.home-bottom').getBoundingClientRect(),bounds=home.getBoundingClientRect();positionArtwork($('home-art'),home,ART_FRAMES['ensemble-poster-buzz-v3'],{top:title.bottom-bounds.top+10,bottom:bounds.bottom-buttons.top+12,left:8,right:8});}
     const game=$('game');if(game.hidden)return;
     const sceneMinimum=parseFloat(getComputedStyle($('scene')).minHeight)||145;
     const minimum=document.querySelector('.dialogue').offsetHeight+document.querySelector('.game-footer').offsetHeight+sceneMinimum;
@@ -313,7 +365,7 @@ function advance({render=true}={}) {
   if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
-  save();if(render)renderGame();return true;
+  wantCard=true;save();if(render)renderGame();return true;
 }
 function openBaggage(){
   const origin={node:state.node,index:state.index};
@@ -330,6 +382,7 @@ function applyEffects(effect={}) {
   if(['romance','friendship'].includes(effect.cinemaAirportBond)&&state.flags.companion)state.flags[state.flags.companion+'Bond']=effect.cinemaAirportBond;
   if(effect.hostBond&&state.flags.host)state.flags[state.flags.host+'Bond']=effect.hostBond;
   if(effect.districtBond&&state.flags.districtOwner)state.flags[state.flags.districtOwner+'Bond']=effect.districtBond;
+  applyRomanceEffect(state.flags,effect);
 }
 function performBeat(option={}, {render=true}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
@@ -342,7 +395,7 @@ function performBeat(option={}, {render=true}={}) {
   if(option.next??action.next)enterNode(option.next??action.next);
   else if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
-  if(state.node!=='end')recordPage();save();if(render)renderGame();
+  if(state.node!=='end')recordPage();wantCard=true;save();if(render)renderGame();
   if(option.feedback??action.feedback)toast(option.feedback??action.feedback);
   return true;
 }
@@ -351,7 +404,7 @@ function choose(choice, {render=true}={}) {
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
-  applyEffects(choice.effect);enterNode(choice.next);recordPage();save();if(render)renderGame();return true;
+  applyEffects(choice.effect);enterNode(choice.next);recordPage();wantCard=true;save();if(render)renderGame();return true;
 }
 function renderEnding() {
   setMusicScene('prologue');
@@ -374,6 +427,7 @@ function renderEnding() {
   if(state.flags.chapterSevenComplete){const f=state.flags.finalChoice;$('ending-title').innerHTML=html(f==='stay'?'Остаюсь<br><em>в Белграде</em>':f==='leave'?'Домой<br><em>с летом</em>':'До осени<br><em>по плану</em>');$('ending-memory').textContent=t(f==='stay'?'У этого города теперь есть твой стул.':f==='leave'?'Лето осталось с тобой, куда бы ты ни летел.':'Дверь приоткрыта. Войти в неё решишь ты.');}
   if(state.flags.chapterFiveComplete)document.querySelector('.ending-inner .demo-note').innerHTML=html(state.flags.chapterSevenComplete?'Конец истории.<br>Спасибо за это лето в Сербии.':state.flags.chapterSixComplete?'Продолжение следует.<br>Дальше — новые решения и встречи.':'Продолжение следует.<br>Дальше — кино во дворе и вечер с близкими.');
   document.querySelector('.ending-inner>p:not(.eyebrow):not(.demo-note)').innerHTML=html(state.flags.chapterSevenComplete?'Это был твой ответ.<br>Любой из них был честным.':state.flags.chapterSixComplete?'У этой жизни уже есть люди.<br>Дальше ты выберешь, куда она приведёт.':state.flags.chapterFiveComplete?'Одни дела завершены.<br>Для остальных выбран следующий шаг.':state.flags.chapterFourComplete?'Первые ответы получены.<br>А у новых знакомств появился свой вечер.':state.flags.chapterThreeComplete?'Вопросы для банка готовы.<br>А у новой встречи уже есть продолжение.':state.flags.chapterOneComplete?'У тебя есть ключ, первый вечер<br>и свой маршрут по Белграду.':'Сегодня у тебя появился адрес.<br>И человек, которому можно написать.');
+  drawEndingPrompt();
 }
 function goBack() {
   if(panel.open||transitionLock||!state||!['game','messenger','ending'].includes(view))return;
@@ -430,10 +484,11 @@ function openPanel(kind) {
     else for(const id of state.journal) {const entry=JOURNAL[id];const article=document.createElement('article');article.className='journal-entry';const tag=document.createElement('p');tag.className='entry-tag';tag.textContent=t(entry.tag);const title=document.createElement('h3');title.textContent=t(entry.title);const body=document.createElement('p');body.textContent=t(entry.text);article.append(tag,title,body);if(entry.link){const a=document.createElement('a');a.href=entry.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t(entry.linkText);article.append(a);}content.append(article);}
   } else {
     $('panel-title').textContent=t('Немного удобства');
-    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема<small>Как в системе — по настройке телефона</small></span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">В системе</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка<small>Меняется вместе со сценой</small></span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting"><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><div class="settings-actions"><button id="account-settings" class="secondary">Мой прогресс · аккаунт</button><button id="screen-info" class="secondary">Сведения об экране</button><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button class="text-button" id="menu-home">На главный экран</button></div><p class="settings-about">Сербское лето · первое знакомство<br>Прогресс сохраняется на устройстве. После входа можно синхронизировать его с аккаунтом или перенести файлом.<br><br>Персонажи и разговоры вымышлены. В истории уже есть аэропорт, заселение, первый вечер и просмотр квартиры. Играй в своём темпе.</p>`);
+    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема<small>Как в системе — по настройке телефона</small></span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">В системе</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка<small>Меняется вместе со сценой</small></span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting"><span>Взрослые сцены · 18+<small>Интимные моменты без подробностей, только по взаимному согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><label class="setting"><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><div class="settings-actions"><button id="account-settings" class="secondary">Мой прогресс · аккаунт</button><button id="screen-info" class="secondary">Сведения об экране</button><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button class="text-button" id="menu-home">На главный экран</button></div><p class="settings-about">Сербское лето · первое знакомство<br>Прогресс сохраняется на устройстве. После входа можно синхронизировать его с аккаунтом или перенести файлом.<br><br>Персонажи и разговоры вымышлены. В истории уже есть аэропорт, заселение, первый вечер и просмотр квартиры. Играй в своём темпе.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
     $('font-size').addEventListener('input',event=>{settings.textSize=Number(event.target.value);$('font-label').textContent=t(settings.textSize+' px');document.documentElement.style.setProperty('--text-size',settings.textSize+'px');writeLocal('settings',settings);fitScene();});
     $('music-toggle').addEventListener('change',event=>applyMusic(event.target.checked));
+    $('adult-toggle').addEventListener('change',event=>{if(event.target.checked&&!window.confirm(t('Тебе есть 18 лет? Взрослые сцены показывают близость без подробностей и всегда спрашивают согласия.'))){event.target.checked=false;return;}settings.adult=event.target.checked;writeLocal('settings',settings);});
     $('music-volume').addEventListener('input',event=>{settings.volume=Number(event.target.value)/100;setVolume(settings.volume);$('volume-label').textContent=t(event.target.value+'%');writeLocal('settings',settings);});
     $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
     $('screen-info').addEventListener('click',showScreenInfo);
@@ -513,10 +568,11 @@ $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.
 $('chapter-progress').addEventListener('click',openChapters);
 $('interaction-back').addEventListener('click',renderGame);
 $('next').addEventListener('click',advance);$('dialogue-text').addEventListener('click',advance);
-$('continue-story').addEventListener('click',()=>{state.rewind=[];state.completed=false;const next=continuationFor(state);if(!next)return;enterNode(next);recordPage();save();renderGame();});
+$('continue-story').addEventListener('click',()=>{state.rewind=[];state.completed=false;const next=continuationFor(state);if(!next)return;enterNode(next);recordPage();wantCard=true;save();renderGame();});
 $('rewind').addEventListener('click',goBack);$('ending-rewind').addEventListener('click',goBack);
 $('ending-journal').addEventListener('click',()=>openPanel('journal'));
 $('close-panel').addEventListener('click',()=>panel.close());
+panel.addEventListener('close',()=>{if(view==='chapter-card'&&cardContext)drawChapterCard(cardContext.previous,cardContext.next);if(view==='ending')drawEndingPrompt();});
 panel.addEventListener('click',event=>{if(event.target===panel){const rect=panel.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)panel.close();}});
 document.addEventListener('keydown',event=>{if((event.code==='Space'||event.code==='Enter')&&view==='game'&&!panel.open&&!/BUTTON|INPUT|A/.test(document.activeElement.tagName)){event.preventDefault();advance();}});
 $('scene-cg').addEventListener('load',fitScene);$('home-art').addEventListener('load',fitScene);

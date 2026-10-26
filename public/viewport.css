@@ -46,6 +46,7 @@
 :root[data-screen=game][data-theme=dark],:root[data-screen=game][data-theme=dark] body{background:#182a31}
 :root[data-screen=game][data-theme=light],:root[data-screen=game][data-theme=light] body{background:#fff3d8}
 :root[data-screen=interaction],:root[data-screen=interaction][data-theme] body{background:#192e3a}
+:root[data-screen=chapter-card],:root[data-screen=chapter-card][data-theme] body{background:#0a2630}
 .game[data-speaker=player] #speaker{color:var(--sea)}
 .game[data-speaker=milica] #speaker{color:#a33270}
 .game[data-speaker=nikola] #speaker{color:#2868ad}

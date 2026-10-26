@@ -1,5 +1,17 @@
 {
-  "scenes": 445,
+  "homeAssets": [
+    "home/milica-casual.webp",
+    "home/nikola-casual.webp",
+    "home/dragan-casual.webp",
+    "home/jelena-casual.webp",
+    "home/asya-casual.webp",
+    "home/luka-casual.webp",
+    "home/milos-casual.webp",
+    "home/belgrade-morning.webp",
+    "home/belgrade-day.webp",
+    "home/belgrade-evening.webp"
+  ],
+  "scenes": 545,
   "backgrounds": 71,
   "stagedBackgrounds": 71,
   "registeredPortraits": 132,

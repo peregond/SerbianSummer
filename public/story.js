@@ -11,6 +11,8 @@ import {extendFirstHalf} from './day-scenes.js?v=0.15.0';
 import {extendSecondHalf} from './day-scenes-late.js?v=0.15.0';
 import {extendOfficeRomance} from './day-office.js?v=0.15.0';
 import {extendMaskedPatrol} from './day-mask.js?v=0.15.0';
+import {extendRomance} from './romance-scenes.js?v=0.15.0';
+import {SLOTS,identityOf,SPRITES} from './romance.js?v=0.15.0';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.0';
 import {extendFourthChapter} from './chapter-four.js?v=0.15.0';
 import {extendHostCoffee} from './host-coffee.js?v=0.15.0';
@@ -674,7 +676,15 @@ extendFirstHalf({NODES,JOURNAL,n,scene});
 extendSecondHalf({NODES,JOURNAL,n,scene});
 extendOfficeRomance({NODES,JOURNAL,n,scene});
 extendMaskedPatrol({NODES,JOURNAL,n,scene});
+extendRomance({NODES,JOURNAL,n,scene});
 extendCast({NODES});
+// Keep the two existing cameo lines at indices 2 and 3 in older saved games.
+// Romance reflections are appended after the cast has supplied those cameos.
+for(const id of ['decision_weigh_work','decision_weigh_people','decision_weigh_home']){
+ const pages=NODES[id].pages;const reflection=pages[2];
+ if(!reflection.byFlag)throw Error('Missing romance reflection '+id);
+ pages.splice(2,1);pages.push(reflection);
+}
 // Thirty days: new days sit between the written ones. Entering a day records the previous day as done.
 {
   const link=(from,day,relabel=true)=>{NODES[from].next=dayFor(day).start;if(relabel)NODES[from].exitAction={kind:'tap',label:'Продолжить · День '+day,object:'Продолжить · День '+day};};
@@ -695,7 +705,8 @@ assignChapters(NODES);
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 export function pageText(page,flags={},locale=getLanguage()) {
   const picked=page.byFlag?(()=>{const{flag,text}=page.byFlag;const key=Array.isArray(flag)?flag.map(f=>flags[f]).join(':'):flags[flag];return text[key]??text.default;})():undefined;
-  let text=picked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  const partnerPicked=page.byPartner?(page.byPartner[SLOTS.includes(flags.lastPartner)?identityOf(flags.lastPartner,flags):'']??page.byPartner.default):undefined;
+  let text=picked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
   return resolveStoryText(text,flags,locale);
 }
@@ -707,7 +718,7 @@ export function presentationFor(node,page,flags={}) {
   const seated=page.seatedMilica??node.seatedMilica;
   // A cameo shows the speaking person even in scenes that have no portrait of their own. The counterpart of the airport
   // person or of the owner is always the other gender, so a day never lacks one of them.
-  const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:flags.districtOwner==='jelena'?'jelena':'dragan',ownerCounterpart:flags.districtOwner==='jelena'?'dragan':'jelena'}[page.speaker]??null):null;
+  const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:flags.districtOwner==='jelena'?'jelena':'dragan',ownerCounterpart:flags.districtOwner==='jelena'?'dragan':'jelena',lovePartner:SLOTS.includes(flags.lastPartner)?(SPRITES[identityOf(flags.lastPartner,flags)]??null):null}[page.speaker]??null):null;
   const seatedMood=page.reactions?.milica??page.emotion??'friendly';
   const bg=kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
   const metadata=BACKGROUNDS[bg];

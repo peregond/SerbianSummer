@@ -1,6 +1,6 @@
 /* The browser's dynamic viewport owns the canvas size. Safe areas belong to
    controls, never to the artwork. Do not pin this to window.innerHeight. */
-:root{--app-height:100dvh;--home-art:url('./assets/ensemble-poster-buzz-v3.webp')}
+:root{--app-height:100dvh;--home-art:url('./assets/home/belgrade-day.webp')}
 .backdrop{background-image:linear-gradient(180deg,#102b4655,transparent 34%,transparent 70%,#102b4655),var(--home-art);background-size:cover;background-position:center top;background-repeat:no-repeat}
 .home{height:var(--app-height);min-height:calc(var(--safe-top) + var(--safe-bottom) + 350px);padding:calc(var(--safe-top) + 10px) 20px calc(var(--safe-bottom) + 6px);gap:8px;overflow:visible}
 .home-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px;min-height:44px;flex-shrink:0;padding:0;margin:0;z-index:1}

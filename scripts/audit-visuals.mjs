@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import {NODES,BACKGROUNDS,CHARACTER_SPRITES,presentationFor} from '../public/story.js';
 import {buildArtCatalog,CORE_EMOTIONS} from '../public/workshop-model.js';
+import {HOME_PORTRAITS,HOME_BACKGROUNDS} from '../public/home-hero-model.js';
 const root=new URL('../public/assets/',import.meta.url);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));
 const catalog=buildArtCatalog(files,CHARACTER_SPRITES,BACKGROUNDS);
@@ -16,8 +17,10 @@ for(const companion of ['milica','nikola'])for(const host of ['dragan','jelena']
   if(frame.character){const sprite=CHARACTER_SPRITES[frame.character]?.[frame.emotion];if(!sprite)missing.add('Unknown pose '+id+':'+index+' '+frame.character+'/'+frame.emotion);else stagedPortraits.add(sprite.file);}
  }
 }
+const homeAssets=[...Object.values(HOME_PORTRAITS).map(p=>p.file),...Object.values(HOME_BACKGROUNDS)];
+for(const file of homeAssets)if(!fs.existsSync(new URL(file,root))||!files.includes(file))missing.add(file);
 const outfits=catalog.people.flatMap(person=>person.looks.map(look=>({person:person.id,look:look.name,available:CORE_EMOTIONS.length-look.missing.length,registered:look.activeCount,missing:look.missing,notRegistered:look.missingInGame})));
-const report={scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,supporting:catalog.supporting.map(person=>({person:person.id,file:person.art.find(entry=>entry.status==='active')?.file??null,missing:person.missing})),underwear:catalog.people.map(person=>({person:person.id,file:person.underwear?.file??null})),missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
+const report={homeAssets,scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,supporting:catalog.supporting.map(person=>({person:person.id,file:person.art.find(entry=>entry.status==='active')?.file??null,missing:person.missing})),underwear:catalog.people.map(person=>({person:person.id,file:person.underwear?.file??null})),missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
 const json=JSON.stringify(report,null,2)+'\n';
 if(process.argv.includes('--write'))fs.writeFileSync(new URL('../artwork/visual-audit.json',import.meta.url),json);else process.stdout.write(json);
 if(report.missingAssets.length||report.unstagedBackgrounds.length||outfits.some(look=>look.missing.length||look.notRegistered.length)||catalog.supporting.some(person=>person.missing.length))process.exitCode=1;

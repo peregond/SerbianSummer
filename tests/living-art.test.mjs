@@ -12,6 +12,25 @@ for(const edit of JSON.parse(fs.readFileSync(new URL('./fixtures/mother-edits.js
  assert.equal(canonical[edit.id].pages[edit.index][edit.field],edit.after,edit.id+': approved mother edit');
  canonical[edit.id].pages[edit.index][edit.field]=edit.before;
 }
+// Preserve the complete original snapshot while admitting the reviewed additions
+// already published in upstream main (a4133da), with reflections appended after
+// legacy cameos for save compatibility; every new scene/field is hashed.
+const upstream=JSON.parse(fs.readFileSync(new URL('./fixtures/upstream-romance.json',import.meta.url)));
+const digest=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+for(const[id,hash]of Object.entries(upstream.addedScenes)){assert.equal(digest(canonical[id]),hash,id+': approved upstream scene');delete canonical[id];}
+for(const edit of upstream.changes){
+ if(edit.path[1]==='pages'){
+  const dialogue=pages=>JSON.parse(JSON.stringify(pages),(key,value)=>key==='action'?undefined:value);
+  assert.deepEqual(dialogue(canonical[edit.path[0]].pages.slice(0,edit.before.length)),dialogue(edit.before),edit.path[0]+': all legacy dialogue indices remain intact');
+ }
+ const parent=edit.path.slice(0,-1).reduce((value,key)=>value[key],canonical);const key=edit.path.at(-1);
+ if(edit.afterMissing)assert.equal(Object.hasOwn(parent,key),false,edit.path.join('.')+': approved upstream removal');else assert.equal(digest(parent[key]),edit.afterHash,edit.path.join('.')+': approved upstream edit');
+ if(edit.beforeExists)parent[key]=edit.before;else delete parent[key];
+}
+// Restore the original object order for the legacy byte-for-byte digest.
+for(const edit of upstream.changes.filter(edit=>edit.afterMissing)){
+ const parent=edit.path.slice(0,-1).reduce((value,key)=>value[key],canonical);const values={...parent};for(const key of Object.keys(parent))delete parent[key];for(const key of edit.beforeKeys)if(Object.hasOwn(values,key))parent[key]=values[key];
+}
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
 assert.equal(STORY_VERSION,1);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));
