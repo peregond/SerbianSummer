@@ -1,12 +1,14 @@
+import {choiceVisible} from './romance.js?v=0.15.3';
+import {RENTAL_NAMES,rentalCounterpart} from './rental-people.js?v=1';
 import {familySpeaker} from './family-contact.js?v=1';
 import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.15.3';
 
-const names = { milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
+const names = { ...RENTAL_NAMES, milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
 export function contactName(value, flags = {}) {
   const dynamic = {
     contact: flags.companion ?? 'milica', contactCounterpart: flags.companion === 'nikola' ? 'milica' : 'nikola',
     host: flags.host ?? 'dragan', districtHost: flags.districtOwner ?? 'jelena',
-    ownerCounterpart: flags.districtOwner === 'jelena' ? 'dragan' : 'jelena',
+    ownerCounterpart: rentalCounterpart(flags) ?? (flags.districtOwner === 'jelena' ? 'dragan' : 'jelena'),
     bankStaff: flags.bankSpark === 'teodora' ? 'teodora' : 'lazar',
     mupStaff: flags.mupSpark === 'strahinya' ? 'strahinja' : 'ivana'
   };
@@ -58,7 +60,8 @@ export function messengerFrame({ sceneId, node, index, flags = {}, journal = [],
     messages.push({ direction: meta.direction, time: meta.time, quote: meta.quote, attachment: meta.attachment, ...messageBody(node.pages[i], meta, text) });
   }
   const meetingChoice = sceneId==='courtyard_arrival'&&index===2;
-  const choices = meetingChoice ? node.choices : action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
+  const rawChoices = meetingChoice ? node.choices : action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
+  const choices=rawChoices?.filter(choice=>choiceVisible(choice,flags));
   const inline = !choices?.length && actual?.direction === 'incoming' ? INLINE_CHAT_REPLIES[sceneId]?.[index] : null;
   const draft = actual?.direction === 'outgoing' ? messageBody(node.pages[index], actual, text) : null;
   return {

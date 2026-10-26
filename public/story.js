@@ -1,3 +1,5 @@
+import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=1';
+import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=1';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.15.3';
 import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=1';
@@ -696,6 +698,8 @@ for(const id of ['decision_weigh_work','decision_weigh_people','decision_weigh_h
 }
 registerPrologueVisuals(NODES,BACKGROUNDS);
 registerKitchenLayers(BACKGROUNDS,CHARACTER_SPRITES);rememberKitchenNodes(NODES);
+registerRentalPortraits(CHARACTER_SPRITES);
+extendRentalStory({NODES,scene,n,y});
 applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES});
 registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);
@@ -705,12 +709,15 @@ applyLivingArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyEpisodicCast(NODES,CHARACTER_SPRITES);
 assignChapters(NODES);
+registerRentalBeats(NODES,scene);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 export function pageText(page,flags={},locale=getLanguage()) {
   const picked=page.byFlag?(()=>{const{flag,text}=page.byFlag;const key=Array.isArray(flag)?flag.map(f=>flags[f]).join(':'):flags[flag];return text[key]??text.default;})():undefined;
   const partnerPicked=page.byPartner?(page.byPartner[SLOTS.includes(flags.lastPartner)?identityOf(flags.lastPartner,flags):'']??page.byPartner.default):undefined;
-  let text=picked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  const rentalVariants=page.byRentalStep?.[flags.districtOwner];
+  const rentalPicked=rentalVariants?.[flags['rentalStep_'+flags.districtOwner]]??rentalVariants?.default;
+  let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
   return resolveStoryText(text,flags,locale);
 }
@@ -723,9 +730,10 @@ export function presentationFor(node,page,flags={}) {
   const seated=page.seatedMilica??node.seatedMilica;
   // A cameo shows the speaking person even in scenes that have no portrait of their own. The counterpart of the airport
   // person or of the owner is always the other gender, so a day never lacks one of them.
-  const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:flags.districtOwner==='jelena'?'jelena':'dragan',ownerCounterpart:flags.districtOwner==='jelena'?'dragan':'jelena',lovePartner:SLOTS.includes(flags.lastPartner)?(SPRITES[identityOf(flags.lastPartner,flags)]??null):null}[page.speaker]??null):null;
+  const cameo=page.cameo?({contact:flags.companion==='nikola'?'nikola-evening':'milica',contactCounterpart:flags.companion==='nikola'?'milica':'nikola-evening',districtHost:rentalOwner(flags)??(flags.districtOwner==='jelena'?'jelena':'dragan'),ownerCounterpart:rentalCounterpart(flags)??(flags.districtOwner==='jelena'?'dragan':'jelena'),lovePartner:SLOTS.includes(flags.lastPartner)?(SPRITES[identityOf(flags.lastPartner,flags)]??null):null}[page.speaker]??null):null;
   const seatedMood=page.reactions?.milica??page.emotion??'friendly';
-  const baseBg=kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
+  const previousHostKitchen=flags.rentalCast==='new'&&(node===NODES.d20_nephew||node===NODES.d20_nephew_end);
+  const baseBg=previousHostKitchen?'kitchen-common-layer-v1':kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
   const daydream=page.daydream??node.daydream??false;
   const visual=prologueVisualFor(node,page,daydream);
   const bg=visual?.bg??baseBg;
@@ -734,13 +742,13 @@ export function presentationFor(node,page,flags={}) {
   const extra=extraVisualFor(page,flags);
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
-  const character=visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   return {
     bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,
-    emotion:episode?.mode==='scene'?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly')),daydream
+    emotion:episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly')),daydream
   };
 }
 

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NODES,JOURNAL,START,BACKGROUNDS,CHARACTER_SPRITES,CHOICE_TONES,presentationFor,pageText,resolveStoryText,interpolate} from '../public/story.js';
+import {choiceVisible} from '../public/romance.js';
 const catalog=JSON.parse(fs.readFileSync(new URL('../public/names.json',import.meta.url),'utf8'));
 const visited=new Set(),usedBackgrounds=new Set(),usedEmotions=new Set(),memo=new Map();
 const contexts=[];
@@ -30,7 +31,8 @@ const stats=walk(START);
 for(const [id,node]of Object.entries(NODES))if(node.legacyOnly)walk(id);
 assert.equal(visited.size,Object.keys(NODES).length,'Unreachable scene');assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
 assert.equal(presentationFor(NODES.nikola_daydream,NODES.nikola_daydream.pages[4]).daydream,false);
-assert.equal(NODES.district_map.choices.length,3);
+assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{})).length,3,'three original district routes remain available in the original story');
+assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'})).length,4,'four distinct new hosts are available in the new story');
 assert.notEqual(NODES.district_map.choices[0].effect.districtOwner,NODES.district_map.choices[1].effect.districtOwner);
 assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'vracar',districtOwner:'dragan'}).character,'dragan');
 assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'dorcol',districtOwner:'jelena'}).bg,'dorcol-apartment');

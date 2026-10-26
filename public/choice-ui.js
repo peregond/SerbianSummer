@@ -1,5 +1,6 @@
 import {t} from './i18n.js?v=0.15.3';
 const PEOPLE = {
+  marko:{id:'marko',name:'Марко',gender:'male'},vuk:{id:'vuk',name:'Вук',gender:'male'},stefan:{id:'stefan',name:'Стефан',gender:'male'},ana:{id:'ana',name:'Ана',gender:'female'},
   luka: { id:'luka', name:'Лука', gender:'male' },
   milica: { id:'milica', name:'Милица', gender:'female' },
   jelena: { id:'jelena', name:'Йелена', gender:'female' },

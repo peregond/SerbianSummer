@@ -1,3 +1,5 @@
+import {rentalRedirect} from './rental-story.js?v=1';
+import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
 import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.15.3';
 import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=0.15.3';
@@ -201,17 +203,19 @@ function renderCreation() {
 }
 function startGame() {
   if(!validProfile(draft))return;
-  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
+  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new'},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
   if(settings.music) applyMusic(true);
   enterNode(START);recordPage();save();renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
-  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
-  return t(familySpeaker(names[page.speaker]??page.speaker),locale);
+  const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:RENTAL_NAMES[rentalOwner(state.flags)]??(state.flags.districtOwner==='jelena'?'Йелена':'Драган'),bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:RENTAL_NAMES[rentalCounterpart(state.flags)]??(state.flags.districtOwner==='jelena'?'Драган':'Йелена'),narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
+  const oldHost=state.flags.rentalCast==='new'&&state.node==='d20_nephew'&&page.speaker==='districtHost';
+  return t(familySpeaker(oldHost?names.host:(names[page.speaker]??page.speaker)),locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
 function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
 function enterNode(id) {
+  id=rentalRedirect(state?.node,id,state?.flags);
   // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
   if(NODES[id]?.adult&&!settings.adult)id=NODES[id].skipTo;
   state.node=id;state.index=0;
@@ -243,7 +247,7 @@ function renderGame({skipMessenger=false}={}) {
   const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
-    if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
+    if(cardWanted&&previousChapter&&(previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0||previousChapter!==chapter.id&&state.node==='rental_day_'+chapter.day&&state.index===0))showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
     return;
   }
   showScreen('game');
@@ -268,7 +272,7 @@ function renderGame({skipMessenger=false}={}) {
   const cg=$('scene-cg');cg.hidden=!presentation.composite;
   if(presentation.composite)cg.src=`./assets/${presentation.bg}.webp`;
   $('game').classList.toggle('has-map',!!node.map);
-  drawDistrictMap($('district-map'),node,choose);
+  drawDistrictMap($('district-map'),node,choose,choice=>choiceVisible(choice,state.flags));
   sceneElement.setAttribute('aria-label',t(presentation.description));
   preloadBackground(presentation.bg);
   // Load just the next frame or the two immediate branches, rather than the whole chapter.
@@ -310,13 +314,13 @@ function renderGame({skipMessenger=false}={}) {
   $('journal-dot').hidden=state.journal.length===0;
 
   $('chapter-progress').textContent=t(chapter.number+' · Главы ↗');
-  $('chapter-heading').hidden=state.node!==chapter.start||state.index!==0;
+  $('chapter-heading').hidden=(state.node!==chapter.start&&state.node!=='rental_day_'+chapter.day)||state.index!==0;
   $('chapter-heading').textContent=t(chapter.number+' · '+chapter.title);
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
   // A step that crosses into a new chapter gets a title card (and a reminder to save progress for guests).
 
-  if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
+  if(cardWanted&&previousChapter&&(previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0||previousChapter!==chapter.id&&state.node==='rental_day_'+chapter.day&&state.index===0))showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
 }
 // A guest is somebody the cloud has finished checking who is not signed in; nobody is nagged while the check is still running.
 function isGuest(){return !!cloud?.ready&&!cloud.user;}
@@ -423,6 +427,7 @@ function applyEffects(effect={}) {
   if(['romance','friendship'].includes(effect.cinemaAirportBond)&&state.flags.companion)state.flags[state.flags.companion+'Bond']=effect.cinemaAirportBond;
   if(effect.hostBond&&state.flags.host)state.flags[state.flags.host+'Bond']=effect.hostBond;
   if(effect.districtBond&&state.flags.districtOwner)state.flags[state.flags.districtOwner+'Bond']=effect.districtBond;
+  if(effect.rentalStep&&rentalOwner(state.flags)){state.flags['rentalStep_'+rentalOwner(state.flags)]=effect.rentalStep;delete state.flags.rentalStep;}
   applyRomanceEffect(state.flags,effect);
 }
 function performBeat(option={}, {render=true}={}) {
@@ -441,7 +446,7 @@ function performBeat(option={}, {render=true}={}) {
   return true;
 }
 function choose(choice, {render=true}={}) {
-  if(transitionLock||panel.open||!['game','messenger'].includes(view))return false;
+  if(transitionLock||panel.open||!['game','messenger'].includes(view)||!choiceVisible(choice,state.flags))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});

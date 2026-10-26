@@ -6,6 +6,7 @@ export const PEOPLE = {
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
   ivana: 'Ивана', strahinja: 'Страхиня', milos: 'Милош'
 };
+export const RENTAL_PEOPLE = {marko:'Марко',vuk:'Вук',stefan:'Стефан',ana:'Ана'};
 export const EMOTIONS = { friendly: 'Приветливость', thoughtful: 'Задумчивость', laughing: 'Смех', flirty: 'Флирт', shy: 'Смущение', surprised: 'Удивление', confident: 'Уверенность', worried: 'Беспокойство' };
 export const CORE_EMOTIONS = Object.keys(EMOTIONS);
 export function acceptsWorkshopCode(value) {
@@ -20,7 +21,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
   for(const file of baggageAssets)active.add(file);
   const entries = files.map(file => {
     const base = file.split('/').at(-1);
-    const person = Object.keys({...PEOPLE,...EPISODIC_PEOPLE}).find(id => base === id + '.webp' || base.startsWith(id + '-'));
+    const person = Object.keys(RENTAL_PEOPLE).find(id => base.startsWith('rental-'+id+'-')) ?? Object.keys({...PEOPLE,...EPISODIC_PEOPLE}).find(id => base === id + '.webp' || base.startsWith(id + '-'));
     const image = /\.(webp|png|svg|jpe?g)$/i.test(file);
     const icon = /icon|poster|sketch/.test(base);
     const background = Object.hasOwn(backgrounds, base.replace(/\.webp$/, ''));
@@ -35,7 +36,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
   });
-  const people = Object.entries(PEOPLE).map(([id, name]) => {
+  const buildPerson = ([id, name]) => {
     const art = entries.filter(e => e.character === id);
     // Archived versions must not hide gaps in the current design. Drafts are visible but not marked as in-game.
     const current = art.filter(e => ['active', 'draft'].includes(e.status) && ['Основной образ', 'Без формы'].includes(e.look));
@@ -48,11 +49,13 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     });
     const underwear=art.find(entry=>entry.look==='Бельё'&&['active','draft'].includes(entry.status))??null;
     return { id, name, art, missing, looks, underwear };
-  });
+  };
+  const people=Object.entries(PEOPLE).map(buildPerson);
+  const rentals=Object.entries(RENTAL_PEOPLE).map(buildPerson);
   const supporting=Object.entries(EPISODIC_PEOPLE).map(([id,name])=>{
     const art=entries.filter(entry=>entry.character===id);
     const missing=art.some(entry=>entry.emotion==='friendly'&&['active','draft'].includes(entry.status))?[]:['friendly'];
     return{id,name,art,missing};
   });
-  return { entries, people, supporting };
+  return { entries, people, rentals, supporting };
 }
