@@ -1,3 +1,4 @@
+import {applyArtExpansion} from './art-expansion.js?v=1';
 import {registerLukaSport} from './luka-redesign.js?v=0.15.0';
 import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
 import {extendSixthChapter} from './chapter-six.js?v=0.15.0';
@@ -682,6 +683,7 @@ applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES});
 registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);
 registerPrologueArt(NODES,BACKGROUNDS);
+applyArtExpansion(NODES,BACKGROUNDS);
 assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
