@@ -211,6 +211,28 @@ export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
    }
   }
  }
+ // The first chapter: at the airport bakery the player may quietly ask Nikola to step aside. He asks for consent aloud; the player may
+ // say yes (an adult passage, skipped when adult scenes are off) or stay friendly. Nothing here changes the story afterwards.
+ const nik=(ru,en)=>({speaker:'nikola',text:T(ru,en),emotion:'friendly'}),me=(ru,en)=>({speaker:'player',text:T(ru,en)});
+ const bakeryPlace=(time)=>({bg:'bakery',character:'nikola',location:T('ХЛЕБ & КИФЛЕ · ЗА СТОЙКОЙ','BREAD & KIFLA · BEHIND THE COUNTER'),time,exitAction:out('Продолжить')});
+ N.nikola_flirt.choices.push(choice(['Тихо предложить отойти в сторону','Quietly suggest stepping aside'],'romance','nikola_aside',{nikolaAside:'asked'}));
+ N.nikola_aside=scene([
+  note('У стойки наконец тихо. Никола поглядывает на часы, потом на меня, и я вдруг слышу собственное сердце громче объявлений в зале.','It is finally quiet at the counter. Nikola glances at the clock, then at me, and suddenly I hear my own heart louder than the announcements in the hall.'),
+  me('Отойдём на минуту? Туда, где потише.','Shall we step aside for a minute? Somewhere quieter.'),
+  nik('У меня перерыв через десять минут. За кладовой есть служебная терраса, там никого. Но только если ты правда этого хочешь.','My break starts in ten minutes. Behind the storeroom there is a staff terrace, and nobody is there. But only if you truly want it.'),
+  nik('Скажешь «стоп» в любую секунду, и я просто провожу тебя к выходу. Хорошо?','Say “stop” at any second and I will simply walk you to the exit. All right?')
+ ],null,{...bakeryPlace('17:33'),choices:[
+  choice(['Сказать «да» и пойти за ним','Say “yes” and follow him'],'romance','nikola_aside_yes',{nikolaAside:'yes'}),
+  choice(['«Давай пока просто постоим рядом»','“Let us just stand close for now”'],'friendship','nikola_aside_after',{nikolaAside:'friend'})]});
+ // ADULT PLACEHOLDER: replace the two notes below with the written passage (see ADULT.md, "Аэропорт").
+ N.nikola_aside_yes=scene([
+  note('Терраса пахнет тёплой пылью и корицей. Мы оба говорим «да» вслух и можем сказать «нет» в любую секунду.','The terrace smells of warm dust and cinnamon. We both say “yes” aloud and could say “no” at any second.'),
+  note('Остальное остаётся между нами, пока внизу объявляют чужие рейсы.','The rest stays between us while other people’s flights are announced below.')
+ ],'nikola_aside_after',{...bakeryPlace('17:36'),adult:true,skipTo:'nikola_aside_after'});
+ N.nikola_aside_after=scene([
+  nik('Мне пора за стойку. Но если захочешь продолжить, найти меня просто: бейдж на фартуке, пекарня у выхода.','I have to get back to the counter. But if you want to go on, finding me is easy: the name tag on the apron, the bakery by the exit.'),
+  note('Он поправляет фартук и улыбается так, будто ничего особенного не произошло, и это особенное.','He straightens his apron and smiles as if nothing special happened, which is exactly what makes it special.')
+ ],'nikola_phone',{...bakeryPlace('17:38')});
  // Day 28 only: an evening for everyone who is close, by shared consent. Anyone may say no; then it is simply tea.
  N.love3_group=scene([
   note('Сегодня у меня в гостях {loveList}. Мы сидим за одним столом, и я впервые говорю вслух то, что давно чувствую: мне дорог каждый из вас.','Tonight {loveList} are my guests. We sit at one table, and for the first time I say aloud what I have long felt: each of you is dear to me.'),

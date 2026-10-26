@@ -100,7 +100,10 @@
     "love3_group_tea": "ceb340dc8e64cc0e6cc91957e4a62fad6c0ec71f96402867a4e8bf83d770f05c",
     "stay_lovers": "27c9415bdd0c07786d10705c78d18dd84413b4fce955ee060995cd5cb10534ea",
     "leave_lovers": "2088ccd2a94327ad61534bcc24ed0a8cce30dd659a6655621cec9da3b76cbe8b",
-    "return_lovers": "9bd8919072934a466bcd121a1a411c52ace79bbe08f746a78d040757ab3b2210"
+    "return_lovers": "9bd8919072934a466bcd121a1a411c52ace79bbe08f746a78d040757ab3b2210",
+    "nikola_aside": "42cfac2c7b793403f341ea36b58497adffff08a344ecd275c2941324c89e34d1",
+    "nikola_aside_yes": "b31c8b6d7ab239f4708770685eb2554842d6d89990f83edf5f839fdaae0d361a",
+    "nikola_aside_after": "9376e23e47eaa21d86737cd5547a37503f9fbd7a7912dbe8030fadb744d75dd6"
   },
   "changes": [
     {
@@ -345,6 +348,32 @@
       "beforeExists": true,
       "before": "d28_end",
       "afterHash": "83d8bef0182f2b6e053557394a350a594a20463cd30c8d65fef8d5c4938ac3ef"
+    },
+    {
+      "path": [
+        "nikola_flirt",
+        "choices"
+      ],
+      "beforeExists": true,
+      "before": [
+        {
+          "label": "На секунду представить Николу без футболки",
+          "next": "nikola_daydream",
+          "effect": {
+            "nikolaDaydream": true
+          },
+          "tone": "dream"
+        },
+        {
+          "label": "Улыбнуться: «Тогда договоримся после смены»",
+          "next": "nikola_invite",
+          "effect": {
+            "nikolaDaydream": false
+          },
+          "tone": "romance"
+        }
+      ],
+      "afterHash": "07dfdfab20e3b48b209a36b1af7ddea90872a2615064d961cb810a5236bed83d"
     }
   ]
 }

@@ -47,7 +47,7 @@ for(const id of scenes){
 }
 for(const stage of [1,2,3])for(const k of [1,2,3])assert.match(JSON.stringify(NODES[`love${stage}_${k}_${stage===1?'airport':'airport'}`].pages),/можно передумать|«Можно взять тебя за руку\?»|любой ответ здесь будет принят/);
 // The intimate passage is short, non-explicit, optional (adult setting) and always followed by the morning.
-const adult=Object.keys(NODES).filter(id=>NODES[id].adult);assert.equal(adult.length,4);
+const adult=Object.keys(NODES).filter(id=>NODES[id].adult);assert.equal(adult.length,5,'three night scenes, the group scene and the airport scene');
 for(const id of adult){assert.ok(NODES[NODES[id].skipTo]&&!NODES[NODES[id].skipTo].adult,id);assert.equal(NODES[id].next,NODES[id].skipTo);assert.ok(NODES[id].pages.length<=2);
  assert.ok(!/обнажённ|раздева|член|грудь|оргазм|секс|нагот|стон|пенис|влагалищ|naked|undress|orgasm|sex|nipple|erect|moan/iu.test(JSON.stringify(NODES[id].pages)),'Fade to black only: '+id);}
 // The evening for several people needs two who are close and asks everyone; "no" is a good answer and leads to tea.
