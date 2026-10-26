@@ -1,32 +1,32 @@
-import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.15.3';
+import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.15.4';
 import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=0.15.3';
+import {renderEpisodeContact} from './episode-contact.js?v=0.15.4';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.15.3-lock1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.3';
+import {drawChapterMap} from './chapter-map.js?v=0.15.4';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.4';
 import {mountRoomInteraction} from './room-interaction.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
-import {mountMessenger} from './messenger.js?v=0.15.3';
-import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.3';
-import {MESSENGER_CONFIG} from './messenger-config.js?v=0.15.3';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.3';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.3';
-import {STAGES} from './days.js?v=0.15.3';
-import {cueFor} from './music-cues.js?v=0.15.3';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.3';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.3';
-import {drawBeatAction} from './beat-action.js?v=0.15.3';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.3';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.3';
+import {mountMessenger} from './messenger.js?v=0.15.4';
+import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.4';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=0.15.4';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.4';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.4';
+import {STAGES} from './days.js?v=0.15.4';
+import {cueFor} from './music-cues.js?v=0.15.4';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.4';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.4';
+import {drawBeatAction} from './beat-action.js?v=0.15.4';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.4';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.4';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.3';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.4';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.3';
-import {appendChoiceContents} from './choice-ui.js?v=0.15.3';
-import {mountBaggageInteraction} from './interaction.js?v=0.15.3';
-import {APP_VERSION} from './release.js?v=0.15.3';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.4';
+import {appendChoiceContents} from './choice-ui.js?v=0.15.4';
+import {mountBaggageInteraction} from './interaction.js?v=0.15.4';
+import {APP_VERSION} from './release.js?v=0.15.4';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -237,6 +237,7 @@ function renderGame({skipMessenger=false}={}) {
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
+  if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
   setMusicScene(cueFor(node));
@@ -282,7 +283,7 @@ function renderGame({skipMessenger=false}={}) {
       preloadBackground(nextPresentation.bg);preloadSprite(nextPresentation.character,nextPresentation.emotion);
     }
   }
-  renderEpisodeContact($('episode-contact'),presentation.contactPortrait);
+  renderEpisodeContact($('episode-contact'),state.node==='road_contact'&&state.index===2?null:presentation.contactPortrait);
   const character=$('milica');const portrait=presentation.character;
   character.hidden=!portrait;
   if(portrait){const sprite=CHARACTER_SPRITES[portrait][presentation.emotion];const nextSrc=new URL(`./assets/${sprite.file}.webp`,location.href).href;const changed=character.src!==nextSrc;character.src=nextSrc;character.alt=t(sprite.alt);preloadSprite(portrait,presentation.emotion);if(changed&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)character.animate([{opacity:.65,translate:'0 3px'},{opacity:1,translate:'0 0'}],{duration:180,easing:'ease-out'});}
@@ -334,6 +335,21 @@ function drawEndingPrompt(){
 }
 function drawChapterCard(previous,next){
   const card=$('chapter-card');card.replaceChildren();
+  if(next.id==='arrival'||(next.day&&next.day<=5)){
+    const images={arrival:'courtyard-door',1:'belgrade-courtyard-morning',2:'bank-consultation',3:'belgrade-kiosk-street',4:'belgrade-courtyard',5:'belgrade-river-noon'};
+    card.style.backgroundImage=`linear-gradient(180deg,#10263255 0%,#10263299 50%,#0b1c2de8 100%),url('./assets/${images[next.day??next.id]}.webp')`;
+    const box=document.createElement('div');box.className='chapter-card-inner chapter-card-simple';
+    const eyebrow=document.createElement('p');eyebrow.className='chapter-card-eyebrow';eyebrow.textContent=t(previous?.id==='prologue'?'Пролог завершён':'Следующая глава');
+    const title=document.createElement('h2');title.id='chapter-card-title';title.className='chapter-card-title';title.textContent=t(next.title);
+    const label=document.createElement('p');label.className='chapter-card-description';label.textContent=next.day?t(next.number):t('Следующая глава');
+    box.append(eyebrow,title,label);
+    if(isGuest()){
+      const copy=document.createElement('p');copy.className='chapter-card-save-copy';copy.textContent=t('Сохрани прогресс: создай аккаунт или войди.');
+      const account=document.createElement('button');account.type='button';account.className='secondary chapter-card-account';account.textContent=t('Создать аккаунт или войти');account.addEventListener('click',()=>{authMode='register';openAccount();});box.append(copy,account);
+    }
+    const start=document.createElement('button');start.type='button';start.id='chapter-card-start';start.className='primary';start.textContent=t('Продолжить историю');start.addEventListener('click',()=>{cardContext=null;renderGame();});box.append(start);card.append(box);return;
+  }
+  card.style.backgroundImage='';
   const inner=document.createElement('div');inner.className='chapter-card-inner';
   const add=(tag,className,text)=>{const element=document.createElement(tag);element.className=className;element.textContent=text;inner.append(element);return element;};
   if(previous?.day||previous?.id==='arrival')add('p','chapter-card-done','✓ '+t(previous.number)+' '+t('завершён')+' · '+t(previous.title));
@@ -400,9 +416,9 @@ function advance({render=true,message=null}={}) {
   if(state.node!=='end')recordPage();
   wantCard=true;save();if(render)renderGame();return true;
 }
-function openRoomInteraction(){
+function openRoomInteraction(mode='arrival'){
   showScreen('room-interaction');
-  roomDispose=mountRoomInteraction($('room-interaction'),{mask:state.flags.roomSettlingMask??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags.roomSettlingMask=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:{roomSettlingMask:7}});toast('Теперь можно выдохнуть. Всё на своих местах.');}});
+  roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});toast(mode==='bedtime'?'Всё готово ко сну.':'Теперь можно выдохнуть. Всё на своих местах.');}});
 }
 function openBaggage(){
   const origin={node:state.node,index:state.index};

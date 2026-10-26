@@ -1,6 +1,6 @@
-import { t } from './i18n.js?v=0.15.3';
-import { appendChoiceContents } from './choice-ui.js?v=0.15.3';
-import { MESSENGER_CONFIG } from './messenger-config.js?v=0.15.3';
+import { t } from './i18n.js?v=0.15.4';
+import { appendChoiceContents } from './choice-ui.js?v=0.15.4';
+import { MESSENGER_CONFIG } from './messenger-config.js?v=0.15.4';
 
 const icons = {
   back: ['m14 4-8 8 8 8'],
@@ -65,6 +65,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
     if (message.quote) {
       const quote = el('blockquote', '', 'chat-quote'); quote.append(el('strong', message.quote.author ?? frame.contact), el('p', message.quote.text)); article.append(quote);
     }
+    if(message.photo){const photo=doc.createElement('img');photo.className='chat-photo';photo.src=message.photo.src;photo.alt=t(message.photo.alt);photo.loading='lazy';article.append(photo);}
     if(message.attachment){const attachment=el('div','','chat-attachment');attachment.append(icon('photo'),el('strong',message.attachment.label),el('small',message.attachment.description));article.append(attachment);}
     article.append(el('p', message.text));
     const meta = el('span', '', 'chat-meta');
@@ -106,13 +107,16 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
   };
   frame.replies.forEach(reply => addReply(reply.text, reply));
   if (!frame.replies.length && frame.draft !== null) addReply(frame.draft, null, frame.draftQuote);
+  let photoTimer;
   if (replyButtons.length) footer.append(replies);
-  else footer.append(continueButton(frame.physicalAction ? 'К действию' : 'Продолжить историю'));
+  else {const next=continueButton(frame.physicalAction ? 'К действию' : 'Продолжить историю');footer.append(next);
+    if(frame.delayedPhoto){next.disabled=true;photoTimer=setTimeout(()=>{bubble({direction:'incoming',text:'',photo:frame.delayedPhoto,time:frame.time});next.disabled=false;feed.scrollTop=feed.scrollHeight;},4000);}
+  }
   footer.append(notice); root.append(header, feed, footer);
   listen(root, 'click', event => { if (!menu.contains(event.target) && !menuToggle.contains(event.target)) { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });
   listen(root, 'keydown', event => { if (event.key === 'Escape') { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });
   const measure = () => { root.style.setProperty('--chat-header-height', header.offsetHeight + 'px'); root.style.setProperty('--chat-footer-height', footer.offsetHeight + 'px'); };
   const observer = new ResizeObserver(measure); observer.observe(header); observer.observe(footer);
   const focus = requestAnimationFrame(() => { measure(); title.focus({ preventScroll: true }); feed.scrollTop = feed.scrollHeight; });
-  return () => { events.abort(); observer.disconnect(); cancelAnimationFrame(focus); };
+  return () => { clearTimeout(photoTimer); events.abort(); observer.disconnect(); cancelAnimationFrame(focus); };
 }

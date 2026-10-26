@@ -1,5 +1,5 @@
-import {unlockPreview} from './chapter-access.js?v=0.15.3';
-import { t } from './i18n.js?v=0.15.3';
+import {unlockPreview} from './chapter-access.js?v=0.15.4';
+import { t } from './i18n.js?v=0.15.4';
 import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=8';
 
 const el = (tag, text, className) => {

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {chapterAvailable,acceptsChapterCode,unlockPreview,hasPreviewAccess} from '../public/chapter-access.js?v=0.15.3';
-import {CHAPTERS} from '../public/chapters.js?v=0.15.3';
+import {chapterAvailable,acceptsChapterCode,unlockPreview,hasPreviewAccess} from '../public/chapter-access.js?v=0.15.4';
+import {CHAPTERS} from '../public/chapters.js?v=0.15.4';
 const memory=new Map();globalThis.localStorage={getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,v)};
 for(const chapter of CHAPTERS){assert.equal(chapterAvailable(chapter),!chapter.day||chapter.day<=5);assert.equal(chapterAvailable(chapter,true),true);}
 assert.equal(hasPreviewAccess(),false);

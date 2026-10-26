@@ -8,7 +8,7 @@ export function kitchenPresentation(node,page,flags={}){
  const stage=page.kitchenStage??node.kitchenStage;if(!stage)return null;
  const person=(node.districtPortrait?flags.districtOwner:flags.host)==='jelena'?'jelena':'dragan';
  const mood=stage==='coffee'?'waiting':stage==='spill'&&node===dryNode?'soft':stage;
- return {bg:'kitchen-common-layer-v1',description:'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:true,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:person,contactPortrait:null,emotion:'kitchen-'+mood,occludeTable:mood!=='comfort',daydream:false};
+ return {bg:'kitchen-common-layer-v1',description:'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:true,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:person,contactPortrait:null,emotion:'kitchen-'+mood,occludeTable:!['comfort','waiting'].includes(mood),daydream:false};
 }
 let dryNode;
 export function rememberKitchenNodes(nodes){dryNode=nodes.host_coffee_change;}

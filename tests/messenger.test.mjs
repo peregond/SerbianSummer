@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
 import { messengerFrame, messageAt, stripMessageQuotes } from '../public/messenger-model.js';
-import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.15.3';
+import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.15.4';
 
 const before = JSON.stringify(NODES);
 const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => t(s) });
@@ -67,8 +67,8 @@ assert.equal(familyText('Дом — это люди'),'Дом — это люд�
 for(const [id,index]of [['nikola_phone',1],['phone',1],['phone',3],['messages',0]]){
  const question=frame(id,index);assert.equal(question.replyKind,'inline');assert.equal(question.replies.length,1);assert.ok(question.replies[0].option.label);assert.ok(!question.replies[0].option.next,'Inline answers keep the original continuation');
 }
-assert.match(frame('nikola_phone',1).replies[0].text,/Скоро выезжаю/);
-setLanguage('en');assert.match(frame('nikola_phone',1).replies[0].text,/leaving soon/);setLanguage('ru');
+assert.match(frame('nikola_phone',1).replies[0].text,/скоро выезжаю/);
+setLanguage('en');assert.match(frame('nikola_phone',1).replies[0].text,/leave soon/);setLanguage('ru');
 
 assert.equal(frame('nikola_phone',1).hideAvatar,true);
 const met=messengerFrame({sceneId:'nikola_phone',node:NODES.nikola_phone,index:1,journal:['dragan'],text:p=>pageText(p,{}),choiceText:s=>s});assert.equal(met.hideAvatar,false);

@@ -1,5 +1,5 @@
 import {familySpeaker} from './family-contact.js?v=1';
-import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.15.3';
+import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.15.4';
 
 const names = { milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
 export function contactName(value, flags = {}) {
@@ -63,6 +63,7 @@ export function messengerFrame({ sceneId, node, index, flags = {}, journal = [],
   const draft = actual?.direction === 'outgoing' ? messageBody(node.pages[index], actual, text) : null;
   return {
     contact: current.contact,
+    delayedPhoto:sceneId==='nikola_last'&&index===1&&flags.nikolaBond==='romance'?{src:'./assets/nikola-bakery-photo-v1.webp',alt:'Фото витрины с круассанами и отражением Николы'}:null,
     hideAvatar: current.contact==='Драган'&&!journal.includes('dragan'),
     time: actual?.time ?? node.time ?? '',
     draftQuote: actual?.quote,
