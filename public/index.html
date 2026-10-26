@@ -22,6 +22,7 @@
   <link rel="preload" as="font" type="font/ttf" href="./assets/fonts/lora-variable.ttf" crossorigin>
   <link rel="preload" as="image" href="./assets/ensemble-poster-buzz-v3.webp">
   <link rel="stylesheet" href="./workshop.css?v=1">
+  <link rel="stylesheet" href="./messenger.css?v=1">
 </head>
 <body data-screen="home">
   <div class="ios-scroll-edge-guard" aria-hidden="true"></div>
@@ -48,10 +49,11 @@
       <article class="dialogue" aria-labelledby="speaker"><p id="chapter-heading" class="chapter-heading" hidden></p><div class="speaker-row"><div class="speaker-name"><h2 id="speaker">Игрок</h2><small id="voice-label" hidden></small></div><span class="page-ornament" aria-hidden="true">✦</span></div><div id="dialogue-text" class="dialogue-text" aria-live="polite"></div><div id="beat-action" class="beat-action" hidden></div><div id="choices" class="choices" aria-label="Выбери ответ" hidden></div><div class="dialogue-navigation"><button id="rewind" class="rewind-button" aria-label="Назад на один шаг" disabled>← Назад</button><button id="next" class="next-button">Дальше <span aria-hidden="true">→</span></button></div></article>
       <footer class="game-footer"><span id="save-status" role="status">Прогресс сохраняется на этом устройстве</span></footer>
     </section>
+    <section id="messenger" class="screen messenger" hidden aria-labelledby="messenger-title"></section>
     <section id="ending" class="screen ending" hidden aria-labelledby="ending-title"><div class="ending-inner"><p class="eyebrow">ПРОДОЛЖЕНИЕ СЛЕДУЕТ</p><h2 id="ending-title">Пока только<br><em>адрес</em></h2><p>Сегодня у тебя появился адрес.<br>И человек, которому можно написать.</p><blockquote id="ending-memory"></blockquote><div class="ending-actions"><button class="primary" id="continue-story">Продолжить · первый вечер</button><button class="secondary" id="ending-rewind" disabled>← Назад к истории</button><button class="primary" id="replay">Начать заново</button><button class="secondary" data-action="chapters">Выбрать главу</button><button class="secondary" id="ending-journal">Открыть дневник</button><button class="text-button" data-action="home">На главный экран</button></div><p class="demo-note">Продолжение следует.<br>Дальше — визит в банк, своё дело и новые встречи.</p></div></section>
     <div id="toast" role="status" class="toast" hidden></div>
   </main>
   <dialog id="panel"><div class="panel-heading"><h2 id="panel-title"></h2><button id="close-panel" class="close-button" aria-label="Закрыть панель">×</button></div><div id="panel-content"></div></dialog>
-  <script type="module" src="./app.js?v=0.15.0-art2"></script>
+  <script type="module" src="./app.js?v=0.15.0-chat1"></script>
 </body>
 </html>

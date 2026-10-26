@@ -1,4 +1,7 @@
 import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=2';
+import {mountMessenger} from './messenger.js?v=1';
+import {messengerFrame,messageAt} from './messenger-model.js?v=1';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
@@ -29,7 +32,7 @@ settings.music = settings.music === true;
 settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':dark?'#182a31':'#fff3d8';}
+function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
 setVolume(settings.volume);
@@ -39,7 +42,7 @@ let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
-let interactionDispose=null;
+let interactionDispose=null,messengerDispose=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -116,6 +119,7 @@ async function requestImmersiveMode() {
 }
 function showScreen(id) {
   if(view==='interaction'&&id!=='interaction'){interactionDispose?.();interactionDispose=null;}
+  if(view==='messenger'){messengerDispose?.();messengerDispose=null;}
   view=id;
   $('home-art').hidden=id!=='home';
   document.body.dataset.screen=id;
@@ -186,7 +190,7 @@ function speakerName(page,locale=getLanguage()) {
   return t(names[page.speaker]??page.speaker,locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
-function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:dialogueVoice(page)});}
+function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
 function enterNode(id) {
   state.node=id;state.index=0;
   if(id==='end') {state.completed=true;return;}
@@ -194,12 +198,14 @@ function enterNode(id) {
   for(const entry of NODES[id].journal??[]) if(!state.journal.includes(entry))state.journal.push(entry);
   rememberChapter(state,NODES);
 }
-function renderGame() {
+function renderGame({skipMessenger=false}={}) {
   if(state.node==='end')return renderEnding();
-  showScreen('game');
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
   setMusicScene(node.music??(['airport-cafe','bakery','cafe-table','bakery-display','bakery-corner'].includes(node.bg)?'encounter':'prologue'));
+  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
+  if(frame)return renderMessenger(frame);
+  showScreen('game');
   const presentation=presentationFor(node,page,state.flags);
   const sceneElement=$('scene');
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
@@ -261,6 +267,25 @@ function renderGame() {
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
 }
+function renderMessenger(frame) {
+  showScreen('messenger');
+  let committed=false;
+  messengerDispose=mountMessenger($('messenger'),frame,{
+    canRewind:!!state.rewind?.length,
+    onBack:goBack,
+    onMenu:()=>openPanel('game-menu'),
+    onSettings:()=>openPanel('settings'),
+    onSend:reply=>{
+      const ok=reply?(frame.replyKind==='action'?performBeat(reply.option,{render:false}):choose(reply.option,{render:false})):advance({render:false});
+      committed=!!ok;return committed;
+    },
+    onContinue:()=>{
+      if(committed)return renderGame();
+      if(frame.physicalAction)return renderGame({skipMessenger:true});
+      advance();
+    }
+  });
+}
 function fitScene() {
   document.documentElement.dataset.standalone=String(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||!!navigator.standalone);
   // Very short viewports and enlarged type remain readable through natural page scrolling.
@@ -273,18 +298,18 @@ function fitScene() {
     if(!$('scene-cg').hidden)positionArtwork($('scene-cg'),$('scene'),currentArtFrame,{top:parseFloat(getComputedStyle(document.querySelector('.game-header')).paddingTop)+2,bottom:8,left:8,right:8});
   });
 }
-function advance() {
-  if(view!=='game'||panel.open||transitionLock)return;
+function advance({render=true}={}) {
+  if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
-  if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat();
+  if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
   if((state.index===node.pages.length-1&&node.choices)||action)return;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,120);
   if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
-  save();renderGame();
+  save();if(render)renderGame();return true;
 }
 function openBaggage(){
   const origin={node:state.node,index:state.index};
@@ -302,8 +327,8 @@ function applyEffects(effect={}) {
   if(effect.hostBond&&state.flags.host)state.flags[state.flags.host+'Bond']=effect.hostBond;
   if(effect.districtBond&&state.flags.districtOwner)state.flags[state.flags.districtOwner+'Bond']=effect.districtBond;
 }
-function performBeat(option={}) {
-  if(view!=='game'||panel.open||transitionLock)return;
+function performBeat(option={}, {render=true}={}) {
+  if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   const node=NODES[state.node],action=beatActionAt(node,state.index);if(!action)return;
   rememberStep(state);transitionLock=true;setTimeout(()=>transitionLock=false,160);
   const label=option.label??action.label;
@@ -313,15 +338,16 @@ function performBeat(option={}) {
   if(option.next??action.next)enterNode(option.next??action.next);
   else if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
-  if(state.node!=='end')recordPage();save();renderGame();
+  if(state.node!=='end')recordPage();save();if(render)renderGame();
   if(option.feedback??action.feedback)toast(option.feedback??action.feedback);
+  return true;
 }
-function choose(choice) {
-  if(transitionLock||view!=='game')return;
+function choose(choice, {render=true}={}) {
+  if(transitionLock||panel.open||!['game','messenger'].includes(view))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
-  applyEffects(choice.effect);enterNode(choice.next);recordPage();save();renderGame();
+  applyEffects(choice.effect);enterNode(choice.next);recordPage();save();if(render)renderGame();return true;
 }
 function renderEnding() {
   setMusicScene('prologue');
@@ -346,7 +372,7 @@ function renderEnding() {
   document.querySelector('.ending-inner>p:not(.eyebrow):not(.demo-note)').innerHTML=html(state.flags.chapterSevenComplete?'Это был твой ответ.<br>Любой из них был честным.':state.flags.chapterSixComplete?'У этой жизни уже есть люди.<br>Дальше ты выберешь, куда она приведёт.':state.flags.chapterFiveComplete?'Одни дела завершены.<br>Для остальных выбран следующий шаг.':state.flags.chapterFourComplete?'Первые ответы получены.<br>А у новых знакомств появился свой вечер.':state.flags.chapterThreeComplete?'Вопросы для банка готовы.<br>А у новой встречи уже есть продолжение.':state.flags.chapterOneComplete?'У тебя есть ключ, первый вечер<br>и свой маршрут по Белграду.':'Сегодня у тебя появился адрес.<br>И человек, которому можно написать.');
 }
 function goBack() {
-  if(panel.open||transitionLock||!state||!['game','ending'].includes(view))return;
+  if(panel.open||transitionLock||!state||!['game','messenger','ending'].includes(view))return;
   if(!rewindStep(state))return;
   state.chapterMarks=readChapterMarks(state.chapterMarks,NODES,JOURNAL,state.log.length);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
@@ -354,7 +380,7 @@ function goBack() {
 }
 function openChapters() {
   if(panel.open)panel.close();
-  const source=['game','ending'].includes(view)?state:saved;
+  const source=['game','messenger','ending'].includes(view)?state:saved;
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const intro=document.createElement('p');intro.className='journal-intro';
@@ -508,5 +534,5 @@ home();
 fitScene();
 refreshMusicControls();
 
-cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{saved=validateSave(input);state=structuredClone(saved);await writeSave(saved);if(view==='game'||view==='ending')renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
+cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{saved=validateSave(input);state=structuredClone(saved);await writeSave(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
 cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account')){history.replaceState(null,'',location.pathname);openAccount();}});

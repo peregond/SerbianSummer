@@ -41,13 +41,14 @@ PNG-мастеры и часть архивных промптов хранят�
 - public/prologue-*.js, chapter-one.js, chapter-three.js, chapter-four.js, chapter-five.js, chapter-six.js, host-coffee.js — расширения сюжета. Не предполагай отдельный chapter-two.js.
 - public/days.js — 30 дней, помощники персонажей, этапы srb.guide и каркасные дни; public/chapters.js — границы, открытия, точки повтора и продолжение по `dayDone`.
 - public/app.js — отображение и управление игровым состоянием.
+- public/messenger*.js, messenger.css — настраиваемый полноэкранный шаблон переписки; примеры и правила подключения в MESSENGER.md.
 - public/i18n.js, public/locales/en.json — локализация.
 - public/storage.js, public/cloud.js, public/rewind.js — сохранение, синхронизация, возврат на два шага.
 - lib/save-format.js — ограничения и валидация сохранений.
 - lib/accounts.js, lib/progress-api.js, app/api/ — внутренние аккаунты и API.
 - db/, drizzle/ — схема и миграции Cloudflare D1.
 - public/choice-ui.*, mobile-shell.css, viewport.css, style.css, theme.css — мобильный интерфейс и тема.
-- tests/ — 21 файл проверок; .github/workflows/ci.yml запускает lint, тесты и сборку.
+- tests/ — 22 файла проверок; .github/workflows/ci.yml запускает lint, тесты и сборку.
 
 ## Совместимость
 Не меняй существующие ID сцен и порядок старых реплик без анализа сохранений. Добавление сцены не должно перезаписывать чужой ID.
