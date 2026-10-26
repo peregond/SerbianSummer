@@ -8,7 +8,7 @@ import {T} from './days.js?v=0.15.0';
 const SLOT_IDENTITIES={airport:['nikola','milica'],asya:['asya'],luka:['luka'],owner:['dragan','jelena'],bank:['lazar','teodora'],mup:['ivana','strahinya'],milos:['milos']};
 const SLOT_BG={airport:'riverside-evening',asya:'courtyard-after-film',luka:'belgrade-morning-cafe',owner:'dorcol-apartment',bank:'belgrade-morning-cafe',mup:'belgrade-morning-cafe',milos:'riverside-evening'};
 // For each person: d = date, k = kiss, n = night. [Russian, English]; x1 is the narration, x2 what the person says.
-const DETAILS={
+export const DETAILS={
  nikola:{
   d1:['Мы встречаемся у реки после смены Николы: от него пахнет тёплым хлебом, а в руках бумажный пакет с кифлами.','We meet by the river after Nikola’s shift: he smells of warm bread and carries a paper bag of kiflas.'],
   d2:['Первую кифлу я всегда отдаю тому, с кем хочу посидеть подольше. Сегодня это ты.','I always give the first kifla to the person I want to sit with longest. Today that is you.'],
@@ -87,6 +87,65 @@ const DETAILS={
   n1:['Милош заваривает кофе с кардамоном на крошечной кухне. Форма висит на стуле, и в комнате странно спокойно.','Miloš makes cardamom coffee in a tiny kitchen. The uniform hangs on a chair, and the room is strangely calm.'],
   n2:['Если остаёшься, я рад. Если нет, я тоже рад: утром всё равно будет кофе, и ты сможешь прийти.','If you stay, I am glad. If not, I am glad too: there will be coffee in the morning anyway, and you can come.']}
 };
+// A third beat for every person at each stage (d3, k3, n3) and a line for the morning after (m1): small habits and history, no new choices.
+const DEEPER={
+ nikola:{
+  d3:['Он рассказывает, как в четыре утра месит тесто под сербское радио: «Так я выучил язык раньше, чем научился на нём шутить».','He tells me how at four in the morning he kneads dough to the Serbian radio: “That is how I learned the language before I learned to joke in it.”'],
+  k3:['Он вытирает ладони о фартук, хотя на нём нет муки. Это его способ собраться с духом.','He wipes his palms on his apron although there is no flour on them. It is his way of gathering his nerve.'],
+  n3:['Он приносит горячую кифлу и садится на пол, ничего не требуя взамен.','He brings a hot kifla and sits down on the floor, asking for nothing in return.'],
+  m1:['Он уже ушёл в пекарню, но оставил на столе кифлу и записку: «Горячее в сумке. Приходи, когда захочешь».','He has already left for the bakery but left a kifla on the table and a note: “Something hot is in the bag. Come whenever you like.”']},
+ milica:{
+  d3:['Она показывает страницу, где нарисованы мои руки с чашкой: «Руки рисовать труднее всего. Поэтому я их запоминаю».','She shows me a page with my hands holding a cup: “Hands are the hardest to draw. That is why I memorise them.”'],
+  k3:['Она осторожно переворачивает мою ладонь, как будто собирается рисовать линии, но вместо карандаша держит пальцы.','She carefully turns my palm over as if to draw its lines, but instead of a pencil she holds my fingers.'],
+  n3:['Она гасит верхний свет и включает лампу над рисунками. Город на стенах становится тёплым.','She switches off the ceiling light and turns on the lamp above the drawings. The city on the walls turns warm.'],
+  m1:['На столе лежит набросок: я у окна с чашкой. Подпись: «Утро, не придумано».','On the table lies a sketch: me by the window with a cup. The caption: “Morning, not invented.”']},
+ asya:{
+  d3:['Она признаётся, что в детстве мечтала жить на маяке: «Чтобы никто не стоял в очереди за светом».','She admits that as a child she dreamed of living in a lighthouse: “So that nobody queues for the light.”'],
+  k3:['Она по привычке достаёт телефон, понимает, что фотографировать нечего, и прячет его в карман.','Out of habit she takes out her phone, realises there is nothing to photograph and puts it in her pocket.'],
+  n3:['Она выключает гирлянду, потом включает снова: «Нет, пусть мигает. Так это мой дом».','She switches off the garland, then switches it on again: “No, let it blink. That is how it is my home.”'],
+  m1:['Ася спорит с чайником, который опять не включился, и впервые не ругается, а смеётся.','Asya argues with the kettle that has failed to switch on again and, for once, does not curse but laughs.']},
+ luka:{
+  d3:['Он достаёт телефон проверить время, смотрит на экран и убирает, не посмотрев: «Сегодня без дедлайнов».','He takes out his phone to check the time, looks at the screen and puts it away without looking: “No deadlines today.”'],
+  k3:['Он поправляет очки и говорит: «Я репетировал это в голове. Не получилось, поэтому буду как есть».','He adjusts his glasses and says: “I rehearsed this in my head. It did not work, so I will be as I am.”'],
+  n3:['Он ставит чайник и тихо считает: «Три минуты. За это время ты можешь передумать».','He puts the kettle on and quietly counts: “Three minutes. You can change your mind in that time.”'],
+  m1:['На холодильнике записка с единственной строчкой, как в его таблицах: «Завтрак: вместе».','On the fridge is a note with a single line, like in his spreadsheets: “Breakfast: together.”']},
+ dragan:{
+  d3:['Он рассказывает, как купил эту квартиру, когда в ней не было ни одного целого окна, и каждый подоконник чинил сам.','He tells me how he bought this flat when it had not one whole window and mended every sill himself.'],
+  k3:['Он говорит, что давно не чувствовал себя так неловко и так легко одновременно.','He says he has not felt so awkward and so light at the same time for a long while.'],
+  n3:['Он ставит вторую рюмку на стол и отодвигает: «Выпьем потом, если захочешь. Сначала скажи, чего хочешь ты».','He puts a second glass on the table and moves it aside: “We will drink later, if you like. First tell me what you want.”'],
+  m1:['Драган ставит передо мной кофе и открывает окно: «Договор отдельно, завтрак отдельно».','Dragan puts coffee in front of me and opens the window: “The lease is separate, breakfast is separate.”']},
+ jelena:{
+  d3:['Она рассказывает, как посадила липу во дворе в год, когда купила дом: «Теперь она выше окон, а я всё жду, что вырасту вместе с ней».','She tells me how she planted the linden in the courtyard the year she bought the house: “Now it is taller than the windows, and I still wait to grow up with it.”'],
+  k3:['Она говорит, что давно не чувствовала себя так неловко и так легко одновременно.','She says she has not felt so awkward and so light at the same time for a long while.'],
+  n3:['Она ставит вторую чашку на стол и отодвигает: «Выпьем потом, если захочешь. Сначала скажи, чего хочешь ты».','She puts a second cup on the table and moves it aside: “We will drink later, if you like. First tell me what you want.”'],
+  m1:['Йелена ставит передо мной кофе и открывает окно: «Договор отдельно, завтрак отдельно».','Jelena puts coffee in front of me and opens the window: “The lease is separate, breakfast is separate.”']},
+ lazar:{
+  d3:['Он признаётся, что в юности хотел стать историком: «Но у денег тоже есть история. Я просто читаю её с другого конца».','He admits that in his youth he wanted to become a historian: “But money has a history too. I just read it from the other end.”'],
+  k3:['Он снимает часы и кладёт в карман: «Чтобы сегодня никуда не спешить».','He takes off his watch and puts it in his pocket: “So that I hurry nowhere today.”'],
+  n3:['Он садится напротив, не касаясь меня: «Расскажи, как прошёл день. Сначала я просто хочу послушать».','He sits down opposite without touching me: “Tell me how your day went. First I simply want to listen.”'],
+  m1:['Лазар заварил кофе и по привычке положил рядом квитанцию, потом смутился и убрал: «Рефлекс».','Lazar has made coffee and out of habit laid a receipt beside it, then grows embarrassed and takes it away: “Reflex.”']},
+ teodora:{
+  d3:['Она рассказывает про первый день в банке, когда перепутала два окна и три часа извинялась перед пожилой женщиной: «Та потом принесла мне пирог».','She tells me about her first day at the bank, when she mixed up two counters and apologised for three hours to an elderly woman: “She brought me a pie afterwards.”'],
+  k3:['Она снимает часы и кладёт в сумку: «Чтобы сегодня не смотреть на время».','She takes off her watch and puts it in her bag: “So that I do not look at the time today.”'],
+  n3:['Она садится напротив, не касаясь меня: «Расскажи, как прошёл день. Сначала я просто хочу послушать».','She sits down opposite without touching me: “Tell me how your day went. First I simply want to listen.”'],
+  m1:['Теодора заварила кофе и по привычке положила рядом папку, потом смутилась и убрала: «Рефлекс».','Teodora has made coffee and out of habit laid a folder beside it, then grows embarrassed and takes it away: “Reflex.”']},
+ ivana:{
+  d3:['Она говорит, что любит работу за одно: когда человек уходит от окна с облегчением на лице. «Это почти как подарок, только без обёртки».','She says she loves her work for one thing: when a person leaves the counter with relief on their face. “It is almost like a gift, only unwrapped.”'],
+  k3:['Она кладёт карандаш на скамейку и смеётся: «Привычка. Без него руки не знают, куда деться».','She puts her pencil on the bench and laughs: “A habit. Without it my hands do not know where to go.”'],
+  n3:['Она протягивает мне плед и садится рядом на расстоянии вытянутой руки: «Ближе, когда скажешь».','She hands me the blanket and sits an arm’s length away: “Closer when you say so.”'],
+  m1:['Утро пахнет тостами. На холодильнике карандашом написано: «Если захочешь, продолжим».','The morning smells of toast. On the fridge, in pencil: “If you want, we will go on.”']},
+ strahinya:{
+  d3:['Он говорит, что любит работу за одно: когда человек уходит от окна с облегчением на лице. «Это почти как подарок, только без обёртки».','He says he loves his work for one thing: when a person leaves the counter with relief on their face. “It is almost like a gift, only unwrapped.”'],
+  k3:['Он кладёт карандаш на скамейку и смеётся: «Привычка. Без него руки не знают, куда деться».','He puts his pencil on the bench and laughs: “A habit. Without it my hands do not know where to go.”'],
+  n3:['Он протягивает мне плед и садится рядом на расстоянии вытянутой руки: «Ближе, когда скажешь».','He hands me the blanket and sits an arm’s length away: “Closer when you say so.”'],
+  m1:['Утро пахнет тостами. На холодильнике карандашом написано: «Если захочешь, продолжим».','The morning smells of toast. On the fridge, in pencil: “If you want, we will go on.”']},
+ milos:{
+  d3:['Он признаётся, что балаклава нужна не для тайны, а чтобы не краснеть на смене: «В ней меня никто не видит смущённым».','He admits the balaclava is not for mystery but so that he does not blush on shift: “In it nobody sees me embarrassed.”'],
+  k3:['Он снимает перстень с мизинца, кладёт мне в ладонь и тут же забирает обратно: «Нет, пусть будет на месте. Это часть меня».','He takes the ring off his little finger, lays it in my palm and at once takes it back: “No, let it stay in its place. It is part of me.”'],
+  n3:['Он вешает форму на спинку стула лицом к стене, будто даёт ей отдохнуть тоже.','He hangs the uniform on the chair back facing the wall, as if letting it rest too.'],
+  m1:['Милош варит кофе с кардамоном и впервые напевает четыре ноты вслух, не оглядываясь.','Miloš makes cardamom coffee and, for the first time, hums the four notes aloud without looking round.']}
+};
+for(const [id,extra] of Object.entries(DEEPER))Object.assign(DETAILS[id],extra);
 export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
  const out=label=>({kind:'tap',label,object:label});
  const note=(ru,en)=>n(T(ru,en));
@@ -97,6 +156,10 @@ export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
   const ids=SLOT_IDENTITIES[slot],text=Object.fromEntries(ids.map(id=>[id,T(...DETAILS[id][key])]));
   return {speaker,...(speaker==='lovePartner'?{cameo:true,emotion:'friendly'}:{}),text:text[ids[0]],...(ids.length>1?{byPartner:{...text,default:text[ids[0]]}}:{})};
  };
+ const detailAll=(key,speaker)=>{
+  const text=Object.fromEntries(Object.keys(DETAILS).map(id=>[id,T(...DETAILS[id][key])]));
+  return {speaker,byPartner:{...text,default:text.nikola},text:text.nikola};
+ };
  Object.assign(J,{
   love_date:{title:T('Вечер вдвоём','An evening for two'),tag:T('ОТНОШЕНИЯ · СВИДАНИЕ','RELATIONSHIPS · A DATE'),text:T('Мы взялись за руки, потому что оба так решили. Это не обещание, а выбор, который можно сделать заново или не делать.','We held hands because we both decided to. It is not a promise but a choice that can be made again or not at all.')},
   love_kiss:{title:T('Первый поцелуй','A first kiss'),tag:T('ОТНОШЕНИЯ · ПОЦЕЛУЙ','RELATIONSHIPS · A KISS'),text:T('Мы спросили друг друга вслух, и ответ был «да». Если бы он был «нет», вечер остался бы таким же хорошим.','We asked each other aloud, and the answer was “yes”. Had it been “no”, the evening would have been just as good.')},
@@ -104,9 +167,9 @@ export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
   love_group:{title:T('Больше, чем двое','More than two'),tag:T('ОТНОШЕНИЯ · ОТКРЫТОСТЬ','RELATIONSHIPS · OPENNESS'),text:T('Я сказал{a} вслух, что дорожу несколькими людьми, и каждый мог ответить «нет». Мы договорились говорить честно, не прятаться и не обещать лишнего.','I said aloud that I care for several people, and each could have answered “no”. We agreed to speak honestly, not to hide and not to promise too much.')}
  });
  const stages=[
-  {no:1,required:null,end:'d22_end',turn:'d22_turn',time:'19:30',bg:null,where:['ВЕЧЕР · СВИДАНИЕ','EVENING · A DATE'],hub:[['В ближайшие вечера у меня есть время. С кем мне хочется побыть наедине?','In the coming evenings I have some time. Whom do I want to be alone with?'],['У меня остаётся ещё один свободный вечер. Кого позвать?','I have one more free evening. Whom shall I ask?'],['Последний свободный вечер на этой неделе. Кого мне хочется увидеть?','The last free evening this week. Whom do I want to see?']],label:['Позвать {who.%s.acc} на свидание','Ask {who.%s} on a date'],key:['d1','d2'],step:'date'},
-  {no:2,required:'date',end:'d25_end',turn:'d25_turn',time:'21:30',bg:'belgrade-night-walk',where:['ВЕЧЕР · ПРОГУЛКА','EVENING · A WALK'],hub:[['Я вспоминаю, с кем мне было хорошо за руку. Кого позвать погулять допоздна?','I remember who felt good to hold hands with. Whom shall I ask for a late walk?'],['Есть ещё один тёплый вечер. Кому написать?','There is one more warm evening. Whom shall I write to?'],['Последний тихий вечер перед тем, как начнутся решающие дни. Кого мне хочется видеть рядом?','The last quiet evening before the deciding days. Whom do I want beside me?']],label:['Погулять допоздна с {who.%s.ins}','Take a late walk with {who.%s}'],key:['k1','k2'],step:'kiss'},
-  {no:3,required:'kiss',end:'d28_end',turn:'d28_turn',time:'22:30',bg:'room-window',where:['НОЧЬ · ДВОЕ','NIGHT · TOGETHER'],hub:[['Вечер почти закончился. Мне хочется не прощаться, но только если все согласны. Кого позвать?','The evening is nearly over. I would rather not say goodbye, but only if everyone agrees. Whom shall I ask?'],['Ещё одна ночь, и никто не обязан ничего решать. Кого позвать?','Another night, and nobody is obliged to decide anything. Whom shall I ask?'],['Последняя ночь перед решающими днями. С кем мне хочется её провести?','The last night before the deciding days. With whom do I want to spend it?']],label:['Позвать {who.%s.acc} к себе','Ask {who.%s} to come home with me'],key:['n1','n2'],step:'lover'}
+  {no:1,required:null,end:'d22_end',turn:'d22_turn',time:'19:30',bg:null,where:['ВЕЧЕР · СВИДАНИЕ','EVENING · A DATE'],hub:[['В ближайшие вечера у меня есть время. С кем мне хочется побыть наедине?','In the coming evenings I have some time. Whom do I want to be alone with?'],['У меня остаётся ещё один свободный вечер. Кого позвать?','I have one more free evening. Whom shall I ask?'],['Последний свободный вечер на этой неделе. Кого мне хочется увидеть?','The last free evening this week. Whom do I want to see?']],label:['Позвать {who.%s.acc} на свидание','Ask {who.%s} on a date'],key:['d1','d2','d3'],step:'date'},
+  {no:2,required:'date',end:'d25_end',turn:'d25_turn',time:'21:30',bg:'belgrade-night-walk',where:['ВЕЧЕР · ПРОГУЛКА','EVENING · A WALK'],hub:[['Я вспоминаю, с кем мне было хорошо за руку. Кого позвать погулять допоздна?','I remember who felt good to hold hands with. Whom shall I ask for a late walk?'],['Есть ещё один тёплый вечер. Кому написать?','There is one more warm evening. Whom shall I write to?'],['Последний тихий вечер перед тем, как начнутся решающие дни. Кого мне хочется видеть рядом?','The last quiet evening before the deciding days. Whom do I want beside me?']],label:['Погулять допоздна с {who.%s.ins}','Take a late walk with {who.%s}'],key:['k1','k2','k3'],step:'kiss'},
+  {no:3,required:'kiss',end:'d28_end',turn:'d28_turn',time:'22:30',bg:'room-window',where:['НОЧЬ · ДВОЕ','NIGHT · TOGETHER'],hub:[['Вечер почти закончился. Мне хочется не прощаться, но только если все согласны. Кого позвать?','The evening is nearly over. I would rather not say goodbye, but only if everyone agrees. Whom shall I ask?'],['Ещё одна ночь, и никто не обязан ничего решать. Кого позвать?','Another night, and nobody is obliged to decide anything. Whom shall I ask?'],['Последняя ночь перед решающими днями. С кем мне хочется её провести?','The last night before the deciding days. With whom do I want to spend it?']],label:['Позвать {who.%s.acc} к себе','Ask {who.%s} to come home with me'],key:['n1','n2','n3'],step:'lover'}
  ];
  const slots=Object.keys(SLOT_IDENTITIES);
  for(const stage of stages){
@@ -121,10 +184,11 @@ export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
    // Generic outcomes shared by every partner of this evening.
    const yes=stage.no===3?id(k,'fade'):id(k,'yes'),keep=id(k,'no');
    for(const slot of slots){
-    const [first,second]=stage.key;
+    const [first,second,third]=stage.key;
     N[id(k,slot)]=scene([
      detail(slot,first,'narrator'),
      detail(slot,second,'lovePartner'),
+     detail(slot,third,'narrator'),
      note(...(stage.no===1?['Мы стоим близко. Я спрашиваю: «Можно взять тебя за руку?» {partner} улыбается: «Да. А если станет слишком, скажи, и мы замедлимся».','We stand close. I ask: “May I hold your hand?” {partner} smiles: “Yes. And if it gets to be too much, say so and we will slow down.”']:stage.no===2?['{partner} ждёт ответа и не торопит. Я знаю, что могу сказать «да», «пока нет» или просто улыбнуться и пойти дальше: любой ответ здесь будет принят.','{partner} waits for an answer and does not hurry me. I know I can say “yes”, “not yet” or simply smile and walk on: any answer will be accepted here.']:['Я понимаю, чего хочу, и говорю это вслух. Мы оба знаем: можно передумать в любую секунду, даже у самой двери.','I know what I want, and I say it aloud. We both know that one can change one’s mind at any second, even at the very door.']))
     ],null,{...place(...stage.where,stage.time,bgOf(slot)),choices:stage.no===1?[
      choice(['Взять за руку и остаться ближе','Take their hand and stay closer'],'romance',yes,{loveStep:'date'}),
@@ -142,7 +206,7 @@ export function extendRomance({NODES:N,JOURNAL:J,n,scene}){
     N[keep]=scene([note('{partner} кивает без тени обиды: «Спасибо, что сказал{a} вслух. Мы никуда не спешим».','{partner} nods without a shade of hurt: “Thank you for saying it aloud. We are in no hurry.”'),note('Мы идём дальше, и вечер остаётся таким же хорошим.','We walk on, and the evening stays just as good.')],after(k),{...place(...stage.where,stage.time,'belgrade-night-walk')});
    } else {
     N[id(k,'fade')]=scene([note('Дверь закрывается тихо. Мы идём медленно, спрашивая и слушая: можно? хорошо? ещё?','The door closes softly. We go slowly, asking and listening: may I? is that good? more?'),note('Остальное остаётся между нами: нежность, смех в темноте и ясное «да», которое можно сказать ещё раз или взять назад.','The rest stays between us: tenderness, laughter in the dark and a clear “yes” that can be said again or taken back.')],id(k,'morning'),{...place('НОЧЬ · ДВОЕ','NIGHT · TOGETHER','23:30','room-window'),adult:true,skipTo:id(k,'morning'),journal:['love_night']});
-    N[id(k,'morning')]=scene([note('Утром пахнет кофе, и {partner} улыбается так, как улыбаются люди, которым хорошо без слов.','In the morning there is the smell of coffee, and {partner} smiles the way people smile when they feel well without words.'),note('Мы не называем это никак. Просто завтракаем и договариваемся о следующей встрече, если захотим оба.','We do not give it a name. We simply have breakfast and agree on the next meeting, if we both want it.')],after(k),{...place('УТРО · ПОСЛЕ','MORNING · AFTER','08:30','room-window'),journal:stage.no===3?['love_night']:[]});
+    N[id(k,'morning')]=scene([detailAll('m1','narrator'),note('Утром пахнет кофе, и {partner} улыбается так, как улыбаются люди, которым хорошо без слов.','In the morning there is the smell of coffee, and {partner} smiles the way people smile when they feel well without words.'),note('Мы не называем это никак. Просто завтракаем и договариваемся о следующей встрече, если захотим оба.','We do not give it a name. We simply have breakfast and agree on the next meeting, if we both want it.')],after(k),{...place('УТРО · ПОСЛЕ','MORNING · AFTER','08:30','room-window'),journal:stage.no===3?['love_night']:[]});
     N[keep]=scene([note('{partner} кивает: «Спасибо, что сказал{a} прямо. Это тоже хороший вечер».','{partner} nods: “Thank you for saying it straight. This is a good evening too.”'),note('Мы прощаемся тепло, без обид и без неловкости. Дверь ещё долго остаётся приоткрытой.','We say goodbye warmly, without hurt or awkwardness. The door stays ajar for a long time.')],after(k),{...place(...stage.where,stage.time,'room-window')});
    }
   }
