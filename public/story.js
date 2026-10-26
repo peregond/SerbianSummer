@@ -1,3 +1,4 @@
+import {applyLivingArt,additionalPortrait} from './living-art.js?v=1';
 import {applyArtExpansion} from './art-expansion.js?v=1';
 import {registerLukaSport} from './luka-redesign.js?v=0.15.0';
 import {extendFifthChapter} from './chapter-five.js?v=0.15.0';
@@ -684,6 +685,7 @@ registerNikolaRedesign(CHARACTER_SPRITES);
 registerLukaSport(CHARACTER_SPRITES);
 registerPrologueArt(NODES,BACKGROUNDS);
 applyArtExpansion(NODES,BACKGROUNDS);
+applyLivingArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
@@ -707,7 +709,8 @@ export function presentationFor(node,page,flags={}) {
   const metadata=BACKGROUNDS[bg];
   const daydream=page.daydream??node.daydream??false;
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
-  const character=kitchenStage||seated||page.portrait===false?null:(cameo??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const extraPortrait=additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
+  const character=kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   return {
     bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage,composite:!!kitchenStage||!!seated,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg?metadata.label:node.location??metadata.label),

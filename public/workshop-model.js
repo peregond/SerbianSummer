@@ -4,7 +4,7 @@ export const PEOPLE = {
   ivana: 'Ивана', strahinja: 'Страхиня', milos: 'Милош'
 };
 export const EMOTIONS = { friendly: 'Приветливость', thoughtful: 'Задумчивость', laughing: 'Смех', flirty: 'Флирт', shy: 'Смущение', surprised: 'Удивление', confident: 'Уверенность' };
-export const CORE_EMOTIONS = ['friendly', 'thoughtful', 'laughing', 'flirty'];
+export const CORE_EMOTIONS = Object.keys(EMOTIONS);
 export function acceptsWorkshopCode(value) {
   return typeof value === 'string' && value.normalize('NFKC').trim().toLocaleLowerCase('ru') === 'грызуны';
 }
@@ -16,10 +16,14 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const person = Object.keys(PEOPLE).find(id => base === id + '.webp' || base.startsWith(id + '-'));
     const image = /\.(webp|png|svg|jpe?g)$/i.test(file);
     const icon = /icon|poster|sketch/.test(base);
-    const character = image && !icon ? person : undefined;
+    const background = Object.hasOwn(backgrounds, base.replace(/\.webp$/, ''));
+    // Composite character scenes remain part of their portrait gallery. A location
+    // named after someone (for example Luka’s office) is still a background.
+    const composite = /^(milica-table-|(?:dragan|jelena)-kitchen-)/.test(base);
+    const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
+    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
     const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : draft ? 'draft' : active.has(file) ? 'active' : character ? 'archive' : 'asset' };

@@ -1,4 +1,5 @@
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=2';
+import {drawChapterMap} from './chapter-map.js?v=1';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=3';
 import {mountMessenger} from './messenger.js?v=1';
 import {messengerFrame,messageAt} from './messenger-model.js?v=1';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=1';
@@ -7,7 +8,7 @@ import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,transl
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-art2';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-art3';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.0';
@@ -378,27 +379,19 @@ function goBack() {
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   save();renderGame();
 }
+panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map');});
 function openChapters() {
   if(panel.open)panel.close();
   const source=['game','messenger','ending'].includes(view)?state:saved;
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
-  const intro=document.createElement('p');intro.className='journal-intro';
-  intro.textContent=t(source?'Возвращайся к открытым главам. При переигрывании дальнейшие выборы будут сделаны заново.':'Главы открываются по мере прохождения. Сначала выбери своего персонажа.');content.append(intro);
   const current=source?chapterFor(source,NODES):null;
-  for(const chapter of CHAPTERS){
-    const unlocked=!!source&&(chapter.id==='prologue'||!!source.chapterMarks?.[chapter.id]);
-    const button=document.createElement('button');button.className='chapter-card';button.disabled=!unlocked;
-    button.dataset.current=String(chapter.id===current?.id);
-    const missingOldPoint=source&&CHAPTERS.indexOf(chapter)<CHAPTERS.indexOf(current)&&!unlocked;
-    const number=document.createElement('small');number.textContent=t(chapter.number+' · '+(chapter.id===current?.id?'Сейчас':unlocked?'Доступна':missingOldPoint?'Нет старой точки':'Пока закрыта'));
-    const title=document.createElement('strong');title.textContent=t(chapter.title);
-    const copy=document.createElement('span');copy.textContent=t(missingOldPoint?'В старом сохранении нет точки этой главы. Текущую историю можно продолжить.':chapter.description);
-    button.append(number,title,copy);button.addEventListener('click',()=>confirmChapter(chapter,source));content.append(button);
-  }
-  const coming=document.createElement('p');coming.className='journal-intro';coming.textContent=t('Следующие главы появятся в обновлениях.');content.append(coming);panel.showModal();
+  drawChapterMap(content,{chapters:CHAPTERS,source,current,onSelect:chapter=>confirmChapter(chapter,source)});
+  panel.classList.add('chapter-map');panel.showModal();
+  requestAnimationFrame(()=>{const active=content.querySelector('[aria-current="step"]');if(active)active.scrollIntoView({block:'center'});else content.scrollTop=0;});
 }
 function confirmChapter(chapter,source){
+  panel.classList.remove('chapter-map');
   $('panel-title').textContent=t('Вернуться к главе?');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const p=document.createElement('p');p.className='confirm-copy';p.textContent=t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
@@ -412,6 +405,7 @@ function confirmChapter(chapter,source){
   actions.append(start,download,cancel);content.append(p,actions);
 }
 function openPanel(kind) {
+  panel.classList.remove('chapter-map');
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();

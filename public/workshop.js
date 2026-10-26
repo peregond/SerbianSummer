@@ -1,5 +1,5 @@
 import { t } from './i18n.js?v=0.15.0';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS } from './workshop-model.js?v=2';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS } from './workshop-model.js?v=3';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
