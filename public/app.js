@@ -1,5 +1,6 @@
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
+import {STAGES} from './days.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
@@ -28,7 +29,7 @@ settings.music = settings.music === true;
 settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
-function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':dark?'#182a31':'#fff3d8';}
+function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':document.body.dataset.screen==='interaction'?'#192e3a':document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
 setVolume(settings.volume);
@@ -39,6 +40,7 @@ const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null;
+let lastChapterId=null,wantCard=false,cardContext=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -259,6 +261,46 @@ function renderGame() {
   $('chapter-heading').textContent=t(chapter.number+' · '+chapter.title);
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
+  // A step that crosses into a new chapter gets a title card (and a reminder to save progress for guests).
+  const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
+  if(cardWanted&&previousChapter&&previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0)showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
+}
+// A guest is somebody the cloud has finished checking who is not signed in; nobody is nagged while the check is still running.
+function isGuest(){return !!cloud?.ready&&!cloud.user;}
+function drawSavePrompt(){
+  const box=document.createElement('div');box.className='save-prompt';
+  const title=document.createElement('strong');title.textContent=t('Сохрани прогресс');
+  const text=document.createElement('p');text.textContent=t('Сейчас история хранится только на этом устройстве. Создай аккаунт, чтобы не потерять её и продолжить с другого телефона.');
+  const create=document.createElement('button');create.type='button';create.className='secondary';create.textContent=t('Создать аккаунт');create.addEventListener('click',()=>{authMode='register';openAccount();});
+  const login=document.createElement('button');login.type='button';login.className='text-button';login.textContent=t('Уже есть аккаунт? Войти');login.addEventListener('click',()=>{authMode='login';openAccount();});
+  box.append(title,text,create,login);return box;
+}
+function drawEndingPrompt(){
+  document.querySelector('#ending .save-prompt')?.remove();
+  if(isGuest())document.querySelector('#ending .ending-inner').insertBefore(drawSavePrompt(),document.querySelector('#ending .ending-actions'));
+}
+function drawChapterCard(previous,next){
+  const card=$('chapter-card');card.replaceChildren();
+  const inner=document.createElement('div');inner.className='chapter-card-inner';
+  const add=(tag,className,text)=>{const element=document.createElement(tag);element.className=className;element.textContent=text;inner.append(element);return element;};
+  if(previous?.day||previous?.id==='arrival')add('p','chapter-card-done','✓ '+t(previous.number)+' '+t('завершён')+' · '+t(previous.title));
+  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 30')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
+  const heading=add('h2','chapter-card-number',t(next.number));heading.id='chapter-card-title';
+  add('p','chapter-card-title',t(next.title));
+  add('p','chapter-card-description',t(next.description));
+  if(next.day){
+    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 30')}`);
+    for(let day=1;day<=30;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
+    inner.append(progress);
+  }
+  if(isGuest())inner.append(drawSavePrompt());
+  const start=document.createElement('button');start.type='button';start.id='chapter-card-start';start.className='primary';start.textContent=next.day?`${t('Начать день')} ${next.day}`:t('Начать');
+  start.addEventListener('click',()=>{cardContext=null;showScreen('game');fitScene();});
+  inner.append(start);card.append(inner);
+}
+function showChapterCard(previous,next){
+  cardContext={previous,next};drawChapterCard(previous,next);showScreen('chapter-card');
+  $('chapter-card-start').focus({preventScroll:true});
 }
 function fitScene() {
   document.documentElement.dataset.standalone=String(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||!!navigator.standalone);
@@ -283,7 +325,7 @@ function advance() {
   if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
-  save();renderGame();
+  wantCard=true;save();renderGame();
 }
 function openBaggage(){
   const origin={node:state.node,index:state.index};
@@ -312,7 +354,7 @@ function performBeat(option={}) {
   if(option.next??action.next)enterNode(option.next??action.next);
   else if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
-  if(state.node!=='end')recordPage();save();renderGame();
+  if(state.node!=='end')recordPage();wantCard=true;save();renderGame();
   if(option.feedback??action.feedback)toast(option.feedback??action.feedback);
 }
 function choose(choice) {
@@ -320,7 +362,7 @@ function choose(choice) {
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
-  applyEffects(choice.effect);enterNode(choice.next);recordPage();save();renderGame();
+  applyEffects(choice.effect);enterNode(choice.next);recordPage();wantCard=true;save();renderGame();
 }
 function renderEnding() {
   setMusicScene('prologue');
@@ -343,6 +385,7 @@ function renderEnding() {
   if(state.flags.chapterSevenComplete){const f=state.flags.finalChoice;$('ending-title').innerHTML=html(f==='stay'?'Остаюсь<br><em>в Белграде</em>':f==='leave'?'Домой<br><em>с летом</em>':'До осени<br><em>по плану</em>');$('ending-memory').textContent=t(f==='stay'?'У этого города теперь есть твой стул.':f==='leave'?'Лето осталось с тобой, куда бы ты ни летел.':'Дверь приоткрыта. Войти в неё решишь ты.');}
   if(state.flags.chapterFiveComplete)document.querySelector('.ending-inner .demo-note').innerHTML=html(state.flags.chapterSevenComplete?'Конец истории.<br>Спасибо за это лето в Сербии.':state.flags.chapterSixComplete?'Продолжение следует.<br>Дальше — новые решения и встречи.':'Продолжение следует.<br>Дальше — кино во дворе и вечер с близкими.');
   document.querySelector('.ending-inner>p:not(.eyebrow):not(.demo-note)').innerHTML=html(state.flags.chapterSevenComplete?'Это был твой ответ.<br>Любой из них был честным.':state.flags.chapterSixComplete?'У этой жизни уже есть люди.<br>Дальше ты выберешь, куда она приведёт.':state.flags.chapterFiveComplete?'Одни дела завершены.<br>Для остальных выбран следующий шаг.':state.flags.chapterFourComplete?'Первые ответы получены.<br>А у новых знакомств появился свой вечер.':state.flags.chapterThreeComplete?'Вопросы для банка готовы.<br>А у новой встречи уже есть продолжение.':state.flags.chapterOneComplete?'У тебя есть ключ, первый вечер<br>и свой маршрут по Белграду.':'Сегодня у тебя появился адрес.<br>И человек, которому можно написать.');
+  drawEndingPrompt();
 }
 function goBack() {
   if(panel.open||transitionLock||!state||!['game','ending'].includes(view))return;
@@ -483,10 +526,11 @@ $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.
 $('chapter-progress').addEventListener('click',openChapters);
 $('interaction-back').addEventListener('click',renderGame);
 $('next').addEventListener('click',advance);$('dialogue-text').addEventListener('click',advance);
-$('continue-story').addEventListener('click',()=>{state.rewind=[];state.completed=false;const next=continuationFor(state);if(!next)return;enterNode(next);recordPage();save();renderGame();});
+$('continue-story').addEventListener('click',()=>{state.rewind=[];state.completed=false;const next=continuationFor(state);if(!next)return;enterNode(next);recordPage();wantCard=true;save();renderGame();});
 $('rewind').addEventListener('click',goBack);$('ending-rewind').addEventListener('click',goBack);
 $('ending-journal').addEventListener('click',()=>openPanel('journal'));
 $('close-panel').addEventListener('click',()=>panel.close());
+panel.addEventListener('close',()=>{if(view==='chapter-card'&&cardContext)drawChapterCard(cardContext.previous,cardContext.next);if(view==='ending')drawEndingPrompt();});
 panel.addEventListener('click',event=>{if(event.target===panel){const rect=panel.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)panel.close();}});
 document.addEventListener('keydown',event=>{if((event.code==='Space'||event.code==='Enter')&&view==='game'&&!panel.open&&!/BUTTON|INPUT|A/.test(document.activeElement.tagName)){event.preventDefault();advance();}});
 $('scene-cg').addEventListener('load',fitScene);$('home-art').addEventListener('load',fitScene);

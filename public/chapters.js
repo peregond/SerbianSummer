@@ -1,6 +1,6 @@
 import {PRELUDE,DAYS} from './days.js?v=0.15.0';
 // Chapters are the prelude (prologue and arrival evening) followed by thirty days; see days.js and DAYS.md.
-export const CHAPTERS=[...PRELUDE,...DAYS.map(d=>({id:d.id,number:'День '+d.n,title:d.title,start:d.start,description:d.description,day:d.n}))];
+export const CHAPTERS=[...PRELUDE,...DAYS.map(d=>({id:d.id,number:'День '+d.n,title:d.title,start:d.start,description:d.description,day:d.n,stage:d.stage}))];
 // Older saves record progress only as chapter flags. Each flag maps to the last day it completed.
 const LEGACY_DAYS=[['chapterSevenComplete',30],['chapterSixComplete',21],['chapterFiveComplete',16],['chapterFourComplete',2],['chapterThreeComplete',1]];
 export function dayProgress(flags={}){return Math.max(Number.isInteger(flags.dayDone)?flags.dayDone:0,...LEGACY_DAYS.filter(([flag])=>flags[flag]).map(([,day])=>day));}
