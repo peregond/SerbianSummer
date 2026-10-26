@@ -1,6 +1,6 @@
-import {t} from './i18n.js?v=0.15.2';
+import {t} from './i18n.js?v=0.15.3';
 // Presentation only: unlocks and restart points continue to come from saved chapter marks.
-export function drawChapterMap(root,{chapters,source,current,onSelect}){
+export function drawChapterMap(root,{chapters,source,current,onSelect,isAvailable=()=>true}){
  const doc=root.ownerDocument;
  const el=(tag,text,cls)=>{const item=doc.createElement(tag);if(text)item.textContent=t(text);if(cls)item.className=cls;return item;};
  root.replaceChildren();
@@ -12,9 +12,10 @@ export function drawChapterMap(root,{chapters,source,current,onSelect}){
  let d=`M${xs[0]} 40`;for(let i=1;i<chapters.length;i++){const y=(i-1)*step+40;d+=` C${xs[(i-1)%4]} ${y+step*.55} ${xs[i%4]} ${y+step*.45} ${xs[i%4]} ${y+step}`;}
  const path=doc.createElementNS(svg.namespaceURI,'path');path.setAttribute('d',d);path.setAttribute('vector-effect','non-scaling-stroke');svg.append(path);route.append(svg);
  chapters.forEach((chapter,index)=>{
-  const unlocked=!!source&&(chapter.id==='prologue'||!!source.chapterMarks?.[chapter.id]);const isCurrent=chapter.id===current?.id;
+  const available=isAvailable(chapter);
+  const unlocked=available&&!!source&&(chapter.id==='prologue'||!!source.chapterMarks?.[chapter.id]);const isCurrent=chapter.id===current?.id;
   const missing=source&&index<chapters.indexOf(current)&&!unlocked;
-  const state=isCurrent?'Сейчас':unlocked?'Доступна':missing?'Нет старой точки':'Пока закрыта';
+  const state=!available?'Нужен промокод':isCurrent?'Сейчас':unlocked?'Доступна':missing?'Нет старой точки':'Пока закрыта';
   const row=el('li','','chapter-stop');row.style.setProperty('--stop-x',xs[index%4]+'%');
   const button=el('button','','chapter-level');button.type='button';button.disabled=!unlocked;button.dataset.current=String(isCurrent);button.dataset.chapter=chapter.id;
   if(isCurrent)button.setAttribute('aria-current','step');

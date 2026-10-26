@@ -1,5 +1,5 @@
-import {t} from './i18n.js?v=0.15.2';
-import {imageHotspotRect} from './interaction.js?v=0.15.2';
+import {t} from './i18n.js?v=0.15.3';
+import {imageHotspotRect} from './interaction.js?v=0.15.3';
 export const ROOM_TASKS=[
  {id:'key',label:'Проверить ключ',short:'Ключ',done:'Ключ подходит',bit:1,rect:{x:.14,y:.44,width:.14,height:.065}},
  {id:'phone',label:'Поставить телефон на зарядку',short:'Телефон на зарядку',done:'Телефон заряжается',bit:2,rect:{x:.68,y:.40,width:.23,height:.09}},
