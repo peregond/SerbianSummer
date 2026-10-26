@@ -1,3 +1,4 @@
+import {familySpeaker} from './family-contact.js?v=1';
 import { CHAT_SCENES, MESSENGER_CONFIG } from './messenger-config.js?v=1';
 
 const names = { milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
@@ -10,7 +11,7 @@ export function contactName(value, flags = {}) {
     mupStaff: flags.mupSpark === 'strahinya' ? 'strahinja' : 'ivana'
   };
   const key = dynamic[value] ?? value;
-  return names[key] ?? String(key).replace(/^Ты\s*→\s*/u, '').split(' · ')[0];
+  return names[key] ?? familySpeaker(String(key).replace(/^Ты\s*→\s*/u, '').split(' · ')[0]);
 }
 export function messageAt(sceneId, node, index, flags = {}) {
   const page = node.pages[index];

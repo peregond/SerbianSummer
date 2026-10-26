@@ -24,7 +24,7 @@ export function extendSeventhChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    n(T('Раньше любой выбор казался репетицией. Сегодня это просто моё утро.','Every choice used to feel like a rehearsal. Today it is simply my morning.'))
   ],'decision_home',{journal:['last_week'],exitAction:out(T('Открыть сообщения','Open my messages'))}),
   decision_home:s([
-   msg(T('Дом','Home'),T('«Мы скучаем и ждём тебя. Но мы поддержим любое решение — только не молчи».','‘We miss you and we are waiting. But we will support whatever you decide; just do not go silent.’')),
+   msg(T('Мама','Mum'),T('«Мы скучаем и ждём тебя. Но мы поддержим любое решение — только не молчи».','‘We miss you and we are waiting. But we will support whatever you decide; just do not go silent.’')),
    n(T('Я читаю её дважды. В сообщении нет давления — только тепло. От этого честно отвечать труднее и легче одновременно.','I read it twice. There is no pressure in it, only warmth. That makes an honest answer both harder and easier.')),
    n(T('Решение не сводится к спору «Сербия против дома». Мне важно понять, что именно я хочу сохранить.','This is not a contest between Serbia and home. I need to understand what exactly I want to keep.'))
   ],null,{choices:[

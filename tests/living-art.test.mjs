@@ -5,8 +5,13 @@ import {NODES,BACKGROUNDS,CHARACTER_SPRITES,presentationFor,STORY_VERSION} from 
 import {REGULAR_MOODS,LIVING_BACKGROUND_SCENES,STORY_BACKGROUNDS} from '../public/living-art.js';
 import {PEOPLE,buildArtCatalog} from '../public/workshop-model.js';
 // Baseline 90fe350: all 445 scene IDs, page order/text, effects, actions and transitions.
-// Only background selection and per-character reaction metadata may differ.
+// Only background selection, reaction metadata and the explicitly approved
+// mother-contact edits in fixtures/mother-edits.json may differ.
 const canonical=JSON.parse(JSON.stringify(NODES),(key,value)=>['bg','districtBg','reactions'].includes(key)?undefined:value);
+for(const edit of JSON.parse(fs.readFileSync(new URL('./fixtures/mother-edits.json',import.meta.url)))){
+ assert.equal(canonical[edit.id].pages[edit.index][edit.field],edit.after,edit.id+': approved mother edit');
+ canonical[edit.id].pages[edit.index][edit.field]=edit.before;
+}
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
 assert.equal(STORY_VERSION,1);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));

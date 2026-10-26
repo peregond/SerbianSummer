@@ -1,14 +1,15 @@
+import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=1';
 import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=4';
 import {mountMessenger} from './messenger.js?v=1';
-import {messengerFrame,messageAt} from './messenger-model.js?v=1';
+import {messengerFrame,messageAt} from './messenger-model.js?v=2';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-art4';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-family1';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.0';
@@ -188,7 +189,7 @@ function startGame() {
 }
 function speakerName(page,locale=getLanguage()) {
   const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:state.flags.districtOwner==='jelena'?'Йелена':'Драган',bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:state.flags.districtOwner==='jelena'?'Драган':'Йелена',narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
-  return t(names[page.speaker]??page.speaker,locale);
+  return t(familySpeaker(names[page.speaker]??page.speaker),locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
 function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
@@ -419,7 +420,7 @@ function openPanel(kind) {
   } else if(kind==='history') {
     $('panel-title').textContent=t('История реплик');
     if(!state?.log.length){const p=document.createElement('p');p.className='journal-empty';p.textContent=t('Здесь появится история вашего первого дня.');content.append(p);}
-    else for(const entry of state.log) {const item=document.createElement('div');item.className='history-entry'+(entry.choice?' choice-entry':'');const label=document.createElement('small');item.dataset.voice=entry.voice??(entry.speaker==='Ты'?'thought':'other');label.textContent=t((entry.speaker==='Ты'?named(state.profile).full.nominative:entry.speaker)+(item.dataset.voice==='thought'?' · про себя':item.dataset.voice==='speech'?' · вслух':''));const p=document.createElement('p');p.textContent=t(translateHistory(entry.text,state.profile,catalog));item.append(label,p);content.append(item);}
+    else for(const entry of state.log) {const item=document.createElement('div');item.className='history-entry'+(entry.choice?' choice-entry':'');const label=document.createElement('small');item.dataset.voice=entry.voice??(entry.speaker==='Ты'?'thought':'other');label.textContent=t((entry.speaker==='Ты'?named(state.profile).full.nominative:familySpeaker(entry.speaker))+(item.dataset.voice==='thought'?' · про себя':item.dataset.voice==='speech'?' · вслух':''));const p=document.createElement('p');p.textContent=t(translateHistory(familyText(entry.text),state.profile,catalog));item.append(label,p);content.append(item);}
   } else if(kind==='journal') {
     $('panel-title').textContent=t('Твой дневник');
     const intro=document.createElement('p');intro.className='journal-intro';intro.textContent=t(state?`${named(state.profile).full.nominative} · история в Белграде`:'Люди, планы и небольшие воспоминания.');content.append(intro);

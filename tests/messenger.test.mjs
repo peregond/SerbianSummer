@@ -1,3 +1,4 @@
+import {familySpeaker,familyText} from '../public/family-contact.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
@@ -25,7 +26,7 @@ const received = frame('prepare_host', 1);
 assert.deepEqual(received.messages.map(m => m.direction), ['outgoing', 'incoming']);
 assert.ok(!JSON.stringify(outgoing).includes('Второй подъезд'), 'No future reply leaks into the draft');
 assert.equal(frame('phone', 1).contact, 'Драган');
-assert.equal(frame('phone', 3).contact, 'Близкий человек');
+assert.equal(frame('phone', 3).contact, 'Мама');
 assert.equal(frame('phone', 3).messages.length, 1, 'Different contacts never share a thread');
 assert.equal(frame('evening_contact_plan', 2, { companion: 'nikola' }).contact, 'Никола');
 assert.equal(frame('host_evening_invite', 0, { host: 'jelena' }).contact, 'Йелена');
@@ -49,3 +50,15 @@ assert.ok(rested.draft && rested.context, 'The narrated suffix remains separate 
 setLanguage('ru');
 assert.equal(JSON.stringify(NODES), before, 'Messenger presentation never modifies story pages or choices');
 console.log('All 77 messages, dynamic contacts, outgoing drafts, authored replies, no spoilers, physical actions, RU/EN and immutable scene data checked.');
+
+// Existing logs keep their original bytes; only displayed identity is normalised.
+for(const label of ['Близкий человек','Дом','mom','Мама'])assert.equal(familySpeaker(label),'Мама');
+assert.equal(familySpeaker('Домой'),'Домой');assert.equal(familySpeaker('Милица'),'Милица');
+for(const [id,index] of [['messages',0],['phone',3],['friend',2],['decision_home',0]]){
+ assert.equal(NODES[id].pages[index].speaker,'Мама');assert.equal(frame(id,index).contact,'Мама');
+}
+assert.match(NODES.host.pages[2].text,/^Маме отвечаю/);
+assert.match(NODES.d23_start.pages[0].text,/^Мама присылает/);
+assert.equal(familyText('Близкому человеку отвечаю: «Пока в аэропорту. Пью кофе. Всё нормально».'),NODES.host.pages[2].text);
+assert.equal(familyText('Дом присылает подробное письмо: обычные новости, смешная история про соседа и осторожный вопрос о планах.'),NODES.d23_start.pages[0].text);
+assert.equal(familyText('Дом — это люди'),'Дом — это люди');

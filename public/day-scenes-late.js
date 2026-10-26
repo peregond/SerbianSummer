@@ -184,7 +184,7 @@ export function extendSecondHalf({NODES,JOURNAL,n,scene}){
  // Day 23: a letter from home. Airport pair.
  build(23,{bg:'room-window',time:'19:00',midTime:'20:00',turnTime:'21:30',
   start:[
-   note('Дом присылает подробное письмо: обычные новости, смешная история про соседа и осторожный вопрос о планах.','Home sends a long letter: ordinary news, a funny story about a neighbour and a careful question about my plans.'),
+   note('Мама присылает подробное письмо: обычные новости, смешная история про соседа и осторожный вопрос о планах.','Mum sends a long letter: everyday news, a funny story about a neighbour and a gentle question about my plans.'),
    note('Читаю дважды. В конце приписка от самого близкого человека: «Мы ждём, но не торопим. Просто напиши, как ты».','I read it twice. At the end there is a postscript from the person closest to me: “We are waiting but not hurrying you. Just write how you are.”'),
    contact(['Письмо домой лучше отправлять вечером, когда уже не хочется править каждое слово.','Send a letter home in the evening, when you no longer want to edit every word.'],['Письмо домой лучше отправлять вечером, когда уже не хочется править каждое слово.','Send a letter home in the evening, when you no longer want to edit every word.'],{message:true})],
   options:[
