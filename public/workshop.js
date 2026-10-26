@@ -1,4 +1,5 @@
-import { t } from './i18n.js?v=0.15.2';
+import {unlockPreview} from './chapter-access.js?v=0.15.3';
+import { t } from './i18n.js?v=0.15.3';
 import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=8';
 
 const el = (tag, text, className) => {
@@ -9,7 +10,7 @@ const el = (tag, text, className) => {
 };
 const statusLabel = { active: 'В игре', archive: 'Прежняя версия', draft: 'Эскиз · не подключено', asset: 'Ресурс' };
 
-export function mountWorkshopEntry(container, open) {
+export function mountWorkshopEntry(container, open, onUnlock=()=>{}) {
   const form = el('form', '', 'workshop-code');
   const label = el('label', 'Промокод');
   const input = el('input');
@@ -21,6 +22,7 @@ export function mountWorkshopEntry(container, open) {
   form.append(label, input, button, message);
   form.addEventListener('submit', event => {
     event.preventDefault();
+    if(unlockPreview(input.value)){input.value='';message.textContent=t('Все главы открыты на этом устройстве');onUnlock();return;}
     if (!acceptsWorkshopCode(input.value)) { message.textContent = t('Промокод не найден'); return; }
     input.value = ''; open();
   });

@@ -1,31 +1,32 @@
+import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.15.3';
 import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=0.15.2';
+import {renderEpisodeContact} from './episode-contact.js?v=0.15.3';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.15.2';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.2';
+import {drawChapterMap} from './chapter-map.js?v=0.15.3';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.3';
 import {mountRoomInteraction} from './room-interaction.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
-import {mountMessenger} from './messenger.js?v=0.15.2';
-import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.2';
-import {MESSENGER_CONFIG} from './messenger-config.js?v=0.15.2';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.2';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.2';
-import {STAGES} from './days.js?v=0.15.2';
-import {cueFor} from './music-cues.js?v=0.15.2';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.2';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.2';
-import {drawBeatAction} from './beat-action.js?v=0.15.2';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.2';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.2';
+import {mountMessenger} from './messenger.js?v=0.15.3';
+import {messengerFrame,messageAt} from './messenger-model.js?v=0.15.3';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=0.15.3';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.3';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.3';
+import {STAGES} from './days.js?v=0.15.3';
+import {cueFor} from './music-cues.js?v=0.15.3';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.3';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.3';
+import {drawBeatAction} from './beat-action.js?v=0.15.3';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.3';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.3';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.2';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.3';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.2';
-import {appendChoiceContents} from './choice-ui.js?v=0.15.2';
-import {mountBaggageInteraction} from './interaction.js?v=0.15.2';
-import {APP_VERSION} from './release.js?v=0.15.2';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.15.3';
+import {appendChoiceContents} from './choice-ui.js?v=0.15.3';
+import {mountBaggageInteraction} from './interaction.js?v=0.15.3';
+import {APP_VERSION} from './release.js?v=0.15.3';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -219,7 +220,19 @@ function enterNode(id) {
   for(const entry of NODES[id].journal??[]) if(!state.journal.includes(entry))state.journal.push(entry);
   rememberChapter(state,NODES);
 }
+function showChapterLock(){
+  cardContext=null;
+  showScreen('chapter-card');
+  const root=$('chapter-card');root.replaceChildren();
+  const box=document.createElement('div');box.className='chapter-card-inner';
+  const title=document.createElement('h2');title.textContent=t('Продолжение пока закрыто');
+  const copy=document.createElement('p');copy.textContent=t('Открыты пролог и дни 1–5. Дальнейшие главы доступны по промокоду. Твой прогресс сохранён.');
+  const settingsButton=document.createElement('button');settingsButton.className='primary';settingsButton.textContent=t('Ввести промокод');settingsButton.onclick=()=>openPanel('settings');
+  const menu=document.createElement('button');menu.className='secondary';menu.textContent=t('На главный экран');menu.onclick=home;
+  box.append(title,copy,settingsButton,menu);root.append(box);
+}
 function renderGame({skipMessenger=false}={}) {
+  if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
@@ -471,11 +484,12 @@ function openChapters() {
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const current=source?chapterFor(source,NODES):null;
-  drawChapterMap(content,{chapters:CHAPTERS,source,current,onSelect:chapter=>confirmChapter(chapter,source)});
+  drawChapterMap(content,{chapters:CHAPTERS,source,current,isAvailable:chapter=>chapterAvailable(chapter,hasPreviewAccess()),onSelect:chapter=>confirmChapter(chapter,source)});
   panel.classList.add('chapter-map');panel.showModal();
   requestAnimationFrame(()=>{const active=content.querySelector('[aria-current="step"]');if(active)active.scrollIntoView({block:'center'});else content.scrollTop=0;});
 }
 function confirmChapter(chapter,source){
+  if(!chapterAvailable(chapter,hasPreviewAccess()))return;
   panel.classList.remove('chapter-map');
   $('panel-title').textContent=t('Вернуться к главе?');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
@@ -528,7 +542,7 @@ function openPanel(kind) {
       mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,back:()=>{
         content.classList.remove('workshop');panel.close();openPanel('settings');
       }});
-    });
+    },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
   }
   panel.showModal();
   if(kind==='history')requestAnimationFrame(()=>panel.scrollTop=panel.scrollHeight);
