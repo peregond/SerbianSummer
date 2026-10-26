@@ -1,5 +1,5 @@
 import {drawChapterMap} from './chapter-map.js?v=1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=3';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=4';
 import {mountMessenger} from './messenger.js?v=1';
 import {messengerFrame,messageAt} from './messenger-model.js?v=1';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=1';
@@ -8,7 +8,7 @@ import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,transl
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-art3';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-art4';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.0';

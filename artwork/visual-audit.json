@@ -1,0 +1,133 @@
+{
+  "scenes": 445,
+  "backgrounds": 70,
+  "stagedBackgrounds": 70,
+  "registeredPortraits": 117,
+  "stagedPortraits": 74,
+  "regularEmotions": [
+    "friendly",
+    "thoughtful",
+    "laughing",
+    "flirty",
+    "shy",
+    "surprised",
+    "confident",
+    "worried"
+  ],
+  "outfits": [
+    {
+      "person": "milica",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "nikola",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "nikola",
+      "look": "После смены",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "dragan",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "jelena",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "asya",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "luka",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "lazar",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "teodora",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "ivana",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "strahinja",
+      "look": "Основной образ",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "milos",
+      "look": "Без формы",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "milos",
+      "look": "На службе · riot-экипировка",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    },
+    {
+      "person": "milos",
+      "look": "В форме без балаклавы",
+      "available": 8,
+      "registered": 8,
+      "missing": [],
+      "notRegistered": []
+    }
+  ],
+  "missingAssets": [],
+  "unstagedBackgrounds": []
+}

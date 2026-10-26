@@ -3,7 +3,7 @@ export const PEOPLE = {
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
   ivana: 'Ивана', strahinja: 'Страхиня', milos: 'Милош'
 };
-export const EMOTIONS = { friendly: 'Приветливость', thoughtful: 'Задумчивость', laughing: 'Смех', flirty: 'Флирт', shy: 'Смущение', surprised: 'Удивление', confident: 'Уверенность' };
+export const EMOTIONS = { friendly: 'Приветливость', thoughtful: 'Задумчивость', laughing: 'Смех', flirty: 'Флирт', shy: 'Смущение', surprised: 'Удивление', confident: 'Уверенность', worried: 'Беспокойство' };
 export const CORE_EMOTIONS = Object.keys(EMOTIONS);
 export function acceptsWorkshopCode(value) {
   return typeof value === 'string' && value.normalize('NFKC').trim().toLocaleLowerCase('ru') === 'грызуны';
@@ -23,17 +23,23 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : 'Основной образ';
+    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
-    return { file, character, category, image, emotion, look, status: retired ? 'archive' : draft ? 'draft' : active.has(file) ? 'active' : character ? 'archive' : 'asset' };
+    return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
   });
   const people = Object.entries(PEOPLE).map(([id, name]) => {
     const art = entries.filter(e => e.character === id);
     // Archived versions must not hide gaps in the current design. Drafts are visible but not marked as in-game.
     const current = art.filter(e => ['active', 'draft'].includes(e.status) && ['Основной образ', 'Без формы'].includes(e.look));
     const missing = CORE_EMOTIONS.filter(mood => !current.some(e => e.emotion === mood));
-    return { id, name, art, missing };
+    const regularLooks = ['Основной образ', 'Без формы', 'После смены', 'На службе · riot-экипировка', 'В форме без балаклавы'];
+    const looks = regularLooks.filter(look => art.some(e => e.look === look && ['active', 'draft'].includes(e.status))).map(look => {
+      const available = art.filter(e => e.look === look && ['active', 'draft'].includes(e.status));
+      const activeMoods = CORE_EMOTIONS.filter(mood => available.some(e => e.emotion === mood && e.status === 'active'));
+      return { name: look, activeCount: activeMoods.length, missing: CORE_EMOTIONS.filter(mood => !available.some(e => e.emotion === mood)), missingInGame: CORE_EMOTIONS.filter(mood => !activeMoods.includes(mood)) };
+    });
+    return { id, name, art, missing, looks };
   });
   return { entries, people };
 }

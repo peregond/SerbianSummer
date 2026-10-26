@@ -13,7 +13,7 @@ export const LIVING_BACKGROUND_SCENES = {
  'belgrade-river-noon':['d19_start','d19_o1','d19_o2','d19_o3','d19_mid','d19_m1','d19_m2','d19_turn'],
  'belgrade-home-workspace':['d18_start','d18_o1','d18_o2','d18_o3','d18_mid','d18_m1','d18_m2']
 };
-export const REGULAR_MOODS=['friendly','thoughtful','laughing','flirty','shy','surprised','confident'];
+export const REGULAR_MOODS=['friendly','thoughtful','laughing','flirty','shy','surprised','confident','worried'];
 const names={milica:'Милица',nikola:'Никола',dragan:'Драган',jelena:'Йелена',asya:'Ася',luka:'Лука',lazar:'Лазар',teodora:'Теодора',ivana:'Ивана',strahinja:'Страхиня',milos:'Милош'};
 const moodLabels={friendly:'Приветливость',thoughtful:'Задумчивость',laughing:'Смех',flirty:'Флирт',shy:'Смущение',surprised:'Удивление',confident:'Уверенность'};
 export function applyLivingArt(nodes,backgrounds,sprites){
@@ -21,7 +21,7 @@ export function applyLivingArt(nodes,backgrounds,sprites){
  for(const[bg,ids]of Object.entries(LIVING_BACKGROUND_SCENES))for(const id of ids){if(!nodes[id])throw Error('Unknown art scene '+id);nodes[id].bg=bg;nodes[id].districtBg=false;}
  for(const[id,name]of Object.entries(names)){
   sprites[id]??={};
-  for(const mood of REGULAR_MOODS){
+  for(const mood of REGULAR_MOODS.filter(mood=>mood!=='worried')){
    if(sprites[id][mood])continue;
    sprites[id][mood]={file:mood==='confident'?id+'-confident'+(id==='nikola'?'-buzz-v3':''):id+'-'+mood+'-living',alt:name+' · '+moodLabels[mood]};
   }

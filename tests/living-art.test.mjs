@@ -13,7 +13,7 @@ const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',impor
 const catalog=buildArtCatalog(files,CHARACTER_SPRITES,BACKGROUNDS);
 for(const id of Object.keys(PEOPLE)){
  const art=REGULAR_MOODS.map(mood=>CHARACTER_SPRITES[id]?.[mood]?.file);
- assert.equal(new Set(art).size,7,id+' needs a distinct illustration per regular emotion');
+ assert.equal(new Set(art).size,8,id+' needs a distinct illustration per regular emotion');
  for(const file of art)assert.ok(files.includes(file+'.webp'),id+'/'+file);
  assert.deepEqual(catalog.people.find(p=>p.id===id).missing,[],id);
 }
@@ -32,4 +32,4 @@ assert.ok(masked>=0);assert.equal(frame('d4_station',masked,{}).character,'milos
 assert.equal(frame('d4_station',masked,{maskedRevealed:true}).character,'milos-masked','Replaying a masked scene must not reveal his face');
 assert.equal(frame('d20_nephew_end',0,{}).character,'milos-uniform','The kitchen text explicitly describes a uniform');
 assert.equal(frame('d27_milos',0,{}).character,'milos','The riverside text explicitly describes casual clothing');
-console.log('Living art: seven distinct regular moods for eleven heroes, staged backgrounds, dynamic office portraits, masked/uniform/casual continuity and unchanged story/save semantics checked.');
+console.log('Living art: eight distinct regular moods for eleven heroes, staged backgrounds, dynamic office portraits, masked/uniform/casual continuity and unchanged story/save semantics checked.');

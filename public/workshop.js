@@ -1,5 +1,5 @@
 import { t } from './i18n.js?v=0.15.0';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS } from './workshop-model.js?v=3';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=4';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -54,7 +54,11 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   const results = el('div'); results.setAttribute('aria-live', 'polite');
   controls.append(search, category, archives); container.append(tabs, controls, results);
   let view = 'characters';
+  const looks = el('select'); looks.setAttribute('aria-label', t('Образ персонажа'));
+  for (const value of ['all', ...new Set(catalog.entries.filter(e=>e.character).map(e=>e.look))]) { const option=el('option',value==='all'?'Все образы':value);option.value=value;looks.append(option); }
+  controls.insertBefore(looks, archives);
   const matches = entry => {
+    if(looks.value!=='all' && entry.look!==looks.value)return false;
     const query = search.value.trim().toLocaleLowerCase();
     return !query || [entry.file, entry.character, catalog.people.find(p => p.id === entry.character)?.name, t(catalog.people.find(p => p.id === entry.character)?.name ?? ''), t(EMOTIONS[entry.emotion] ?? ''), entry.emotion, t(entry.look)].some(v => v?.toLocaleLowerCase().includes(query));
   };
@@ -83,17 +87,23 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
     category.hidden = view !== 'assets'; archives.hidden = view !== 'characters'; search.hidden = view === 'gaps';
     for (const button of tabs.children) button.setAttribute('aria-pressed', String(button.dataset.view === view));
     if (view === 'gaps') {
-      results.append(el('p', 'Базовый набор: приветливость, задумчивость, смех и флирт. Эскизы учитываются отдельно от подключённых портретов.', 'workshop-intro'));
+      results.append(el('p', t('Набор эмоций') + ': ' + Object.values(EMOTIONS).map(label=>t(label)).join(', ') + '. ' + t('Каждый образ проверяется отдельно.'), 'workshop-intro'));
       for (const person of catalog.people) {
         const section = el('section', '', 'workshop-person'); section.append(el('h3', person.name));
         section.append(el('p', person.missing.length ? t('Не хватает:') + ' ' + person.missing.map(m => t(EMOTIONS[m])).join(', ') : 'Базовые эмоции собраны', person.missing.length ? 'workshop-missing' : ''));
+        for(const look of person.looks){
+          const row=el('div','','workshop-look-coverage');row.append(el('h4',look.name),el('p',t('В игре')+': '+look.activeCount+'/'+CORE_EMOTIONS.length));
+          if(look.missing.length)row.append(el('p',t('Не хватает:')+' '+look.missing.map(m=>t(EMOTIONS[m])).join(', '),'workshop-missing'));
+          else if(look.missingInGame.length)row.append(el('p',t('Ещё не подключено:')+' '+look.missingInGame.map(m=>t(EMOTIONS[m])).join(', ')));
+          section.append(row);
+        }
         if (person.art.some(a => a.status === 'draft')) section.append(el('p', 'Есть эскиз, ещё не подключённый к сценарию.'));
         results.append(section);
       }
     } else if (view === 'characters') {
       for (const person of catalog.people) {
         const art = person.art.filter(e => (checkbox.checked || e.status !== 'archive') && matches(e));
-        if (search.value.trim() && !art.length) continue;
+        if ((search.value.trim() || looks.value!=='all') && !art.length) continue;
         const section = el('section', '', 'workshop-person'); section.append(el('h3', person.name));
         if (person.missing.length) section.append(el('p', t('Не хватает:') + ' ' + person.missing.map(m => t(EMOTIONS[m])).join(', '), 'workshop-missing'));
         const grid = el('div', '', 'workshop-grid'); art.forEach(e => grid.append(card(e)));
@@ -109,5 +119,5 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   for (const [value, label] of Object.entries({ characters: 'Персонажи', assets: 'Ассеты', gaps: 'Чего не хватает' })) {
     const button = el('button', label, 'secondary'); button.dataset.view = value; button.onclick = () => { view = value; render(); }; tabs.append(button);
   }
-  search.addEventListener('input', render); category.addEventListener('change', render); checkbox.addEventListener('change', render); render();
+  looks.addEventListener('change', render); search.addEventListener('input', render); category.addEventListener('change', render); checkbox.addEventListener('change', render); render();
 }
