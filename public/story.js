@@ -1,3 +1,4 @@
+import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=1';
 import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=2';
 import {applyLivingArt,additionalPortrait} from './living-art.js?v=1';
 import {applyArtExpansion} from './art-expansion.js?v=1';
@@ -688,6 +689,7 @@ registerPrologueArt(NODES,BACKGROUNDS);
 applyArtExpansion(NODES,BACKGROUNDS);
 applyLivingArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
+applyEpisodicCast(NODES,CHARACTER_SPRITES);
 assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
@@ -712,13 +714,15 @@ export function presentationFor(node,page,flags={}) {
   const daydream=page.daydream??node.daydream??false;
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
   const extra=extraVisualFor(page,flags);
+  const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
-  const character=kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:(cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   return {
     bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage,composite:!!kitchenStage||!!seated,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
-    emotion:extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly')),daydream
+    contactPortrait:episode?.mode==='contact'?episode:null,
+    emotion:episode?.mode==='scene'?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly')),daydream
   };
 }
 

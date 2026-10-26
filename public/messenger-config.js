@@ -1,3 +1,4 @@
+import {EPISODIC_AVATARS} from './episodic-cast.js?v=1';
 // Shared presentation settings. Story text and consequences remain in the scenario.
 export const MESSENGER_CONFIG = {
   accent: '#7360f2',
@@ -5,6 +6,7 @@ export const MESSENGER_CONFIG = {
   historyLimit: 40,
   chrome: { light: '#f6f4f1', dark: '#19181c' },
   avatars: {
+    ...EPISODIC_AVATARS,
     'Милица': 'milica.webp', 'Никола': 'nikola-friendly-buzz-v3.webp',
     'Драган': 'dragan-v2.webp', 'Йелена': 'jelena-v2.webp',
     'Ася': 'asya-friendly.webp', 'Лука': 'luka-reference-friendly-v3.webp',

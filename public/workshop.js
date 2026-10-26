@@ -1,5 +1,5 @@
 import { t } from './i18n.js?v=0.15.0';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=5';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=6';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -43,6 +43,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   if (!loading.isConnected) return;
   loading.remove();
   const tabs = el('div', '', 'workshop-tabs'); tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', t('Разделы мастерской'));
+  const people=[...catalog.people,...catalog.supporting];
   const controls = el('div', '', 'workshop-controls');
   const search = el('input'); search.type = 'search'; search.placeholder = t('Имя, эмоция или имя файла'); search.setAttribute('aria-label', t('Поиск по библиотеке'));
   const category = el('select'); category.setAttribute('aria-label', t('Тип ресурса'));
@@ -60,21 +61,21 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   const matches = entry => {
     if(looks.value!=='all' && entry.look!==looks.value)return false;
     const query = search.value.trim().toLocaleLowerCase();
-    return !query || [entry.file, entry.character, catalog.people.find(p => p.id === entry.character)?.name, t(catalog.people.find(p => p.id === entry.character)?.name ?? ''), t(EMOTIONS[entry.emotion] ?? ''), entry.emotion, t(entry.look)].some(v => v?.toLocaleLowerCase().includes(query));
+    return !query || [entry.file, entry.character, people.find(p => p.id === entry.character)?.name, t(people.find(p => p.id === entry.character)?.name ?? ''), t(EMOTIONS[entry.emotion] ?? ''), entry.emotion, t(entry.look)].some(v => v?.toLocaleLowerCase().includes(query));
   };
   function card(entry) {
     const item = el('figure', '', 'workshop-card');
     const url = './assets/' + entry.file;
     if (entry.image) {
       const link = el('a'); link.href = url; link.target = '_blank'; link.rel = 'noopener'; link.setAttribute('aria-label', t('Открыть изображение') + ': ' + entry.file);
-      const image = el('img'); image.src = url; image.loading = 'lazy'; image.alt = [t(catalog.people.find(p => p.id === entry.character)?.name ?? 'Ресурс'), t(EMOTIONS[entry.emotion] ?? entry.look)].join(' · ');
+      const image = el('img'); image.src = url; image.loading = 'lazy'; image.alt = [t(people.find(p => p.id === entry.character)?.name ?? 'Ресурс'), t(EMOTIONS[entry.emotion] ?? entry.look)].join(' · ');
       image.addEventListener('error', () => { image.hidden = true; item.prepend(el('p', 'Файл недоступен', 'workshop-missing')); }, { once: true });
       link.append(image); item.append(link);
     } else if (entry.category === 'audio') {
       const audio = el('audio'); audio.controls = true; audio.preload = 'none'; audio.src = url; item.append(audio);
     }
     const caption = el('figcaption');
-    const person = catalog.people.find(p => p.id === entry.character);
+    const person = people.find(p => p.id === entry.character);
     if (person) caption.append(el('strong', person.name));
     caption.append(el('strong', EMOTIONS[entry.emotion] ?? (entry.character ? 'Постановочная сцена' : 'Ресурс')));
     if (person) caption.append(el('span', entry.look));
@@ -101,11 +102,14 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
         if (person.art.some(a => a.status === 'draft')) section.append(el('p', 'Есть эскиз, ещё не подключённый к сценарию.'));
         results.append(section);
       }
-    } else if (view === 'characters') {
-      for (const person of catalog.people) {
+      results.append(el('h3','Эпизодические собеседники'));
+      for(const person of catalog.supporting){const row=el('section','','workshop-supporting-status');row.append(el('h4',person.name),el('p',person.missing.length?'Портрет пока не создан':'Портрет подготовлен'));results.append(row);}
+    } else if (view === 'characters' || view === 'supporting') {
+      for (const person of view==='supporting'?catalog.supporting:catalog.people) {
         const art = person.art.filter(e => (checkbox.checked || e.status !== 'archive') && matches(e));
         if ((search.value.trim() || looks.value!=='all') && !art.length) continue;
-        const section = el('section', '', 'workshop-person'); section.append(el('h3', person.name));
+        const section = el('section', '', 'workshop-person'+(view==='supporting'?' workshop-supporting-person':'')); section.append(el('h3', person.name));
+        if(view==='supporting')section.append(el('p','Эпизодический собеседник','workshop-intro'));
         if (person.missing.length) section.append(el('p', t('Не хватает:') + ' ' + person.missing.map(m => t(EMOTIONS[m])).join(', '), 'workshop-missing'));
         const grid = el('div', '', 'workshop-grid'); art.forEach(e => grid.append(card(e)));
         if (!art.length) grid.append(el('p', 'Изображений пока нет')); section.append(grid); results.append(section);
@@ -117,7 +121,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
     }
     if (!results.children.length) results.append(el('p', 'Ничего не найдено'));
   }
-  for (const [value, label] of Object.entries({ characters: 'Персонажи', assets: 'Ассеты', gaps: 'Чего не хватает' })) {
+  for (const [value, label] of Object.entries({ characters: 'Персонажи', supporting: 'Эпизодические', assets: 'Ассеты', gaps: 'Чего не хватает' })) {
     const button = el('button', label, 'secondary'); button.dataset.view = value; button.onclick = () => { view = value; render(); }; tabs.append(button);
   }
   looks.addEventListener('change', render); search.addEventListener('input', render); category.addEventListener('change', render); checkbox.addEventListener('change', render); render();

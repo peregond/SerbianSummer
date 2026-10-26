@@ -21,9 +21,10 @@
   <link rel="preload" as="font" type="font/ttf" href="./assets/fonts/onest-variable.ttf" crossorigin>
   <link rel="preload" as="font" type="font/ttf" href="./assets/fonts/lora-variable.ttf" crossorigin>
   <link rel="preload" as="image" href="./assets/ensemble-poster-buzz-v3.webp">
-  <link rel="stylesheet" href="./workshop.css?v=2">
+  <link rel="stylesheet" href="./workshop.css?v=3">
   <link rel="stylesheet" href="./messenger.css?v=1">
   <link rel="stylesheet" href="./chapter-map.css?v=1">
+  <link rel="stylesheet" href="./episode-contact.css?v=1">
 </head>
 <body data-screen="home">
   <div class="ios-scroll-edge-guard" aria-hidden="true"></div>
@@ -46,7 +47,7 @@
     </section>
     <section id="game" class="screen game" hidden aria-label="Игровая сцена">
       <header class="game-header"><nav class="game-tools" aria-label="Игровое меню"><button data-action="game-menu" aria-label="Меню" title="Меню"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><button data-action="settings" aria-label="Настройки" title="Настройки"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 3-.5 2-2 1-2-.5L2 10l1.5 1.5v2L2 15l2.5 4.5 2-.5 2 1 .5 2h6l.5-2 2-1 2 .5L22 15l-1.5-1.5v-2L22 10l-2.5-4.5-2 .5-2-1L15 3H9Z"/><circle cx="12" cy="12" r="3"/></svg></button><button id="chapter-progress" hidden></button><span id="journal-dot" hidden></span></nav></header>
-      <div id="scene" class="scene"><div id="district-map" class="district-map" hidden aria-label="Схематическая карта районов Белграда"></div><div class="scene-shade"></div><div id="beat-hotspots" class="beat-hotspots" hidden></div><img id="scene-cg" class="scene-cg" alt="" aria-hidden="true" hidden><img id="milica" class="character" src="./assets/milica.webp" alt="Милица — девушка с блокнотом и стаканчиком кофе" hidden><div class="location"><span class="location-dot"></span><span id="location">АЭРОПОРТ · ПРИЛЁТ</span></div><div class="scene-caption"><span id="scene-time">17:12</span><span id="scene-day">ПЕРВЫЙ ДЕНЬ</span></div></div>
+      <div id="scene" class="scene"><div id="district-map" class="district-map" hidden aria-label="Схематическая карта районов Белграда"></div><div class="scene-shade"></div><div id="beat-hotspots" class="beat-hotspots" hidden></div><img id="scene-cg" class="scene-cg" alt="" aria-hidden="true" hidden><img id="milica" class="character" src="./assets/milica.webp" alt="Милица — девушка с блокнотом и стаканчиком кофе" hidden><div class="location"><span class="location-dot"></span><span id="location">АЭРОПОРТ · ПРИЛЁТ</span></div><aside id="episode-contact" class="episode-contact" hidden></aside><div class="scene-caption"><span id="scene-time">17:12</span><span id="scene-day">ПЕРВЫЙ ДЕНЬ</span></div></div>
       <article class="dialogue" aria-labelledby="speaker"><p id="chapter-heading" class="chapter-heading" hidden></p><div class="speaker-row"><div class="speaker-name"><h2 id="speaker">Игрок</h2><small id="voice-label" hidden></small></div><span class="page-ornament" aria-hidden="true">✦</span></div><div id="dialogue-text" class="dialogue-text" aria-live="polite"></div><div id="beat-action" class="beat-action" hidden></div><div id="choices" class="choices" aria-label="Выбери ответ" hidden></div><div class="dialogue-navigation"><button id="rewind" class="rewind-button" aria-label="Назад на один шаг" disabled>← Назад</button><button id="next" class="next-button">Дальше <span aria-hidden="true">→</span></button></div></article>
       <footer class="game-footer"><span id="save-status" role="status">Прогресс сохраняется на этом устройстве</span></footer>
     </section>
@@ -55,6 +56,6 @@
     <div id="toast" role="status" class="toast" hidden></div>
   </main>
   <dialog id="panel"><div class="panel-heading"><h2 id="panel-title"></h2><button id="close-panel" class="close-button" aria-label="Закрыть панель">×</button></div><div id="panel-content"></div></dialog>
-  <script type="module" src="./app.js?v=0.15.0-wardrobe1"></script>
+  <script type="module" src="./app.js?v=0.15.0-guests1"></script>
 </body>
 </html>

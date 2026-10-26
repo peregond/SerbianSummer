@@ -1,3 +1,4 @@
+import {EPISODIC_CAST} from '../public/episodic-cast.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import{NODES,BACKGROUNDS,CHARACTER_SPRITES,presentationFor}from'../public/story.js';
@@ -10,6 +11,10 @@ const looks=catalog.people.flatMap(person=>person.looks);
 assert.equal(looks.length,14,'Eleven people, Nikola after work and two additional police outfits');
 for(const look of looks){assert.deepEqual(look.missing,[],look.name);assert.deepEqual(look.missingInGame,[],look.name);assert.equal(look.activeCount,8,look.name);}
 for(const person of Object.keys(CHARACTER_SPRITES)){
+ if(Object.hasOwn(EPISODIC_CAST,person)){
+  assert.deepEqual(Object.keys(CHARACTER_SPRITES[person]),['friendly'],person+': supporting roles need a base portrait');
+  assert.ok(files.includes(CHARACTER_SPRITES[person].friendly.file+'.webp'));continue;
+ }
  const regular=CORE_EMOTIONS.map(mood=>CHARACTER_SPRITES[person][mood]?.file);
  assert.equal(new Set(regular).size,8,person+' needs different art per emotion');
  for(const file of regular)assert.ok(files.includes(file+'.webp'),file);

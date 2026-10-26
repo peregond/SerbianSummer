@@ -2,8 +2,8 @@
   "scenes": 445,
   "backgrounds": 71,
   "stagedBackgrounds": 71,
-  "registeredPortraits": 117,
-  "stagedPortraits": 74,
+  "registeredPortraits": 132,
+  "stagedPortraits": 89,
   "regularEmotions": [
     "friendly",
     "thoughtful",
@@ -126,6 +126,83 @@
       "registered": 8,
       "missing": [],
       "notRegistered": []
+    }
+  ],
+  "supporting": [
+    {
+      "person": "guest-mom",
+      "file": "guest-mom-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-bank-staff",
+      "file": "guest-bank-staff-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-mobile-staff",
+      "file": "guest-mobile-staff-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-kiosk-seller",
+      "file": "guest-kiosk-seller-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-translator",
+      "file": "guest-translator-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-support-operator",
+      "file": "guest-support-operator-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-client",
+      "file": "guest-client-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-market-seller",
+      "file": "guest-market-seller-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-bakery-seller",
+      "file": "guest-bakery-seller-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-passerby",
+      "file": "guest-passerby-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-driver",
+      "file": "guest-driver-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-waiter",
+      "file": "guest-waiter-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-neighbour",
+      "file": "guest-neighbour-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-elder-customer",
+      "file": "guest-elder-customer-friendly.webp",
+      "missing": []
+    },
+    {
+      "person": "guest-documents-adviser",
+      "file": "guest-documents-adviser-friendly.webp",
+      "missing": []
     }
   ],
   "underwear": [

@@ -1,5 +1,5 @@
 import {familySpeaker} from './family-contact.js?v=1';
-import { CHAT_SCENES, MESSENGER_CONFIG } from './messenger-config.js?v=1';
+import { CHAT_SCENES, MESSENGER_CONFIG } from './messenger-config.js?v=2';
 
 const names = { milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
 export function contactName(value, flags = {}) {

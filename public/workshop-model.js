@@ -1,3 +1,4 @@
+import {EPISODIC_PEOPLE} from './episodic-cast.js?v=1';
 export const PEOPLE = {
   milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена',
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
@@ -13,7 +14,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
   for (const name of Object.keys(backgrounds)) active.add(name + '.webp');
   const entries = files.map(file => {
     const base = file.split('/').at(-1);
-    const person = Object.keys(PEOPLE).find(id => base === id + '.webp' || base.startsWith(id + '-'));
+    const person = Object.keys({...PEOPLE,...EPISODIC_PEOPLE}).find(id => base === id + '.webp' || base.startsWith(id + '-'));
     const image = /\.(webp|png|svg|jpe?g)$/i.test(file);
     const icon = /icon|poster|sketch/.test(base);
     const background = Object.hasOwn(backgrounds, base.replace(/\.webp$/, ''));
@@ -23,7 +24,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
+    const look = Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
@@ -42,5 +43,10 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const underwear=art.find(entry=>entry.look==='Бельё'&&['active','draft'].includes(entry.status))??null;
     return { id, name, art, missing, looks, underwear };
   });
-  return { entries, people };
+  const supporting=Object.entries(EPISODIC_PEOPLE).map(([id,name])=>{
+    const art=entries.filter(entry=>entry.character===id);
+    const missing=art.some(entry=>entry.emotion==='friendly'&&['active','draft'].includes(entry.status))?[]:['friendly'];
+    return{id,name,art,missing};
+  });
+  return { entries, people, supporting };
 }

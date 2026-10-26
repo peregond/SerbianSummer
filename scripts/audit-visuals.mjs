@@ -12,11 +12,12 @@ for(const companion of ['milica','nikola'])for(const host of ['dragan','jelena']
  for(const[id,node]of Object.entries(NODES))for(const[index,page]of node.pages.entries()){
   const frame=presentationFor(node,page,flags);stagedBackgrounds.add(frame.bg);
   if(!BACKGROUNDS[frame.bg])missing.add('Unknown background '+id+':'+index+' '+frame.bg);
+  if(frame.contactPortrait){const contact=frame.contactPortrait;if(!fs.existsSync(new URL(contact.file,root)))missing.add(contact.file);else stagedPortraits.add(contact.file.replace(/\.webp$/,''));}
   if(frame.character){const sprite=CHARACTER_SPRITES[frame.character]?.[frame.emotion];if(!sprite)missing.add('Unknown pose '+id+':'+index+' '+frame.character+'/'+frame.emotion);else stagedPortraits.add(sprite.file);}
  }
 }
 const outfits=catalog.people.flatMap(person=>person.looks.map(look=>({person:person.id,look:look.name,available:CORE_EMOTIONS.length-look.missing.length,registered:look.activeCount,missing:look.missing,notRegistered:look.missingInGame})));
-const report={scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,underwear:catalog.people.map(person=>({person:person.id,file:person.underwear?.file??null})),missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
+const report={scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,supporting:catalog.supporting.map(person=>({person:person.id,file:person.art.find(entry=>entry.status==='active')?.file??null,missing:person.missing})),underwear:catalog.people.map(person=>({person:person.id,file:person.underwear?.file??null})),missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
 const json=JSON.stringify(report,null,2)+'\n';
 if(process.argv.includes('--write'))fs.writeFileSync(new URL('../artwork/visual-audit.json',import.meta.url),json);else process.stdout.write(json);
-if(report.missingAssets.length||report.unstagedBackgrounds.length||outfits.some(look=>look.missing.length||look.notRegistered.length))process.exitCode=1;
+if(report.missingAssets.length||report.unstagedBackgrounds.length||outfits.some(look=>look.missing.length||look.notRegistered.length)||catalog.supporting.some(person=>person.missing.length))process.exitCode=1;

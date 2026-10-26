@@ -1,15 +1,16 @@
+import {renderEpisodeContact} from './episode-contact.js?v=1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=5';
-import {mountMessenger} from './messenger.js?v=1';
-import {messengerFrame,messageAt} from './messenger-model.js?v=2';
-import {MESSENGER_CONFIG} from './messenger-config.js?v=1';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=6';
+import {mountMessenger} from './messenger.js?v=2';
+import {messengerFrame,messageAt} from './messenger-model.js?v=3';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=2';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.15.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-wardrobe1';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.15.0-guests1';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.15.0';
@@ -237,6 +238,7 @@ function renderGame({skipMessenger=false}={}) {
       preloadBackground(nextPresentation.bg);preloadSprite(nextPresentation.character,nextPresentation.emotion);
     }
   }
+  renderEpisodeContact($('episode-contact'),presentation.contactPortrait);
   const character=$('milica');const portrait=presentation.character;
   character.hidden=!portrait;
   if(portrait){const sprite=CHARACTER_SPRITES[portrait][presentation.emotion];const nextSrc=new URL(`./assets/${sprite.file}.webp`,location.href).href;const changed=character.src!==nextSrc;character.src=nextSrc;character.alt=t(sprite.alt);preloadSprite(portrait,presentation.emotion);if(changed&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)character.animate([{opacity:.65,translate:'0 3px'},{opacity:1,translate:'0 0'}],{duration:180,easing:'ease-out'});}
