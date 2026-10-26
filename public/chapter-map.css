@@ -7,3 +7,5 @@
 .chapter-map-finish{width:max-content;max-width:85%;margin:10px auto calc(var(--safe-bottom) + 35px);padding:14px 20px;border-radius:22px;background:#fff8e6ed;font:600 15px/1.5 'Lora',Georgia,serif;text-align:center}.chapter-map::backdrop{background:#183d40}
 :root[data-theme=dark] #panel.chapter-map{background-image:linear-gradient(#102b4640,#102b4640),url('./assets/belgrade-chapter-map.webp')}
 @media(prefers-reduced-motion:reduce){.chapter-level *{transition:none}}
+
+.chapter-level-number svg{width:28px;height:28px;display:block}

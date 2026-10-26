@@ -15,13 +15,17 @@ export function drawChapterMap(root,{chapters,source,current,onSelect,isAvailabl
   const available=isAvailable(chapter);
   const unlocked=available&&!!source&&(chapter.id==='prologue'||!!source.chapterMarks?.[chapter.id]);const isCurrent=chapter.id===current?.id;
   const missing=source&&index<chapters.indexOf(current)&&!unlocked;
-  const state=!available?'Нужен промокод':isCurrent?'Сейчас':unlocked?'Доступна':missing?'Нет старой точки':'Пока закрыта';
+  const state=!available?'Пока закрыта':isCurrent?'Сейчас':unlocked?'Доступна':missing?'Нет старой точки':'Пока закрыта';
   const row=el('li','','chapter-stop');row.style.setProperty('--stop-x',xs[index%4]+'%');
   const button=el('button','','chapter-level');button.type='button';button.disabled=!unlocked;button.dataset.current=String(isCurrent);button.dataset.chapter=chapter.id;
   if(isCurrent)button.setAttribute('aria-current','step');
-  const badge=el('span',chapter.day?String(chapter.day):chapter.id==='prologue'?'✈':'⌂','chapter-level-number');badge.setAttribute('aria-hidden','true');
-  const label=el('span','','chapter-level-label');label.append(el('small',chapter.number+' · '+state),el('strong',chapter.title));
-  button.title=t(missing?'В старом сохранении нет точки этой главы. Текущую историю можно продолжить.':chapter.description);
+  const badge=el('span',available?(chapter.day?String(chapter.day):chapter.id==='prologue'?'✈':'⌂'):'','chapter-level-number');badge.setAttribute('aria-hidden','true');
+  if(!available){
+   const lock=doc.createElementNS(svg.namespaceURI,'svg');lock.setAttribute('viewBox','0 0 24 24');lock.setAttribute('fill','none');lock.setAttribute('stroke','currentColor');lock.setAttribute('stroke-width','2');lock.setAttribute('stroke-linecap','round');lock.setAttribute('stroke-linejoin','round');
+   const shape=doc.createElementNS(svg.namespaceURI,'path');shape.setAttribute('d','M7 10V7a5 5 0 0 1 10 0v3M6 10h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Zm6 4v3');lock.append(shape);badge.append(lock);
+  }
+  const label=el('span','','chapter-level-label');label.append(el('small',available?chapter.number+' · '+state:chapter.number),el('strong',chapter.title));
+  button.title=t(!available?'Пока закрыта':missing?'В старом сохранении нет точки этой главы. Текущую историю можно продолжить.':chapter.description);
   button.setAttribute('aria-label',t(chapter.number)+' · '+t(chapter.title)+' · '+t(state));
   button.append(badge,label);button.addEventListener('click',()=>onSelect(chapter));row.append(button);route.append(row);
  });
