@@ -46,3 +46,13 @@ assert.ok(archiveOnly.missing.includes('friendly'), 'An archived portrait must n
 const translations = JSON.parse(fs.readFileSync(new URL('../public/locales/en.json', import.meta.url)));
 for (const label of [...Object.values(PEOPLE), ...Object.values(EMOTIONS), 'Промокод', 'Мастерская', 'Чего не хватает']) assert.ok(translations[label], label);
 console.log('Workshop: promo entry, complete inventory, active/draft/archive status, expression gaps, translations and story immutability checked.');
+
+const preparedUnderwear=catalog.people.filter(person=>person.underwear);
+assert.deepEqual(preparedUnderwear.map(person=>person.id).sort(),['asya','jelena','luka']);
+assert.equal(catalog.people.filter(person=>!person.underwear).length,8);
+for(const person of preparedUnderwear){
+ assert.equal(person.underwear.look,'Бельё');assert.equal(person.underwear.status,'draft');
+ assert.equal(person.underwear.emotion,'friendly');assert.ok(files.includes(person.underwear.file));
+}
+const onlyUnderwear=buildArtCatalog(['workshop/milica-dream-underwear-friendly-draft.webp'],{},{}).people.find(p=>p.id==='milica');
+assert.equal(onlyUnderwear.underwear.status,'draft');assert.ok(onlyUnderwear.missing.includes('friendly'),'An underwear variant must not hide missing ordinary artwork');

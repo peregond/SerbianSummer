@@ -1,7 +1,7 @@
 {
   "scenes": 445,
-  "backgrounds": 70,
-  "stagedBackgrounds": 70,
+  "backgrounds": 71,
+  "stagedBackgrounds": 71,
   "registeredPortraits": 117,
   "stagedPortraits": 74,
   "regularEmotions": [
@@ -126,6 +126,52 @@
       "registered": 8,
       "missing": [],
       "notRegistered": []
+    }
+  ],
+  "underwear": [
+    {
+      "person": "milica",
+      "file": null
+    },
+    {
+      "person": "nikola",
+      "file": null
+    },
+    {
+      "person": "dragan",
+      "file": null
+    },
+    {
+      "person": "jelena",
+      "file": "workshop/jelena-dream-underwear-friendly-draft.webp"
+    },
+    {
+      "person": "asya",
+      "file": "workshop/asya-dream-underwear-friendly-draft.webp"
+    },
+    {
+      "person": "luka",
+      "file": "workshop/luka-dream-underwear-friendly-draft.webp"
+    },
+    {
+      "person": "lazar",
+      "file": null
+    },
+    {
+      "person": "teodora",
+      "file": null
+    },
+    {
+      "person": "ivana",
+      "file": null
+    },
+    {
+      "person": "strahinja",
+      "file": null
+    },
+    {
+      "person": "milos",
+      "file": null
     }
   ],
   "missingAssets": [],

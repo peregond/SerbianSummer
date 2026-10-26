@@ -23,7 +23,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
+    const look = /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? (Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
@@ -39,7 +39,8 @@ export function buildArtCatalog(files, sprites, backgrounds) {
       const activeMoods = CORE_EMOTIONS.filter(mood => available.some(e => e.emotion === mood && e.status === 'active'));
       return { name: look, activeCount: activeMoods.length, missing: CORE_EMOTIONS.filter(mood => !available.some(e => e.emotion === mood)), missingInGame: CORE_EMOTIONS.filter(mood => !activeMoods.includes(mood)) };
     });
-    return { id, name, art, missing, looks };
+    const underwear=art.find(entry=>entry.look==='Бельё'&&['active','draft'].includes(entry.status))??null;
+    return { id, name, art, missing, looks, underwear };
   });
   return { entries, people };
 }

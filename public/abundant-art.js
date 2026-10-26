@@ -1,5 +1,6 @@
 // Visual staging only. This layer never edits dialogue, choices, effects or save data.
 export const EXTRA_BACKGROUNDS={
+ 'belgrade-desk-night':{label:'У СТОЛА · НОЧЬ',description:'Тёплая лампа, блокнот и закрытый ноутбук на столе с видом на ночной Белград',position:'50% 45%'},
  'belgrade-room-night':{label:'КОМНАТА · НОЧЬ',description:'Тихая комната с тёплой лампой и ночными крышами за окном',position:'50% 46%'},
  'belgrade-room-morning':{label:'КОМНАТА · ЛЕТНЕЕ УТРО',description:'Утренний свет, открытые ставни и ещё не убранная постель',position:'50% 46%'},
  'belgrade-kitchen-day':{label:'КУХНЯ · ПОСЛЕ ОБЕДА',description:'Чайник, хлеб и три чашки на светлой белградской кухне',position:'50% 45%'},
@@ -16,7 +17,10 @@ export const EXTRA_BACKGROUNDS={
  'airplane-city-night':{label:'НАД БЕЛГРАДОМ · ОГНИ',description:'Огни Белграда и тёмные реки через окно взлетающего самолёта',position:'50% 47%'}
 };
 export const EXTRA_BACKGROUND_SCENES={
- 'belgrade-room-night':['chapter_four_close','chapter_five_close','cinema_tomorrow','chapter_six_close','d9_end','d14_end','d22_end','d23_mid','d23_m1','d23_m2','d23_turn','d23_end','d24_end','d26_end','d27_end'],
+ 'belgrade-desk-night':['d6_end','d7_end','d8_end','d10_end','d11_end','d18_end'],
+ 'belgrade-kitchen-evening':['d20_end','d26_turn'],
+ 'belgrade-park-bench':['d25_turn'],
+ 'belgrade-room-night':['d3_end','d4_end','d17_end','chapter_four_close','chapter_five_close','cinema_tomorrow','chapter_six_close','d9_end','d14_end','d22_end','d23_mid','d23_m1','d23_m2','d23_turn','d23_end','d24_end','d26_end','d27_end'],
  'belgrade-room-morning':['d25_start'],
  'belgrade-kitchen-day':['d9_turn'],
  'asya-home-evening':['d5_turn','d14_turn','d24_turn','d27_turn'],

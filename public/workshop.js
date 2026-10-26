@@ -1,5 +1,5 @@
 import { t } from './i18n.js?v=0.15.0';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=4';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=5';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -97,6 +97,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
           else if(look.missingInGame.length)row.append(el('p',t('Ещё не подключено:')+' '+look.missingInGame.map(m=>t(EMOTIONS[m])).join(', ')));
           section.append(row);
         }
+        section.append(el('p',person.underwear?'Бельё: изображение подготовлено':'Бельё: изображения пока нет',person.underwear?'workshop-wardrobe-ready':'workshop-wardrobe-missing'));
         if (person.art.some(a => a.status === 'draft')) section.append(el('p', 'Есть эскиз, ещё не подключённый к сценарию.'));
         results.append(section);
       }

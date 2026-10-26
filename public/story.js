@@ -1,4 +1,4 @@
-import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=1';
+import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=2';
 import {applyLivingArt,additionalPortrait} from './living-art.js?v=1';
 import {applyArtExpansion} from './art-expansion.js?v=1';
 import {registerLukaSport} from './luka-redesign.js?v=0.15.0';

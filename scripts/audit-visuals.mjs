@@ -16,7 +16,7 @@ for(const companion of ['milica','nikola'])for(const host of ['dragan','jelena']
  }
 }
 const outfits=catalog.people.flatMap(person=>person.looks.map(look=>({person:person.id,look:look.name,available:CORE_EMOTIONS.length-look.missing.length,registered:look.activeCount,missing:look.missing,notRegistered:look.missingInGame})));
-const report={scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
+const report={scenes:Object.keys(NODES).length,backgrounds:Object.keys(BACKGROUNDS).length,stagedBackgrounds:stagedBackgrounds.size,registeredPortraits:new Set(Object.values(CHARACTER_SPRITES).flatMap(looks=>Object.values(looks).map(s=>s.file))).size,stagedPortraits:stagedPortraits.size,regularEmotions:CORE_EMOTIONS,outfits,underwear:catalog.people.map(person=>({person:person.id,file:person.underwear?.file??null})),missingAssets:[...missing].sort(),unstagedBackgrounds:Object.keys(BACKGROUNDS).filter(bg=>!stagedBackgrounds.has(bg))};
 const json=JSON.stringify(report,null,2)+'\n';
 if(process.argv.includes('--write'))fs.writeFileSync(new URL('../artwork/visual-audit.json',import.meta.url),json);else process.stdout.write(json);
 if(report.missingAssets.length||report.unstagedBackgrounds.length||outfits.some(look=>look.missing.length||look.notRegistered.length))process.exitCode=1;
