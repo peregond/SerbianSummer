@@ -1,3 +1,4 @@
+import {RENTAL_NAMES,rentalOwner} from './rental-people.js?v=1';
 import {SLOTS,nameOf,nameCase,loveNames,joinNames} from './romance.js?v=0.15.4';
 // Russian remains the canonical language of story data and saves.
 // Only rendered strings change, so language never changes choices or checkpoints.
@@ -48,7 +49,7 @@ export function html(markup){
 }
 export function resolvePeople(text,flags={},locale=language){
   const host=flags.host==='jelena'?'Йелена':'Драган';
-  const owner=flags.districtOwner==='jelena'?'Йелена':'Драган';
+  const owner=RENTAL_NAMES[rentalOwner(flags)]??(flags.districtOwner==='jelena'?'Йелена':'Драган');
   return t(text,locale).replaceAll('{host.dative}',locale==='en'?t(host,'en'):host==='Йелена'?'Йелене':'Драгану').replaceAll('{host}',t(host,locale)).replaceAll('{districtHost}',t(owner,locale))
     .replace(/\{who\.([a-z]+)(?:\.(acc|ins))?\}/g,(match,slot,grammarCase)=>SLOTS.includes(slot)?(locale==='en'?t(nameOf(slot,flags),'en'):nameCase(slot,flags,grammarCase)):'')
     .replaceAll('{partner}',t(SLOTS.includes(flags.lastPartner)?nameOf(flags.lastPartner,flags):'Ася',locale))
@@ -71,7 +72,7 @@ export function translateHistory(text,profile,catalog){
   if(!historyCache.has(key)){
     const rendered=new Map();
     for(const [ru,en]of Object.entries(dictionary)){
-      for(const host of ['dragan','jelena'])for(const districtOwner of ['dragan','jelena']){
+      for(const host of ['dragan','jelena'])for(const districtOwner of ['dragan','jelena','marko','vuk','stefan','ana']){
         const flags={host,districtOwner};
         rendered.set(interpolateText(resolvePeople(ru,flags,'ru'),profile,catalog,'ru'),interpolateText(resolvePeople(en,flags,'en'),profile,catalog,'en'));
       }

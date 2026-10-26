@@ -8,7 +8,7 @@ const IDENTITY={
  airport:f=>f.companion==='nikola'?'nikola':'milica',
  asya:()=>'asya',
  luka:()=>'luka',
- owner:f=>(f.districtBond==='romance'?f.districtOwner:f.hostBond==='romance'?f.host:f.districtOwner)==='jelena'?'jelena':'dragan',
+ owner:f=>(f.rentalCast==='new'?f.host:f.districtBond==='romance'?f.districtOwner:f.hostBond==='romance'?f.host:f.districtOwner)==='jelena'?'jelena':'dragan',
  bank:f=>f.bankSpark==='teodora'?'teodora':'lazar',
  mup:f=>f.mupSpark==='strahinya'?'strahinya':'ivana',
  milos:()=>'milos'
@@ -25,7 +25,7 @@ const AVAILABLE={
  airport:f=>f[(f.companion==='nikola'?'nikola':'milica')+'Bond']==='romance',
  asya:f=>f.asyaBond==='romance',
  luka:f=>f.lukaBond==='romance',
- owner:f=>f.hostBond==='romance'||f.districtBond==='romance',
+ owner:f=>f.hostBond==='romance'||(f.rentalCast!=='new'&&f.districtBond==='romance'),
  bank:f=>f.bankBond==='romance'&&f.bankDate==='asked',
  mup:f=>f.mupBond==='spark'&&f.mupDate==='asked',
  milos:f=>f.maskEnd==='spark'
@@ -41,6 +41,10 @@ export function joinNames(names,and){return names.length<2?names.join(''):names.
 // A choice may carry a condition: {partner,stage} (stage null = nothing has happened yet) or {minPartners:{stage,count}}.
 export function choiceVisible(choice,flags={}){
  const when=choice.when;if(!when)return true;
+ if(when.flag){
+  if(Object.hasOwn(when,'equals')&&flags[when.flag]!==when.equals)return false;
+  if(Object.hasOwn(when,'notEquals')&&flags[when.flag]===when.notEquals)return false;
+ }
  if(when.partner){
   if(!isAvailable(when.partner,flags))return false;
   const stage=stageOf(when.partner,flags);

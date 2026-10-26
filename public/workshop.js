@@ -1,6 +1,6 @@
 import {unlockPreview} from './chapter-access.js?v=0.15.4';
 import { t } from './i18n.js?v=0.15.4';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=8';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=9';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -45,7 +45,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   if (!loading.isConnected) return;
   loading.remove();
   const tabs = el('div', '', 'workshop-tabs'); tabs.setAttribute('role', 'group'); tabs.setAttribute('aria-label', t('Разделы мастерской'));
-  const people=[...catalog.people,...catalog.supporting];
+  const people=[...catalog.people,...catalog.rentals,...catalog.supporting];
   const controls = el('div', '', 'workshop-controls');
   const search = el('input'); search.type = 'search'; search.placeholder = t('Имя, эмоция или имя файла'); search.setAttribute('aria-label', t('Поиск по библиотеке'));
   const category = el('select'); category.setAttribute('aria-label', t('Тип ресурса'));
@@ -91,7 +91,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
     for (const button of tabs.children) button.setAttribute('aria-pressed', String(button.dataset.view === view));
     if (view === 'gaps') {
       results.append(el('p', t('Набор эмоций') + ': ' + Object.values(EMOTIONS).map(label=>t(label)).join(', ') + '. ' + t('Каждый образ проверяется отдельно.'), 'workshop-intro'));
-      for (const person of catalog.people) {
+      for (const person of [...catalog.people,...catalog.rentals]) {
         const section = el('section', '', 'workshop-person'); section.append(el('h3', person.name));
         section.append(el('p', person.missing.length ? t('Не хватает:') + ' ' + person.missing.map(m => t(EMOTIONS[m])).join(', ') : 'Базовые эмоции собраны', person.missing.length ? 'workshop-missing' : ''));
         for(const look of person.looks){
@@ -107,7 +107,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
       results.append(el('h3','Эпизодические собеседники'));
       for(const person of catalog.supporting){const row=el('section','','workshop-supporting-status');row.append(el('h4',person.name),el('p',person.missing.length?'Портрет пока не создан':'Портрет подготовлен'));results.append(row);}
     } else if (view === 'characters' || view === 'supporting') {
-      for (const person of view==='supporting'?catalog.supporting:catalog.people) {
+      for (const person of view==='supporting'?catalog.supporting:[...catalog.people,...catalog.rentals]) {
         const art = person.art.filter(e => (checkbox.checked || e.status !== 'archive') && matches(e));
         if ((search.value.trim() || looks.value!=='all') && !art.length) continue;
         const section = el('section', '', 'workshop-person'+(view==='supporting'?' workshop-supporting-person':'')); section.append(el('h3', person.name));

@@ -31,6 +31,18 @@ for(const edit of upstream.changes){
 for(const edit of upstream.changes.filter(edit=>edit.afterMissing)){
  const parent=edit.path.slice(0,-1).reduce((value,key)=>value[key],canonical);const values={...parent};for(const key of Object.keys(parent))delete parent[key];for(const key of edit.beforeKeys)if(Object.hasOwn(values,key))parent[key]=values[key];
 }
+// New rental introductions are separate scenes; their routes and translations
+// are checked in rental-story-integrity.test.mjs. The original three choices
+// receive exactly one eligibility condition, and four new ones are added.
+const rentalChoices=canonical.district_map.choices;
+assert.equal(rentalChoices.length,7);
+for(const choice of rentalChoices.slice(0,3))assert.deepEqual(choice.when,{flag:'rentalCast',notEquals:'new'});
+for(const choice of rentalChoices.slice(3))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
+assert.deepEqual(rentalChoices.slice(3).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
+canonical.district_map.choices=rentalChoices.slice(0,3).map(({when,...choice})=>choice);
+for(const id of Object.keys(canonical))if(id.startsWith('rental_'))delete canonical[id];
+assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
+canonical.d20_nephew.pages[1].speaker='districtHost';
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
 assert.equal(STORY_VERSION,1);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));

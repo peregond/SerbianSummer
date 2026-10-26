@@ -1,3 +1,4 @@
+import {rentalOwner} from './rental-people.js?v=1';
 const STAGES=['waiting','spill','comfort','soft','dry','borrowed'];
 export function registerKitchenLayers(backgrounds,sprites){
  for(const person of ['dragan','jelena'])for(const stage of ['coffee','spill','comfort','soft','dry','borrowed'])delete backgrounds[`${person}-kitchen-${stage}`];
@@ -6,6 +7,8 @@ export function registerKitchenLayers(backgrounds,sprites){
 }
 export function kitchenPresentation(node,page,flags={}){
  const stage=page.kitchenStage??node.kitchenStage;if(!stage)return null;
+ const owner=node.districtPortrait&&rentalOwner(flags);
+ if(owner)return {bg:'kitchen-common-layer-v1',description:'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:false,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:owner,contactPortrait:null,emotion:'friendly',daydream:false};
  const person=(node.districtPortrait?flags.districtOwner:flags.host)==='jelena'?'jelena':'dragan';
  const mood=stage==='coffee'?'waiting':stage==='spill'&&node===dryNode?'soft':stage;
  return {bg:'kitchen-common-layer-v1',description:'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:true,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:person,contactPortrait:null,emotion:'kitchen-'+mood,occludeTable:!['comfort','waiting'].includes(mood),daydream:false};

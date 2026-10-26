@@ -2,18 +2,24 @@ import assert from 'node:assert/strict';
 import {NODES,JOURNAL,pageText} from '../public/story.js';
 import {CHAPTERS,continuationFor,chapterFor,rememberChapter,restartChapter} from '../public/chapters.js';
 import {normalizeProgress} from '../lib/save-format.js';
+import {rentalRedirect} from '../public/rental-story.js';
 const decision=CHAPTERS.find(c=>c.id==='decision'),answer=CHAPTERS.find(c=>c.id==='answer');
 const last=id=>['decision','answer'].includes(NODES[id].chapterId);
 assert.equal(decision.start,'decision_morning');assert.equal(answer.start,'decision_plan');
 assert.equal(NODES.chapter_six_close.next,'d22_start');assert.equal(NODES.d28_end.next,decision.start);
 const reach=new Set(),endings=new Map();
-(function walk(id,flags={}){
+function walk(id,flags={}){
  if(id==='end')return;
  const node=NODES[id];assert.ok(node,'Missing '+id);
   reach.add(id);
  if(node.effectOnEnter?.chapterSevenComplete)endings.set(id,flags.finalChoice);
- for(const next of node.choices?node.choices.map(c=>[c.next,{...flags,...c.effect}]):[[node.next,{...flags,...node.effectOnEnter}]])walk(next[0],next[1]);
-})(decision.start);
+ for(const next of node.choices?node.choices.map(c=>[c.next,{...flags,...c.effect}]):[[node.next,{...flags,...node.effectOnEnter}]])walk(rentalRedirect(id,next[0],next[1]),next[1]);
+}
+walk(decision.start);
+for(const districtOwner of ['ana','stefan','marko','vuk']){
+ const flags={rentalCast:'new',districtOwner};
+ walk(rentalRedirect('d28_end',decision.start,flags),flags);
+}
 assert.deepEqual([...endings.values()].sort(),['leave','return','stay'],'Stay, leave and return are all reachable endings');
 assert.deepEqual(Object.keys(NODES).filter(last).filter(id=>!reach.has(id)),[],'No unreachable chapter 7 scene');
 // The decision belongs to the player: the three final options are all offered together.

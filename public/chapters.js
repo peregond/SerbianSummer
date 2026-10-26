@@ -32,7 +32,7 @@ export function rememberChapter(state,nodes,alreadyRecorded=false){
 export function restartChapter(state,id,nodes){
  const chapter=CHAPTERS.find(c=>c.id===id);if(!chapter)return false;
  let mark=state.chapterMarks?.[id];
- if(id==='prologue')mark={node:chapter.start,index:0,flags:{...nodes[chapter.start].effectOnEnter},journal:[...(nodes[chapter.start].journal??[])],logLength:0};
+ if(id==='prologue')mark={node:chapter.start,index:0,flags:{...nodes[chapter.start].effectOnEnter,...(state.flags?.rentalCast==='new'?{rentalCast:'new'}:{})},journal:[...(nodes[chapter.start].journal??[])],logLength:0};
  if(!mark)return false;
  const earlier=new Set(CHAPTERS.slice(0,CHAPTERS.indexOf(chapter)).map(c=>c.id));
  state.chapterMarks=Object.fromEntries(Object.entries(state.chapterMarks??{}).filter(([key])=>earlier.has(key)));
