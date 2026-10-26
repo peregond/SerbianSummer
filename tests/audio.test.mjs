@@ -15,7 +15,7 @@ globalThis.Audio=class{
 const {setMusic,setMusicScene,setVolume,musicPlaying}=await import('../public/audio.js');
 const flush=()=>new Promise(resolve=>setImmediate(resolve));
 setMusicScene('encounter');assert.equal(audio.length,0,'Muted scenes must not start or load audio');
-await setMusic(true);assert.equal(audio.length,2);assert.ok(audio[1].src.endsWith('encounter-theme.m4a'));assert.equal(audio[1].plays,1);assert.equal(musicPlaying(),true);
+await setMusic(true);assert.equal(audio.length,7);assert.ok(audio[1].src.endsWith('encounter-theme.m4a'));assert.equal(audio[1].plays,1);assert.equal(musicPlaying(),true);
 setVolume(.27);assert.equal(audio[1].volume,.27);
 setMusicScene('encounter');await flush();assert.equal(audio[1].plays,1,'Same cue must not restart each page');
 setMusicScene('prologue');await flush();timers.splice(0).forEach(fn=>fn());assert.equal(audio[0].paused,false);assert.equal(audio[1].paused,true);assert.equal(audio[0].volume,.27);
