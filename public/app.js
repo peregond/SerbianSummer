@@ -1,6 +1,7 @@
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.15.0';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.15.0';
 import {STAGES} from './days.js?v=0.15.0';
+import {cueFor} from './music-cues.js?v=0.15.0';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.15.0';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.15.0';
 import {drawBeatAction} from './beat-action.js?v=0.15.0';
@@ -203,7 +204,7 @@ function renderGame() {
   showScreen('game');
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
-  setMusicScene(node.music??(['airport-cafe','bakery','cafe-table','bakery-display','bakery-corner'].includes(node.bg)?'encounter':'prologue'));
+  setMusicScene(cueFor(node));
   const presentation=presentationFor(node,page,state.flags);
   const sceneElement=$('scene');
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
