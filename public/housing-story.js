@@ -190,7 +190,7 @@ export function extendHousing({NODES,JOURNAL,BACKGROUNDS}){
     vuk:['Я помогла Вуку составить опись, как со всеми домами здесь. Если что-то непонятно в договоре, пиши.','I helped Vuk draw up the inventory, as with every house here. If something in the lease is unclear, write to me.']
   };
   finish('flat_arrive',[
-    N('Дверь новой квартиры открывается моим ключом. Он тяжелее ключа от временной комнаты.','The door of the new flat opens with my own key. It is heavier than the key to the temporary room.'),
+    N('Дверь новой квартиры открывается моим ключом. Он тяжелее ключа от временной комнаты.','The door of the new flat opens with my own key. It is heavier than the key to the temporary room.',{portrait:false}),
     H('Вот опись. Пройдём по комнатам: мебель, счётчики, ключи. Если что-то записано неверно, скажи, и исправим.','Here is the inventory. Let us walk through the rooms: furniture, meters, keys. If something is written wrongly, say so and we will correct it.'),
     {speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...counterpartLines.ana),districtText:Object.fromEntries(Object.entries(counterpartLines).map(([owner,pair])=>[owner,T(...pair)]))},
     AM('Поздравляю с новым адресом! Банк подождёт до вечера, сначала дом.','Congratulations on the new address! The bank can wait until the evening; home comes first.'),

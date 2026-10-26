@@ -20,9 +20,9 @@
 .viewing-tab[aria-selected=true]{background:#fff3d8;color:#17323a;border-color:#fff}
 .viewing-tab[data-done=true]:not([aria-selected=true]){background:#2c6f55;border-color:#9fe5c2}
 .viewing-card{position:absolute;z-index:3;left:12px;right:12px;top:calc(var(--safe-top,0px) + 124px);bottom:calc(var(--safe-bottom,0px) + 86px);display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:20px;background:#fff8e9f2;color:#17323a;box-shadow:0 12px 34px #0008;overflow:auto}
-.viewing-stage{flex:0 0 auto;border-radius:14px;overflow:hidden;background:#fff}
-.viewing-stage svg{display:block;width:100%;height:auto;max-height:40dvh}
-.viewing-finding{margin:0;min-height:3.9em;font-size:16px;line-height:1.45;font-weight:600}
+.viewing-stage{flex:0 1 auto;min-height:0;border-radius:14px;overflow:hidden;background:#fff}
+.viewing-stage svg{display:block;width:100%;height:auto;max-height:44dvh}
+.viewing-finding{margin:0;min-height:3.9em;font-size:17px;line-height:1.45;font-weight:600}
 .viewing-actions{display:grid;gap:8px;margin-top:auto}
 .viewing-target{min-height:56px;padding:12px 14px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-size:17px;font-weight:700}
 .viewing-target[data-done=true]{background:#d9f3e6;border-color:#2c6f55;color:#1d5a42}
@@ -41,4 +41,34 @@
 .viewing-stage .leds circle{transition:fill .3s}
 @keyframes drip{0%{transform:translateY(-8px);opacity:0}30%{opacity:1}100%{transform:translateY(22px);opacity:0}}
 @media(prefers-reduced-motion:reduce){.map-pin,.viewing-stage *{animation:none!important;transition:none!important}}
-@media(min-height:760px){.viewing-stage svg{max-height:42dvh}}
+/* Bank guide: a phone page laid out like a reference article. */
+.scene-quest.is-guide,.scene-quest:has(.guide-page){background:#f6efe0;color:#17323a}
+.scene-quest:has(.guide-page)::after{display:none}
+.guide-bar{position:absolute;z-index:4;inset:0 0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:calc(var(--safe-top,0px) + 8px) 12px 8px;background:#173b46;color:#fff}
+.guide-tool{min-height:44px;padding:9px 13px;border:1px solid #fff7;border-radius:14px;background:#0f2c36;color:#fff;font-weight:600}
+.guide-tool:disabled{opacity:.45}
+.guide-badge{margin:0;text-align:center;font-size:12px;line-height:1.3;opacity:.9}
+.guide-page{position:absolute;inset:calc(var(--safe-top,0px) + 62px) 0 calc(var(--safe-bottom,0px) + 86px);overflow:auto;padding:16px 16px 24px;-webkit-overflow-scrolling:touch}
+.guide-title{margin:0 0 8px;font-family:Lora,Georgia,serif;font-size:25px;line-height:1.2}
+.guide-intro{margin:0 0 14px;font-size:15px;line-height:1.5}
+.guide-compare{width:100%;border-collapse:collapse;margin:0 0 14px;font-size:12px;background:#fff;border-radius:12px;overflow:hidden}
+.guide-compare caption{padding:8px 0;text-align:left;font-weight:700;font-size:13px}
+.guide-compare th,.guide-compare td{padding:7px 6px;border:1px solid #e3d9c2;text-align:left;vertical-align:top;line-height:1.3}
+.guide-compare thead th,.guide-compare tr:first-of-type th{background:#e8f3ef}
+.guide-tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.guide-tab{min-height:52px;padding:8px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-weight:700;font-size:15px}
+.guide-tab[aria-selected=true]{background:#08786f;color:#fff}
+.guide-detail{min-height:150px;padding:14px;border-radius:16px;background:#fff;box-shadow:0 2px 10px #0002}
+.guide-detail h3{margin:0 0 4px;font-size:19px}
+.guide-tag{margin:0 0 10px;font-size:13px;color:#52666d;line-height:1.4}
+.guide-block{margin:0 0 10px}
+.guide-block h4{margin:0 0 2px;font-size:13px;color:#08786f;text-transform:uppercase;letter-spacing:.03em}
+.guide-block p{margin:0;font-size:15px;line-height:1.45}
+.guide-hint{margin:0;color:#52666d}
+.guide-note{margin:14px 0 0;padding:12px;border-radius:12px;background:#fff1c9;font-size:13px;line-height:1.45}
+.guide-footer{position:absolute;z-index:4;inset:auto 0 0;padding:10px 12px calc(var(--safe-bottom,0px) + 12px);background:#f6efe0f2;border-top:1px solid #e3d9c2}
+.guide-choose{width:100%;min-height:54px;font-size:17px}
+.guide-choose:disabled{opacity:.55}
+.guide-options{display:grid;gap:8px}
+.guide-option{min-height:54px;padding:10px 14px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-size:17px;font-weight:700}
+.guide-close{justify-self:center}

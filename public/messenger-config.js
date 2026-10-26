@@ -37,5 +37,6 @@ export const CHAT_SCENES = {
 export const INLINE_CHAT_REPLIES = {
  nikola_phone:{1:{label:'Да, я уже в аэропорту и скоро выезжаю.',tone:'practical'},2:{label:'Думаю, буду примерно через час. Напишу по дороге.',tone:'practical'}},
  phone:{1:{label:'Я ещё в аэропорту. Постараюсь приехать до семи. Напишу, когда буду рядом.',tone:'practical'},3:{label:'Пока ещё в аэропорту. Всё хорошо, сейчас пью кофе. Как доберусь, напишу.',tone:'friendship'}},
+ bank_alta_wait:{1:{label:'Держусь. Вечером расскажу, как прошло.',tone:'friendship'}},
  messages:{0:{label:'Долетел{a} хорошо! Пока ещё в аэропорту. Как доберусь, напишу.',tone:'friendship'}}
 };

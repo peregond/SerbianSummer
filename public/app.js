@@ -8,6 +8,8 @@ import {drawChapterMap} from './chapter-map.js?v=0.15.4';
 import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.15.4';
 import {mountRoomInteraction} from './room-interaction.js?v=1';
 import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=1';
+import {mountBankGuide} from './bank-guide.js?v=1';
+import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
 import {mountMessenger} from './messenger.js?v=0.15.4';
@@ -246,6 +248,7 @@ function renderGame({skipMessenger=false}={}) {
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
   if(node.map)return openDistrictMap();
   if(page.action?.quest==='viewing')return openViewingQuest();
+  if(page.action?.quest==='bank-guide')return openBankGuide();
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
@@ -438,6 +441,12 @@ function openDistrictMap(){
 function openViewingQuest(){
   showScreen('scene-quest');
   questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat({feedback:'Осмотр закончен.'});}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openBankGuide(){
+  showScreen('scene-quest');
+  const node=NODES[state.node];
+  questDispose=mountBankGuide($('scene-quest'),{mask:state.flags[BANK_FLAG]??0,choices:node.choices.filter(choice=>choiceVisible(choice,state.flags)),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onRead:mask=>{state.flags[BANK_FLAG]=mask;save();},onChoose:choice=>choose(choice)});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openBaggage(){
