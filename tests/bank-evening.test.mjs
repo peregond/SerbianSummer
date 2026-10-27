@@ -60,7 +60,7 @@ assert.equal(frame.contact,'Никола');assert.equal(frame.replies.length,1);
 for(const key of BANK_KEYS){const bank=BANKS[key];for(const field of ['visit','docs','checks','ask','tag'])assert.ok(bank[field],key+'/'+field);}
 assert.ok(BANK_KEYS.slice(0,3).every(key=>BANKS[key].visit!==BANKS.api.visit||key==='api'),'the requirements differ between banks');
 assert.match(GUIDE.note,/Ни один банк не обязан открыть счёт/);
-assert.match(BANKS.adriatic.checks,/повторный визит/);assert.match(BANKS.api.checks,/решение остаётся за банком/i);
+assert.match(BANKS.adriatic.checks,/повторный визит/);assert.match(BANKS.api.checks,/сам решает/i);
 assert.ok(JOURNAL.bank_guide.link.includes('srb.guide'));
 {
   const doc=makeDocument(),root=doc.createElement('section');const reads=[];let chosen=null;

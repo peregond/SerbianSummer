@@ -145,7 +145,7 @@ export function extendHousing({NODES,JOURNAL}){
   for(const amount of [100,150]){
     const word=amount===100?['сто','a hundred']:['сто пятьдесят','a hundred and fifty'];
     finish('flat_price_warm'+amount,[
-      H(`Мне приятно, что мы нашли общий язык. Скину ${word[0]} евро просто как хозяин, которому с тобой спокойно.`,`I am glad we found a common language. I will take ${word[1]} euros off simply as a host who feels at ease with you.`),
+      H(`Мне приятно, что мы нашли общий язык. Скину ${word[0]} евро просто потому, что с тобой спокойно.`,`I am glad we found a common language. I will take ${word[1]} euros off simply because I feel at ease with you.`),
       P('Спасибо. Только пусть цена ни к чему меня не обязывает.','Thank you. But let the price not oblige me to anything.'),
       H('Не обязывает. Договор — отдельно, симпатия — отдельно. Если станет неловко, скажи.','It does not. The lease is one thing and fondness is another. If it ever feels awkward, say so.'),
       priced('narrator',(owner,rent)=>fill(['Теперь аренда — {rent} евро в месяц.','Now the rent is {rent} euros a month.'],rent))
