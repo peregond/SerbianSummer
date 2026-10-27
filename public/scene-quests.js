@@ -17,9 +17,9 @@ const UI=[
   T('Осталось','Left'),
   T('Всё проверено','Everything checked')
 ];
-const MAP_SIZE={width:941,height:1672};
+const MAP_SIZE={width:1080,height:1920};
 // Where each district sits on the painted panorama (fractions of the picture).
-export const MAP_PINS={dorcol:{x:.7,y:.36},vracar:{x:.8,y:.64},newbelgrade:{x:.22,y:.125}};
+export const MAP_PINS={dorcol:{x:.77,y:.29},vracar:{x:.74,y:.77},newbelgrade:{x:.19,y:.45}};
 const make=(doc,tag,className,text)=>{const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 function toolbar(doc,{title,canRewind,onBack,onSettings,listen}){
   const header=make(doc,'header','quest-tools');
@@ -33,7 +33,7 @@ export function mountDistrictMap(root,{choices,flags,onChoose,onBack,onSettings,
   const doc=root.ownerDocument;
   const events=new AbortController();const listen=(el,event,fn)=>el.addEventListener(event,fn,{signal:events.signal});
   root.replaceChildren();
-  const art=make(doc,'img','quest-art map-art');art.alt=t(UI[0]);art.src='./assets/belgrade-chapter-map.webp';
+  const art=make(doc,'img','quest-art map-art');art.alt=t(UI[0]);art.src='./assets/belgrade-district-map-v1.webp';
   const {header,heading}=toolbar(doc,{title:t(UI[1]),canRewind,onBack,onSettings,listen});heading.id='scene-quest-title';
   const hint=make(doc,'p','map-hint',t(UI[2]));
   const pins=new Map();

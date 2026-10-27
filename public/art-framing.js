@@ -3,6 +3,8 @@
 // or hand gesture; the rest of the image may extend outside the viewport.
 const mark=(head,detail)=>({head,detail});
 export const ART_FRAMES={
+ 'dragan-hug-neutral-male-layer-v1':mark([.19,.07,.61,.35],[.15,.27,.78,.65]),
+ 'dragan-hug-neutral-female-layer-v1':mark([.16,.07,.61,.38],[.16,.32,.78,.70]),
  'nikola-elder-bread-handover-v1':mark([.07,.12,.88,.37],[.27,.39,.78,.58]),
  'taxi-navigation-v1':mark([.13,.07,.46,.31],[.59,.32,.9,.53]),
  'nikola-bakery-lookback-v1':mark([.43,.30,.74,.45],[.39,.39,.76,.52]),

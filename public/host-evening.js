@@ -31,14 +31,18 @@ export function extendHostEvening({NODES,JOURNAL}){
   });
 
   // The evening starts in a courtyard that looks like evening, and the walk no longer ends at the first corner.
-  walk.bg='courtyard-after-film';walk.lighting='night';
+  walk.bg='belgrade-courtyard-evening-v1';walk.lighting='night';
   walk.choices=undefined;delete walk.choices;walk.next='host_old_town';
   walk.exitAction=tap('Выйти со двора на старые улицы','Leave the courtyard for the old streets');
   walk.actions[5]=walk.exitAction;walk.pages[5].action=walk.exitAction;
   for(const id of ['host_evening_close','host_evening_goodnight']){
-    NODES[id].bg='courtyard-after-film';NODES[id].lighting='night';NODES[id].time='21:35';
+    NODES[id].bg='belgrade-courtyard-evening-v1';NODES[id].lighting='night';NODES[id].time='21:35';
     // The daylight door picture would pull the scene back into the afternoon.
     for(const action of Object.values(NODES[id].actions??{}))delete action.bg;
+  }
+  for(const id of ['host_evening_close','host_evening_goodnight']){
+    const action=NODES[id].actions?.[NODES[id].pages.length-1];
+    if(action)action.bg='courtyard-door-evening-v1';
   }
   NODES.host_evening.time='20:10';
   // The reply to the invitation jokes about the spilled coffee only if the coffee scene actually happened.

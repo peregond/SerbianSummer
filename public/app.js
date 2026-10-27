@@ -5,9 +5,9 @@ import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=0.16.1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=0.16.1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.1-evening1';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.1-evening2';
 import {mountRoomInteraction} from './room-interaction.js?v=2';
-import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=2';
+import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=3';
 import {mountBankGuide} from './bank-guide.js?v=1';
 import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
@@ -15,7 +15,7 @@ import {renderArrivalPhone} from './arrival-phone.js?v=1';
 import {mountMessenger} from './messenger.js?v=0.16.1';
 import {messengerFrame,messageAt} from './messenger-model.js?v=0.16.1';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-art3';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.1';
 import {STAGES} from './days.js?v=0.16.1';
 import {cueFor} from './music-cues.js?v=0.16.1';
@@ -23,7 +23,7 @@ import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
 import {drawBeatAction} from './beat-action.js?v=0.16.1';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.1-art2';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.1-art3';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
@@ -280,7 +280,7 @@ function renderGame({skipMessenger=false}={}) {
     return;
   }
   showScreen('game');
-  const presentation=presentationFor(node,page,state.flags);
+  const presentation=presentationFor(node,page,state.flags,state.profile);
   const sceneElement=$('scene');
   renderArrivalPhone(sceneElement,state.node,state.index);
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
@@ -297,21 +297,21 @@ function renderGame({skipMessenger=false}={}) {
   let kitchenTable=sceneElement.querySelector('.kitchen-table');
   if(presentation.kitchenLayers&&!kitchenTable){kitchenTable=document.createElement('div');kitchenTable.className='kitchen-table';sceneElement.append(kitchenTable);}
   if(kitchenTable)kitchenTable.hidden=!presentation.kitchenLayers||!presentation.occludeTable;
-  currentArtFrame=ART_FRAMES[presentation.bg];
+  currentArtFrame=ART_FRAMES[presentation.cg??presentation.bg];
   const cg=$('scene-cg');cg.hidden=!presentation.composite;
-  if(presentation.composite)cg.src=`./assets/${presentation.bg}.webp`;
+  if(presentation.composite)cg.src=`./assets/${presentation.cg??presentation.bg}.webp`;
   $('game').classList.toggle('has-map',!!node.map);
   drawDistrictMap($('district-map'),node,choose,choice=>choiceVisible(choice,state.flags));
   sceneElement.setAttribute('aria-label',t(presentation.description));
   preloadBackground(presentation.bg);
   // Load just the next frame or the two immediate branches, rather than the whole chapter.
   if(node.pages[state.index+1]) {
-    const nextPresentation=presentationFor(node,node.pages[state.index+1],state.flags);
+    const nextPresentation=presentationFor(node,node.pages[state.index+1],state.flags,state.profile);
     preloadBackground(nextPresentation.bg);preloadSprite(nextPresentation.character,nextPresentation.emotion);
   }
   else for(const next of node.choices?node.choices.map(choice=>choice.next):[node.next]) {
     if(NODES[next]) {
-      const nextPresentation=presentationFor(NODES[next],NODES[next].pages[0],state.flags);
+      const nextPresentation=presentationFor(NODES[next],NODES[next].pages[0],state.flags,state.profile);
       preloadBackground(nextPresentation.bg);preloadSprite(nextPresentation.character,nextPresentation.emotion);
     }
   }

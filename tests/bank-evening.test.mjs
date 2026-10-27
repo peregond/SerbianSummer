@@ -104,7 +104,7 @@ const pace=NODES.host_terrace_meal.choices;
 assert.deepEqual(pace.map(choice=>choice.tone),['romance','personal','friendship'],'a romantic, a slow and a friendly pace');
 assert.deepEqual(pace.map(choice=>choice.next),['host_evening_close','host_evening_goodnight','host_evening_goodnight']);
 assert.ok(NODES.host_evening_close.pages.some(page=>/Можно тебя обнять\?/.test(page.text)),'the hug is asked for aloud');
-assert.equal(NODES.host_evening_close.bg,'courtyard-after-film');assert.equal(NODES.host_evening.bg,'courtyard-after-film','the courtyard looks like evening');
+assert.equal(NODES.host_evening_close.bg,'belgrade-courtyard-evening-v1');assert.equal(NODES.host_evening.bg,'belgrade-courtyard-evening-v1','the courtyard looks like evening');
 assert.equal(NODES.host_old_town.bg,'belgrade-night-walk');assert.equal(NODES.host_terrace.bg,'belgrade-cafe-twilight');
 // The joke about the floorboard appears only if the coffee was spilled.
 const reply=NODES.host_evening_invite.pages[1];
