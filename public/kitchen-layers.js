@@ -7,6 +7,7 @@ export function registerKitchenLayers(backgrounds,sprites){
  // The borrowed top comes in two colours; the layers are the original pose re-lit by tools/art/recolor-dragan-tee.py.
  for(const top of ['grey','white'])sprites.dragan['kitchen-borrowed-'+top]={file:`dragan-kitchen-borrowed-layer-${top}-v1`,alt:`Драган на кухне в ${top==='grey'?'серой':'белой'} футболке Under Armour`};
  for(const top of ['grey','white'])sprites.dragan['kitchen-dressing-'+top]={file:`dragan-kitchen-dressing-${top}-v1`,alt:`Драган улыбается и шутливо показывает мышцы в ${top==='grey'?'серой':'белой'} футболке`};
+ sprites.dragan['kitchen-dressing-white'].file='dragan-kitchen-dressing-white-v2';
  for(const person of ['dragan','jelena'])for(const stage of STAGES)sprites[person]['kitchen-'+stage]={file:`${person}-kitchen-${stage}-layer-${stage==='comfort'?'v2':'v1'}`,alt:person==='dragan'?'Драган на кухне':'Йелена на кухне'};
  sprites.dragan['kitchen-waiting'].file='dragan-kitchen-waiting-layer-v2';
  sprites.dragan['kitchen-spill'].file='dragan-kitchen-spill-layer-v2';
