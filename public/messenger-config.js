@@ -1,4 +1,4 @@
-import {EPISODIC_AVATARS} from './episodic-cast.js?v=1';
+import {EPISODIC_AVATARS} from './episodic-cast.js?v=2';
 // Shared presentation settings. Story text and consequences remain in the scenario.
 export const MESSENGER_CONFIG = {
   accent: '#7360f2',

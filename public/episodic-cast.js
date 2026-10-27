@@ -1,5 +1,7 @@
 // Supporting roles have a base portrait, not a romance/emotion collection.
 export const EPISODIC_CAST={
+ 'guest-bank-nevena':{name:'Невена',alt:'Невена'},
+ 'guest-bank-bogdan':{name:'Богдан',alt:'Богдан'},
  'guest-mom':{name:'Мама',alt:'Мама: женщина с седеющими каштановыми волосами в голубом кардигане'},
  'guest-bank-staff':{name:'Сотрудник банка',alt:'Сотрудник банка: зрелый мужчина в очках со светлой рубашкой и папкой'},
  'guest-mobile-staff':{name:'Сотрудник салона связи',alt:'Сотрудник салона связи: молодой мужчина с рыжими кудрями в жёлтом поло'},

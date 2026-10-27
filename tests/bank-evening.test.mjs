@@ -120,9 +120,9 @@ for(const top2 of ['grey','white'])assert.ok(fs.existsSync(new URL(`../public/as
 assert.equal(presentationFor(NODES.host_coffee_borrowed,NODES.host_coffee_borrowed.pages[0],{host:'dragan',hostTop:'white'}).emotion,'kitchen-borrowed-white');
 assert.equal(presentationFor(NODES.host_coffee_borrowed,NODES.host_coffee_borrowed.pages[0],{host:'dragan'}).emotion,'kitchen-borrowed');
 // On the evening walk Dragan carries no keys: only the key-free portraits are used.
-const KEY_FREE=new Set(['confident','worried','surprised']);
+const KEY_FREE=new Set(['evening-friendly','evening-thoughtful','evening-laughing','evening-flirty']);
 for(const id of ['host_evening','host_old_town','host_terrace','host_terrace_meal','host_evening_close','host_evening_goodnight'])for(const page of NODES[id].pages){
-  const p=presentationFor(NODES[id],page,{host:'dragan'});assert.ok(KEY_FREE.has(p.emotion),id+': '+p.emotion);assert.ok(CHARACTER_SPRITES.dragan[p.emotion]);
+  const p=presentationFor(NODES[id],page,{host:'dragan'});if(p.character==='dragan'){assert.ok(KEY_FREE.has(p.emotion),id+': '+p.emotion);assert.ok(CHARACTER_SPRITES.dragan[p.emotion]);}
 }
 // The tidy-up of the unpacked suitcase.
 assert.ok(!/Чемодан так и стоит у двери/.test(JSON.stringify(NODES.room_alone.pages)));

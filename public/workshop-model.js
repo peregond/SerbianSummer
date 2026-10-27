@@ -1,6 +1,6 @@
 import {BAGGAGE_ITEMS} from './baggage-model.js?v=1';
 import {HOME_PORTRAITS,HOME_BACKGROUNDS} from './home-hero-model.js?v=1';
-import {EPISODIC_PEOPLE} from './episodic-cast.js?v=1';
+import {EPISODIC_PEOPLE} from './episodic-cast.js?v=2';
 export const PEOPLE = {
   milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена',
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
@@ -31,7 +31,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
+    const look = /^dragan-evening-.*-v1\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? ((Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) || Object.values(HOME_BACKGROUNDS).includes(file) || file==='baggage/search-carousel.webp') ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };

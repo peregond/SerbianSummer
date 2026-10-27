@@ -7,7 +7,7 @@ import {BANK_FLAG,BANKS,BANK_KEYS} from './bank-data.js?v=1';
 const N=(ru,en,extra={})=>({speaker:'narrator',text:T(ru,en),...extra});
 const P=(ru,en,extra={})=>({speaker:'player',text:T(ru,en),...extra});
 const AM=(ru,en,extra={})=>({speaker:'Ася',character:'asya',emotion:'friendly',message:true,text:T(ru,en),...extra});
-const S=(name,ru,en,extra={})=>({speaker:name,text:T(ru,en),...extra});
+const S=(name,ru,en,extra={})=>({speaker:name,text:T(ru,en),...({Невена:{character:'guest-bank-nevena',emotion:'friendly'},Богдан:{character:'guest-bank-bogdan',emotion:'friendly'}}[name]??{}),...extra});
 const tap=(label,en,extra={})=>({kind:'tap',label:T(label,en),object:T(label,en),...extra});
 const choice=(label,en,next,tone,effect)=>({label:T(label,en),next,tone,...(effect?{effect}:{})});
 
