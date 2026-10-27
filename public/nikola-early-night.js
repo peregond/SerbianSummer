@@ -7,27 +7,39 @@ import {T} from './days.js?v=0.16.1';
 const PARK_BG='belgrade-park-evening-v1';
 const HOME_BG='nikola-apartment-night-v1';
 const SCENE={
- briefs:'nikola-briefs-bulge-v1',
+ shy:'nikola-park-shy-wanting-v1',
+ laugh:'nikola-park-nervous-laugh-v1',
+ seductive:'nikola-bedroom-seductive-v1',
+ door:'nikola-door-kiss-v1',
+ briefs:'nikola-briefs-lookdown-v1',
  touch:'nikola-briefs-touch-v1',
+ moan:'nikola-bed-moan-v1',
  jock:'nikola-jock-ready-v1',
  fuck:'nikola-jock-fuck-v1',
+ climax:'nikola-climax-face-v1',
  cumInside:'nikola-cum-inside-v1',
  cumJock:'nikola-cum-jock-v1',
  cumChest:'nikola-cum-chest-v1',
- afterglow:'nikola-afterglow-v1'
+ afterglow:'nikola-afterglow-smile-v1'
 };
 
 export const NIKOLA_EARLY_NIGHT_BACKGROUNDS={
  [PARK_BG]:{label:T('БЕЛГРАД · ПАРК','BELGRADE · PARK'),description:T('Вечерний парк: аллея, фонари, скамейки','Evening park: avenue, lamps, benches'),position:'50% 45%'},
  [HOME_BG]:{label:T('КВАРТИРА НИКОЛЫ · НОЧЬ','NIKOLA’S FLAT · NIGHT'),description:T('Небольшая спальня: лампа, простыни, подоконник с корицей','A small bedroom: lamp, sheets, cinnamon on the windowsill'),position:'50% 40%'},
- [SCENE.briefs]:{label:T('НИКОЛА · БЕЛЫЕ BRIEF','NIKOLA · WHITE BRIEFS'),description:T('Заглушка: Никола на кровати в белых трусах; чёрные плашки на зоне, которую нужно дорисовать','Placeholder: Nikola on the bed in white briefs; black bars over the area to inpaint'),position:'50% 35%'},
+ [SCENE.shy]:{label:T('НИКОЛА · ХОЧЕТ','NIKOLA · WANTING'),description:T('Никола в белых трусах, смущённый возбуждённый взгляд','Nikola in white briefs, shy wanting look'),position:'50% 35%'},
+ [SCENE.laugh]:{label:T('НИКОЛА · СМЕХ','NIKOLA · LAUGH'),description:T('Никола в белых трусах, нервный смех','Nikola in white briefs, a nervous laugh'),position:'50% 35%'},
+ [SCENE.seductive]:{label:T('НИКОЛА · ВЗГЛЯД','NIKOLA · LOOK'),description:T('Никола в белых трусах, соблазнительная улыбка','Nikola in white briefs, a seductive smile'),position:'50% 35%'},
+ [SCENE.door]:{label:T('НИКОЛА · У ДВЕРИ','NIKOLA · AT THE DOOR'),description:T('Никола в белых трусах у двери','Nikola in white briefs at the door'),position:'50% 40%'},
+ [SCENE.briefs]:{label:T('НИКОЛА · БЕЛЫЕ BRIEF','NIKOLA · WHITE BRIEFS'),description:T('Никола на кровати в белых трусах, взгляд вниз','Nikola on the bed in white briefs, looking down'),position:'50% 35%'},
  [SCENE.touch]:{label:T('НИКОЛА · КАСАНИЕ','NIKOLA · TOUCH'),description:T('Заглушка: касание через трусы; чёрные плашки под inpaint','Placeholder: a touch through the briefs; black bars for inpaint'),position:'50% 40%'},
+ [SCENE.moan]:{label:T('НИКОЛА · СТОН','NIKOLA · MOAN'),description:T('Никола в белых трусах на кровати, стонет','Nikola in white briefs on the bed, moaning'),position:'50% 40%'},
  [SCENE.jock]:{label:T('НИКОЛА · ДЖОКИ','NIKOLA · JOCKSTRAP'),description:T('Заглушка: белые джоки; чёрные плашки под inpaint','Placeholder: white jockstrap; black bars for inpaint'),position:'50% 40%'},
  [SCENE.fuck]:{label:T('НИКОЛА · СЕКС','NIKOLA · SEX'),description:T('Заглушка: секс с цензурными плашками под inpaint','Placeholder: sex with censor bars for inpaint'),position:'50% 40%'},
+ [SCENE.climax]:{label:T('НИКОЛА · ОРГАЗМ','NIKOLA · CLIMAX'),description:T('Крупный план лица Николы в оргазме','Close-up of Nikola’s face at climax'),position:'50% 30%'},
  [SCENE.cumInside]:{label:T('НИКОЛА · ФИНИШ ВНУТРЬ','NIKOLA · FINISH INSIDE'),description:T('Заглушка финиша внутрь; чёрные плашки под inpaint','Placeholder for finishing inside; black bars for inpaint'),position:'50% 40%'},
  [SCENE.cumJock]:{label:T('НИКОЛА · ФИНИШ НА ДЖОКИ','NIKOLA · FINISH ON JOCK'),description:T('Заглушка финиша на джоки; чёрные плашки под inpaint','Placeholder for finishing on the jock; black bars for inpaint'),position:'50% 40%'},
  [SCENE.cumChest]:{label:T('НИКОЛА · ФИНИШ НА ГРУДЬ','NIKOLA · FINISH ON CHEST'),description:T('Заглушка финиша на грудь; чёрные плашки под inpaint','Placeholder for finishing on the chest; black bars for inpaint'),position:'50% 40%'},
- [SCENE.afterglow]:{label:T('НИКОЛА · ПОСЛЕ','NIKOLA · AFTER'),description:T('После секса / заглушка нижней части кадра','After sex / placeholder for the lower part of the frame'),position:'50% 40%'}
+ [SCENE.afterglow]:{label:T('НИКОЛА · ПОСЛЕ','NIKOLA · AFTER'),description:T('Никола в белых трусах после, мягкая улыбка','Nikola in white briefs after, a soft smile'),position:'50% 40%'}
 };
 
 export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}){
@@ -62,18 +74,18 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
  // 1. Park
  N.nikola_park=scene([
   note('Мы сворачиваем с набережной в парк. Фонари тёплые, гравий тихо хрустит под ногами, где-то лает собака.','We turn off the embankment into the park. The lamps are warm, gravel crunches softly underfoot, a dog barks somewhere.'),
-  nik('Здесь пахнет лучше, чем у стойки. И никто не просит кифлу.','It smells better here than at the counter. And nobody is asking for a kifla.','laughing'),
+  {...nik('Здесь пахнет лучше, чем у стойки. И никто не просит кифлу.','It smells better here than at the counter. And nobody is asking for a kifla.','laughing'),bg:SCENE.laugh,portrait:false},
   note('Его льняная рубашка чуть расстёгнута. Когда он идёт рядом, я чувствую жар его плеча — и то, как у меня уже стоит просто от его голоса.','His linen shirt is slightly unbuttoned. When he walks beside me I feel the heat of his shoulder — and how hard I already am just from his voice.'),
   me('Если скажешь «стоп», мы просто дойдём до выхода. Но мне хочется тебя ближе.','If you say “stop”, we will just walk to the exit. But I want you closer.'),
-  nik('Не говори «стоп». Мне тоже хочется. Пальцы дрожат, будто я снова мешу тесто в четыре утра.','Do not say “stop”. I want it too. My fingers are shaking as if I were kneading dough at four in the morning again.','shy')
+  {...nik('Не говори «стоп». Мне тоже хочется. Пальцы дрожат, будто я снова мешу тесто в четыре утра.','Do not say “stop”. I want it too. My fingers are shaking as if I were kneading dough at four in the morning again.','shy'),bg:SCENE.shy,portrait:false}
  ],'nikola_park_invite',{...place('БЕЛГРАД · ПАРК','BELGRADE · PARK','20:05',PARK_BG),character:'nikola-evening',emotion:'flirty',portrait:true,music:'encounter'});
 
  // 2. Invitation
  N.nikola_park_invite=scene([
   note('У выхода из парка Никола останавливается. Ключи в кармане звякают — он сжимает их сильнее, чем нужно.','At the park exit Nikola stops. Keys jingle in his pocket — he grips them harder than he needs to.'),
-  nik('Моя квартира в двух остановках. Можем просто посидеть. Или… если хочешь остаться на ночь — я хочу. Скажи прямо.','My flat is two stops away. We can just sit. Or… if you want to stay the night — I want that. Say it straight.','flirty'),
-  note('Он смотрит мне в глаза, и под джинсами у него уже явно натянуто. Он не прячет это — только сглатывает.','He looks me in the eye, and his jeans are already clearly tight. He does not hide it — he only swallows.')
- ],null,{...place('БЕЛГРАД · ПАРК · ВЫХОД','BELGRADE · PARK · EXIT','20:20',PARK_BG),character:'nikola-evening',emotion:'shy',portrait:true,choices:[
+  {...nik('Моя квартира в двух остановках. Можем просто посидеть. Или… если хочешь остаться на ночь — я хочу. Скажи прямо.','My flat is two stops away. We can just sit. Or… if you want to stay the night — I want that. Say it straight.','flirty'),bg:SCENE.seductive,portrait:false},
+  note('Он смотрит мне в глаза, и в белых трусах у него уже явно натянуто. Он не прячет это — только сглатывает.','He looks me in the eye, and his white briefs are already clearly tight. He does not hide it — he only swallows.')
+ ],null,{...place('БЕЛГРАД · ПАРК · ВЫХОД','BELGRADE · PARK · EXIT','20:20',SCENE.shy),choices:[
   {label:T('«Да. Хочу трахнуть тебя у тебя дома»','“Yes. I want to fuck you at your place”'),tone:'romance',next:'nikola_park_home',effect:{nikolaPark:'yes'}},
   {label:T('«Не сегодня. Проводи меня до трамвая»','“Not tonight. Walk me to the tram”'),tone:'friendship',next:'nikola_park_decline',effect:{nikolaPark:'later'}}
  ]});
@@ -92,15 +104,15 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
  ],'nikola_park_door',{...place('КВАРТИРА НИКОЛЫ · КОРИДОР','NIKOLA’S FLAT · HALL','21:10',HOME_BG),character:'nikola-evening',emotion:'shy',portrait:true,journal:['nikola_early_night']});
 
  N.nikola_park_door=scene([
-  note('Я прижимаю его к двери. Он выше меня на голову, но податливый: раскрывает рот под поцелуем, трётся стояком о бедро через джинсы, тяжело дышит мне в шею.','I pin him to the door. He is a head taller than me, but pliant: he opens his mouth under the kiss, rubs his hard-on against my thigh through his jeans, breathes hard into my neck.'),
+  note('Я прижимаю его к двери. Он выше меня на голову, но податливый: раскрывает рот под поцелуем, трётся стояком о бедро через белые трусы, тяжело дышит мне в шею.','I pin him to the door. He is a head taller than me, but pliant: he opens his mouth under the kiss, rubs his hard-on against my thigh through white briefs, breathes hard into my neck.'),
   nik('Бля… да. Хочу, чтобы ты меня трахнул. Только скажи, если что не так — я сразу остановлюсь. И ты тоже.','Fuck… yes. I want you to fuck me. Just say if anything is wrong — I will stop at once. And so will you.','flirty'),
   me('Договорились. В спальню.','Agreed. Bedroom.')
- ],'nikola_park_closer',{...place('КВАРТИРА НИКОЛЫ · ДВЕРЬ','NIKOLA’S FLAT · DOOR','21:15',HOME_BG),character:'nikola-evening',emotion:'flirty',portrait:true});
+ ],'nikola_park_closer',{...place('КВАРТИРА НИКОЛЫ · ДВЕРЬ','NIKOLA’S FLAT · DOOR','21:15',SCENE.door)});
 
  // 4. Briefs — adult; skipped to morning when 18+ is off
  N.nikola_park_closer=scene([
-  note('Он скидывает рубашку и джинсы. Остаётся в белых хлопковых Calvin Klein — узкая резинка, логотип на поясе. Ткань спереди уже тёмная от смазки: толстый член натягивает брифы так, что виден рельеф головки и ствола.','He drops the shirt and jeans. He is left in white cotton Calvin Klein briefs — narrow waistband, logo on the band. The fabric in front is already dark with precum: his thick cock stretches the briefs so the outline of the head and shaft shows.'),
-  nik('Смотри, что ты со мной сделал ещё в парке.','Look what you did to me back in the park.','shy'),
+  note('Он скидывает рубашку. Остаётся в белых хлопковых Calvin Klein — узкая резинка, логотип на поясе. Ткань спереди уже тёмная от смазки: толстый член натягивает брифы так, что виден рельеф головки и ствола.','He drops the shirt. He is left in white cotton Calvin Klein briefs — narrow waistband, logo on the band. The fabric in front is already dark with precum: his thick cock stretches the briefs so the outline of the head and shaft shows.'),
+  {...nik('Смотри, что ты со мной сделал ещё в парке.','Look what you did to me back in the park.','shy'),bg:SCENE.seductive},
   {...note('Я провожу ладонью по натянутому холму. Он дёргается под пальцами, стонет сквозь зубы. Я сжимаю сильнее — чувствую жар, пульс, как яйца поджаты в белом хлопке.','I run my palm over the stretched bulge. It twitches under my fingers; he moans through his teeth. I squeeze harder — heat, pulse, his balls drawn tight in the white cotton.'),bg:SCENE.touch},
   me('На колени. Сними их зубами — нет, стой. Сначала джоки. Хочу тебя в белых джоках, когда буду входить.','On your knees. Take them off with your teeth — no, wait. Jockstrap first. I want you in a white jock when I push in.'),
   nik('Они в ящике… секунду.','They are in the drawer… one second.','flirty')
@@ -117,8 +129,8 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
 
  // 5b. Sex + climax choice
  N.nikola_park_sex=scene([
-  note('Головка упирается, проходит — он орёт в подушку, потом рвано смеётся. Я держу его за бёдра и медленно вхожу целиком: джоки натянуты на яйцах, спина выгибается, мышцы на пояснице ходят. Когда я начинаю двигаться жёстче, мошонка шлёпает о его, смазка хлюпает, кровать стучит о стену.','The head presses, slips in — he cries into the pillow, then laughs roughly. I hold his hips and slowly bury myself to the hilt: the jockstrap tight on his balls, his back arching, the muscles along his spine working. When I start thrusting harder, my sack slaps his, lube squelches, the bed knocks the wall.'),
-  nik('Блядь… не останавливайся. Я весь твой. Можешь кончить куда хочешь — только предупреди.','Fuck… do not stop. I am all yours. You can cum wherever you want — just warn me.','flirty'),
+  {...note('Головка упирается, проходит — он орёт в подушку, потом рвано смеётся. Я держу его за бёдра и медленно вхожу целиком: джоки натянуты на яйцах, спина выгибается, мышцы на пояснице ходят. Когда я начинаю двигаться жёстче, мошонка шлёпает о его, смазка хлюпает, кровать стучит о стену.','The head presses, slips in — he cries into the pillow, then laughs roughly. I hold his hips and slowly bury myself to the hilt: the jockstrap tight on his balls, his back arching, the muscles along his spine working. When I start thrusting harder, my sack slaps his, lube squelches, the bed knocks the wall.'),bg:SCENE.moan},
+  {...nik('Блядь… не останавливайся. Я весь твой. Можешь кончить куда хочешь — только предупреди.','Fuck… do not stop. I am all yours. You can cum wherever you want — just warn me.','flirty'),bg:SCENE.climax},
   note('Я ускоряюсь. Он подаётся навстречу каждому толчку, джоки мокрые спереди от его собственной смазки, голос срывается на стон.','I speed up. He meets every thrust, the jock wet in front from his own precum, his voice breaking into a moan.')
  ],null,{...place('КВАРТИРА НИКОЛЫ · НОЧЬ','NIKOLA’S FLAT · NIGHT','22:10',SCENE.fuck),adult:true,skipTo:'nikola_park_morning',choices:[
   {label:T('Кончить в него глубоко','Cum deep inside him'),tone:'romance',next:'nikola_park_cum_inside',effect:{nikolaFinish:'inside'}},

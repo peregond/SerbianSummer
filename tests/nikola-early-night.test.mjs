@@ -24,8 +24,11 @@ assert.equal(NODES.nikola_park_decline.next,'chapter_three_close');
 assert.ok(JOURNAL.nikola_early_night);
 
 for(const file of Object.keys(NIKOLA_EARLY_NIGHT_BACKGROUNDS))assert.ok(BACKGROUNDS[file],file);
-assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[0],{}).bg,'nikola-jock-fuck-v1');
+assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[0],{}).bg,'nikola-bed-moan-v1');
+assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[1],{}).bg,'nikola-climax-face-v1');
 assert.equal(presentationFor(NODES.nikola_park_cum_inside,NODES.nikola_park_cum_inside.pages[0],{}).bg,'nikola-cum-inside-v1');
+assert.equal(presentationFor(NODES.nikola_park_closer,NODES.nikola_park_closer.pages[0],{}).bg,'nikola-briefs-lookdown-v1');
+assert.equal(presentationFor(NODES.nikola_park_door,NODES.nikola_park_door.pages[0],{}).bg,'nikola-door-kiss-v1');
 assert.equal(NODES.nikola_park_sex.choices.length,3);
 assert.deepEqual(NODES.nikola_park_sex.choices.map(c=>c.effect.nikolaFinish).sort(),['chest','inside','jock']);
 
