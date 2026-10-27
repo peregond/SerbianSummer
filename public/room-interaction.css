@@ -6,3 +6,4 @@
 .room-interaction::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#0b1c2d77,transparent 25%,transparent 45%,#0b1c2daa)}
 .room-tools,.room-title,.room-progress{z-index:4}
 .room-result:empty{display:none}
+@media(min-width:700px){.room-sheet{left:max(12px,calc((100% - 560px)/2));right:max(12px,calc((100% - 560px)/2))}}

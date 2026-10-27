@@ -72,3 +72,11 @@
 .guide-options{display:grid;gap:8px}
 .guide-option{min-height:54px;padding:10px 14px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-size:17px;font-weight:700}
 .guide-close{justify-self:center}
+/* Wide screens (desktop, tablets): keep the interactive panels at a phone-like reading width. */
+@media(min-width:700px){
+  .viewing-tabs,.viewing-card,.viewing-footer,.map-hint{left:max(12px,calc((100% - 560px)/2));right:max(12px,calc((100% - 560px)/2))}
+  .viewing-stage svg{max-height:46dvh}
+  .guide-page,.guide-footer{padding-left:max(16px,calc((100% - 640px)/2));padding-right:max(16px,calc((100% - 640px)/2))}
+  .quest-tools{left:max(12px,calc((100% - 700px)/2));right:max(12px,calc((100% - 700px)/2))}
+}
+.viewing-stage[data-station=water]{background:#cfe3e6}.viewing-stage[data-station=windows]{background:#f1e4cf}.viewing-stage[data-station=internet]{background:#e9dcc4}
