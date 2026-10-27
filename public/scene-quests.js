@@ -93,6 +93,7 @@ export function mountViewingQuest(root,{owner,mask=0,canRewind,onBack,onSettings
   root.append(bg,header,tabs,card,footer);
   const bit=(station,target)=>1<<(station*2+target);
   const stationDone=station=>(done&bit(station,0))&&(done&bit(station,1));
+  active=Math.max(0,QUEST_STATIONS.findIndex((_,index)=>!stationDone(index)));  // after a reload start at the first unfinished part
   const tabButtons=QUEST_STATIONS.map((station,index)=>{
     const button=make(doc,'button','viewing-tab');button.type='button';button.setAttribute('role','tab');
     listen(button,'click',()=>{active=index;paint();});tabs.append(button);return button;
