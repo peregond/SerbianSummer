@@ -6,6 +6,16 @@ export function imageHotspotRect(width,height,imageWidth,imageHeight,hotspot){
  const drawnWidth=imageWidth*scale,drawnHeight=imageHeight*scale;
  return {left:(width-drawnWidth)/2+drawnWidth*hotspot.x,top:(height-drawnHeight)/2+drawnHeight*hotspot.y,width:drawnWidth*hotspot.width,height:drawnHeight*hotspot.height};
 }
+// Anchor the feet to the diagonal surface of the carousel in image coordinates.
+export function baggagePosition(width,height,index){
+ const scale=Math.max(width/1024,height/1536),drawnWidth=1024*scale,drawnHeight=1536*scale;
+ const left=(width-drawnWidth)/2,top=(height-drawnHeight)/2;
+ const centers=[.12,.43,.74,.26,.57,.88],center=width*centers[index];
+ const x=Math.max(0,Math.min(1,(center-left)/drawnWidth));
+ const foot=index<3?.675-.065*x:.715-.075*x;
+ const bagWidth=Math.max(44,Math.min(width*.17,drawnHeight*.12)),bagHeight=Math.max(44,drawnHeight*.13);
+ return {left:Math.max(0,Math.min(width-bagWidth,center-bagWidth/2)),top:top+drawnHeight*foot-bagHeight,width:bagWidth,height:bagHeight};
+}
 export function mountBaggageInteraction({canvas,image,board,slot,status,onComplete,text=value=>value,random=Math.random}){
  const doc=canvas.ownerDocument,win=doc.defaultView;
  let phase='searching',disposed=false,flying=null;
@@ -22,11 +32,9 @@ export function mountBaggageInteraction({canvas,image,board,slot,status,onComple
  const placeBags=()=>{
   const {width,height}=canvas.getBoundingClientRect();
   if(!width||!height)return;
-  const scale=Math.max(width/1024,height/1536),drawnHeight=1536*scale,top=(height-drawnHeight)/2;
   board.querySelectorAll('.baggage-item').forEach((bag,index)=>{
-   const positions=[.50,.515,.49,.58,.59,.57];
-   bag.style.top=(top+drawnHeight*positions[index])+'px';
-   bag.style.height=(drawnHeight*.13)+'px';
+   const pos=baggagePosition(width,height,index);
+   Object.assign(bag.style,{left:pos.left+'px',top:pos.top+'px',width:pos.width+'px',height:pos.height+'px'});
   });
  };
  const finish=()=>{
