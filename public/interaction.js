@@ -19,6 +19,16 @@ export function mountBaggageInteraction({canvas,image,board,slot,status,onComple
  slot.dataset.found='false';slot.querySelector('[data-baggage-count]').textContent='0/1';
  status.textContent=text('Найди синий чемодан с жёлтой лентой.');
  board.replaceChildren();
+ const placeBags=()=>{
+  const {width,height}=canvas.getBoundingClientRect();
+  if(!width||!height)return;
+  const scale=Math.max(width/1024,height/1536),drawnHeight=1536*scale,top=(height-drawnHeight)/2;
+  board.querySelectorAll('.baggage-item').forEach((bag,index)=>{
+   const positions=[.50,.515,.49,.58,.59,.57];
+   bag.style.top=(top+drawnHeight*positions[index])+'px';
+   bag.style.height=(drawnHeight*.13)+'px';
+  });
+ };
  const finish=()=>{
   if(disposed||phase!=='collecting')return;
   flying?.remove();flying=null;phase='found';slot.dataset.found='true';
@@ -58,9 +68,12 @@ export function mountBaggageInteraction({canvas,image,board,slot,status,onComple
   };
   button.addEventListener('click',click);listeners.push([button,click]);
  }
- image.src='./assets/baggage/search-carousel.webp';
+ image.src='./assets/baggage/search-carousel-v2.webp';
+ placeBags();win.addEventListener('resize',placeBags);
+ const observer=win.ResizeObserver?new win.ResizeObserver(placeBags):null;observer?.observe(canvas);
  return ()=>{
   disposed=true;phase='disposed';timers.forEach(id=>win.clearTimeout(id));animations.forEach(animation=>animation.cancel());
+  win.removeEventListener('resize',placeBags);observer?.disconnect();
   listeners.forEach(([button,click])=>button.removeEventListener('click',click));flying?.remove();board.replaceChildren();
  };
 }
