@@ -80,3 +80,19 @@
   .quest-tools{left:max(12px,calc((100% - 700px)/2));right:max(12px,calc((100% - 700px)/2))}
 }
 .viewing-stage[data-station=water]{background:#cfe3e6}.viewing-stage[data-station=windows]{background:#f1e4cf}.viewing-stage[data-station=internet]{background:#e9dcc4}
+.viewing-finish:disabled{background:#4d5f66;color:#dbe5e5;opacity:1}
+/* Dark theme for the guide page and the viewing card. */
+:root[data-theme=dark] .scene-quest:has(.guide-page){background:#16272e;color:#edf1e7}
+:root[data-theme=dark] .guide-compare,:root[data-theme=dark] .guide-detail,:root[data-theme=dark] .guide-tab,:root[data-theme=dark] .guide-option{background:#21343c;color:#edf1e7}
+:root[data-theme=dark] .guide-tab,:root[data-theme=dark] .guide-option{color:#82d8bd;border-color:#82d8bd}
+:root[data-theme=dark] .guide-tab[aria-selected=true]{background:#82d8bd;color:#16272e}
+:root[data-theme=dark] .guide-compare th,:root[data-theme=dark] .guide-compare td{border-color:#42575b}
+:root[data-theme=dark] .guide-compare tr:first-of-type th{background:#254b40}
+:root[data-theme=dark] .guide-tag,:root[data-theme=dark] .guide-hint{color:#b1beb9}
+:root[data-theme=dark] .guide-block h4{color:#82d8bd}
+:root[data-theme=dark] .guide-note{background:#423b29;color:#fff0c1}
+:root[data-theme=dark] .guide-footer{background:#16272ef2;border-color:#42575b}
+:root[data-theme=dark] .viewing-card{background:#1d3037f2;color:#edf1e7}
+:root[data-theme=dark] .viewing-finding{background:#263d44}
+:root[data-theme=dark] .viewing-target{background:#23353b;color:#82d8bd;border-color:#82d8bd}
+:root[data-theme=dark] .viewing-target[data-done=true]{background:#254b40;color:#c3f5df}
