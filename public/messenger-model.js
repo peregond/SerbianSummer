@@ -4,6 +4,8 @@ import {familySpeaker} from './family-contact.js?v=1';
 import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.16.1';
 
 const names = { ...RENTAL_NAMES, milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
+// Preserve the old page index for saved games while opening Dragan's message directly.
+export function visibleMessagePage(sceneId,index){return sceneId==='nikola_phone'&&index===0?1:index;}
 export function contactName(value, flags = {}) {
   const dynamic = {
     contact: flags.companion ?? 'milica', contactCounterpart: flags.companion === 'nikola' ? 'milica' : 'nikola',

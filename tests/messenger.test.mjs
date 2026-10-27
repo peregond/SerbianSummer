@@ -2,10 +2,13 @@ import {familySpeaker,familyText} from '../public/family-contact.js';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
-import { messengerFrame, messageAt, stripMessageQuotes } from '../public/messenger-model.js';
+import { messengerFrame, messageAt, stripMessageQuotes, visibleMessagePage } from '../public/messenger-model.js';
 import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.16.1';
 
 const before = JSON.stringify(NODES);
+assert.equal(visibleMessagePage('nikola_phone',0),1,'Skip the redundant narration even when restoring an old save');
+assert.equal(visibleMessagePage('nikola_phone',1),1);
+assert.equal(visibleMessagePage('phone',0),0);
 const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => t(s) });
 let count = 0;
 for (const [id, node] of Object.entries(NODES)) for (const [index, page] of node.pages.entries()) {

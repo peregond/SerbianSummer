@@ -13,7 +13,7 @@ import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
 import {mountMessenger} from './messenger.js?v=0.16.1';
-import {messengerFrame,messageAt} from './messenger-model.js?v=0.16.1';
+import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.16.1-chat2';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-art3';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.1-art5';
@@ -243,7 +243,7 @@ function enterNode(id) {
   id=rentalRedirect(state?.node,id,state?.flags);
   // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
   if(NODES[id]?.adult&&!settings.adult)id=NODES[id].skipTo;
-  state.node=id;state.index=0;
+  state.node=id;state.index=visibleMessagePage(id,0);
   if(id==='end') {state.completed=true;return;}
   Object.assign(state.flags,NODES[id].effectOnEnter??{});applyFlatEffect(state.flags,NODES[id].effectOnEnter);
   for(const entry of NODES[id].journal??[]) if(!state.journal.includes(entry))state.journal.push(entry);
@@ -261,6 +261,7 @@ function showChapterLock(){
   box.append(title,copy,settingsButton,menu);root.append(box);
 }
 function renderGame({skipMessenger=false}={}) {
+  state.index=visibleMessagePage(state.node,state.index);
   if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
