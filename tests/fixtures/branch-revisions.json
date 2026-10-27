@@ -1117,7 +1117,7 @@
    }
   },
   "host_coffee_lend": {
-   "afterHash": "c489b1f13e9fd691b42c02f04a4b3632b4ab5c5618bdb6a16295797965edf8c7",
+   "afterHash": "e225b4d43b4fc9058e2e439dea2afb0a9ccf1cfd964737e039d3ba4135984383",
    "before": {
     "pages": [
      {
@@ -1165,7 +1165,7 @@
    }
   },
   "host_coffee_borrowed": {
-   "afterHash": "e861832bcbd7e073a1da35b5d2774228c6364197ab8ce3e0c9077d01022a7c51",
+   "afterHash": "2eb83f6853a36276744c252bde7e097339480f5d520e17aaa15b4b1d200a612c",
    "before": {
     "pages": [
      {

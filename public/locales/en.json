@@ -1,4 +1,7 @@
 {
+  "Печатает…": "Typing…",
+  "Драган улыбается и шутливо показывает мышцы в серой футболке": "Dragan smiles and playfully flexes his muscles in a grey T-shirt",
+  "Драган улыбается и шутливо показывает мышцы в белой футболке": "Dragan smiles and playfully flexes his muscles in a white T-shirt",
   "АЭРОПОРТ · ПЕРРОН": "AIRPORT · APRON",
   "Самолёт уже остановился, а в ушах всё ещё стоит ровный гул полёта.": "The plane has stopped, but the steady hum of the flight is still in my ears.",
   "За иллюминатором — огромное летнее небо. Красно-синий хвост соседнего самолёта, белый автобус, полосы солнечного света на бетоне.": "Beyond the window, an enormous summer sky. The red and blue tail of another plane, a white bus, stripes of sunlight on the concrete.",
@@ -4670,5 +4673,14 @@
   "Предложить сухую одежду": "Offer some dry clothes",
   "Носок цепляется за край половицы. Я спотыкаюсь и падаю, а одна из чашек вылетает у меня из руки. Кофе выплёскивается прямо вперёд.": "My toe catches the edge of the floorboard. I stumble and fall, and one of the cups flies from my hand. Coffee splashes straight ahead.",
   "Драган вскидывает руки и ошарашенно смотрит на меня из-за стола. По зелёной рубашке расползается тёмное пятно, капли попадают на открытую грудь у воротника и стекают к поясу.": "Dragan raises his hands and stares at me in shock from across the table. A dark stain spreads across his green shirt; drops land on his exposed chest at the collar and run toward his belt.",
-  "Йелена отступает и удивлённо смотрит на меня. Кофе попадает на рубашку и плотный топ под ней: большое пятно идёт от груди к талии, несколько капель — сбоку у пояса.": "Jelena steps back and looks at me in surprise. Coffee hits her overshirt and the opaque top beneath: a broad stain runs from chest to waist, with a few drops at the side of her belt."
+  "Йелена отступает и удивлённо смотрит на меня. Кофе попадает на рубашку и плотный топ под ней: большое пятно идёт от груди к талии, несколько капель — сбоку у пояса.": "Jelena steps back and looks at me in surprise. Coffee hits her overshirt and the opaque top beneath: a broad stain runs from chest to waist, with a few drops at the side of her belt.",
+  "В шкафу есть чистые спортивные футболки Under Armour. Какую принести Драгану: серую или белую?": "There are clean Under Armour sports shirts in the wardrobe. Which should I bring Dragan: grey or white?",
+  "В шкафу есть мягкие толстовки с надписью «СПБГУ 2008». Какую принести Йелене: серую или белую?": "There are soft hoodies marked “СПБГУ 2008” in the wardrobe. Which should I bring Jelena: grey or white?",
+  "Я достаю выбранную вещь из шкафа и возвращаюсь на кухню.": "I take the chosen item from the wardrobe and return to the kitchen.",
+  "Драган благодарит меня и, не смущаясь, надевает футболку. Заметив мой взгляд, он шутливо напрягает руку и улыбается.": "Dragan thanks me and slips on the T-shirt without hesitation. Catching my eye, he playfully flexes an arm and smiles.",
+  "Йелена благодарит меня и надевает толстовку поверх сухого топа. Поправив рукава, она улыбается мне.": "Jelena thanks me and pulls the hoodie over her dry top. She adjusts the sleeves and smiles at me.",
+  "Серая футболка Under Armour сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой смотрит на меня.": "The grey Under Armour T-shirt fits Dragan more closely than I expected. He adjusts a sleeve and smiles at me.",
+  "Белая футболка Under Armour облегает Драгана плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой смотрит на меня.": "The white Under Armour T-shirt hugs Dragan more closely than I expected. He adjusts a sleeve and smiles at me.",
+  "Удобная футболка, спасибо. Верну после стирки — будет повод увидеться снова.": "This T-shirt is comfortable, thank you. I will return it after washing it—an excuse to see you again.",
+  "Уютная толстовка, спасибо. Верну после стирки — будет повод увидеться снова.": "This hoodie is cosy, thank you. I will return it after washing it—an excuse to see you again."
 }

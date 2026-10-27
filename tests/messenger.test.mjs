@@ -9,6 +9,12 @@ const before = JSON.stringify(NODES);
 assert.equal(visibleMessagePage('nikola_phone',0),1,'Skip the redundant narration even when restoring an old save');
 assert.equal(visibleMessagePage('nikola_phone',1),1);
 assert.equal(visibleMessagePage('phone',0),0);
+assert.ok(framePhotoCheck());
+function framePhotoCheck(){
+ const photoFrame=messengerFrame({sceneId:'nikola_last',node:NODES.nikola_last,index:1,flags:{nikolaBond:'romance'},text:p=>pageText(p,{}),choiceText:s=>s});
+ const later=messengerFrame({sceneId:'nikola_last',node:NODES.nikola_last,index:5,flags:{nikolaBond:'romance'},action:beatActionAt(NODES.nikola_last,5),text:p=>pageText(p,{}),choiceText:s=>s});
+ return photoFrame.delayedPhoto && !later.delayedPhoto && later.messages.filter(message=>message.photo).length===1;
+}
 const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => t(s) });
 let count = 0;
 for (const [id, node] of Object.entries(NODES)) for (const [index, page] of node.pages.entries()) {

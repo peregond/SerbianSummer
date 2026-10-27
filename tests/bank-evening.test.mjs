@@ -111,7 +111,7 @@ const reply=NODES.host_evening_invite.pages[1];
 assert.match(pageText(reply,{host:'dragan',hostCoffeeSpilled:true}),/помню про половицу/);
 assert.doesNotMatch(pageText(reply,{host:'dragan'}),/половиц/);assert.doesNotMatch(pageText(reply,{host:'jelena',hostCoffeeSpilled:false}),/половиц/);
 // Grey or white close-fitting Under Armour T-shirt, asked as a choice.
-const lend=NODES.host_coffee_lend;assert.match(pageText(lend.pages[0],{host:'dragan'}),/облегающая футболка Under Armour/);assert.match(pageText(lend.pages[0],{host:'dragan'}),/Серая или белая/);
+const lend=NODES.host_coffee_lend;assert.match(pageText(lend.pages[0],{host:'dragan'}),/футболки Under Armour/);assert.match(pageText(lend.pages[0],{host:'dragan'}),/серую или белую/);
 const top=beatActionAt(lend,0);assert.equal(top.kind,'reply');assert.deepEqual(top.options.map(option=>option.effect.hostTop),['grey','white']);
 assert.match(pageText(NODES.host_coffee_borrowed.pages[0],{host:'dragan',hostTop:'white'}),/Белая футболка Under Armour облегает/);
 assert.match(pageText(NODES.host_coffee_borrowed.pages[0],{host:'dragan',hostTop:'grey'}),/Серая футболка Under Armour/);

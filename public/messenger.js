@@ -110,7 +110,13 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
   let photoTimer;
   if (replyButtons.length) footer.append(replies);
   else {const next=continueButton(frame.physicalAction ? 'К действию' : 'Продолжить историю');footer.append(next);
-    if(frame.delayedPhoto){next.disabled=true;photoTimer=setTimeout(()=>{bubble({direction:'incoming',text:'',photo:frame.delayedPhoto,time:frame.time});next.disabled=false;feed.scrollTop=feed.scrollHeight;},4000);}
+    if(frame.delayedPhoto){
+      next.disabled=true;
+      const typing=el('div','','chat-row incoming');
+      const indicator=el('div',frame.typingLabel,'chat-bubble incoming chat-typing');indicator.setAttribute('role','status');
+      typing.append(indicator);feed.append(typing);
+      photoTimer=setTimeout(()=>{typing.remove();bubble({direction:'incoming',text:'',photo:frame.delayedPhoto,time:frame.time});next.disabled=false;feed.scrollTop=feed.scrollHeight;},1500);
+    }
   }
   footer.append(notice); root.append(header, feed, footer);
   listen(root, 'click', event => { if (!menu.contains(event.target) && !menuToggle.contains(event.target)) { menu.hidden = true; menuToggle.setAttribute('aria-expanded', 'false'); } });

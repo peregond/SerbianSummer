@@ -19,12 +19,15 @@ for(const host of ['dragan','jelena'])for(const node of Object.values(NODES))for
 assert.match(pageText(NODES.host_coffee_comfort.pages[1],{host:'jelena'}),/не обожглась/);
 assert.match(pageText(NODES.host_coffee_change.pages[2],{host:'dragan'}),/татуировка/);
 assert.match(pageText(NODES.host_coffee_lend.pages[0],{host:'dragan'}),/Under Armour/);
+assert.equal(NODES.host_coffee_lend.pages[0].speaker,'narrator');
 assert.match(pageText(NODES.host_coffee_borrowed.pages[0],{host:'jelena'}),/СПБГУ 2008/);
 assert.ok(JOURNAL.host_coffee&&JOURNAL.borrowed_top);
 console.log('Optional kitchen route: both hosts, hand reassurance, clothing choice, old save indices and protected image bounds checked.');
 
 for(const host of ['dragan','jelena']){for(const id of ['host_coffee_pour','host_coffee_spill','host_coffee_comfort','host_coffee_change','host_coffee_wait','host_coffee_borrowed']){for(const page of NODES[id].pages){const p=presentationFor(NODES[id],page,{host});assert.equal(p.bg,host==='dragan'&&['kitchen-waiting','kitchen-spill','kitchen-comfort'].includes(p.emotion)?'kitchen-seated-layer-v1':'kitchen-common-layer-v1');assert.equal(p.character,host);assert.equal(p.composite,false);assert.ok(p.emotion.startsWith('kitchen-'));}}assert.equal(presentationFor(NODES.host_flirt,NODES.host_flirt.pages[3],{host}).emotion,'kitchen-waiting');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[0],{host}).emotion,'kitchen-soft');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[2],{host}).emotion,'kitchen-dry');}
 for(const color of ['grey','white']){
+ const dressing=presentationFor(NODES.host_coffee_lend,NODES.host_coffee_lend.pages[2],{host:'dragan',hostTop:color});
+ assert.equal(dressing.emotion,`kitchen-dressing-${color}`);
  const frame=presentationFor(NODES.host_coffee_borrowed,NODES.host_coffee_borrowed.pages[0],{host:'dragan',hostTop:color});
  assert.equal(frame.bg,'kitchen-seated-layer-v1');
  assert.equal(frame.emotion,`kitchen-borrowed-${color}`);
