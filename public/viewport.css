@@ -83,3 +83,5 @@
 
 .game[data-speaker=luka] #speaker{color:#4a6699}
 :root[data-theme=dark] .game[data-speaker=luka] #speaker{color:#b6caff}
+/* Status notices never block the reading controls beneath them. */
+.toast{pointer-events:none}

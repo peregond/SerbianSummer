@@ -30,3 +30,8 @@
 
 .chat-photo{display:block;width:min(100%,280px);height:auto;border-radius:12px;object-fit:contain}
 .chat-next:disabled{opacity:.55}
+
+/* Keep the compact artwork while giving contact and reaction controls a 44px touch area. */
+.chat-contact-toggle,.chat-reaction{position:relative}
+.chat-contact-toggle::after,.chat-reaction::after{content:'';position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.chat-row{min-height:44px}
