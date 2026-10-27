@@ -8,6 +8,7 @@ export function registerKitchenLayers(backgrounds,sprites){
  for(const top of ['grey','white'])sprites.dragan['kitchen-borrowed-'+top]={file:`dragan-kitchen-borrowed-layer-${top}-v1`,alt:`Драган на кухне в ${top==='grey'?'серой':'белой'} футболке Under Armour`};
  for(const person of ['dragan','jelena'])for(const stage of STAGES)sprites[person]['kitchen-'+stage]={file:`${person}-kitchen-${stage}-layer-${stage==='comfort'?'v2':'v1'}`,alt:person==='dragan'?'Драган на кухне':'Йелена на кухне'};
  sprites.dragan['kitchen-waiting'].file='dragan-kitchen-waiting-layer-v2';
+ sprites.dragan['kitchen-spill'].file='dragan-kitchen-spill-layer-v2';
  sprites.dragan['kitchen-comfort'].file='dragan-kitchen-comfort-layer-v3';
  for(const top of ['grey','white'])sprites.dragan['kitchen-borrowed-'+top].file=`dragan-kitchen-borrowed-layer-${top}-v2`;
 }
@@ -17,7 +18,7 @@ export function kitchenPresentation(node,page,flags={}){
  if(owner)return {bg:'kitchen-common-layer-v1',description:'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:false,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:owner,contactPortrait:null,emotion:'friendly',daydream:false};
  const person=(node.districtPortrait?flags.districtOwner:flags.host)==='jelena'?'jelena':'dragan';
  const mood=stage==='coffee'?'waiting':stage==='spill'&&node===dryNode?'soft':stage;
- const seated=person==='dragan'&&(['waiting','comfort'].includes(mood)||(mood==='borrowed'&&['grey','white'].includes(flags.hostTop)));
+ const seated=person==='dragan'&&(['waiting','spill','comfort'].includes(mood)||(mood==='borrowed'&&['grey','white'].includes(flags.hostTop)));
  return {bg:seated?'kitchen-seated-layer-v1':'kitchen-common-layer-v1',description:seated?'Кухня с деревянным столом у окна':'Кухня с деревянным столом у окна',position:'50% 0%',insert:false,seated:false,composite:false,kitchenLayers:true,location:'КВАРТИРА · КОФЕ НА КУХНЕ',time:page.time??node.time,character:person,contactPortrait:null,emotion:'kitchen-'+(mood==='borrowed'&&person==='dragan'&&['grey','white'].includes(flags.hostTop)?'borrowed-'+flags.hostTop:mood),occludeTable:!seated&&!['comfort','waiting'].includes(mood),daydream:false};
 }
 let dryNode;
