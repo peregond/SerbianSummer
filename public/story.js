@@ -1,7 +1,7 @@
 import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=2';
 import {extendHousing} from './housing-story.js?v=1';
 import {extendBank} from './bank-story.js?v=2';
-import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=1';
+import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=2';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=2';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
@@ -46,6 +46,8 @@ export const STORY_VERSION = 1;
 export const START = 'quick_arrival';
 // Positions are chosen for the shorter illustration area above a phone's dialogue panel.
 export const BACKGROUNDS = {
+  'belgrade-courtyard-evening-v1': { label:'БЕЛГРАД · ДВОР', description:'Вечерний двор с освещёнными окнами', position:'50% 50%' },
+  'courtyard-door-evening-v1': { label:'БЕЛГРАД · ДВЕРЬ', description:'Дверь во дворе при свете вечерней лампы', position:'50% 50%' },
   'airport-apron': { label:'АЭРОПОРТ · ПЕРРОН', description:'Летнее небо, самолёт и перрон аэропорта Белграда', position:'50% 55%' },
   'arrivals-corridor': { label:'АЭРОПОРТ · КОРИДОР ПРИЛЁТА', description:'Залитый солнцем коридор прилёта', position:'50% 57%' },
   'escalator': { label:'АЭРОПОРТ · ПЕРЕХОД', description:'Движущаяся дорожка и указатели к получению багажа', position:'50% 60%' },
@@ -716,7 +718,7 @@ registerRentalBeats(NODES,scene);
 extendHousing({NODES,JOURNAL});
 extendBank({NODES,JOURNAL});
 extendHostEvening({NODES,JOURNAL});
-for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v1',alt:'Драган'};
+for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v2',alt:'Драган в вечерней рубашке'};
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 // Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
@@ -733,7 +735,7 @@ export function pageText(page,flags={},locale=getLanguage()) {
   return resolveStoryText(callToken(text),flags,locale);
 }
 
-export function presentationFor(node,page,flags={}) {
+export function presentationFor(node,page,flags={},profile={}) {
   const kitchen=kitchenPresentation(node,page,flags);if(kitchen)return kitchen;
   const districtBg={dorcol:'dorcol-apartment',vracar:'vracar-apartment',newbelgrade:'new-belgrade-apartment'};
   const kitchenStage=page.kitchenStage??node.kitchenStage;
@@ -747,16 +749,18 @@ export function presentationFor(node,page,flags={}) {
   const baseBg=previousHostKitchen?'kitchen-common-layer-v1':kitchenStage?`${kitchenPerson}-kitchen-${kitchenStage}`:seated&&!page.insert?(SEATED_MILICA_ART[seatedMood]??SEATED_MILICA_ART.friendly):page.action?.bg??page.bg??(node.districtBg?(districtBg[flags.district]??'dorcol-apartment'):node.bg);
   const daydream=page.daydream??node.daydream??false;
   const visual=prologueVisualFor(node,page,daydream);
-  const bg=visual?.bg??baseBg;
+  const hug=node===NODES.host_evening_close&&page===node.pages[4]&&(flags.host??'dragan')==='dragan'&&['male','female'].includes(profile.gender);
+  const bg=hug?'belgrade-courtyard-evening-v1':visual?.bg??baseBg;
+  const cg=hug?`dragan-hug-neutral-${profile.gender}-layer-v1`:null;
   const metadata=BACKGROUNDS[bg];
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
   const extra=extraVisualFor(page,flags);
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
-  const character=visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=hug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   const eveningMood=character==='dragan'&&EVENING_NODES.some(id=>NODES[id]===node)?'evening-'+(['friendly','thoughtful','laughing','flirty'].includes(page.emotion)?page.emotion:'friendly'):null;
   return {
-    bg,description:node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!kitchenStage||!!seated||!!visual?.composite,
+    bg,cg,description:hug?'Драган обнимает силуэт игрока во дворе':node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!hug||!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,
