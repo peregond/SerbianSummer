@@ -499,7 +499,7 @@ function renderEnding() {
   $('ending-rewind').disabled=!state.rewind?.length;
   const continuation=continuationFor(state);
   $('continue-story').hidden=!continuation;
-  $('continue-story').textContent=(()=>{const day=CHAPTERS.find(c=>c.start===continuation);return day?.day?t('Продолжить · День '+day.day):t(continuation==='next_steps'?'Продолжить · Счёт на себя':'Продолжить · Своя дверь');})();
+  $('continue-story').textContent=(()=>{const day=CHAPTERS.find(c=>c.start===continuation);return day?.day?t('Продолжить · День '+day.day):t(continuation==='next_steps'?'Продолжить · Условия квартиры':'Продолжить · Своя дверь');})();
   $('ending-title').innerHTML=html(state.flags.chapterOneComplete?'Уже не только<br><em>адрес</em>':'Пока только<br><em>адрес</em>');
   const finalBackground={dorcol:'dorcol-apartment',vracar:'vracar-apartment',newbelgrade:'new-belgrade-apartment'}[state.flags.district]??'first-room';
   $('ending').style.backgroundImage=state.flags.chapterOneComplete?`linear-gradient(#164d5d55,#123d49ed),url('./assets/${finalBackground}.webp')`:'';

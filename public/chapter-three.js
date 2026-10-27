@@ -132,5 +132,5 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
  });
  for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'13:20':['bank_call'],'14:10':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
  for(const id of ['date_river','date_kiss','date_hand','date_slow'])N[id].music='encounter';
- N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Счёт на себя');
+ N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Условия квартиры');
 }

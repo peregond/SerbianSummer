@@ -43,10 +43,10 @@ export function mountDistrictMap(root,{choices,flags,onChoose,onBack,onSettings,
     const seen=!!(choice.revisit&&hasSeen(flags,owner));
     const button=make(doc,'button','map-pin');button.type='button';button.dataset.district=district;button.dataset.seen=String(seen);
     const name=make(doc,'strong','map-pin-name',pick(DISTRICT_LABEL[district]??[district,district]));
-    const hosts=OWNER_LINE[district];
-    const meta=make(doc,'small','map-pin-meta',hosts?(seen?'✓ ':'')+pick(hosts):'');
+    const ownerLine=OWNER_LINE[owner];
+    const meta=make(doc,'small','map-pin-meta',ownerLine?(seen?'✓ ':'')+pick(ownerLine):'');
     button.append(name,meta);
-    button.setAttribute('aria-label',pick(DISTRICT_LABEL[district]??[district,district])+(hosts?' · '+pick(hosts):'')+(seen?' · '+t(UI[3]):''));
+    button.setAttribute('aria-label',pick(DISTRICT_LABEL[district]??[district,district])+(ownerLine?' · '+pick(ownerLine):'')+(seen?' · '+t(UI[3]):''));
     listen(button,'click',()=>onChoose(seen?{...choice,next:choice.revisit}:choice));
     pins.set(district,button);
   }
@@ -63,7 +63,8 @@ export function mountDistrictMap(root,{choices,flags,onChoose,onBack,onSettings,
   const observer=new ResizeObserver(place);observer.observe(root);listen(art,'load',place);requestAnimationFrame(place);
   return ()=>{events.abort();observer.disconnect();};
 }
-const OWNER_LINE={dorcol:['Ана · Стефан','Ana · Stefan'],vracar:['Марко','Marko'],newbelgrade:['Вук','Vuk']};
+// The people behind the first flat of each district; the original story (Jelena and Dragan) shows its own hosts.
+const OWNER_LINE={ana:['Ана · Стефан','Ana · Stefan'],marko:['Марко','Marko'],vuk:['Вук','Vuk'],jelena:['Йелена','Jelena'],dragan:['Драган','Dragan']};
 
 // Hand-drawn vector fallbacks. A painted illustration can replace each one later through STATION_ART.
 export const STATION_ART={};
