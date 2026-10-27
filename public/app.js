@@ -1,5 +1,5 @@
 import {rentalRedirect} from './rental-story.js?v=2';
-import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
+import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
 import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.16.1';
 import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=0.16.1';
@@ -23,7 +23,7 @@ import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
 import {drawBeatAction} from './beat-action.js?v=0.16.1';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.1-art3';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.1-art4';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';

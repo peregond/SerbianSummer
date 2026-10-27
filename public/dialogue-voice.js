@@ -1,4 +1,4 @@
-import {rentalCounterpart} from './rental-people.js?v=1';
+import {rentalCounterpart} from './rental-people.js?v=2';
 export function dialogueVoice(page) {
  return page.speaker==='narrator'?'thought':page.speaker==='player'?'speech':page.message?'message':'other';
 }
