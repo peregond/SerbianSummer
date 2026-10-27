@@ -17,7 +17,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
   for (const name of Object.keys(backgrounds)) active.add(name + '.webp');
   for(const portrait of Object.values(HOME_PORTRAITS))active.add(portrait.file);
   for(const file of Object.values(HOME_BACKGROUNDS))active.add(file);
-  const baggageAssets=new Set(['baggage/search-carousel.webp',...BAGGAGE_ITEMS.map(item=>'baggage/'+item.id+'.webp')]);
+  const baggageAssets=new Set(['baggage/search-carousel-v2.webp',...BAGGAGE_ITEMS.map(item=>'baggage/'+item.id+'.webp')]);
   for(const file of baggageAssets)active.add(file);
   const entries = files.map(file => {
     const base = file.split('/').at(-1);
@@ -32,7 +32,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const draft = file.startsWith('workshop/');
     const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
     const look = /^dragan-evening-.*-v[12]\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
-    const category = character ? 'characters' : image ? ((Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) || Object.values(HOME_BACKGROUNDS).includes(file) || file==='baggage/search-carousel.webp') ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
+    const category = character ? 'characters' : image ? ((Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) || Object.values(HOME_BACKGROUNDS).includes(file) || file.startsWith('baggage/search-carousel')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
   });
