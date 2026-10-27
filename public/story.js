@@ -713,7 +713,7 @@ applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyEpisodicCast(NODES,CHARACTER_SPRITES);
 assignChapters(NODES);
 registerRentalBeats(NODES,scene);
-extendHousing({NODES,JOURNAL,BACKGROUNDS});
+extendHousing({NODES,JOURNAL});
 extendBank({NODES,JOURNAL});
 extendHostEvening({NODES,JOURNAL});
 

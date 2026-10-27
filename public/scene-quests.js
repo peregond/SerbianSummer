@@ -20,7 +20,6 @@ const UI=[
 const MAP_SIZE={width:941,height:1672};
 // Where each district sits on the painted panorama (fractions of the picture).
 export const MAP_PINS={dorcol:{x:.7,y:.36},vracar:{x:.8,y:.64},newbelgrade:{x:.22,y:.125}};
-const SVG='http://www.w3.org/2000/svg';
 const make=(doc,tag,className,text)=>{const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 function toolbar(doc,{title,canRewind,onBack,onSettings,listen}){
   const header=make(doc,'header','quest-tools');
@@ -97,7 +96,7 @@ export function mountViewingQuest(root,{owner,mask=0,canRewind,onBack,onSettings
     const button=make(doc,'button','viewing-tab');button.type='button';button.setAttribute('role','tab');
     listen(button,'click',()=>{active=index;paint();});tabs.append(button);return button;
   });
-  const targetButtons=[0,1].map(target=>{const button=make(doc,'button','viewing-target');button.type='button';actions.append(button);return button;});
+  const targetButtons=[0,1].map(()=>{const button=make(doc,'button','viewing-target');button.type='button';actions.append(button);return button;});
   const paint=(message='')=>{
     const station=QUEST_STATIONS[active];
     tabButtons.forEach((button,index)=>{
@@ -107,7 +106,7 @@ export function mountViewingQuest(root,{owner,mask=0,canRewind,onBack,onSettings
     });
     stage.innerHTML=art[station.id];stage.dataset.station=station.id;
     stage.classList.toggle('first-done',!!(done&bit(active,0)));stage.classList.toggle('second-done',!!(done&bit(active,1)));
-    station.targets.forEach(([id,label],target)=>{
+    station.targets.forEach(([,label],target)=>{
       const button=targetButtons[target],checked=!!(done&bit(active,target));
       button.textContent=(checked?'✓ ':'')+pick(label);button.dataset.done=String(checked);button.setAttribute('aria-pressed',String(checked));
     });

@@ -25,9 +25,8 @@ const priced=(speaker,fn,extra={})=>{
 const tap=(label,en,extra={})=>({kind:'tap',label:T(label,en),object:T(label,en),...extra});
 const choice=(label,en,next,tone,effect,when)=>({label:T(label,en),next,tone,...(effect?{effect}:{}),...(when?{when}:{})});
 const owned=owner=>({flag:'districtOwner',equals:owner});
-const place=(owner)=>FLATS[owner].district;
 
-export function extendHousing({NODES,JOURNAL,BACKGROUNDS}){
+export function extendHousing({NODES,JOURNAL}){
   const day=CHAPTERS.find(c=>c.day===1);
   const base={bg:'first-room',location:T('БЕЛГРАД · ПОИСК КВАРТИРЫ','BELGRADE · FLAT HUNT'),time:'11:00',day:'ДЕНЬ 1',chapterId:day.id,chapter:day.number+' · '+day.title,districtBg:true,districtPortrait:true};
   const finish=(id,pages,next,extra={})=>{
@@ -141,7 +140,7 @@ export function extendHousing({NODES,JOURNAL,BACKGROUNDS}){
   ],'flat_contract',{time:'12:35',effectOnEnter:{flatDiscount:0},exitAction:tap('Получить проект договора','Receive the draft lease')});
   finish('flat_price_basic',[
     H('Пятьдесят евро скинуть могу. Спокойный деловой разговор мне нравится.','I can take fifty euros off. A calm, businesslike conversation suits me.'),
-    priced('narrator',(owner,rent,discount)=>fill(['Теперь аренда — {rent} евро в месяц. Скидка в пятьдесят евро — обычная вежливая просьба, без обещаний с моей стороны.','Now the rent is {rent} euros a month. The fifty-euro discount is an ordinary polite request, with no promises from me.'],rent))
+    priced('narrator',(owner,rent)=>fill(['Теперь аренда — {rent} евро в месяц. Скидка в пятьдесят евро — обычная вежливая просьба, без обещаний с моей стороны.','Now the rent is {rent} euros a month. The fifty-euro discount is an ordinary polite request, with no promises from me.'],rent))
   ],'flat_contract',{time:'12:35',effectOnEnter:{flatDiscount:50},exitAction:tap('Получить проект договора','Receive the draft lease')});
   for(const amount of [100,150]){
     const word=amount===100?['сто','a hundred']:['сто пятьдесят','a hundred and fifty'];

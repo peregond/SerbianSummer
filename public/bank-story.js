@@ -12,7 +12,7 @@ const tap=(label,en,extra={})=>({kind:'tap',label:T(label,en),object:T(label,en)
 const choice=(label,en,next,tone,effect)=>({label:T(label,en),next,tone,...(effect?{effect}:{})});
 
 export function extendBank({NODES,JOURNAL}){
-  const day2=CHAPTERS.find(c=>c.day===2),day1=CHAPTERS.find(c=>c.day===1);
+  const day2=CHAPTERS.find(c=>c.day===2);
   const base={bg:'bank-consultation',location:T('БЕЛГРАД · ОТДЕЛЕНИЕ БАНКА','BELGRADE · BANK BRANCH'),time:'09:30',day:'ДЕНЬ 2',chapterId:day2.id,chapter:day2.number+' · '+day2.title};
   const finish=(id,pages,next,extra={})=>{
     const node={...base,pages,next,...extra};
