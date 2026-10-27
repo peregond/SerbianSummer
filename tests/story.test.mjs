@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {isBackEdge} from './graph-helpers.mjs';
 import fs from 'node:fs';
 import {NODES,JOURNAL,START,BACKGROUNDS,CHARACTER_SPRITES,CHOICE_TONES,presentationFor,pageText,resolveStoryText,interpolate} from '../public/story.js';
 import {choiceVisible} from '../public/romance.js';
@@ -21,7 +22,7 @@ function walk(id,ancestors=[]) {
   }
   for(const journal of node.journal??[])assert.ok(Object.hasOwn(JOURNAL,journal));
   for(const choice of node.choices??[]){assert.ok(Object.hasOwn(CHOICE_TONES,choice.tone),choice.label);assert.ok(!/[{}]/.test(interpolate(resolveStoryText(choice.label,contexts[0]),{gender:'female',nameId:'anna'},catalog)));}
-  const next=node.choices?node.choices.map(c=>c.next):[node.next];
+  const next=(node.choices?node.choices.map(c=>c.next):[node.next]).filter(target=>!isBackEdge(id,target));
   const descendants=next.map(target=>walk(target,[...ancestors,id]));
   const words=node.pages.reduce((sum,p)=>sum+p.text.split(/\s+/u).length,0);
   const stats={paths:descendants.reduce((sum,x)=>sum+x.paths,0),min:words+Math.min(...descendants.map(x=>x.min)),max:words+Math.max(...descendants.map(x=>x.max))};memo.set(id,stats);return stats;
@@ -32,7 +33,7 @@ for(const [id,node]of Object.entries(NODES))if(node.legacyOnly)walk(id);
 assert.equal(visited.size,Object.keys(NODES).length,'Unreachable scene');assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
 assert.equal(presentationFor(NODES.nikola_daydream,NODES.nikola_daydream.pages[4]).daydream,false);
 assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{})).length,3,'three original district routes remain available in the original story');
-assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'})).length,4,'four distinct new hosts are available in the new story');
+assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'})).length,3,'three districts are on the map in the new story');
 assert.notEqual(NODES.district_map.choices[0].effect.districtOwner,NODES.district_map.choices[1].effect.districtOwner);
 assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'vracar',districtOwner:'dragan'}).character,'dragan');
 assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'dorcol',districtOwner:'jelena'}).bg,'dorcol-apartment');

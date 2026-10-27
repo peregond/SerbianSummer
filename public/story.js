@@ -1,34 +1,37 @@
-import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=1';
+import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=2';
+import {extendHousing} from './housing-story.js?v=1';
+import {extendBank} from './bank-story.js?v=1';
+import {extendHostEvening} from './host-evening.js?v=1';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
-import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=1';
-import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.15.4';
+import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=2';
+import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
 import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=1';
 import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=2';
 import {applyLivingArt,additionalPortrait} from './living-art.js?v=1';
 import {applyArtExpansion} from './art-expansion.js?v=1';
-import {registerLukaSport} from './luka-redesign.js?v=0.15.4';
-import {extendFifthChapter} from './chapter-five.js?v=0.15.4';
-import {extendSixthChapter} from './chapter-six.js?v=0.15.4';
-import {extendSeventhChapter} from './chapter-seven.js?v=0.15.4';
-import {extendCast,dayFor} from './days.js?v=0.15.4';
-import {extendFirstHalf} from './day-scenes.js?v=0.15.4';
-import {extendSecondHalf} from './day-scenes-late.js?v=0.15.4';
-import {extendOfficeRomance} from './day-office.js?v=0.15.4';
-import {extendMaskedPatrol} from './day-mask.js?v=0.15.4';
-import {extendRomance} from './romance-scenes.js?v=0.15.4';
-import {SLOTS,identityOf,SPRITES} from './romance.js?v=0.15.4';
-import {registerNikolaRedesign} from './nikola-redesign.js?v=0.15.4';
-import {extendFourthChapter} from './chapter-four.js?v=0.15.4';
-import {extendHostCoffee} from './host-coffee.js?v=0.15.4';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.15.4';
-import {assignChapters} from './chapters.js?v=0.15.4';
-import {extendNextChapter} from './chapter-three.js?v=0.15.4';
-import {extendFastPrologue} from './prologue-fast.js?v=0.15.4';
-import {editPrologue} from './prologue-edit.js?v=0.15.4';
-import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.15.4';
-import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.15.4';
+import {registerLukaSport} from './luka-redesign.js?v=0.16.1';
+import {extendFifthChapter} from './chapter-five.js?v=0.16.1';
+import {extendSixthChapter} from './chapter-six.js?v=0.16.1';
+import {extendSeventhChapter} from './chapter-seven.js?v=0.16.1';
+import {extendCast,dayFor} from './days.js?v=0.16.1';
+import {extendFirstHalf} from './day-scenes.js?v=0.16.1';
+import {extendSecondHalf} from './day-scenes-late.js?v=0.16.1';
+import {extendOfficeRomance} from './day-office.js?v=0.16.1';
+import {extendMaskedPatrol} from './day-mask.js?v=0.16.1';
+import {extendRomance} from './romance-scenes.js?v=0.16.1';
+import {SLOTS,identityOf,SPRITES,callsByShortName} from './romance.js?v=0.16.1';
+import {registerNikolaRedesign} from './nikola-redesign.js?v=0.16.1';
+import {extendFourthChapter} from './chapter-four.js?v=0.16.1';
+import {extendHostCoffee} from './host-coffee.js?v=0.16.1';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.16.1';
+import {assignChapters} from './chapters.js?v=0.16.1';
+import {extendNextChapter} from './chapter-three.js?v=0.16.1';
+import {extendFastPrologue} from './prologue-fast.js?v=0.16.1';
+import {editPrologue} from './prologue-edit.js?v=0.16.1';
+import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.16.1';
+import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.16.1';
 export {beatActionAt};
-import {extendChapter} from './chapter-one.js?v=0.15.4';
+import {extendChapter} from './chapter-one.js?v=0.16.1';
 // Original story for the playable prototype. Text is kept separate from the player.
 const n = text => ({ speaker: 'narrator', text });
 const m = text => ({ speaker: 'milica', text });
@@ -710,16 +713,23 @@ applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyEpisodicCast(NODES,CHARACTER_SPRITES);
 assignChapters(NODES);
 registerRentalBeats(NODES,scene);
+extendHousing({NODES,JOURNAL});
+extendBank({NODES,JOURNAL});
+extendHostEvening({NODES,JOURNAL});
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
+// Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
+// gender, with the text of the matching gender: Ana as Jelena, the three men as Dragan.
+const RENTAL_TEXT_KEY={ana:'jelena',stefan:'dragan',marko:'dragan',vuk:'dragan'};
 export function pageText(page,flags={},locale=getLanguage()) {
   const picked=page.byFlag?(()=>{const{flag,text}=page.byFlag;const key=Array.isArray(flag)?flag.map(f=>flags[f]).join(':'):flags[flag];return text[key]??text.default;})():undefined;
   const partnerPicked=page.byPartner?(page.byPartner[SLOTS.includes(flags.lastPartner)?identityOf(flags.lastPartner,flags):'']??page.byPartner.default):undefined;
   const rentalVariants=page.byRentalStep?.[flags.districtOwner];
   const rentalPicked=rentalVariants?.[flags['rentalStep_'+flags.districtOwner]]??rentalVariants?.default;
-  let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
+  const callToken=value=>typeof value==='string'&&value.includes('{call}')?value.replaceAll('{call}',callsByShortName(page.speaker,flags)?'{short}':'{full}'):value;
+  let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.districtText?.[RENTAL_TEXT_KEY[flags.districtOwner]]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
-  return resolveStoryText(text,flags,locale);
+  return resolveStoryText(callToken(text),flags,locale);
 }
 
 export function presentationFor(node,page,flags={}) {

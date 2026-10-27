@@ -33,7 +33,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
   ],{districtBg:true,districtPortrait:true,next:'bank_plan',journal:['housing_reply'],exitAction:out('Добавить квартиру в сравнение')}),
   housing_other:s([
    y('Хочу ещё посмотреть. Район нравится, а квартиру пока не чувствую своей.'),
-   owner('Тогда поищем другое. Обещаю не обижаться за стены.','Значит, хорошо, что посмотрели. Заодно узнали, что тебе важно.'),
+   owner('Понимаю. Лучше сразу сказать, что квартира не твоя, чем жить среди чужих стен.','Значит, хорошо, что посмотрели. Заодно узнали, что тебе важно.'),
    n('Ася ставит в заметке маленький плюс: «Первый отказ без катастрофы. Отлично идём». ')
   ],{districtBg:true,districtPortrait:true,next:'bank_plan',journal:['housing_reply'],exitAction:out('Записать, чего не хватило квартире')}),
   bank_plan:s([
@@ -80,7 +80,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
   ],{next:'afternoon_invite',journal:['work_route'],exitAction:out('Сохранить направления для изучения')}),
   afternoon_invite:s([
    contact('Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.','Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.'),
-   n('Время на экране — 18:40. Сегодня у меня было достаточно серьёзное лицо.'),
+   n('Время на экране — 18:40. Пишет {who.airport}: мы обменялись номерами ещё в аэропорту. Сегодня у меня было достаточно серьёзное лицо.'),
    n('Теперь можно решить, каким будет вечер.')
   ],{time:'18:40',choices:[
    {label:'Предложить свидание у реки',tone:'romance',next:'date_river',effect:{eveningIntent:'romance'}},
@@ -132,5 +132,5 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
  });
  for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'13:20':['bank_call'],'14:10':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
  for(const id of ['date_river','date_kiss','date_hand','date_slow'])N[id].music='encounter';
- N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Счёт на себя');
+ N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Условия квартиры');
 }

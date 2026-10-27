@@ -1,6 +1,8 @@
 // New rental stories are layered onto the existing graph. The original scenes
 // are kept so a replay with an older save still has its original people.
 import {CHAPTERS} from './chapters.js?v=0.15.3';
+import {housingRedirect,SKIPPED_BEAT_DAYS} from './housing-story.js?v=1';
+import {bankRedirect} from './bank-story.js?v=1';
 const people={
  ana:{name:'Ана',district:'dorcol',bg:'dorcol-apartment',intro:['Ана открывает дверь с камерой через плечо.','Ana opens the door with a camera over her shoulder.'],voice:['Привет. Я Ана. Стефан сейчас задерживается, но я покажу тебе квартиру.','Hi. I am Ana. Stefan is running late, but I can show you the flat.'],detail:['У окна лежат фотографии двора. Ана замечает мой взгляд: «Соседи попросили пока не выкладывать их лица. Я их понимаю».','Photographs of the courtyard lie by the window. Ana notices my glance. “The neighbours asked me not to post their faces yet. I understand.”']},
  stefan:{name:'Стефан',district:'dorcol',bg:'dorcol-apartment',intro:['Стефан открывает дверь, вытирая руки от древесной пыли.','Stefan opens the door, wiping wood dust from his hands.'],voice:['Привет, я Стефан. Не бойся, стол я уже починил. Дверь пока только обещал.','Hi, I am Stefan. Do not worry, I fixed the table already. The door only has my promise so far.'],detail:['Он показывает отреставрированный стул и смеётся: «Ана говорит, я умею отдыхать только с отвёрткой».','He shows me a restored chair and laughs. “Ana says I only know how to rest with a screwdriver.”']},
@@ -20,7 +22,7 @@ export function extendRentalStory({NODES,scene,n,y}){
    choose(['Спросить об условиях аренды','Ask about the rental terms'],'rental_terms_'+id,'practical',{['rentalBond_'+id]:'practical'}),
    choose(['Предложить познакомиться по-дружески','Suggest getting to know each other as friends'],'rental_friends_'+id,'friendship',{['rentalBond_'+id]:'friendship'}),
    choose(['Предложить кофе после просмотра','Suggest coffee after the viewing'],'rental_flirt_'+id,'romance',{['rentalBond_'+id]:'romance'})]});
-  for(const [mode,reply]of Object.entries({terms:line('Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.','Of course. Let us write down the term, payments and questions that still need answers.'),friends:line('С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.','I would like that. I can show you my favourite place in the neighbourhood whenever it suits you.'),flirt:line('Да, с удовольствием. Давай сначала закончим с квартирой, а потом выберем время.','Yes, I would like that. Let us finish with the flat first, then pick a time.')})){
+  for(const [mode,reply]of Object.entries({terms:line('Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.','Of course. Let us write down the term, payments and questions that still need answers.'),friends:line('С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.','I would like that. I can show you my favourite place in the neighbourhood whenever it suits you.'),flirt:line('Да, с удовольствием. Пока Ася говорит по телефону, у нас как раз есть десять минут.','Yes, with pleasure. While Asya is on the phone we have ten minutes.')})){
    NODES['rental_'+mode+'_'+id]=scene([say(p.name,reply,{character:id}),say('narrator',line('Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.','I like that there is no need to hurry. I close my notebook and save the contact.'))],'morning_ready',{bg:p.bg,districtPortrait:true,time:'11:52',journal:['viewing_done'],exitAction:{kind:'tap',label:T('Продолжить','Continue'),object:T('Продолжить','Continue')}});
   }
  }
@@ -101,9 +103,11 @@ function extendRentalBeats(NODES,scene){
  }
 }
 export function rentalRedirect(from,target,flags={}){
+ target=bankRedirect(from,target,flags);
+ target=housingRedirect(from,target,flags);
  if(flags.rentalCast!=='new'||!people[flags.districtOwner]||!from||from.startsWith('rental_'))return target;
  if(['epilogue_stay','epilogue_leave','epilogue_return'].includes(target))return 'rental_'+target;
  const chapter=CHAPTERS.find(c=>c.start===target&&Object.hasOwn(beats,c.day));
- return chapter?'rental_day_'+chapter.day:target;
+ return chapter&&!(flags.rentalMoved===true&&SKIPPED_BEAT_DAYS.includes(chapter.day))?'rental_day_'+chapter.day:target;
 }
 export function registerRentalBeats(NODES,scene){extendRentalBeats(NODES,scene);}

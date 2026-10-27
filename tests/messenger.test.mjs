@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { NODES, beatActionAt, pageText } from '../public/story.js';
 import { messengerFrame, messageAt, stripMessageQuotes } from '../public/messenger-model.js';
-import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.15.4';
+import { configureTranslations, setLanguage, t } from '../public/i18n.js?v=0.16.1';
 
 const before = JSON.stringify(NODES);
 const frame = (id, index, flags = {}) => messengerFrame({ sceneId: id, node: NODES[id], index, flags, action: beatActionAt(NODES[id], index), text: p => pageText(p, flags), choiceText: s => t(s) });
@@ -18,7 +18,7 @@ for (const [id, node] of Object.entries(NODES)) for (const [index, page] of node
     assert.ok(result.draft !== null || result.messages.length);
   }
 }
-assert.equal(count, 77, 'All existing marked messages are covered');
+assert.equal(count, 87, 'All existing marked messages are covered');
 const outgoing = frame('prepare_host', 0);
 assert.equal(outgoing.contact, 'Драган'); assert.equal(outgoing.messages.length, 0);
 assert.match(outgoing.draft, /Я уже в аэропорту/);

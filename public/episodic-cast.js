@@ -20,7 +20,6 @@ export const EPISODIC_PEOPLE=Object.fromEntries(Object.entries(EPISODIC_CAST).ma
 export const EPISODIC_AVATARS=Object.fromEntries(Object.entries(EPISODIC_CAST).map(([id,person])=>[person.name,id+'-friendly.webp']));
 // Scene IDs and page indices are references only; no story pages are inserted or rewritten.
 export const EPISODIC_STAGES=[
- ['bank_call',0,'guest-bank-staff','contact','Звонок'],['bank_call',2,'guest-bank-staff','contact','На связи'],
  ...['bank_visit','bank_documents','bank_cost'].flatMap(id=>[0,1,2].map(index=>[id,index,'guest-bank-staff','scene'])),
  ['bank_approved',2,'guest-bank-staff','scene'],
  ...[0,1].map(index=>['d3_o1',index,'guest-mobile-staff','scene']),

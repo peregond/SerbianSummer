@@ -70,6 +70,7 @@ const internal={
   keys_room:{3:check('Проверить ключ и устроиться',['Ключ открывает дверь','Телефон ловит сеть','Чемодан внутри'],{bg:'courtyard-door',effect:{roomKeyChecked:true}})},
   river_meeting:{2:tap('Показать новый ключ','Ключ')},
   river_close:{3:{kind:'reply',label:'Как ответить на «Можно?»',options:[{label:'Дать свою ладонь',tone:'romance',effect:{eveningIntent:'romance'}},{label:'Улыбнуться и пока оставить руки на парапете',tone:'friendship',effect:{eveningIntent:'friendship'},next:'river_friendly'}]}},
+  host_coffee_lend:{0:{kind:'reply',label:'Какую вещь принести',options:[{label:'Серую',tone:'personal',effect:{hostTop:'grey'}},{label:'Белую',tone:'personal',effect:{hostTop:'white'}}]}},
   host_evening:{2:tap('Убрать телефон и идти рядом','Телефон в карман')},
   host_evening_close:{3:tap('Обнять на прощание','Обнять',{effect:{hostHug:true}})}
 };
