@@ -1,4 +1,4 @@
-import {PRELUDE,DAYS} from './days.js?v=0.16.0';
+import {PRELUDE,DAYS} from './days.js?v=0.16.1';
 // Chapters are the prelude (prologue and arrival evening) followed by thirty days; see days.js and DAYS.md.
 export const CHAPTERS=[...PRELUDE,...DAYS.map(d=>({id:d.id,number:'День '+d.n,title:d.title,start:d.start,description:d.description,day:d.n,stage:d.stage}))];
 // Older saves record progress only as chapter flags. Each flag maps to the last day it completed.

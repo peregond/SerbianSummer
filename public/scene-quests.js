@@ -1,7 +1,7 @@
 // Full-screen illustrated interactions: the district map and the three-station flat viewing.
 // Story progress stays with the caller; these templates only draw, report taps and clean up after themselves.
-import {getLanguage,t} from './i18n.js?v=0.16.0';
-import {imageHotspotRect} from './interaction.js?v=0.16.0';
+import {getLanguage,t} from './i18n.js?v=0.16.1';
+import {imageHotspotRect} from './interaction.js?v=0.16.1';
 import {FLATS,QUEST_STATIONS,hasSeen,DISTRICT_LABEL,T} from './flat-data.js?v=1';
 
 const pick=pair=>getLanguage()==='en'?pair[1]:pair[0];

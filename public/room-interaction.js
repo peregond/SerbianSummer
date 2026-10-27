@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=0.16.0';
+import {t} from './i18n.js?v=0.16.1';
 import {T} from './flat-data.js?v=1';
 export const ROOM_TASKS=[
  {id:'key',label:'Проверить ключ',short:'Ключ',done:'Ключ подходит',bit:1,rect:{x:.14,y:.44,width:.14,height:.065}},

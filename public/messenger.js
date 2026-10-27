@@ -1,6 +1,6 @@
-import { t } from './i18n.js?v=0.16.0';
-import { appendChoiceContents } from './choice-ui.js?v=0.16.0';
-import { MESSENGER_CONFIG } from './messenger-config.js?v=0.16.0';
+import { t } from './i18n.js?v=0.16.1';
+import { appendChoiceContents } from './choice-ui.js?v=0.16.1';
+import { MESSENGER_CONFIG } from './messenger-config.js?v=0.16.1';
 
 const icons = {
   back: ['m14 4-8 8 8 8'],

@@ -1,7 +1,7 @@
 import {choiceVisible} from './romance.js?v=0.15.3';
 import {RENTAL_NAMES,rentalCounterpart} from './rental-people.js?v=1';
 import {familySpeaker} from './family-contact.js?v=1';
-import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.16.0';
+import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.16.1';
 
 const names = { ...RENTAL_NAMES, milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена', asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора', ivana: 'Ивана', strahinja: 'Страхиня' };
 export function contactName(value, flags = {}) {

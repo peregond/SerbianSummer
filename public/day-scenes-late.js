@@ -1,7 +1,7 @@
 // Days 17-20 and 22-28: the days of waiting for an answer and of coming to a decision. Same shape as day-scenes.js.
 // Nothing here announces an approval; the answer to the application stays open until the final day.
-import {dayKit} from './day-scenes.js?v=0.16.0';
-import {T} from './days.js?v=0.16.0';
+import {dayKit} from './day-scenes.js?v=0.16.1';
+import {T} from './days.js?v=0.16.1';
 export function extendSecondHalf({NODES,JOURNAL,n,scene}){
  const {build,opt,note,A,L,contact,counter,owner,neighbour,route}=dayKit({NODES,JOURNAL,n,scene});
  const msg=page=>({...page,message:true});

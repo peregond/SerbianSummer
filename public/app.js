@@ -1,38 +1,38 @@
 import {rentalRedirect} from './rental-story.js?v=2';
 import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
-import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.16.0';
+import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.16.1';
 import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=0.16.0';
+import {renderEpisodeContact} from './episode-contact.js?v=0.16.1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.16.0';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.0';
+import {drawChapterMap} from './chapter-map.js?v=0.16.1';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.1';
 import {mountRoomInteraction} from './room-interaction.js?v=2';
 import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=1';
 import {mountBankGuide} from './bank-guide.js?v=1';
 import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
 import {renderArrivalPhone} from './arrival-phone.js?v=1';
-import {mountMessenger} from './messenger.js?v=0.16.0';
-import {messengerFrame,messageAt} from './messenger-model.js?v=0.16.0';
-import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.0';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.0';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.0';
-import {STAGES} from './days.js?v=0.16.0';
-import {cueFor} from './music-cues.js?v=0.16.0';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.0';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.0';
-import {drawBeatAction} from './beat-action.js?v=0.16.0';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.0';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.0';
+import {mountMessenger} from './messenger.js?v=0.16.1';
+import {messengerFrame,messageAt} from './messenger-model.js?v=0.16.1';
+import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.1';
+import {STAGES} from './days.js?v=0.16.1';
+import {cueFor} from './music-cues.js?v=0.16.1';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
+import {drawBeatAction} from './beat-action.js?v=0.16.1';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.1';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.8.0';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.0';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.0';
-import {appendChoiceContents} from './choice-ui.js?v=0.16.0';
-import {mountBaggageInteraction} from './interaction.js?v=0.16.0';
-import {APP_VERSION} from './release.js?v=0.16.0';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
+import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
+import {mountBaggageInteraction} from './interaction.js?v=0.16.1';
+import {APP_VERSION} from './release.js?v=0.16.1';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -67,6 +67,26 @@ function preloadBackground(id) {
   if(!Object.hasOwn(BACKGROUNDS,id)||preloadedBackgrounds.has(id))return;
   const image=new Image();image.src=`./assets/${id}.webp`;
   preloadedBackgrounds.set(id,image);
+}
+let spriteSwapToken=0,spriteShown=false;
+// Swap the portrait only once the new pose is decoded, and cross-fade from a ghost of the old pose,
+// so back/next never shows an empty frame or a dip in brightness.
+function swapSprite(character,nextSrc){
+  const token=++spriteSwapToken;
+  const wasShown=spriteShown;spriteShown=true;
+  if(character.src===nextSrc){character.style.visibility='';return;}
+  if(!wasShown)character.style.visibility='hidden';
+  const calm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const apply=()=>{
+    if(token!==spriteSwapToken)return;
+    const visible=wasShown;
+    let ghost=null;
+    if(visible&&!calm&&character.parentNode){ghost=character.cloneNode(false);ghost.removeAttribute('id');ghost.setAttribute('aria-hidden','true');ghost.alt='';ghost.style.pointerEvents='none';character.parentNode.insertBefore(ghost,character);}
+    character.src=nextSrc;character.style.visibility='';
+    if(ghost){const done=()=>ghost.remove();const fade=ghost.animate?.([{opacity:1},{opacity:0}],{duration:200,easing:'ease-out',fill:'forwards'});if(fade)fade.onfinish=done;else done();setTimeout(done,400);}
+  };
+  const probe=new Image();probe.src=nextSrc;
+  if(probe.decode)probe.decode().then(apply,apply);else apply();
 }
 function preloadSprite(character,emotion='friendly') {
   const sprite=CHARACTER_SPRITES[character]?.[emotion];
@@ -298,7 +318,8 @@ function renderGame({skipMessenger=false}={}) {
   renderEpisodeContact($('episode-contact'),state.node==='road_contact'&&state.index===2?null:presentation.contactPortrait);
   const character=$('milica');const portrait=presentation.character;
   character.hidden=!portrait;
-  if(portrait){const sprite=CHARACTER_SPRITES[portrait][presentation.emotion];const nextSrc=new URL(`./assets/${sprite.file}.webp`,location.href).href;const changed=character.src!==nextSrc;character.src=nextSrc;character.alt=t(sprite.alt);preloadSprite(portrait,presentation.emotion);if(changed&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)character.animate([{opacity:.65,translate:'0 3px'},{opacity:1,translate:'0 0'}],{duration:180,easing:'ease-out'});}
+  if(portrait){const sprite=CHARACTER_SPRITES[portrait][presentation.emotion];const nextSrc=new URL(`./assets/${sprite.file}.webp`,location.href).href;character.alt=t(sprite.alt);preloadSprite(portrait,presentation.emotion);swapSprite(character,nextSrc);}
+  else{spriteSwapToken++;spriteShown=false;character.style.visibility='';}
   $('location').textContent=t(presentation.location);$('scene-time').textContent=t(presentation.time);
   document.querySelector('.scene-caption>span:last-child').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   $('speaker').textContent=t(speakerName(page));
