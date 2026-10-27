@@ -1,0 +1,37 @@
+import assert from 'node:assert/strict';
+import {NODES,BACKGROUNDS,JOURNAL,presentationFor} from '../public/story.js';
+import {choiceVisible} from '../public/romance.js';
+import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from '../public/nikola-early-night.js';
+
+const parkChoice=NODES.date_kiss.choices.find(c=>c.next==='nikola_park');
+const homeChoice=NODES.date_kiss.choices.find(c=>c.next==='chapter_three_close');
+assert.ok(parkChoice);assert.ok(homeChoice);
+assert.deepEqual(NODES.date_hand.choices.map(c=>c.next).sort(),NODES.date_kiss.choices.map(c=>c.next).sort());
+
+assert.equal(choiceVisible(parkChoice,{companion:'nikola'},{gender:'male'}),true);
+assert.equal(choiceVisible(parkChoice,{companion:'nikola'},{gender:'female'}),false);
+assert.equal(choiceVisible(parkChoice,{companion:'milica'},{gender:'male'}),false);
+assert.equal(choiceVisible(homeChoice,{companion:'milica'},{gender:'female'}),true);
+
+const chain=['nikola_park','nikola_park_invite','nikola_park_home','nikola_park_door','nikola_park_closer','nikola_park_prep','nikola_park_sex','nikola_park_cum_inside','nikola_park_cum_jock','nikola_park_cum_chest','nikola_park_afterglow','nikola_park_morning','nikola_park_decline'];
+for(const id of chain)assert.ok(NODES[id],id);
+
+assert.equal(NODES.nikola_park_closer.adult,true);
+assert.equal(NODES.nikola_park_closer.skipTo,'nikola_park_morning');
+assert.equal(NODES.nikola_park_sex.adult,true);
+assert.equal(NODES.nikola_park_morning.next,'chapter_three_close');
+assert.equal(NODES.nikola_park_decline.next,'chapter_three_close');
+assert.ok(JOURNAL.nikola_early_night);
+
+for(const file of Object.keys(NIKOLA_EARLY_NIGHT_BACKGROUNDS))assert.ok(BACKGROUNDS[file],file);
+assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[0],{}).bg,'nikola-jock-fuck-v1');
+assert.equal(presentationFor(NODES.nikola_park_cum_inside,NODES.nikola_park_cum_inside.pages[0],{}).bg,'nikola-cum-inside-v1');
+assert.equal(NODES.nikola_park_sex.choices.length,3);
+assert.deepEqual(NODES.nikola_park_sex.choices.map(c=>c.effect.nikolaFinish).sort(),['chest','inside','jock']);
+
+// Prologue nikola_invite must remain the bakery scene, not the park branch.
+assert.match(NODES.nikola_invite.bg,/^bakery/);
+assert.equal(NODES.nikola_invite.pages.length,5);
+assert.notEqual(NODES.nikola_invite.next,'nikola_park_home');
+
+console.log('Nikola early night: entry gates, adult skip, climax branches, art registry and prologue ID safety checked.');

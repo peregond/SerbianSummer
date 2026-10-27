@@ -46,10 +46,14 @@ for(const id of scenes){
  assert.match(JSON.stringify(NODES[id].pages),/Можно|можно|«нет»|«стоп»|скажи|Скажи|решай|Решай|хочешь|хочется|Если/,id+' asks');
 }
 for(const stage of [1,2,3])for(const k of [1,2,3])assert.match(JSON.stringify(NODES[`love${stage}_${k}_${stage===1?'airport':'airport'}`].pages),/можно передумать|«Можно взять тебя за руку\?»|любой ответ здесь будет принят/);
-// The intimate passage is short, non-explicit, optional (adult setting) and always followed by the morning.
-const adult=Object.keys(NODES).filter(id=>NODES[id].adult);assert.equal(adult.length,5,'three night scenes, the group scene and the airport scene');
-for(const id of adult){assert.ok(NODES[NODES[id].skipTo]&&!NODES[NODES[id].skipTo].adult,id);assert.equal(NODES[id].next,NODES[id].skipTo);assert.ok(NODES[id].pages.length<=2);
+// Legacy intimate passages stay short, non-explicit and optional; the early Nikola park night is an explicit opt-in branch.
+const fadeAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&!id.startsWith('nikola_park_'));
+const earlyAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&id.startsWith('nikola_park_'));
+assert.equal(fadeAdult.length,5,'three night scenes, the group scene and the airport scene');
+assert.ok(earlyAdult.length>=5,'early Nikola park night adds explicit adult scenes');
+for(const id of fadeAdult){assert.ok(NODES[NODES[id].skipTo]&&!NODES[NODES[id].skipTo].adult,id);assert.equal(NODES[id].next,NODES[id].skipTo);assert.ok(NODES[id].pages.length<=2);
  assert.ok(!/обнажённ|раздева|член|грудь|оргазм|секс|нагот|стон|пенис|влагалищ|naked|undress|orgasm|sex|nipple|erect|moan/iu.test(JSON.stringify(NODES[id].pages)),'Fade to black only: '+id);}
+for(const id of earlyAdult){assert.ok(NODES[NODES[id].skipTo]&&!NODES[NODES[id].skipTo].adult,id);assert.equal(NODES[id].skipTo,'nikola_park_morning');}
 // The evening for several people needs two who are close and asks everyone; "no" is a good answer and leads to tea.
 assert.match(JSON.stringify(NODES.love3_group.pages),/«Нет» здесь всегда хороший ответ/);assert.deepEqual(NODES.love3_group.choices.map(c=>c.tone),['romance','friendship']);
 assert.equal(NODES.love3_group_tea.next,'d28_end');assert.equal(NODES.love3_group_morning.next,'d28_end');
