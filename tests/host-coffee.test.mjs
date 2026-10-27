@@ -9,7 +9,8 @@ assert.equal(NODES.host_flirt.next,'host_coffee_pour');
 assert.equal(NODES.host_friend.next,'room_alone');
 assert.equal(NODES.host_practical.next,'room_alone');
 assert.equal(NODES.host_coffee_borrowed.next,'room_alone');
-assert.equal(NODES.host_coffee_stay.next,'room_alone');
+assert.equal(NODES.host_coffee_stay.next,'host_coffee_lend','The romantic conversation leads to the dry clothing choice');
+assert.match(NODES.host_coffee_spill.pages[0].text,/спотыкаюсь и падаю/);
 assert.equal(NODES.host_coffee_comfort.choices.length,2,'The player can leave or release the hand');
 for(const host of ['dragan','jelena'])for(const node of Object.values(NODES))for(const page of node.pages){
  const p=presentationFor(node,page,{host,districtOwner:host});
@@ -22,7 +23,7 @@ assert.match(pageText(NODES.host_coffee_borrowed.pages[0],{host:'jelena'}),/СП
 assert.ok(JOURNAL.host_coffee&&JOURNAL.borrowed_top);
 console.log('Optional kitchen route: both hosts, hand reassurance, clothing choice, old save indices and protected image bounds checked.');
 
-for(const host of ['dragan','jelena']){for(const id of ['host_coffee_pour','host_coffee_spill','host_coffee_comfort','host_coffee_change','host_coffee_wait','host_coffee_borrowed']){for(const page of NODES[id].pages){const p=presentationFor(NODES[id],page,{host});assert.equal(p.bg,host==='dragan'&&['kitchen-waiting','kitchen-comfort'].includes(p.emotion)?'kitchen-seated-layer-v1':'kitchen-common-layer-v1');assert.equal(p.character,host);assert.equal(p.composite,false);assert.ok(p.emotion.startsWith('kitchen-'));}}assert.equal(presentationFor(NODES.host_flirt,NODES.host_flirt.pages[3],{host}).emotion,'kitchen-waiting');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[0],{host}).emotion,'kitchen-soft');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[2],{host}).emotion,'kitchen-dry');}
+for(const host of ['dragan','jelena']){for(const id of ['host_coffee_pour','host_coffee_spill','host_coffee_comfort','host_coffee_change','host_coffee_wait','host_coffee_borrowed']){for(const page of NODES[id].pages){const p=presentationFor(NODES[id],page,{host});assert.equal(p.bg,host==='dragan'&&['kitchen-waiting','kitchen-spill','kitchen-comfort'].includes(p.emotion)?'kitchen-seated-layer-v1':'kitchen-common-layer-v1');assert.equal(p.character,host);assert.equal(p.composite,false);assert.ok(p.emotion.startsWith('kitchen-'));}}assert.equal(presentationFor(NODES.host_flirt,NODES.host_flirt.pages[3],{host}).emotion,'kitchen-waiting');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[0],{host}).emotion,'kitchen-soft');assert.equal(presentationFor(NODES.host_coffee_change,NODES.host_coffee_change.pages[2],{host}).emotion,'kitchen-dry');}
 for(const color of ['grey','white']){
  const frame=presentationFor(NODES.host_coffee_borrowed,NODES.host_coffee_borrowed.pages[0],{host:'dragan',hostTop:color});
  assert.equal(frame.bg,'kitchen-seated-layer-v1');
