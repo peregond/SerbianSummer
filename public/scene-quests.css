@@ -20,9 +20,9 @@
 .viewing-tab[aria-selected=true]{background:#fff3d8;color:#17323a;border-color:#fff}
 .viewing-tab[data-done=true]:not([aria-selected=true]){background:#2c6f55;border-color:#9fe5c2}
 .viewing-card{position:absolute;z-index:3;left:12px;right:12px;top:calc(var(--safe-top,0px) + 124px);bottom:calc(var(--safe-bottom,0px) + 92px);display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:20px;background:#fff8e9f2;color:#17323a;box-shadow:0 12px 34px #0008;overflow:auto}
-.viewing-stage{flex:0 1 auto;min-height:0;border-radius:14px;overflow:hidden;background:#fff}
-.viewing-stage svg{display:block;width:100%;height:auto;max-height:44dvh}
-.viewing-finding{margin:0;flex:1 1 auto;display:flex;align-items:center;min-height:3.9em;padding:10px 12px;border-radius:12px;background:#f3e8d0;font-size:17px;line-height:1.45;font-weight:600}
+.viewing-stage{flex:1 1 0;min-height:110px;border-radius:14px;overflow:hidden;background:#fff}
+.viewing-stage svg{display:block;width:100%;height:100%}
+.viewing-finding{margin:0;flex:0 0 auto;display:flex;align-items:center;min-height:3.9em;padding:10px 12px;border-radius:12px;background:#f3e8d0;font-size:17px;line-height:1.45;font-weight:600}
 .viewing-actions{display:grid;gap:8px;margin-top:auto}
 .viewing-target{min-height:56px;padding:12px 14px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-size:17px;font-weight:700}
 .viewing-target[data-done=true]{background:#d9f3e6;border-color:#2c6f55;color:#1d5a42}
@@ -75,7 +75,6 @@
 /* Wide screens (desktop, tablets): keep the interactive panels at a phone-like reading width. */
 @media(min-width:700px){
   .viewing-tabs,.viewing-card,.viewing-footer,.map-hint{left:max(12px,calc((100% - 560px)/2));right:max(12px,calc((100% - 560px)/2))}
-  .viewing-stage svg{max-height:46dvh}
   .guide-page,.guide-footer{padding-left:max(16px,calc((100% - 640px)/2));padding-right:max(16px,calc((100% - 640px)/2))}
   .quest-tools{left:max(12px,calc((100% - 700px)/2));right:max(12px,calc((100% - 700px)/2))}
 }
@@ -96,3 +95,5 @@
 :root[data-theme=dark] .viewing-finding{background:#263d44}
 :root[data-theme=dark] .viewing-target{background:#23353b;color:#82d8bd;border-color:#82d8bd}
 :root[data-theme=dark] .viewing-target[data-done=true]{background:#254b40;color:#c3f5df}
+@media(max-width:360px){.quest-tool,.guide-tool{padding:9px 8px;font-size:13px;white-space:nowrap}.quest-title{font-size:16px}.guide-badge{font-size:11px}}
+.quest-tool,.guide-tool{white-space:nowrap}
