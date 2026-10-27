@@ -1,7 +1,7 @@
 // Full-screen illustrated interactions: the district map and the three-station flat viewing.
 // Story progress stays with the caller; these templates only draw, report taps and clean up after themselves.
-import {getLanguage,t} from './i18n.js?v=0.15.4';
-import {imageHotspotRect} from './interaction.js?v=0.15.4';
+import {getLanguage,t} from './i18n.js?v=0.16.0';
+import {imageHotspotRect} from './interaction.js?v=0.16.0';
 import {FLATS,QUEST_STATIONS,hasSeen,DISTRICT_LABEL,T} from './flat-data.js?v=1';
 
 const pick=pair=>getLanguage()==='en'?pair[1]:pair[0];
@@ -66,7 +66,7 @@ export function mountDistrictMap(root,{choices,flags,onChoose,onBack,onSettings,
 // The people behind the first flat of each district; the original story (Jelena and Dragan) shows its own hosts.
 const OWNER_LINE={ana:['Ана · Стефан','Ana · Stefan'],marko:['Марко','Marko'],vuk:['Вук','Vuk'],jelena:['Йелена','Jelena'],dragan:['Драган','Dragan']};
 
-// Hand-drawn vector fallbacks. A painted illustration can replace each one later through STATION_ART.
+// Hand-drawn vector fallbacks. A painted illustration replaces one through STATION_ART, e.g. {'ana:water':'flat-view-ana-water-v1'}.
 export const STATION_ART={};
 const art={
  water:`<svg viewBox="0 0 320 270" preserveAspectRatio="xMidYMid meet" role="img" aria-hidden="true"><rect width="320" height="270" fill="#cfe3e6"/><g transform="translate(0,25)"><g stroke="#b6d0d4" stroke-width="2">${Array.from({length:9},(_,i)=>`<path d="M${i*40} 0V220"/>`).join('')}${Array.from({length:6},(_,i)=>`<path d="M0 ${i*40}H320"/>`).join('')}</g><rect x="20" y="150" width="170" height="70" rx="14" fill="#fbfbf7"/><path d="M60 150h90v14a45 22 0 0 1-90 0Z" fill="#e3ecee"/><g class="faucet"><path d="M105 150v-28q0-22 22-22h26v14h-24q-8 0-8 8v20Z" fill="#aab6bb"/><rect x="146" y="106" width="18" height="12" rx="3" fill="#8da0a8"/></g><g class="drops"><circle cx="155" cy="124" r="4" fill="#4ea9d8"/><circle cx="155" cy="142" r="4" fill="#4ea9d8"/><circle cx="155" cy="160" r="3" fill="#4ea9d8"/></g><g class="shower"><path d="M250 20v72" stroke="#aab6bb" stroke-width="7"/><ellipse cx="250" cy="100" rx="28" ry="9" fill="#8da0a8"/><g class="spray" stroke="#4ea9d8" stroke-width="3" stroke-linecap="round"><path d="M232 114v28M244 116v34M256 116v34M268 114v28"/></g></g></g></svg>`,
@@ -105,7 +105,8 @@ export function mountViewingQuest(root,{owner,mask=0,canRewind,onBack,onSettings
       button.textContent=(complete?'✓ ':'')+pick(QUEST_STATIONS[index].title);
       button.setAttribute('aria-selected',String(index===active));button.dataset.done=String(complete);
     });
-    stage.innerHTML=art[station.id];stage.dataset.station=station.id;
+    const painted=STATION_ART[`${owner}:${station.id}`];
+    stage.innerHTML=painted?`<img src="./assets/${painted}.webp" alt="">`:art[station.id];stage.dataset.station=station.id;
     stage.classList.toggle('first-done',!!(done&bit(active,0)));stage.classList.toggle('second-done',!!(done&bit(active,1)));
     station.targets.forEach(([,label],target)=>{
       const button=targetButtons[target],checked=!!(done&bit(active,target));

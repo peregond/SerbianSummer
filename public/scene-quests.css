@@ -19,15 +19,15 @@
 .viewing-tab{min-height:48px;padding:6px 4px;border:2px solid #fff6;border-radius:14px;background:#173b46d9;color:#fff;font-weight:700;font-size:13px;line-height:1.2}
 .viewing-tab[aria-selected=true]{background:#fff3d8;color:#17323a;border-color:#fff}
 .viewing-tab[data-done=true]:not([aria-selected=true]){background:#2c6f55;border-color:#9fe5c2}
-.viewing-card{position:absolute;z-index:3;left:12px;right:12px;top:calc(var(--safe-top,0px) + 124px);bottom:calc(var(--safe-bottom,0px) + 86px);display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:20px;background:#fff8e9f2;color:#17323a;box-shadow:0 12px 34px #0008;overflow:auto}
+.viewing-card{position:absolute;z-index:3;left:12px;right:12px;top:calc(var(--safe-top,0px) + 124px);bottom:calc(var(--safe-bottom,0px) + 92px);display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:20px;background:#fff8e9f2;color:#17323a;box-shadow:0 12px 34px #0008;overflow:auto}
 .viewing-stage{flex:0 1 auto;min-height:0;border-radius:14px;overflow:hidden;background:#fff}
 .viewing-stage svg{display:block;width:100%;height:auto;max-height:44dvh}
-.viewing-finding{margin:0;min-height:3.9em;font-size:17px;line-height:1.45;font-weight:600}
+.viewing-finding{margin:0;flex:1 1 auto;display:flex;align-items:center;min-height:3.9em;padding:10px 12px;border-radius:12px;background:#f3e8d0;font-size:17px;line-height:1.45;font-weight:600}
 .viewing-actions{display:grid;gap:8px;margin-top:auto}
 .viewing-target{min-height:56px;padding:12px 14px;border:2px solid #08786f;border-radius:14px;background:#fff;color:#08786f;font-size:17px;font-weight:700}
 .viewing-target[data-done=true]{background:#d9f3e6;border-color:#2c6f55;color:#1d5a42}
 .viewing-footer{position:absolute;z-index:4;left:12px;right:12px;bottom:calc(var(--safe-bottom,0px) + 12px);display:grid;gap:6px}
-.viewing-progress{margin:0;text-align:center;font-size:13px;text-shadow:0 1px 6px #000}
+.viewing-progress{margin:0;text-align:center;font-size:13px;text-shadow:0 1px 6px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .viewing-finish{min-height:52px;font-size:17px}
 .viewing-finish:disabled{opacity:.5}
 /* Illustration states: first target = .first-done, second = .second-done */
