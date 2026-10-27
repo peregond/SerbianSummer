@@ -35,3 +35,4 @@
 .chat-contact-toggle,.chat-reaction{position:relative}
 .chat-contact-toggle::after,.chat-reaction::after{content:'';position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
 .chat-row{min-height:44px}
+.chat-typing{font-size:14px;color:var(--chat-ink);opacity:.8;letter-spacing:.02em}

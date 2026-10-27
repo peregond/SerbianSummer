@@ -27,7 +27,7 @@ export function t(value,locale=language){
 export async function initialiseLanguage(){
   let saved;try{saved=JSON.parse(localStorage.getItem('ss-language'));}catch{}
   const chosen=detectLanguage(saved,navigator.languages?.length?navigator.languages:[navigator.language]);
-  const response=await fetch('./locales/en.json?v=0.16.1-art5');
+  const response=await fetch('./locales/en.json?v=0.16.1-chat3');
   if(!response.ok)throw Error('Translation unavailable');
   configureTranslations(await response.json());setLanguage(chosen);
   return chosen;

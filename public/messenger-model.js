@@ -61,6 +61,9 @@ export function messengerFrame({ sceneId, node, index, flags = {}, journal = [],
     if (!meta || meta.contact !== current.contact || (i === index && meta.direction === 'outgoing')) continue;
     messages.push({ direction: meta.direction, time: meta.time, quote: meta.quote, attachment: meta.attachment, ...messageBody(node.pages[i], meta, text) });
   }
+  const nikolaPhoto=sceneId==='nikola_last'&&flags.nikolaBond==='romance'?{src:'./assets/nikola-bakery-photo-v1.webp',alt:'Фото витрины с круассанами и отражением Николы'}:null;
+  // Later pages retain the already received photo as chat history, without sending it again.
+  if(nikolaPhoto&&index>1)messages.push({direction:'incoming',text:'',photo:nikolaPhoto,time:node.time??''});
   const meetingChoice = sceneId==='courtyard_arrival'&&index===2;
   const rawChoices = meetingChoice ? node.choices : action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
   const choices=rawChoices?.filter(choice=>choiceVisible(choice,flags));
@@ -68,7 +71,8 @@ export function messengerFrame({ sceneId, node, index, flags = {}, journal = [],
   const draft = actual?.direction === 'outgoing' ? messageBody(node.pages[index], actual, text) : null;
   return {
     contact: current.contact,
-    delayedPhoto:sceneId==='nikola_last'&&index===1&&flags.nikolaBond==='romance'?{src:'./assets/nikola-bakery-photo-v1.webp',alt:'Фото витрины с круассанами и отражением Николы'}:null,
+    delayedPhoto:index===1?nikolaPhoto:null,
+    typingLabel:text({speaker:'narrator',text:'Печатает…'}),
     hideAvatar: current.contact==='Драган'&&!journal.includes('dragan'),
     time: actual?.time ?? node.time ?? '',
     draftQuote: actual?.quote,
