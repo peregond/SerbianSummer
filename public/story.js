@@ -2,7 +2,7 @@ import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=2';
 import {extendHousing} from './housing-story.js?v=1';
 import {extendBank} from './bank-story.js?v=2';
 import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=2';
-import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=1';
+import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=2';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
 import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=2';
@@ -759,12 +759,15 @@ export function presentationFor(node,page,flags={},profile={}) {
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
   const character=hug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   const eveningMood=character==='dragan'&&EVENING_NODES.some(id=>NODES[id]===node)?'evening-'+(['friendly','thoughtful','laughing','flirty'].includes(page.emotion)?page.emotion:'friendly'):null;
+  const rentalMood=rentalOwner({districtOwner:character})&&page===node.pages[0]
+    ? (node===NODES['rental_flirt_'+character]?'flirty':node===NODES['rental_friends_'+character]?'laughing':node===NODES['rental_terms_'+character]?'thoughtful':null)
+    : null;
   return {
     bg,cg,description:hug?'Драган обнимает силуэт игрока во дворе':node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!hug||!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,
-    emotion:eveningMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly'))),daydream
+    emotion:eveningMood??rentalMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly'))),daydream
   };
 }
 

@@ -1,5 +1,5 @@
 import {choiceVisible} from './romance.js?v=0.15.3';
-import {RENTAL_NAMES,rentalCounterpart} from './rental-people.js?v=1';
+import {RENTAL_NAMES,rentalCounterpart} from './rental-people.js?v=2';
 import {familySpeaker} from './family-contact.js?v=1';
 import { CHAT_SCENES, MESSENGER_CONFIG, INLINE_CHAT_REPLIES } from './messenger-config.js?v=0.16.1';
 

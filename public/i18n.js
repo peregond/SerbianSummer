@@ -1,4 +1,4 @@
-import {RENTAL_NAMES,rentalOwner} from './rental-people.js?v=1';
+import {RENTAL_NAMES,rentalOwner} from './rental-people.js?v=2';
 import {SLOTS,nameOf,nameCase,loveNames,joinNames} from './romance.js?v=0.16.1';
 // Russian remains the canonical language of story data and saves.
 // Only rendered strings change, so language never changes choices or checkpoints.
