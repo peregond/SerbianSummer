@@ -31,7 +31,7 @@ import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
-import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage2';
+import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
 import {APP_VERSION} from './release.js?v=0.16.1';
 
 const $ = id => document.getElementById(id);

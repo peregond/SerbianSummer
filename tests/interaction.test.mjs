@@ -1,8 +1,16 @@
 import assert from 'node:assert/strict';
-import {imageHotspotRect} from '../public/interaction.js';
+import {imageHotspotRect,baggagePosition} from '../public/interaction.js';
 import {speakerIdentity} from '../public/dialogue-voice.js';
 import {NODES,presentationFor} from '../public/story.js';
 const target={x:.24,y:.53,width:.39,height:.1};
+for(const [width,height] of [[390,844],[480,674],[320,568]]){
+ const rectangles=Array.from({length:6},(_,i)=>baggagePosition(width,height,i));
+ for(const rect of rectangles){
+  assert.ok(rect.left>=0&&rect.left+rect.width<=width,'Luggage stays inside the viewport');
+  assert.ok(rect.top>=0&&rect.top+rect.height<=height,'Luggage remains visible vertically');
+  assert.ok(rect.width>=44&&rect.height>=44,'Luggage remains touch accessible');
+ }
+}
 for(const[width,height]of [[390,398],[390,592],[320,316]]){
  const rect=imageHotspotRect(width,height,941,1672,target);
  assert.ok(rect.width>=44&&rect.height>=44);
