@@ -11,15 +11,21 @@ configureTranslations(dictionary);
 const ids=['ana','stefan','marko','vuk'];
 const choices=NODES.district_map.choices;
 const current=choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'}));
-assert.deepEqual(current.map(choice=>choice.effect.districtOwner).sort(),[...ids].sort(),'all four distinct landlords must be reachable');
+// Three districts are on the map; Dorćol has a second flat that the decision scene offers.
+assert.deepEqual(current.map(choice=>choice.effect.district),['dorcol','vracar','newbelgrade']);
+const secondDorcol=NODES.flat_decision.choices.find(choice=>choice.next==='flat_enter_stefan');
+assert.ok(secondDorcol,'Stefan is reachable from the first Dorćol flat');
+assert.deepEqual(new Set([...current.map(choice=>choice.effect.districtOwner),secondDorcol.effect.districtOwner]),new Set(ids),'all four distinct landlords must be reachable');
 for(const id of ids){
  const first=NODES['rental_first_'+id],hub=NODES['rental_hub_'+id];
  assert.ok(first&&hub,id);assert.equal(first.next,'rental_hub_'+id);
+ assert.ok(NODES['flat_enter_'+id]&&NODES['flat_after_'+id],id+': viewing scenes');
+ assert.equal(NODES['flat_after_'+id].next,'rental_hub_'+id);
  assert.deepEqual(new Set(hub.choices.map(choice=>choice.tone)),new Set(['practical','friendship','romance']));
  for(const mode of ['terms','friends','flirt']){
   const choice=hub.choices.find(c=>c.next==='rental_'+mode+'_'+id);assert.ok(choice,id+'/'+mode);
-  assert.equal(choice.effect['rentalBond_'+id],mode==='terms'?'practical':mode==='friends'?'friendship':'romance');
-  assert.equal(NODES[choice.next].next,'morning_ready');
+  assert.equal(choice.effect.rentalBond,mode==='terms'?'practical':mode==='friends'?'friendship':'romance','the viewing bond is generic until the lease is signed');
+  assert.equal(NODES[choice.next].next,mode==='flirt'?'flat_coffee':'flat_decision');
  }
 }
 for(const day of [4,7,8,10,11,19,22,25,27,28,29,30]){

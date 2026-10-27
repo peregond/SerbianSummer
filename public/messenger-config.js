@@ -20,6 +20,7 @@ export const MESSENGER_CONFIG = {
 // Indices are presentation overrides; do not insert or reorder story pages.
 export const CHAT_SCENES = {
   afternoon_invite: { contact:'contact', pages:{0:{direction:'incoming'}} },
+  date_messages: { contact:'contact', pages:{0:{direction:'outgoing'},1:{direction:'incoming'}} },
   nikola_phone: { contact:'dragan', pages:{2:{direction:'incoming'},3:{direction:'incoming'}} },
   road_contact: { contact:'contact', pages:{0:{direction:'outgoing',quotedBody:true,attachment:{label:'Селфи из такси',description:'У окна, на фоне реки и вечернего Белграда'}}} },
   evening_contact_plan: { contact: 'contact', pages: { 1: { direction: 'outgoing' } } },
@@ -37,5 +38,6 @@ export const CHAT_SCENES = {
 export const INLINE_CHAT_REPLIES = {
  nikola_phone:{1:{label:'Да, я уже в аэропорту и скоро выезжаю.',tone:'practical'},2:{label:'Думаю, буду примерно через час. Напишу по дороге.',tone:'practical'}},
  phone:{1:{label:'Я ещё в аэропорту. Постараюсь приехать до семи. Напишу, когда буду рядом.',tone:'practical'},3:{label:'Пока ещё в аэропорту. Всё хорошо, сейчас пью кофе. Как доберусь, напишу.',tone:'friendship'}},
+ bank_alta_wait:{1:{label:'Держусь. Вечером расскажу, как прошло.',tone:'friendship'}},
  messages:{0:{label:'Долетел{a} хорошо! Пока ещё в аэропорту. Как доберусь, напишу.',tone:'friendship'}}
 };

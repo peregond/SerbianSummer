@@ -1,0 +1,2028 @@
+{
+ "revised": {
+  "last_message": {
+   "afterHash": "fbc4538f83d500e4adb74b02d99efee92e7ccbab4d9eadec54d77cb44f356b9d",
+   "before": {
+    "location": "АЭРОПОРТ · ВЫХОД К ТАКСИ",
+    "time": "17:44",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Пока ищу в телефоне адрес, приходит сообщение."
+     },
+     {
+      "speaker": "Милица",
+      "text": "«{full}, не забудь поесть. Кофе пока за еду не считается».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Дел всё ещё много. Но теперь есть кому рассказать, как они идут."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Убираю телефон и перехватываю ручку чемодана."
+     },
+     {
+      "speaker": "narrator",
+      "text": "До комнаты ещё нужно добраться. И впервые за день хочется посмотреть, что будет дальше.",
+      "action": {
+       "kind": "reply",
+       "label": "Ответить Милице",
+       "options": [
+        {
+         "label": "«Спасибо. Напишу, когда доберусь»",
+         "tone": "friendship",
+         "effect": {
+          "milicaBond": "friendship"
+         }
+        },
+        {
+         "label": "«Мне хочется увидеться ещё раз»",
+         "tone": "romance",
+         "effect": {
+          "milicaBond": "romance"
+         }
+        }
+       ]
+      }
+     }
+    ],
+    "next": "road_start",
+    "journal": [
+     "next"
+    ],
+    "actions": {
+     "4": {
+      "kind": "reply",
+      "label": "Ответить Милице",
+      "options": [
+       {
+        "label": "«Спасибо. Напишу, когда доберусь»",
+        "tone": "friendship",
+        "effect": {
+         "milicaBond": "friendship"
+        }
+       },
+       {
+        "label": "«Мне хочется увидеться ещё раз»",
+        "tone": "romance",
+        "effect": {
+         "milicaBond": "romance"
+        }
+       }
+      ]
+     }
+    },
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "room_alone": {
+   "afterHash": "774375eea585744392319da51a832e6a895630ad4ba7b3ac40a4dd61c9760280",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "19:05",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Оставшись в комнате, я первым делом сажусь на край кровати. Чемодан так и стоит у двери, будто всё ещё не уверен в наших намерениях."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Только теперь замечаю, как устали плечи. Снимаю обувь. За окном кто-то поливает цветы, и вода недолго стучит по подоконнику ниже."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я отправляю близким: «Я уже в квартире. Ключи есть». Потом фотографирую стол у окна — первый уголок, который сегодня можно назвать своим."
+     },
+     {
+      "speaker": "narrator",
+      "text": "На телефоне несколько разговоров, которые ещё утром не существовали. Есть вечер. И пока есть право распорядиться им без списка обязательств."
+     }
+    ],
+    "next": null,
+    "chapter": "День 0 · Своя дверь",
+    "choices": [
+     {
+      "label": "Написать новому знакомому из аэропорта",
+      "next": "evening_contact_plan",
+      "tone": "friendship",
+      "effect": {
+       "eveningWith": "contact"
+      }
+     },
+     {
+      "label": "Предложить {host.dative} короткую прогулку вдвоём",
+      "next": "host_evening_invite",
+      "tone": "romance",
+      "effect": {
+       "eveningWith": "host",
+       "hostBond": "romance"
+      }
+     },
+     {
+      "label": "Остаться дома, отдохнуть и посмотреть объявления",
+      "next": "room_rest",
+      "tone": "personal",
+      "effect": {
+       "eveningWith": "self"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "arrival"
+   }
+  },
+  "host_evening_invite": {
+   "afterHash": "9e65f068c48a54134a4133141f22c8cf3923ba9e116d2d2970f7c99df53419bb",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "19:20",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "«Если у тебя свободен вечер, давай пройдёмся немного? На этот раз без осмотра квартиры». "
+     },
+     {
+      "speaker": "host",
+      "text": "«Через полчаса буду во дворе. Только переобуюсь». ",
+      "message": true,
+      "hostText": {
+       "dragan": "«С удовольствием. Через полчаса буду во дворе. И обещаю не показывать выключатели».",
+       "jelena": "«Давай. Через полчаса буду во дворе. Только теперь я могу задавать вопросы не про заселение?»"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я улыбаюсь телефону. Потом обнаруживаю, что собираюсь на обычную короткую прогулку так, словно у меня уже есть любимая рубашка для Белграда.",
+      "action": {
+       "kind": "tap",
+       "label": "Спуститься во двор",
+       "object": "Во двор"
+      }
+     }
+    ],
+    "next": "host_evening",
+    "chapter": "День 0 · Своя дверь",
+    "journal": [
+     "host_spark"
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Спуститься во двор",
+      "object": "Во двор"
+     }
+    },
+    "chapterId": "arrival"
+   }
+  },
+  "host_evening": {
+   "afterHash": "c0ee43ea9ab72e12f474256316f42adca845aaaa47c708e209aa3378b7ddaaec",
+   "before": {
+    "location": "БЕЛГРАД · ВЕЧЕРНИЕ УЛИЦЫ",
+    "time": "20:00",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Мы встречаемся у двери и почти сразу уходим со двора. Без чемодана путь кажется заметно короче."
+     },
+     {
+      "speaker": "host",
+      "text": "Ну что. Теперь можно познакомиться нормально. Не как человек со связкой ключей."
+     },
+     {
+      "speaker": "player",
+      "text": "Тогда расскажи что-нибудь, чего нет в объявлении.",
+      "action": {
+       "kind": "tap",
+       "label": "Убрать телефон и идти рядом",
+       "object": "Телефон в карман"
+      }
+     },
+     {
+      "speaker": "host",
+      "text": "Я люблю этот город поздно вечером. И иногда специально иду домой длинной дорогой.",
+      "hostText": {
+       "dragan": "Я когда-то хотел строить дома. Теперь больше нравится оживлять те, что уже стоят. И готовлю завтрак лучше, чем чиню краны.",
+       "jelena": "Я работаю с интерьерами, но дома у меня вечно недокрашенная полка. И я умею выбирать кофе лучше, чем заканчивать ремонт."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "В разговоре появляется та лёгкость, которой не было между вопросом о воде и паролем от сети."
+     },
+     {
+      "speaker": "host",
+      "text": "Мне приятно, что ты предложил{a} встретиться."
+     }
+    ],
+    "next": null,
+    "chapter": "День 0 · Своя дверь",
+    "hostPortrait": true,
+    "journal": [
+     "host_evening"
+    ],
+    "choices": [
+     {
+      "label": "«Я надеюсь, это не последняя такая прогулка»",
+      "next": "host_evening_close",
+      "tone": "romance",
+      "effect": {
+       "hostEvening": "close"
+      }
+     },
+     {
+      "label": "Поблагодарить за компанию и вернуться отдыхать",
+      "next": "host_evening_goodnight",
+      "tone": "friendship",
+      "effect": {
+       "hostEvening": "slow"
+      }
+     }
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Убрать телефон и идти рядом",
+      "object": "Телефон в карман"
+     }
+    },
+    "chapterId": "arrival"
+   }
+  },
+  "host_evening_close": {
+   "afterHash": "8ebec9215eab1688a192fcdb92ee0bcbe392adaf64ef85caf62ab03ccc2404ca",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "20:22",
+    "pages": [
+     {
+      "speaker": "host",
+      "text": "Тогда давай не будем делать её последней."
+     },
+     {
+      "speaker": "narrator",
+      "text": "У дверей мы останавливаемся чуть раньше, чем нужно. {host} смотрит на меня, и я впервые не пытаюсь заполнить паузу."
+     },
+     {
+      "speaker": "player",
+      "text": "Можно тебя обнять?"
+     },
+     {
+      "speaker": "host",
+      "text": "Можно.",
+      "action": {
+       "kind": "tap",
+       "label": "Обнять на прощание",
+       "object": "Обнять",
+       "effect": {
+        "hostHug": true
+       }
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Объятие получается коротким и удивительно настоящим. Потом дверь снова открывается, а тепло ещё остаётся у меня на плечах.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть дверь своей комнаты",
+       "object": "Ключ"
+      }
+     }
+    ],
+    "next": "night_messages",
+    "chapter": "День 0 · Своя дверь",
+    "hostPortrait": true,
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Обнять на прощание",
+      "object": "Обнять",
+      "effect": {
+       "hostHug": true
+      }
+     },
+     "4": {
+      "kind": "tap",
+      "label": "Открыть дверь своей комнаты",
+      "object": "Ключ"
+     }
+    },
+    "chapterId": "arrival"
+   }
+  },
+  "host_evening_goodnight": {
+   "afterHash": "04ec27b0a07f0eb6e9f6106a5a73e7d816ab30daccf9148cad31139d682e54e5",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "20:22",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Спасибо. Это был очень хороший первый вечер."
+     },
+     {
+      "speaker": "host",
+      "text": "Тогда оставим силы и на второй. Спокойной ночи."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мы расходимся без обещаний, которых сегодня могло бы оказаться слишком много. Возможность встретиться ещё раз никуда не исчезает.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть дверь своей комнаты",
+       "object": "Ключ"
+      }
+     }
+    ],
+    "next": "night_messages",
+    "chapter": "День 0 · Своя дверь",
+    "hostPortrait": true,
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Открыть дверь своей комнаты",
+      "object": "Ключ"
+     }
+    },
+    "chapterId": "arrival"
+   }
+  },
+  "night_messages": {
+   "afterHash": "a9ed0cdb996c17b983f99bbe22f64da417c26a81b59967ad0cf5cece70b04e5c",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "22:16",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "К вечеру в комнате становится тихо. Снаружи ещё разговаривают, но теперь эти голоса не мешают — просто доказывают, что дом живёт."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Привет! Мне дали твой контакт. Говорят, ты сегодня в Белграде. Завтра можем посмотреть варианты квартиры. Главное — не пытайся выбрать всю жизнь по трём фотографиям кухни». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я отвечаю, что это, к сожалению, почти мой метод. Приходит смеющийся смайлик и обещание помочь составить вопросы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Перед сном кладу ключи рядом с телефоном. Раньше в заметке был только адрес. Теперь рядом лежит вещь, которая его открывает."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я не решаю сегодня, останусь ли здесь навсегда. Только оставляю окно приоткрытым. На одну ночь это вполне достаточное решение.",
+      "action": {
+       "kind": "checklist",
+       "label": "Приготовиться ко сну",
+       "items": [
+        "Телефон на зарядке",
+        "Вода рядом",
+        "Будильник"
+       ],
+       "effect": {
+        "nightReady": true
+       }
+      }
+     }
+    ],
+    "next": "morning_start",
+    "chapter": "День 0 · Своя дверь",
+    "lighting": "night",
+    "journal": [
+     "asya"
+    ],
+    "actions": {
+     "4": {
+      "kind": "checklist",
+      "label": "Приготовиться ко сну",
+      "items": [
+       "Телефон на зарядке",
+       "Вода рядом",
+       "Будильник"
+      ],
+      "effect": {
+       "nightReady": true
+      }
+     }
+    },
+    "chapterId": "arrival"
+   }
+  },
+  "morning_start": {
+   "afterHash": "813ae529ed2e5b48ecf58bca1a173dc405a6b7c396ed9b85564b84873c729f56",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "09:05",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Утром я несколько секунд не понимаю, где находится дверь. Потом вижу ключи на столе и вспоминаю всё сразу."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Свет на стене уже другой. Город за окном занят обычным утром, даже если мой собственный день выглядит как начало отдельной главы."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Доброе утро. Нашла три направления. Сначала решим, что тебе важнее, а потом будем смотреть квартиры». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я завариваю чай и открываю сообщения. В этот раз хочется выбирать не из страха что-то упустить, а из того, как я действительно хочу жить."
+     }
+    ],
+    "next": null,
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1",
+    "choices": [
+     {
+      "label": "Тихий двор и место, где можно выспаться",
+      "next": "housing_quiet",
+      "tone": "practical",
+      "effect": {
+       "housingPriority": "quiet"
+      }
+     },
+     {
+      "label": "Рабочий стол, связь и удобный угол для работы",
+      "next": "housing_work",
+      "tone": "practical",
+      "effect": {
+       "housingPriority": "work"
+      }
+     },
+     {
+      "label": "Сначала сравнить условия нескольких вариантов",
+      "next": "housing_compare",
+      "tone": "explore",
+      "effect": {
+       "housingPriority": "compare"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts"
+   }
+  },
+  "morning_ready": {
+   "afterHash": "466c0668dc76b61c9f6e5d37f09e607de6a4167f213c4b0d2a305140ce2c803c",
+   "before": {
+    "location": "БЕЛГРАД · К ПЕРВОМУ ПРОСМОТРУ",
+    "time": "12:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "После просмотра я выхожу на улицу и некоторое время не открываю телефон. Хочется запомнить, как чувствуется именно этот район."
+     },
+     {
+      "speaker": "narrator",
+      "text": "У меня ещё нет постоянной квартиры. Зато теперь есть вопросы, ответы и место, которое получилось увидеть своими глазами."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Банк, работа и ВНЖ ждут своей очереди. Сегодня я не обязан{a} решить всё сразу."
+     },
+     {
+      "speaker": "narrator",
+      "text": "В телефоне есть новый разговор. В сумке — ключ от временной комнаты. А в голове уже получается представить обычное утро в Белграде."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Решение остаться или уехать ещё впереди. Сейчас мне хочется узнать, что будет завтра.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить · Счёт на себя",
+       "object": "Продолжить · Счёт на себя"
+      }
+     }
+    ],
+    "next": "next_steps",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1",
+    "effectOnEnter": {
+     "chapterOneComplete": true
+    },
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить · Счёт на себя",
+     "object": "Продолжить · Счёт на себя"
+    },
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Продолжить · Счёт на себя",
+      "object": "Продолжить · Счёт на себя"
+     }
+    },
+    "chapterId": "districts"
+   }
+  },
+  "district_map": {
+   "afterHash": "82b2f3ca98f144bdbfeb021b87bc89f014b7cb4b6af0a81c6764a1743e24b2bb",
+   "before": {
+    "location": "БЕЛГРАД · ВЫБЕРИ РАЙОН",
+    "time": "09:35",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "text": "«Теперь выбирай район. В разных местах у нас разные квартиры и люди. Нажми на карте — и поедем смотреть». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Это ещё не выбор навсегда. Только первый маршрут, который может стать моим."
+     }
+    ],
+    "next": null,
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1",
+    "map": true,
+    "choices": [
+     {
+      "label": "Дорћол · Йелена, старый дом и окно во двор",
+      "next": "district_dorcol",
+      "tone": "explore",
+      "effect": {
+       "district": "dorcol",
+       "districtOwner": "jelena"
+      },
+      "when": {
+       "flag": "rentalCast",
+       "notEquals": "new"
+      }
+     },
+     {
+      "label": "Врачар · Драган, балкон и рабочий угол",
+      "next": "district_vracar",
+      "tone": "explore",
+      "effect": {
+       "district": "vracar",
+       "districtOwner": "dragan"
+      },
+      "when": {
+       "flag": "rentalCast",
+       "notEquals": "new"
+      }
+     },
+     {
+      "label": "Новый Белград · Йелена, простор и новые знакомства",
+      "next": "district_newbelgrade",
+      "tone": "explore",
+      "effect": {
+       "district": "newbelgrade",
+       "districtOwner": "jelena"
+      },
+      "when": {
+       "flag": "rentalCast",
+       "notEquals": "new"
+      }
+     },
+     {
+      "label": "Ана · Дорћол",
+      "next": "rental_first_ana",
+      "tone": "explore",
+      "effect": {
+       "district": "dorcol",
+       "districtOwner": "ana",
+       "rentalKnown_ana": true
+      },
+      "when": {
+       "flag": "rentalCast",
+       "equals": "new"
+      }
+     },
+     {
+      "label": "Стефан · Дорћол",
+      "next": "rental_first_stefan",
+      "tone": "explore",
+      "effect": {
+       "district": "dorcol",
+       "districtOwner": "stefan",
+       "rentalKnown_stefan": true
+      },
+      "when": {
+       "flag": "rentalCast",
+       "equals": "new"
+      }
+     },
+     {
+      "label": "Марко · Врачар",
+      "next": "rental_first_marko",
+      "tone": "explore",
+      "effect": {
+       "district": "vracar",
+       "districtOwner": "marko",
+       "rentalKnown_marko": true
+      },
+      "when": {
+       "flag": "rentalCast",
+       "equals": "new"
+      }
+     },
+     {
+      "label": "Вук · Новый Белград",
+      "next": "rental_first_vuk",
+      "tone": "explore",
+      "effect": {
+       "district": "newbelgrade",
+       "districtOwner": "vuk",
+       "rentalKnown_vuk": true
+      },
+      "when": {
+       "flag": "rentalCast",
+       "equals": "new"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts"
+   }
+  },
+  "district_dorcol": {
+   "afterHash": "195a89816b910a421adbbed3bed7534dc755f63833bc02767abc3ab6423c576d",
+   "before": {
+    "location": "ДОРЋОЛ · ПЕРВЫЙ ПРОСМОТР",
+    "time": "11:32",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Дорћол встречает короткими тенями и окнами, за которыми у каждого давно идёт своя жизнь. Ася ждёт у двери старого дома."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Йелена открывает квартиру. Паркет чуть скрипит, окно смотрит во двор, потолок оказывается выше, чем обещала фотография."
+     },
+     {
+      "speaker": "districtHost",
+      "text": "Здесь не идеально ровные стены. Зато свет меняется весь день. Я могу показывать его дольше, чем саму квартиру."
+     },
+     {
+      "speaker": "narrator",
+      "text": "На подоконнике лежит маленький рисунок. Йелена замечает мой взгляд и говорит, что неподалёку иногда проходят выставки местных художников."
+     },
+     {
+      "speaker": "Милица",
+      "text": "«Дорћол? Тогда потом покажу маленькую галерею. Она спрятана почти так же хорошо, как твой первый подъезд». ",
+      "message": true,
+      "action": {
+       "kind": "checklist",
+       "label": "Проверить квартиру своими глазами",
+       "items": [
+        "Вода и розетки",
+        "Окна и шум",
+        "Связь"
+       ],
+       "effect": {
+        "apartmentInspected": true
+       },
+       "feedback": "Теперь можно задать свои вопросы."
+      }
+     }
+    ],
+    "next": "district_host_talk",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1",
+    "districtPortrait": true,
+    "journal": [
+     "district_dorcol"
+    ],
+    "actions": {
+     "4": {
+      "kind": "checklist",
+      "label": "Проверить квартиру своими глазами",
+      "items": [
+       "Вода и розетки",
+       "Окна и шум",
+       "Связь"
+      ],
+      "effect": {
+       "apartmentInspected": true
+      },
+      "feedback": "Теперь можно задать свои вопросы."
+     }
+    },
+    "chapterId": "districts"
+   }
+  },
+  "district_vracar": {
+   "afterHash": "6a8e44eb1a3c5136555d45b6c7c1b14ecea564a2cf81554ef6ede6cafb7753ed",
+   "before": {
+    "location": "ВРАЧАР · ПЕРВЫЙ ПРОСМОТР",
+    "time": "11:32",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "На Врачаре Ася сразу ведёт меня к балкону: «Сначала проверь, нравится ли тебе смотреть именно сюда». "
+     },
+     {
+      "speaker": "narrator",
+      "text": "Драган открывает дверь и отходит в сторону. У окна стол, рядом книги, за балконом слышны обычные городские голоса."
+     },
+     {
+      "speaker": "districtHost",
+      "text": "Вот рабочее место. Стол настоящий. Мы специально проверили, что на него помещается больше одной чашки."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я мысленно ставлю ноутбук у окна. Впервые это не попытка начать идеальную жизнь, а вполне понятное рабочее утро."
+     },
+     {
+      "speaker": "Никола",
+      "text": "«На Врачаре? Тогда у меня уже есть причина показать тебе пару пекарен. Как пройдёт просмотр — напиши». ",
+      "message": true,
+      "action": {
+       "kind": "checklist",
+       "label": "Проверить квартиру своими глазами",
+       "items": [
+        "Вода и розетки",
+        "Окна и шум",
+        "Связь"
+       ],
+       "effect": {
+        "apartmentInspected": true
+       },
+       "feedback": "Теперь можно задать свои вопросы."
+      }
+     }
+    ],
+    "next": "district_host_talk",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1",
+    "districtPortrait": true,
+    "journal": [
+     "district_vracar"
+    ],
+    "actions": {
+     "4": {
+      "kind": "checklist",
+      "label": "Проверить квартиру своими глазами",
+      "items": [
+       "Вода и розетки",
+       "Окна и шум",
+       "Связь"
+      ],
+      "effect": {
+       "apartmentInspected": true
+      },
+      "feedback": "Теперь можно задать свои вопросы."
+     }
+    },
+    "chapterId": "districts"
+   }
+  },
+  "housing_other": {
+   "afterHash": "d0ab150be83af95a382d054b34f2812422dd1ebc2ea243baddc077720b06c55a",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "12:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Хочу ещё посмотреть. Район нравится, а квартиру пока не чувствую своей."
+     },
+     {
+      "speaker": "districtHost",
+      "text": "Тогда поищем другое. Обещаю не обижаться за стены.",
+      "districtText": {
+       "dragan": "Тогда поищем другое. Обещаю не обижаться за стены.",
+       "jelena": "Значит, хорошо, что посмотрели. Заодно узнали, что тебе важно."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Ася ставит в заметке маленький плюс: «Первый отказ без катастрофы. Отлично идём». ",
+      "action": {
+       "kind": "tap",
+       "label": "Записать, чего не хватило квартире",
+       "object": "Записать, чего не хватило квартире"
+      }
+     }
+    ],
+    "next": "bank_plan",
+    "day": "ДЕНЬ 1",
+    "districtPortrait": true,
+    "journal": [
+     "housing_reply"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Записать, чего не хватило квартире",
+     "object": "Записать, чего не хватило квартире"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Записать, чего не хватило квартире",
+      "object": "Записать, чего не хватило квартире"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "bank_plan": {
+   "afterHash": "bb1575aeae32a4fd182c56b6498a52abf965952860680142113b5855760364e1",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "13:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "За столом временной комнаты я открываю следующую вкладку: банк. У этой вкладки почему-то вид контрольной работы."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Не собирай документы по чужой удачной истории. Сначала спроси конкретный банк про свою ситуацию». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Рядом лежат паспорт, адрес и список вопросов. С чего начать?"
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 1",
+    "choices": [
+     {
+      "label": "Связаться с банком и уточнить требования",
+      "tone": "practical",
+      "next": "bank_call",
+      "effect": {
+       "bankApproach": "ask"
+      }
+     },
+     {
+      "label": "Попросить Асю помочь сформулировать вопросы",
+      "tone": "friendship",
+      "next": "bank_asya",
+      "effect": {
+       "bankApproach": "with_asya"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "bank_call": {
+   "afterHash": "79d69d3f3263ce058a69c27ff0898c4d09017fcc8cd84edf0a0fe444d836f0af",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "13:20",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Здравствуйте. Я недавно приехал{a}. Хочу уточнить возможность открытия личного счёта и список документов для моей ситуации."
+     },
+     {
+      "speaker": "Сотрудник банка",
+      "text": "«Уточним обстоятельства и направим информацию. Пожалуйста, подготовьте вопросы для консультации. Возможность открытия определяется после проверки». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Это ещё не «счёт открыт». Зато теперь у меня есть следующий понятный разговор.",
+      "action": {
+       "kind": "checklist",
+       "label": "Подготовить вопросы к визиту",
+       "items": [
+        "Документы и подтверждения",
+        "Тарифы и обслуживание",
+        "Запись и дальнейшие шаги"
+       ],
+       "effect": {
+        "bankQuestionsReady": true
+       }
+      }
+     }
+    ],
+    "next": "work_crossroads",
+    "day": "ДЕНЬ 1",
+    "journal": [
+     "bank_questions"
+    ],
+    "exitAction": {
+     "kind": "checklist",
+     "label": "Подготовить вопросы к визиту",
+     "items": [
+      "Документы и подтверждения",
+      "Тарифы и обслуживание",
+      "Запись и дальнейшие шаги"
+     ],
+     "effect": {
+      "bankQuestionsReady": true
+     }
+    },
+    "actions": {
+     "2": {
+      "kind": "checklist",
+      "label": "Подготовить вопросы к визиту",
+      "items": [
+       "Документы и подтверждения",
+       "Тарифы и обслуживание",
+       "Запись и дальнейшие шаги"
+      ],
+      "effect": {
+       "bankQuestionsReady": true
+      }
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "work_crossroads": {
+   "afterHash": "6042efb3fb8071f03826cb3e08d1184c96a5536d0977a48f8d6a45b38ad33e42",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "14:00",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "В списке рядом с банком стоит «работа». Пока одно слово на все мои надежды и тревоги."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Хочешь своё дело, ищешь работу в компании или пока разбираешься? От ответа зависит, кого я тебе представлю». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Можно выбрать направление, не подписываясь на него навсегда."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 1",
+    "choices": [
+     {
+      "label": "Хочу разобраться со своим делом и ИП",
+      "tone": "practical",
+      "next": "work_business",
+      "effect": {
+       "workRoute": "business"
+      }
+     },
+     {
+      "label": "Интереснее работа в компании",
+      "tone": "practical",
+      "next": "work_employment",
+      "effect": {
+       "workRoute": "employment"
+      }
+     },
+     {
+      "label": "Мне нужно время на исследование вариантов",
+      "tone": "personal",
+      "next": "work_explore",
+      "effect": {
+       "workRoute": "explore"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "afternoon_invite": {
+   "afterHash": "f7981d2bc3cbf35c5254aca1bc92fae6d11fc574fbe942d95ae8428bf104d7ef",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "18:40",
+    "pages": [
+     {
+      "speaker": "contact",
+      "text": "Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.",
+      "contactText": {
+       "nikola": "Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.",
+       "milica": "Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Время на экране — 18:40. Сегодня у меня было достаточно серьёзное лицо."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Теперь можно решить, каким будет вечер."
+     },
+     {
+      "speaker": "districtHost",
+      "cameo": true,
+      "emotion": "friendly",
+      "text": "Ужин сегодня в восемь, если захочешь — присоединяйся.",
+      "districtText": {
+       "dragan": "Ужин сегодня в восемь, если захочешь — присоединяйся.",
+       "jelena": "Ужин сегодня в восемь, если захочешь — присоединяйся."
+      }
+     },
+     {
+      "speaker": "ownerCounterpart",
+      "cameo": true,
+      "emotion": "friendly",
+      "text": "Я принесу хлеб из пекарни на углу.",
+      "districtText": {
+       "dragan": "Я принесу хлеб из пекарни на углу.",
+       "jelena": "Я принесу хлеб из пекарни на углу."
+      }
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 1",
+    "choices": [
+     {
+      "label": "Предложить свидание у реки",
+      "tone": "romance",
+      "next": "date_river",
+      "effect": {
+       "eveningIntent": "romance"
+      }
+     },
+     {
+      "label": "Встретиться за кофе по-дружески",
+      "tone": "friendship",
+      "next": "date_friends",
+      "effect": {
+       "eveningIntent": "friendship"
+      }
+     },
+     {
+      "label": "Остаться дома и обменяться сообщениями",
+      "tone": "personal",
+      "next": "date_messages",
+      "effect": {
+       "eveningIntent": "quiet"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "host_coffee_wait": {
+   "afterHash": "caf841549bfa55ae788993ed0e16e87c3ac5a7b812396282f03e4ffab1d94d2d",
+   "before": {
+    "pages": [
+     {
+      "speaker": "host",
+      "text": "А я бы согласился и без представления. Но половица решила помочь.",
+      "hostText": {
+       "dragan": "А я бы согласился и без представления. Но половица решила помочь.",
+       "jelena": "А я бы согласилась и без представления. Но у половицы явно были свои планы."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Рубашка сохнет на стуле. Мы сидим за столом чуть ближе, чем раньше. Теперь пауза между нами уже не пугает."
+     },
+     {
+      "speaker": "narrator",
+      "text": "В чемодане есть чистые вещи. Можно предложить что-нибудь сухое — или просто остаться рядом, пока одежда сохнет."
+     }
+    ],
+    "next": null,
+    "location": "КВАРТИРА · КОФЕ НА КУХНЕ",
+    "time": "18:50",
+    "music": "encounter",
+    "hostPortrait": true,
+    "kitchenStage": "dry",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор на кухне",
+     "object": "Продолжить разговор на кухне"
+    },
+    "choices": [
+     {
+      "label": "«У меня есть сухая одежда. Давай найду тебе что-нибудь»",
+      "tone": "friendship",
+      "next": "host_coffee_lend"
+     },
+     {
+      "label": "«Посидим ещё немного. Мне хорошо с тобой»",
+      "tone": "romance",
+      "next": "host_coffee_stay"
+     }
+    ],
+    "actions": {},
+    "chapterId": "arrival",
+    "chapter": "День 0 · Своя дверь"
+   }
+  },
+  "host_coffee_lend": {
+   "afterHash": "c489b1f13e9fd691b42c02f04a4b3632b4ab5c5618bdb6a16295797965edf8c7",
+   "before": {
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "У меня есть чистая спортивная футболка. Чёрная Under Armour. Кажется, должна подойти.",
+      "hostText": {
+       "dragan": "У меня есть чистая спортивная футболка. Чёрная Under Armour. Кажется, должна подойти.",
+       "jelena": "У меня есть мягкая толстовка. С надписью «СПБГУ 2008». Можешь взять, пока рубашка сохнет."
+      }
+     },
+     {
+      "speaker": "host",
+      "text": "Спасибо. Тогда у меня появится официальный повод зайти ещё раз — вернуть после стирки."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я достаю вещь из чемодана и ненадолго оставляю кухню, чтобы можно было спокойно переодеться.",
+      "action": {
+       "kind": "tap",
+       "label": "Вернуться на кухню с новой чашкой кофе",
+       "object": "Вернуться на кухню с новой чашкой кофе"
+      }
+     }
+    ],
+    "next": "host_coffee_borrowed",
+    "location": "КВАРТИРА · КОФЕ НА КУХНЕ",
+    "time": "18:50",
+    "music": "encounter",
+    "hostPortrait": true,
+    "kitchenStage": "dry",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Вернуться на кухню с новой чашкой кофе",
+     "object": "Вернуться на кухню с новой чашкой кофе"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Вернуться на кухню с новой чашкой кофе",
+      "object": "Вернуться на кухню с новой чашкой кофе"
+     }
+    },
+    "chapterId": "arrival",
+    "chapter": "День 0 · Своя дверь"
+   }
+  },
+  "host_coffee_borrowed": {
+   "afterHash": "772a0564d5f0656895030c011e21abf8de7402d90f856dd769ec6db74c3872b9",
+   "before": {
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Чёрная футболка сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.",
+      "hostText": {
+       "dragan": "Чёрная футболка сидит на Драгане плотнее, чем я ожидал{a}. Он поправляет рукав и с улыбкой возвращается к столу.",
+       "jelena": "Йелена прячет пальцы в длинных рукавах толстовки. Надпись «СПБГУ 2008» выглядит на ней неожиданно уютно. Она улыбается, заметив, что я смотрю."
+      }
+     },
+     {
+      "speaker": "host",
+      "text": "Вторую чашку понесём вместе? На всякий случай."
+     },
+     {
+      "speaker": "player",
+      "text": "Вместе. Но за руку можно взять меня и без помощи половицы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мы допиваем кофе без происшествий. У этого неловкого знакомства появился очень хороший повод продолжиться.",
+      "action": {
+       "kind": "tap",
+       "label": "Проводить до двери и договориться увидеться",
+       "object": "Проводить до двери и договориться увидеться"
+      }
+     }
+    ],
+    "next": "room_alone",
+    "location": "КВАРТИРА · КОФЕ НА КУХНЕ",
+    "time": "18:50",
+    "music": "encounter",
+    "hostPortrait": true,
+    "kitchenStage": "borrowed",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Проводить до двери и договориться увидеться",
+     "object": "Проводить до двери и договориться увидеться"
+    },
+    "journal": [
+     "borrowed_top"
+    ],
+    "effectOnEnter": {
+     "hostBorrowedTop": true
+    },
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Проводить до двери и договориться увидеться",
+      "object": "Проводить до двери и договориться увидеться"
+     }
+    },
+    "chapterId": "arrival",
+    "chapter": "День 0 · Своя дверь"
+   }
+  },
+  "third_morning": {
+   "afterHash": "d5937cf2f84dbe7fd6a544beeee1a55a02bcb7f55421a6454757a4b1f3541f49",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "08:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Утром я нахожу в сумке вчерашний список. Он немного помялся, но за ночь не стал страшнее."
+     },
+     {
+      "speaker": "contact",
+      "text": "Доброе утро. Пусть сегодня всё будет хотя бы немного понятнее. Напишешь потом?",
+      "contactText": {
+       "nikola": "Доброе утро. Желаю тебе сегодня побольше понятных ответов. И нормального завтрака.",
+       "milica": "Доброе утро. Пусть сегодня всё будет хотя бы немного понятнее. Напишешь потом?"
+      },
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "После банка Ася обещала познакомить меня с бухгалтером. Хочу понять, как устроить своё дело без догадок.",
+      "workText": {
+       "business": "После банка Ася обещала познакомить меня с бухгалтером. Хочу понять, как устроить своё дело без догадок.",
+       "employment": "После банка встречусь с Асей: она обещала рассказать о знакомой команде. Открывать бизнес только ради галочки я не собираюсь.",
+       "explore": "После банка встречусь с Асей. Сегодня можно узнавать варианты, не обещая выбрать один навсегда."
+      },
+      "action": {
+       "kind": "checklist",
+       "label": "Собраться на консультацию",
+       "items": [
+        "Паспорт и подготовленные документы",
+        "Список вопросов",
+        "Адрес и время встречи"
+       ]
+      }
+     }
+    ],
+    "next": "bank_visit",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "checklist",
+     "label": "Собраться на консультацию",
+     "items": [
+      "Паспорт и подготовленные документы",
+      "Список вопросов",
+      "Адрес и время встречи"
+     ]
+    },
+    "effectOnEnter": {
+     "dayDone": 1
+    },
+    "actions": {
+     "2": {
+      "kind": "checklist",
+      "label": "Собраться на консультацию",
+      "items": [
+       "Паспорт и подготовленные документы",
+       "Список вопросов",
+       "Адрес и время встречи"
+      ]
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rental_hub_ana": {
+   "afterHash": "3ab88e68b0e5665b95502c1d143bf9461921489b959c75094ee6877100b481a5",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Условия, знакомство и возможная симпатия — разные вещи. Я выбираю, о чём поговорить сейчас."
+     }
+    ],
+    "next": null,
+    "districtPortrait": true,
+    "choices": [
+     {
+      "label": "Спросить об условиях аренды",
+      "next": "rental_terms_ana",
+      "tone": "practical",
+      "effect": {
+       "rentalBond_ana": "practical"
+      }
+     },
+     {
+      "label": "Предложить познакомиться по-дружески",
+      "next": "rental_friends_ana",
+      "tone": "friendship",
+      "effect": {
+       "rentalBond_ana": "friendship"
+      }
+     },
+     {
+      "label": "Предложить кофе после просмотра",
+      "next": "rental_flirt_ana",
+      "tone": "romance",
+      "effect": {
+       "rentalBond_ana": "romance"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_terms_ana": {
+   "afterHash": "861141f1ce64237a3a78ba729af0729783e02442f803e42ba82c0720ba47fc4b",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Ана",
+      "text": "Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.",
+      "character": "ana"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_friends_ana": {
+   "afterHash": "4c1ddc989e7985cfc5fcdfb08bae17448ad24fa35aa403300fe150c946a0d935",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Ана",
+      "text": "С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.",
+      "character": "ana"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_flirt_ana": {
+   "afterHash": "cbdd92b517489d03ee80a3f90643ec09554e2e6df4b954a42539e0216c8f3a0e",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Ана",
+      "text": "Да, с удовольствием. Давай сначала закончим с квартирой, а потом выберем время.",
+      "character": "ana"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_hub_stefan": {
+   "afterHash": "cc5d6a6f64e502364d44bc2712c13312687cfc7dc09667dc95f58f71da84c03e",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Условия, знакомство и возможная симпатия — разные вещи. Я выбираю, о чём поговорить сейчас."
+     }
+    ],
+    "next": null,
+    "districtPortrait": true,
+    "choices": [
+     {
+      "label": "Спросить об условиях аренды",
+      "next": "rental_terms_stefan",
+      "tone": "practical",
+      "effect": {
+       "rentalBond_stefan": "practical"
+      }
+     },
+     {
+      "label": "Предложить познакомиться по-дружески",
+      "next": "rental_friends_stefan",
+      "tone": "friendship",
+      "effect": {
+       "rentalBond_stefan": "friendship"
+      }
+     },
+     {
+      "label": "Предложить кофе после просмотра",
+      "next": "rental_flirt_stefan",
+      "tone": "romance",
+      "effect": {
+       "rentalBond_stefan": "romance"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_terms_stefan": {
+   "afterHash": "e2d29be67f8c199c0eb13fcf05b8020e57b2da92f2143be5fd994c3e070f874e",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Стефан",
+      "text": "Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.",
+      "character": "stefan"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_friends_stefan": {
+   "afterHash": "8111aa727e2f80e627be37377d19e25334165f11d666d98241cd2a7e7b937d09",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Стефан",
+      "text": "С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.",
+      "character": "stefan"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_flirt_stefan": {
+   "afterHash": "100ffa0d9d1d621293b4a47b4bc49a1fbba05e0c133f6dcd114760dcb30b20c0",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Стефан",
+      "text": "Да, с удовольствием. Давай сначала закончим с квартирой, а потом выберем время.",
+      "character": "stefan"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_hub_marko": {
+   "afterHash": "b4b52f8b3c78106ba3cb71a949bda8261a702941db62b78d07f5633a955145b3",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Условия, знакомство и возможная симпатия — разные вещи. Я выбираю, о чём поговорить сейчас."
+     }
+    ],
+    "next": null,
+    "districtPortrait": true,
+    "choices": [
+     {
+      "label": "Спросить об условиях аренды",
+      "next": "rental_terms_marko",
+      "tone": "practical",
+      "effect": {
+       "rentalBond_marko": "practical"
+      }
+     },
+     {
+      "label": "Предложить познакомиться по-дружески",
+      "next": "rental_friends_marko",
+      "tone": "friendship",
+      "effect": {
+       "rentalBond_marko": "friendship"
+      }
+     },
+     {
+      "label": "Предложить кофе после просмотра",
+      "next": "rental_flirt_marko",
+      "tone": "romance",
+      "effect": {
+       "rentalBond_marko": "romance"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_terms_marko": {
+   "afterHash": "76ebcdba1e11471ba1e2e93a43113f4443a6ef63aca107d4d6ad0a386186d260",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Марко",
+      "text": "Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.",
+      "character": "marko"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_friends_marko": {
+   "afterHash": "e757d40dcce17e690947f74a6b136f8e882f90c46a256c64432cd2598fb86910",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Марко",
+      "text": "С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.",
+      "character": "marko"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_flirt_marko": {
+   "afterHash": "cac5bcae4bbd84174c2cb93b69543920a4f62adcab848d79b2e0a0a1b714d288",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Марко",
+      "text": "Да, с удовольствием. Давай сначала закончим с квартирой, а потом выберем время.",
+      "character": "marko"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_hub_vuk": {
+   "afterHash": "6c6db9d449f8179f8b47bca8292337c49b91cbab07e82960f1f52e5d20d03f58",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Условия, знакомство и возможная симпатия — разные вещи. Я выбираю, о чём поговорить сейчас."
+     }
+    ],
+    "next": null,
+    "districtPortrait": true,
+    "choices": [
+     {
+      "label": "Спросить об условиях аренды",
+      "next": "rental_terms_vuk",
+      "tone": "practical",
+      "effect": {
+       "rentalBond_vuk": "practical"
+      }
+     },
+     {
+      "label": "Предложить познакомиться по-дружески",
+      "next": "rental_friends_vuk",
+      "tone": "friendship",
+      "effect": {
+       "rentalBond_vuk": "friendship"
+      }
+     },
+     {
+      "label": "Предложить кофе после просмотра",
+      "next": "rental_flirt_vuk",
+      "tone": "romance",
+      "effect": {
+       "rentalBond_vuk": "romance"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_terms_vuk": {
+   "afterHash": "ae8de2c25b27c832592e290ba237550ffdf57b25db44206737814eca23beba50",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Вук",
+      "text": "Конечно. Запишем срок, платежи и вопросы, которые ещё нужно уточнить.",
+      "character": "vuk"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_friends_vuk": {
+   "afterHash": "fc3e6bc1454b7e774e1e5e54c863b66bc050258163ed88d50634f51cfc9d3fd4",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Вук",
+      "text": "С удовольствием. Могу показать любимое место в районе, когда тебе будет удобно.",
+      "character": "vuk"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  },
+  "rental_flirt_vuk": {
+   "afterHash": "082da1a8ea44a7bc9c69f39c174b141b8956089ea7955d2e9bf3dcf74001400e",
+   "before": {
+    "location": "АЭРОПОРТ · ПРИЛЁТ",
+    "time": "11:52",
+    "pages": [
+     {
+      "speaker": "Вук",
+      "text": "Да, с удовольствием. Давай сначала закончим с квартирой, а потом выберем время.",
+      "character": "vuk"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мне нравится, что здесь можно не торопиться. Я закрываю блокнот и сохраняю контакт.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить",
+       "object": "Продолжить"
+      }
+     }
+    ],
+    "next": "morning_ready",
+    "districtPortrait": true,
+    "journal": [
+     "viewing_done"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить",
+     "object": "Продолжить"
+    },
+    "actions": {
+     "1": {
+      "kind": "tap",
+      "label": "Продолжить",
+      "object": "Продолжить"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни",
+    "day": "ДЕНЬ 1"
+   }
+  }
+ },
+ "added": [
+  "flat_intro",
+  "flat_enter_ana",
+  "flat_after_ana",
+  "flat_enter_stefan",
+  "flat_after_stefan",
+  "flat_enter_marko",
+  "flat_after_marko",
+  "flat_enter_vuk",
+  "flat_after_vuk",
+  "flat_coffee",
+  "flat_coffee_warm",
+  "flat_coffee_calm",
+  "flat_decision",
+  "flat_terms",
+  "flat_price_full",
+  "flat_price_basic",
+  "flat_price_warm100",
+  "flat_price_warm150",
+  "flat_contract",
+  "flat_questions",
+  "flat_signed",
+  "flat_move_day",
+  "flat_arrive",
+  "flat_settle",
+  "bank_visit_api",
+  "bank_api_docs",
+  "bank_api_cost",
+  "bank_visit_alta",
+  "bank_alta_wait",
+  "bank_alta_window",
+  "bank_alta_book",
+  "bank_visit_adriatic",
+  "bank_adriatic_docs",
+  "bank_adriatic_list",
+  "host_old_town",
+  "host_terrace",
+  "host_terrace_meal"
+ ]
+}

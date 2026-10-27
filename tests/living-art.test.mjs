@@ -8,6 +8,12 @@ import {PEOPLE,buildArtCatalog} from '../public/workshop-model.js';
 // Only background selection, reaction metadata and the explicitly approved
 // mother-contact edits in fixtures/mother-edits.json may differ.
 const canonical=JSON.parse(JSON.stringify(NODES),(key,value)=>['bg','districtBg','reactions'].includes(key)?undefined:value);
+// Scenes this branch revised on purpose (tools/make-branch-revisions.mjs): each must match its recorded new version exactly,
+// then the baseline from main is restored so that the older fixtures and the final digest still prove everything else is untouched.
+const branch=JSON.parse(fs.readFileSync(new URL('./fixtures/branch-revisions.json',import.meta.url)));
+const digestOf=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
+for(const [id,{afterHash,before}]of Object.entries(branch.revised)){assert.equal(digestOf(canonical[id]),afterHash,id+': revised scene differs from its recorded version');canonical[id]=before;}
+for(const id of branch.added){assert.ok(canonical[id],id+': new scene');delete canonical[id];}
 for(const edit of [...JSON.parse(fs.readFileSync(new URL('./fixtures/mother-edits.json',import.meta.url))),...JSON.parse(fs.readFileSync(new URL('./fixtures/prologue-ui-edits.json',import.meta.url)))]){
  assert.deepEqual(canonical[edit.id].pages[edit.index][edit.field],edit.after,edit.id+': approved text edit');
  canonical[edit.id].pages[edit.index][edit.field]=edit.before;
@@ -34,13 +40,14 @@ for(const edit of upstream.changes.filter(edit=>edit.afterMissing)){
 // New rental introductions are separate scenes; their routes and translations
 // are checked in rental-story-integrity.test.mjs. The original three choices
 // receive exactly one eligibility condition, and four new ones are added.
+// (This branch's later changes to the map are restored above; housing.test.mjs checks the current map.)
 const rentalChoices=canonical.district_map.choices;
 assert.equal(rentalChoices.length,7);
 for(const choice of rentalChoices.slice(0,3))assert.deepEqual(choice.when,{flag:'rentalCast',notEquals:'new'});
 for(const choice of rentalChoices.slice(3))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
 assert.deepEqual(rentalChoices.slice(3).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
 canonical.district_map.choices=rentalChoices.slice(0,3).map(({when,...choice})=>choice);
-for(const id of Object.keys(canonical))if(id.startsWith('rental_'))delete canonical[id];
+for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_'))delete canonical[id];
 assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
 canonical.d20_nephew.pages[1].speaker='districtHost';
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
