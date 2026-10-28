@@ -2,7 +2,7 @@
 export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
  const contact=(nikola,milica)=>({speaker:'contact',text:milica,contactText:{nikola,milica}});
  const owner=(dragan,jelena)=>({speaker:'districtHost',text:dragan,districtText:{dragan,jelena}});
- const s=(pages,extra={})=>scene(pages,null,{bg:'first-room',location:'БЕЛГРАД · ВТОРОЙ ДЕНЬ',time:'12:30',day:'ВТОРОЙ ДЕНЬ',...extra});
+ const s=(pages,extra={})=>scene(pages,null,{bg:'first-room',location:'БЕЛГРАД · ДЕНЬ 1',time:'12:30',day:'ДЕНЬ 1',...extra});
  const out=label=>({kind:'tap',label,object:label});
  Object.assign(J,{
   housing_reply:{title:'Ответ после просмотра',tag:'ГЛАВА 3 · КВАРТИРА',text:'После просмотра выбран следующий шаг: запросить договор, взять время на сравнение или попросить другой вариант. Симпатия к человеку не заменяет условия аренды.'},
@@ -78,14 +78,14 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    msg('Ася','«Хороший ответ. Составим список людей и вопросов. Срочность не должна изображать уверенность». '),
    n('Я закрываю пустую форму. Иногда первый полезный шаг — не заполнить её наугад.')
   ],{next:'afternoon_invite',journal:['work_route'],exitAction:out('Сохранить направления для изучения')}),
-  // Host/neighbour lines are appended in extendCast; choices live on evening_plan so Ana’s last line is not mixed with the airport evening menu.
+  // Host/neighbour lines are appended in extendCast (soft home invite, not a locked dinner). Choices live on evening_plan.
   afternoon_invite:s([
    contact('Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.','Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.'),
    n('Время на экране — 18:40. Пишет {who.airport}: мы обменялись номерами ещё в аэропорту. Сегодня у меня было достаточно серьёзное лицо.'),
-   n('Теперь можно решить, каким будет вечер.')
+   n('В чате с квартирой тоже короткое сообщение — на всякий случай, если вечер окажется домашним.')
   ],{time:'18:40',next:'evening_plan',exitAction:out('Открыть сообщение')}),
   evening_plan:s([
-   n('Сообщение от {who.airport} всё ещё на экране. Каким будет вечер?')
+   n('Ответить {who.airport}:')
   ],{time:'18:42',choices:[
    {label:'Предложить свидание у реки',tone:'romance',next:'date_river',effect:{eveningIntent:'romance'}},
    {label:'Встретиться за кофе по-дружески',tone:'friendship',next:'date_friends',effect:{eveningIntent:'friendship'}},
@@ -134,7 +134,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    n('Зато уже есть несколько решений, принятых своим голосом. И человек, которому хочется пожелать доброй ночи.')
   ],{time:'22:10',lighting:'night',next:'end',journal:['bank_appointment'],effectOnEnter:{chapterThreeComplete:true},exitAction:out('Сохранить план на завтра')})
  });
- for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'13:20':['bank_call'],'14:10':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
+ for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'16:40':['bank_call'],'17:35':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
  for(const id of ['date_river','date_kiss','date_hand','date_slow'])N[id].music='encounter';
  N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Условия квартиры');
 }

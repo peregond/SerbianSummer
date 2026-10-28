@@ -110,10 +110,10 @@ export function extendCast({NODES:N}){
  const L=(ru,en,message=true)=>({speaker:'Лука',character:'luka',emotion:'friendly',text:T(ru,en),message});
  const owner=(dragan,jelena)=>({speaker:'districtHost',cameo:true,emotion:'friendly',text:T(...dragan),districtText:{dragan:T(...dragan),jelena:T(...jelena)}});
  const neighbour=(whenDragan,whenJelena)=>({speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...whenDragan),districtText:{dragan:T(...whenDragan),jelena:T(...whenJelena)}});
- // Day 1: the owner and neighbour finish afternoon_invite; evening choices stay on evening_plan so they are not shown under the bread line.
- N.afternoon_invite.pages.push(
-  owner(['Ужин сегодня в восемь, если захочешь — присоединяйся.','Dinner is at eight tonight; join us if you like.'],['Ужин сегодня в восемь, если захочешь — присоединяйся.','Dinner is at eight tonight; join us if you like.']),
-  neighbour(['Я принесу хлеб из пекарни на углу.','I will bring bread from the bakery on the corner.'],['Я принесу хлеб из пекарни на углу.','I will bring bread from the bakery on the corner.']));
+ // Day 1: owner/neighbour leave a soft home option (not a locked dinner) after the airport ping; evening choices stay on evening_plan.
+ const softDinner=['Если вечером останешься дома — ужин в восемь. Не обижусь, если планы изменятся.','If you stay in tonight, dinner is at eight. I will not mind if your plans change.'];
+ const softBread=['Я всё равно захвачу хлеб с угла — пригодится, даже если тебя не будет.','I will grab bread from the corner anyway - it will come in handy even if you are out.'];
+ N.afternoon_invite.pages.push(owner(softDinner,softDinner),neighbour(softBread,softBread));
  // Day 12: two friends who have been through the same bank and the same tax questions.
  N.bank_send.pages.push(
   A('Если банк попросит больше бумаг, не пугайся: у меня просили три раза.','If the bank asks for more papers, do not panic: mine asked three times.'),

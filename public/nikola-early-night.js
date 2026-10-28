@@ -93,6 +93,7 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
   nik('Хорошо. Спасибо, что сказал честно. Завтра всё равно испеку тебе кифлу.','All right. Thank you for saying it honestly. Tomorrow I will still bake you a kifla.','friendly'),
   note('Он провожает меня до дверей трамвая. Поцелуй на прощание короткий и тёплый — без обиды.','He walks me to the tram doors. The goodbye kiss is short and warm — without hurt.')
  ],'chapter_three_close',{...place('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP','20:35',RIVER_BG),character:'nikola-evening',emotion:'friendly',portrait:true});
+ // next rewritten to ada_tired after that scene exists (extendAdaEpisode).
 
  // 3. Home + consent (split for mobile pacing: ≤5 lines between actions)
  N.nikola_park_home=scene([
@@ -166,4 +167,5 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
   note('Утром его уже нет в кровати — смена в пекарне. На столе кифла в бумаге и записка корявым почерком: «Горячее. Приходи, когда захочешь. — Н.»','In the morning he is already gone from the bed — bakery shift. On the table a kifla in paper and a note in uneven handwriting: “Something hot. Come whenever you like. — N.”'),
   note('Джоки сушатся на спинке стула. Я улыбаюсь и закрываю дверь его квартиры так же тихо, как мы вчера её открывали.','The jockstrap is drying on the chair back. I smile and close his flat door as quietly as we opened it yesterday.')
  ],'chapter_three_close',{...place('КВАРТИРА НИКОЛЫ · УТРО','NIKOLA’S FLAT · MORNING','07:40',HOME_BG),journal:['nikola_early_night']});
+ // next rewritten to third_morning after Day 2 exists (wireNikolaEarlyNightExits).
 }

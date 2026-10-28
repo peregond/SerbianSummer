@@ -130,7 +130,7 @@ export function extendHousing({NODES,JOURNAL}){
   ],null,{time:'12:30',choices:[
     choice('Принять цену как есть','Accept the price as it is','flat_price_full','practical',{flatDiscount:0}),
     choice('Вежливо попросить скидку','Politely ask for a discount','flat_price_basic','practical',{flatDiscount:50}),
-    choice('Спросить о большей скидке: мы ведь уже успели познакомиться','Ask about a bigger discount, since we have already got to know each other','flat_price_warm100','romance',{flatDiscount:100},{flag:'flatWarmth',equals:1}),
+    choice('Спросить о большей скидке: нам уже спокойно разговаривать','Ask about a bigger discount; talking already feels easy','flat_price_warm100','friendship',{flatDiscount:100},{flag:'flatWarmth',equals:1}),
     choice('Спросить о большей скидке: мне здесь хорошо, и с квартирой, и с тобой','Ask about a bigger discount; I feel good here, with the flat and with you','flat_price_warm150','romance',{flatDiscount:150},{flag:'flatWarmth',equals:2}),
     choice('Пока подумать и вернуться на карту','Think it over and go back to the map','district_map','personal')
   ]});

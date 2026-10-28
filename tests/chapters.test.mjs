@@ -24,7 +24,8 @@ assert.equal(chapterFor({node:'end',flags:{chapterThreeComplete:true}},NODES).id
 assert.equal(NODES.chapter_three_close.next,'third_morning');
 assert.equal(NODES.chapter_four_close.next,'d3_start');assert.equal(NODES.chapter_five_close.next,'d17_start');assert.equal(NODES.chapter_six_close.next,'d22_start');
 assert.equal(chapterFor({node:'end',flags:{chapterFiveComplete:true}},NODES).id,'after-filing');assert.equal(chapterFor({node:'end',flags:{chapterSixComplete:true}},NODES).id,'courtyard');assert.equal(chapterFor({node:'end',flags:{chapterSevenComplete:true}},NODES).id,'answer');
-for(const id of ['date_slow','date_friends','date_messages'])assert.equal(NODES[id].next,'ada_tired');
+for(const id of ['date_slow','date_friends'])assert.equal(NODES[id].next,'ada_tired');
+assert.equal(NODES.date_messages.next,'chapter_three_close');
 for(const id of ['date_kiss','date_hand']){
  assert.equal(NODES[id].next,null);
  assert.ok(NODES[id].choices.some(c=>c.next==='nikola_park'));

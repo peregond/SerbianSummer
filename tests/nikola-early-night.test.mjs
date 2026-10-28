@@ -24,8 +24,9 @@ for(const id of chain)assert.ok(NODES[id],id);
 assert.equal(NODES.nikola_park_closer.adult,true);
 assert.equal(NODES.nikola_park_closer.skipTo,'nikola_park_morning');
 assert.equal(NODES.nikola_park_sex.adult,true);
-assert.equal(NODES.nikola_park_morning.next,'chapter_three_close');
-assert.equal(NODES.nikola_park_decline.next,'chapter_three_close');
+assert.equal(NODES.nikola_park_morning.next,'third_morning');
+assert.equal(NODES.nikola_park_morning.effectOnEnter.chapterThreeComplete,true);
+assert.equal(NODES.nikola_park_decline.next,'ada_tired');
 assert.ok(JOURNAL.nikola_early_night);
 
 for(const file of Object.keys(NIKOLA_EARLY_NIGHT_BACKGROUNDS))assert.ok(BACKGROUNDS[file],file);

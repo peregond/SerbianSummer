@@ -85,7 +85,10 @@ assert.match(pageText(NODES.afternoon_invite.pages[1],{companion:'nikola'}),/\{w
 assert.equal(NODES.afternoon_invite.choices,undefined,'airport evening choices are not under Ana’s bread line');
 assert.equal(NODES.afternoon_invite.next,'evening_plan');
 assert.equal(NODES.afternoon_invite.pages.at(-1).speaker,'ownerCounterpart');
+assert.match(NODES.afternoon_invite.pages.at(-1).text,/даже если тебя не будет|even if you are out/i);
 assert.deepEqual(NODES.evening_plan.choices.map(c=>c.next),['date_river','date_friends','date_messages']);
+assert.equal(NODES.work_business.time,'17:35');
+assert.equal(NODES.evening_plan.location,'БЕЛГРАД · ДЕНЬ 1');
 // ---- Names ----
 const dmitry={gender:'male',nameId:'dmitry'};
 assert.equal(callsByShortName('Никола',{companion:'nikola',nikolaBond:'romance'}),true);

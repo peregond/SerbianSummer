@@ -150,9 +150,12 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     n('Автобус пахнет кремом от солнца и арбузом.','The bus smells of sunscreen and watermelon.'),
     n('Завтра банк. Сегодня — чистая усталость, и она мне подходит.','Tomorrow is the bank. Today is a clean tiredness, and it suits me.')
   ],'chapter_three_close',{time:'21:55',bg:'ada-promenade-v1',adaPortrait:true,journal:['ada_rest'],exitAction:{kind:'tap',label:T('Вернуться домой','Go back home'),object:T('Автобус','The bus')}});
-  for(const id of ['date_kiss','date_hand','date_slow','date_friends','date_messages']){
+  // Stay-home messaging is already a quiet evening; do not force a trip to Ada after “good night”.
+  for(const id of ['date_kiss','date_hand','date_slow','date_friends']){
     const node=NODES[id];if(!node)continue;
     if(node.next==='chapter_three_close')node.next='ada_tired';
     for(const choice of node.choices??[])if(choice.next==='chapter_three_close')choice.next='ada_tired';
   }
+  // Soft refuse after the river invite should still reach Ada, same as saying goodbye at the embankment.
+  if(NODES.nikola_park_decline?.next==='chapter_three_close')NODES.nikola_park_decline.next='ada_tired';
 }

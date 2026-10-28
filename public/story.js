@@ -505,9 +505,9 @@ Object.assign(NODES, {
     k('Напиши потом. Пришлю, как добраться. Там, кстати, хорошая выпечка. Но это секрет.')
   ],'nikola_phone'),
   nikola_phone: bakery([
-    n('Телефон вибрирует. Драган. Я на секунду возвращаюсь к плану, который был до тёплого пакета и этого разговора.'),
-    msg('Драган · хозяин','«Во сколько примерно будете? Напишите, когда будете рядом. Я встречу с ключом».'),
-    y('Кажется, пора забирать свою дверь.'),
+    {...n('Телефон вибрирует. Драган. Я на секунду возвращаюсь к плану, который был до тёплого пакета и этого разговора.'),portrait:false},
+    {...msg('Драган · хозяин','«Во сколько примерно будете? Напишите, когда будете рядом. Я встречу с ключом».'),portrait:false},
+    {...y('Кажется, пора забирать свою дверь.'),portrait:false},
     k('Хорошая причина идти.'),
     n('Я отправляю примерное время. Сразу приходит ответ: «Всё хорошо, буду ждать».'),
     n('Никола достаёт из-под стойки свой телефон. Чехол немного потёрт, в углу наклейка с маленькой молнией.'),
@@ -725,6 +725,11 @@ extendHostEvening({NODES,JOURNAL});
 for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v2',alt:'Драган в вечерней рубашке'};
 applyEarlyCityArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES});
+// Morning after Nikola’s early night is already the next calendar day — skip the shared 22:10 epilogue.
+if(NODES.nikola_park_morning&&NODES.third_morning){
+ NODES.nikola_park_morning.next='third_morning';
+ NODES.nikola_park_morning.effectOnEnter={...NODES.nikola_park_morning.effectOnEnter,chapterThreeComplete:true};
+}
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 // Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
