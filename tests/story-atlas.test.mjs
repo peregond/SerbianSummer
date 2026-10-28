@@ -2,17 +2,25 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NODES,START} from '../public/story.js';
 import {CHAPTERS} from '../public/chapters.js';
-import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath,scaleStoryGraph,scenePreviewLines} from '../public/story-atlas-model.js';
+import {presentationFor,CHARACTER_SPRITES} from '../public/story.js';
+import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath,scaleStoryGraph,scenePreviewLines,resolveSceneFrame} from '../public/story-atlas-model.js';
 
 const before=JSON.stringify({NODES,CHAPTERS,START});
-const atlas=buildStoryAtlas(NODES,CHAPTERS,START);
+const atlas=buildStoryAtlas(NODES,CHAPTERS,START,{
+  presentationFor,
+  sprites:CHARACTER_SPRITES,
+  flags:{companion:'nikola',host:'dragan',districtOwner:'jelena',district:'dorcol',rentalCast:'new'},
+  profile:{gender:'female',nameId:'alexandra'}
+});
 assert.equal(JSON.stringify({NODES,CHAPTERS,START}),before,'Atlas build must not mutate story data');
 
 assert.equal(atlas.totals.start,START);
 assert.ok(atlas.totals.scenes>=600,`expected many scenes, got ${atlas.totals.scenes}`);
 assert.equal(atlas.totals.chapters,CHAPTERS.length);
 assert.ok(atlas.scenes[START],'start scene is indexed');
+assert.ok(atlas.scenes[START].frame?.bg,'start scene has a frame background preview');
 assert.ok(Array.isArray(atlas.incoming[START])||atlas.incoming[START]===undefined);
+assert.ok(resolveSceneFrame(NODES[START],{presentationFor,sprites:CHARACTER_SPRITES})?.bg);
 
 const prologue=atlas.chapters.find(chapter=>chapter.id==='prologue')||atlas.chapters[0];
 assert.ok(prologue.sceneIds.includes(prologue.start));
@@ -21,6 +29,7 @@ const graph=buildStoryGraph(atlas,{chapterId:prologue.id});
 assert.ok(graph.nodes.length>=1);
 assert.ok(graph.byId[prologue.start],'chapter start is placed');
 assert.ok(graph.byId[prologue.start].preview,'nodes carry scene preview text');
+assert.ok(graph.byId[prologue.start].frame?.bg,'graph nodes carry frame art');
 assert.ok(graph.edges.length>=1,'chapter has exits');
 assert.ok(graph.width>graph.nodeW);
 assert.ok(graph.height>graph.nodeH);

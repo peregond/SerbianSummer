@@ -1,4 +1,5 @@
 import {t} from './i18n.js?v=0.16.1';
+import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.1-art9';
 import {
   buildStoryAtlas,
   buildStoryGraph,
@@ -8,7 +9,10 @@ import {
   graphEdgeLabelPoint,
   scaleStoryGraph,
   scenePreviewLines
-} from './story-atlas-model.js?v=3';
+} from './story-atlas-model.js?v=4';
+
+const PREVIEW_FLAGS={companion:'nikola',host:'dragan',districtOwner:'jelena',district:'dorcol',rentalCast:'new'};
+const PREVIEW_PROFILE={gender:'female',nameId:'alexandra'};
 
 const el=(tag,text,className)=>{
   const node=document.createElement(tag);
@@ -16,6 +20,33 @@ const el=(tag,text,className)=>{
   if(className)node.className=className;
   return node;
 };
+
+function frameThumb(frame,className){
+  if(!frame||(!frame.bg&&!frame.portrait))return null;
+  const wrap=el('div','',className||'story-atlas-frame');
+  if(frame.composite)wrap.classList.add('is-composite');
+  if(frame.bg){
+    const bg=document.createElement('img');
+    bg.className='story-atlas-frame-bg';
+    bg.src=frame.bg;
+    bg.alt='';
+    bg.loading='lazy';
+    bg.decoding='async';
+    bg.addEventListener('error',()=>{bg.hidden=true;},{once:true});
+    wrap.append(bg);
+  }
+  if(frame.portrait){
+    const portrait=document.createElement('img');
+    portrait.className='story-atlas-frame-portrait';
+    portrait.src=frame.portrait;
+    portrait.alt=frame.alt?t(frame.alt):'';
+    portrait.loading='lazy';
+    portrait.decoding='async';
+    portrait.addEventListener('error',()=>{portrait.hidden=true;},{once:true});
+    wrap.append(portrait);
+  }
+  return wrap;
+}
 
 async function copyText(value){
   try{
@@ -30,7 +61,12 @@ async function copyText(value){
 }
 
 export function mountStoryAtlas(container,{nodes,chapters,start,status}){
-  const atlas=buildStoryAtlas(nodes,chapters,start);
+  const atlas=buildStoryAtlas(nodes,chapters,start,{
+    presentationFor,
+    sprites:CHARACTER_SPRITES,
+    flags:PREVIEW_FLAGS,
+    profile:PREVIEW_PROFILE
+  });
   const root=el('div','','story-atlas');
   const intro=el('p','Интерактивная схема сюжета: ходи по узлам, смотри реплики и копируй ID сцен для правок.','workshop-intro');
   const summary=el('p','','story-atlas-summary');
@@ -164,6 +200,10 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       preview.append(el('p',t('Превью сцены появится после выбора узла.'),'story-atlas-preview-empty'));
       return;
     }
+    const body=el('div','','story-atlas-preview-body');
+    const frame=frameThumb(scene.frame,'story-atlas-preview-frame');
+    if(frame)body.append(frame);
+    const copy=el('div','','story-atlas-preview-copy');
     const head=el('div','','story-atlas-preview-head');
     head.append(el('code',scene.id,'story-atlas-id'));
     const meta=[];
@@ -171,15 +211,15 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     if(scene.time)meta.push(scene.time);
     if(scene.pageCount)meta.push(`${scene.pageCount} ${t('стр.')}`);
     if(meta.length)head.append(el('span',meta.join(' · '),'story-atlas-preview-meta'));
-    preview.append(head);
-    if(scene.chapter)preview.append(el('p',scene.chapter,'story-atlas-preview-chapter'));
+    copy.append(head);
+    if(scene.chapter)copy.append(el('p',scene.chapter,'story-atlas-preview-chapter'));
     const lines=el('div','','story-atlas-preview-lines');
     for(const page of scenePreviewLines(scene,2)){
       const row=el('p','','story-atlas-preview-line');
       row.append(el('small',page.speaker+(page.message?' · msg':'')),document.createTextNode(' '+page.text));
       lines.append(row);
     }
-    preview.append(lines);
+    copy.append(lines);
     if(scene.outs.length){
       const choices=el('div','','story-atlas-preview-choices');
       for(const out of scene.outs.slice(0,4)){
@@ -189,8 +229,10 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
         chip.onclick=()=>{if(out.next&&out.next!=='end')goTo(out.next);};
         choices.append(chip);
       }
-      preview.append(choices);
+      copy.append(choices);
     }
+    body.append(copy);
+    preview.append(body);
   }
 
   function renderDetail(scene){
@@ -374,19 +416,23 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       button.classList.toggle('is-selected',node.id===selected);
       button.classList.toggle('is-external',!!node.external);
       button.classList.toggle('is-root',node.id===graph.root);
+      const thumb=frameThumb(node.frame,'story-atlas-node-frame');
+      if(thumb)button.append(thumb);
+      const copy=el('div','','story-atlas-node-copy');
       const title=el('strong',node.label);
       title.style.fontSize=`${fontSize}px`;
-      button.append(title);
+      copy.append(title);
       if(node.meta){
         const meta=el('small',node.meta,'story-atlas-node-meta');
         meta.style.fontSize=`${metaSize}px`;
-        button.append(meta);
+        copy.append(meta);
       }
       if(node.preview){
         const previewLine=el('span',node.preview,'story-atlas-node-preview');
         previewLine.style.fontSize=`${previewSize}px`;
-        button.append(previewLine);
+        copy.append(previewLine);
       }
+      button.append(copy);
       button.onclick=()=>goTo(node.id);
       layer.append(button);
     }
