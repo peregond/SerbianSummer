@@ -1,5 +1,14 @@
 import {t} from './i18n.js?v=0.16.1';
-import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath} from './story-atlas-model.js?v=2';
+import {
+  buildStoryAtlas,
+  buildStoryGraph,
+  filterAtlasScenes,
+  formatSceneNote,
+  graphEdgePath,
+  graphEdgeLabelPoint,
+  scaleStoryGraph,
+  scenePreviewLines
+} from './story-atlas-model.js?v=3';
 
 const el=(tag,text,className)=>{
   const node=document.createElement(tag);
@@ -47,6 +56,9 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   legacy.append(legacyBox,document.createTextNode(t('Показать legacyOnly')));
   controls.append(chapter,search,legacy);
 
+  const preview=el('section','','story-atlas-preview');
+  preview.setAttribute('aria-live','polite');
+
   const layout=el('div','','story-atlas-layout story-atlas-layout-schema');
   const schemaWrap=el('div','','story-atlas-schema');
   schemaWrap.setAttribute('tabindex','0');
@@ -56,7 +68,8 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   const zoomIn=el('button','+','secondary story-atlas-zoom');zoomIn.type='button';zoomIn.setAttribute('aria-label',t('Увеличить'));
   const zoomReset=el('button',t('Сброс'),'secondary story-atlas-zoom');zoomReset.type='button';
   const fitBtn=el('button',t('К выбранной'),'secondary story-atlas-zoom');fitBtn.type='button';
-  schemaToolbar.append(zoomOut,zoomIn,zoomReset,fitBtn);
+  const zoomLabel=el('span','100%','story-atlas-zoom-label');
+  schemaToolbar.append(zoomOut,zoomIn,zoomReset,fitBtn,zoomLabel);
   const schemaViewport=el('div','','story-atlas-schema-viewport');
   const schemaCanvas=el('div','','story-atlas-schema-canvas');
   schemaViewport.append(schemaCanvas);
@@ -65,7 +78,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   const detail=el('article','','story-atlas-detail');
   detail.append(el('p',t('Выбери узел на схеме — справа появятся ID, реплики и переходы.'),'story-atlas-empty'));
   layout.append(schemaWrap,detail);
-  root.append(intro,summary,controls,layout);
+  root.append(intro,summary,controls,preview,layout);
   container.append(root);
 
   let selected=prologue?.start||atlas.totals.start;
@@ -75,12 +88,17 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   let panY=0;
   let dragging=false;
   let dragOrigin=null;
+  let baseGraph=null;
   let graph=null;
 
   const setStatus=message=>{if(status)status.textContent=message;};
 
-  function applyTransform(){
-    schemaCanvas.style.transform=`translate(${panX}px, ${panY}px) scale(${scale})`;
+  function applyPan(){
+    schemaCanvas.style.transform=`translate(${panX}px, ${panY}px)`;
+  }
+
+  function updateZoomLabel(){
+    zoomLabel.textContent=`${Math.round(scale*100)}%`;
   }
 
   function centerOn(id){
@@ -88,24 +106,40 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     if(!node)return;
     const rect=schemaViewport.getBoundingClientRect();
     if(!rect.width||!rect.height)return;
-    const cx=node.x+graph.nodeW/2;
-    const cy=node.y+graph.nodeH/2;
-    panX=rect.width/2-cx*scale;
-    panY=rect.height/2-cy*scale;
-    applyTransform();
+    panX=rect.width/2-(node.x+graph.nodeW/2);
+    panY=rect.height/2-(node.y+graph.nodeH/2);
+    applyPan();
   }
 
   function fitGraph(){
-    if(!graph)return;
+    if(!baseGraph)return;
     const rect=schemaViewport.getBoundingClientRect();
     if(!rect.width||!rect.height)return;
-    const pad=48;
-    const sx=(rect.width-pad)/Math.max(graph.width,1);
-    const sy=(rect.height-pad)/Math.max(graph.height,1);
-    scale=Math.min(1.15,Math.max(0.35,Math.min(sx,sy)));
-    panX=(rect.width-graph.width*scale)/2;
-    panY=(rect.height-graph.height*scale)/2;
-    applyTransform();
+    const pad=56;
+    const sx=(rect.width-pad)/Math.max(baseGraph.width,1);
+    const sy=(rect.height-pad)/Math.max(baseGraph.height,1);
+    setZoom(Math.min(1.1,Math.max(0.45,Math.min(sx,sy))),{refit:true});
+  }
+
+  function setZoom(next,{keepCenter=true,refit=false}={}){
+    const rect=schemaViewport.getBoundingClientRect();
+    const clamped=Math.min(2.2,Math.max(0.45,next));
+    let worldX=0,worldY=0;
+    if(keepCenter&&rect.width&&!refit){
+      worldX=(rect.width/2-panX)/scale;
+      worldY=(rect.height/2-panY)/scale;
+    }
+    scale=clamped;
+    updateZoomLabel();
+    renderGraph();
+    if(refit){
+      panX=(rect.width-graph.width)/2;
+      panY=(rect.height-graph.height)/2;
+    }else if(keepCenter&&rect.width){
+      panX=rect.width/2-worldX;
+      panY=rect.height/2-worldY;
+    }
+    applyPan();
   }
 
   function goTo(id,{push=true}={}){
@@ -115,9 +149,48 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       if(crawl[crawl.length-1]!==id)crawl.push(id);
       if(crawl.length>40)crawl=crawl.slice(-40);
     }
-    if(chapter.value==='focus')renderAll();
-    else{renderGraph();renderDetail(atlas.scenes[id]);}
+    if(chapter.value==='focus')renderAll({preservePan:false});
+    else{
+      renderGraph();
+      renderPreview(atlas.scenes[id]);
+      renderDetail(atlas.scenes[id]);
+    }
     requestAnimationFrame(()=>centerOn(id));
+  }
+
+  function renderPreview(scene){
+    preview.replaceChildren();
+    if(!scene){
+      preview.append(el('p',t('Превью сцены появится после выбора узла.'),'story-atlas-preview-empty'));
+      return;
+    }
+    const head=el('div','','story-atlas-preview-head');
+    head.append(el('code',scene.id,'story-atlas-id'));
+    const meta=[];
+    if(scene.location)meta.push(scene.location);
+    if(scene.time)meta.push(scene.time);
+    if(scene.pageCount)meta.push(`${scene.pageCount} ${t('стр.')}`);
+    if(meta.length)head.append(el('span',meta.join(' · '),'story-atlas-preview-meta'));
+    preview.append(head);
+    if(scene.chapter)preview.append(el('p',scene.chapter,'story-atlas-preview-chapter'));
+    const lines=el('div','','story-atlas-preview-lines');
+    for(const page of scenePreviewLines(scene,2)){
+      const row=el('p','','story-atlas-preview-line');
+      row.append(el('small',page.speaker+(page.message?' · msg':'')),document.createTextNode(' '+page.text));
+      lines.append(row);
+    }
+    preview.append(lines);
+    if(scene.outs.length){
+      const choices=el('div','','story-atlas-preview-choices');
+      for(const out of scene.outs.slice(0,4)){
+        const label=out.label&&out.label!=='→'?`${out.label} → ${out.next??'end'}`:`→ ${out.next??'end'}`;
+        const chip=el('button',label,'story-atlas-preview-choice');
+        chip.type='button';
+        chip.onclick=()=>{if(out.next&&out.next!=='end')goTo(out.next);};
+        choices.append(chip);
+      }
+      preview.append(choices);
+    }
   }
 
   function renderDetail(scene){
@@ -207,17 +280,21 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
 
   function renderGraph(){
     const chapterId=chapter.value;
-    graph=buildStoryGraph(atlas,{
+    baseGraph=buildStoryGraph(atlas,{
       chapterId:chapterId==='focus'?'all':chapterId,
       focusId:selected,
       hops:1
     });
     if(!legacyBox.checked){
-      graph.nodes=graph.nodes.filter(node=>!atlas.scenes[node.id]?.legacyOnly||node.id===selected);
-      const keep=new Set(graph.nodes.map(n=>n.id));
-      graph.edges=graph.edges.filter(edge=>keep.has(edge.from)&&(edge.end||keep.has(edge.to)));
-      graph.byId=Object.fromEntries(graph.nodes.map(n=>[n.id,n]));
+      baseGraph={
+        ...baseGraph,
+        nodes:baseGraph.nodes.filter(node=>!atlas.scenes[node.id]?.legacyOnly||node.id===selected)
+      };
+      const keep=new Set(baseGraph.nodes.map(n=>n.id));
+      baseGraph.edges=baseGraph.edges.filter(edge=>keep.has(edge.from)&&(edge.end||keep.has(edge.to)));
+      baseGraph.byId=Object.fromEntries(baseGraph.nodes.map(n=>[n.id,n]));
     }
+    graph=scaleStoryGraph(baseGraph,scale);
 
     schemaCanvas.replaceChildren();
     schemaCanvas.style.width=`${graph.width}px`;
@@ -229,30 +306,62 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     svg.setAttribute('height',String(graph.height));
     svg.setAttribute('viewBox',`0 0 ${graph.width} ${graph.height}`);
     const marker=document.createElementNS('http://www.w3.org/2000/svg','defs');
-    marker.innerHTML=`<marker id="story-atlas-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="currentColor"/></marker>`;
+    marker.innerHTML=`<marker id="story-atlas-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="currentColor"/></marker>`;
     svg.append(marker);
 
+    const laneOf=new Map();
+    const showLabels=scale>=0.85;
     for(const edge of graph.edges){
       const from=graph.byId[edge.from];
       if(!from)continue;
       const to=edge.end?null:graph.byId[edge.to];
+      const key=`${edge.from}->${edge.to??'end'}`;
+      const lane=laneOf.get(key)||0;
+      laneOf.set(key,lane+1);
+      // stagger parallel outs from same node
+      const sibling=graph.edges.filter(e=>e.from===edge.from).indexOf(edge);
+      const pathLane=(sibling-Math.floor((from.outs?.length||1)/2))*1;
       const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-      path.setAttribute('d',graphEdgePath(from,to||{x:from.x+graph.nodeW+40,y:from.y},graph.nodeW,graph.nodeH));
-      path.setAttribute('class',`story-atlas-edge${edge.external?' is-external':''}${edge.end?' is-end':''}${edge.from===selected||edge.to===selected?' is-active':''}`);
+      path.setAttribute('d',graphEdgePath(from,to||{x:from.x+graph.nodeW+40,y:from.y},graph.nodeW,graph.nodeH,pathLane));
+      const active=edge.from===selected||edge.to===selected;
+      path.setAttribute('class',`story-atlas-edge${edge.external?' is-external':''}${edge.end?' is-end':''}${active?' is-active':''}`);
       path.setAttribute('marker-end','url(#story-atlas-arrow)');
       svg.append(path);
-      if(edge.label&&edge.label!=='→'&&to){
-        const label=document.createElementNS('http://www.w3.org/2000/svg','text');
-        label.textContent=edge.label.length>28?edge.label.slice(0,27)+'…':edge.label;
-        label.setAttribute('x',String((from.x+graph.nodeW+to.x)/2));
-        label.setAttribute('y',String((from.y+to.y)/2+graph.nodeH/2-8));
-        label.setAttribute('class','story-atlas-edge-label');
-        svg.append(label);
+
+      const usefulLabel=edge.label&&edge.label!=='→';
+      if(usefulLabel&&to&&showLabels&&active){
+        const point=graphEdgeLabelPoint(from,to,graph.nodeW,graph.nodeH,pathLane);
+        const labelText=edge.label.length>22?edge.label.slice(0,21)+'…':edge.label;
+        const group=document.createElementNS('http://www.w3.org/2000/svg','g');
+        group.setAttribute('class','story-atlas-edge-label-group');
+        const bg=document.createElementNS('http://www.w3.org/2000/svg','rect');
+        const text=document.createElementNS('http://www.w3.org/2000/svg','text');
+        text.textContent=labelText;
+        text.setAttribute('x',String(point.x));
+        text.setAttribute('y',String(point.y));
+        text.setAttribute('class','story-atlas-edge-label');
+        group.append(bg,text);
+        svg.append(group);
+        // size background after text exists in DOM
+        requestAnimationFrame(()=>{
+          try{
+            const box=text.getBBox();
+            bg.setAttribute('x',String(box.x-6));
+            bg.setAttribute('y',String(box.y-3));
+            bg.setAttribute('width',String(box.width+12));
+            bg.setAttribute('height',String(box.height+6));
+            bg.setAttribute('rx','6');
+            bg.setAttribute('class','story-atlas-edge-label-bg');
+          }catch{/* Safari may throw before layout */}
+        });
       }
     }
     schemaCanvas.append(svg);
 
     const layer=el('div','','story-atlas-nodes');
+    const fontSize=Math.max(11,Math.round(12*Math.min(1.15,scale)));
+    const metaSize=Math.max(9,Math.round(10*Math.min(1.1,scale)));
+    const previewSize=Math.max(10,Math.round(11*Math.min(1.1,scale)));
     for(const node of graph.nodes){
       if(!legacyBox.checked&&atlas.scenes[node.id]?.legacyOnly&&node.id!==selected)continue;
       const button=el('button','','story-atlas-node');
@@ -265,17 +374,29 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       button.classList.toggle('is-selected',node.id===selected);
       button.classList.toggle('is-external',!!node.external);
       button.classList.toggle('is-root',node.id===graph.root);
-      button.append(el('strong',node.label));
-      if(node.meta)button.append(el('small',node.meta));
+      const title=el('strong',node.label);
+      title.style.fontSize=`${fontSize}px`;
+      button.append(title);
+      if(node.meta){
+        const meta=el('small',node.meta,'story-atlas-node-meta');
+        meta.style.fontSize=`${metaSize}px`;
+        button.append(meta);
+      }
+      if(node.preview){
+        const previewLine=el('span',node.preview,'story-atlas-node-preview');
+        previewLine.style.fontSize=`${previewSize}px`;
+        button.append(previewLine);
+      }
       button.onclick=()=>goTo(node.id);
       layer.append(button);
     }
     schemaCanvas.append(layer);
-    applyTransform();
+    applyPan();
   }
 
   function renderAll(){
     renderGraph();
+    renderPreview(atlas.scenes[selected]||null);
     renderDetail(atlas.scenes[selected]||null);
   }
 
@@ -311,8 +432,8 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   });
   legacyBox.addEventListener('change',()=>renderAll());
 
-  zoomIn.onclick=()=>{scale=Math.min(2.2,scale+0.12);applyTransform();centerOn(selected);};
-  zoomOut.onclick=()=>{scale=Math.max(0.35,scale-0.12);applyTransform();centerOn(selected);};
+  zoomIn.onclick=()=>setZoom(scale+0.12);
+  zoomOut.onclick=()=>setZoom(scale-0.12);
   zoomReset.onclick=()=>fitGraph();
   fitBtn.onclick=()=>centerOn(selected);
 
@@ -327,7 +448,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     if(!dragging||!dragOrigin)return;
     panX=event.clientX-dragOrigin.x;
     panY=event.clientY-dragOrigin.y;
-    applyTransform();
+    applyPan();
   });
   const endPan=event=>{
     dragging=false;dragOrigin=null;schemaViewport.classList.remove('is-panning');
@@ -338,12 +459,15 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   schemaViewport.addEventListener('wheel',event=>{
     if(event.ctrlKey||event.metaKey){
       event.preventDefault();
-      const delta=event.deltaY>0?-0.08:0.08;
-      scale=Math.min(2.2,Math.max(0.45,scale+delta));
-      applyTransform();
+      setZoom(scale+(event.deltaY>0?-0.08:0.08));
+    }else{
+      panX-=event.deltaX;
+      panY-=event.deltaY;
+      applyPan();
     }
   },{passive:false});
 
+  updateZoomLabel();
   renderAll();
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     fitGraph();

@@ -5039,6 +5039,8 @@
   "Сюжет": "Story",
   "Внутренняя карта сюжета: ID сцен, главы и переходы. Удобно копировать ID, когда присылаешь правки.": "Internal story map: scene IDs, chapters and exits. Handy for copying IDs when you send edits.",
   "Интерактивная схема сюжета: ходи по узлам, смотри реплики и копируй ID сцен для правок.": "Interactive story schema: crawl the nodes, read lines and copy scene IDs for edits.",
+  "Превью сцены появится после выбора узла.": "Scene preview appears after you pick a node.",
+  "стр.": "pp.",
   "сцен": "scenes",
   "глав": "chapters",
   "старт": "start",
