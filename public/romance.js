@@ -50,9 +50,10 @@ export const loversOf=(flags={})=>(flags.lovers??'').split(',').filter(slot=>SLO
 export const loveNames=(flags={})=>loversOf(flags).map(slot=>nameOf(slot,flags));
 export function joinNames(names,and){return names.length<2?names.join(''):names.slice(0,-1).join(', ')+' '+and+' '+names.at(-1);}
 // A choice may carry a condition: {partner,stage} (stage null = nothing has happened yet) or {minPartners:{stage,count}}.
-export function choiceVisible(choice,flags={}){
+export function choiceVisible(choice,flags={},ctx={}){
  const when=choice.when;if(!when)return true;
- if(when.all)return when.all.every(each=>choiceVisible({when:each},flags));
+ if(when.all)return when.all.every(each=>choiceVisible({when:each},flags,ctx));
+ if(when.gender&&ctx.gender&&when.gender!==ctx.gender)return false;
  if(Object.hasOwn(when,'bit')&&!((flags[when.flag]??0)&when.bit))return false;
  if(Object.hasOwn(when,'notBit')&&((flags[when.flag]??0)&when.notBit))return false;
  if(when.flag){

@@ -26,6 +26,7 @@ import {extendHostCoffee} from './host-coffee.js?v=0.16.1-art3';
 import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.16.1';
 import {assignChapters} from './chapters.js?v=0.16.1';
 import {extendNextChapter} from './chapter-three.js?v=0.16.1';
+import {extendNikolaEarlyNight} from './nikola-early-night.js?v=0.16.1';
 import {extendFastPrologue} from './prologue-fast.js?v=0.16.1';
 import {editPrologue} from './prologue-edit.js?v=0.16.1';
 import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.16.1';
@@ -675,6 +676,7 @@ NODES.nikola_invite.choices=[
 ];
 extendFastPrologue(NODES);
 extendNextChapter({NODES,JOURNAL,n,y,msg,scene});
+extendNikolaEarlyNight({NODES,JOURNAL,BACKGROUNDS,n,y,scene});
 editPrologue({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES});
 extendHostCoffee({NODES,JOURNAL,BACKGROUNDS});
 extendFourthChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,msg,scene});
