@@ -62,10 +62,12 @@
 /* Wide web / Safari: full workshop shell for every tab */
 @media(min-width:860px){
   #panel.workshop-wide{
-    width:min(1180px,calc(100vw - 48px));
+    width:calc(100vw - 32px);
     max-width:none;
-    height:min(880px,calc(100dvh - 48px));
-    max-height:calc(100dvh - 48px);
+    height:calc(100dvh - 32px);
+    max-height:calc(100dvh - 32px);
+    inset:16px;
+    margin:auto;
     display:flex;
     flex-direction:column;
     overflow:hidden;

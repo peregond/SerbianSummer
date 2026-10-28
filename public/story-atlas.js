@@ -183,7 +183,8 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     if(scene.outs.length){
       const choices=el('div','','story-atlas-preview-choices');
       for(const out of scene.outs.slice(0,4)){
-        const chip=el('button',`${out.label||'→'} → ${out.next??'end'}`,'story-atlas-preview-choice');
+        const label=out.label&&out.label!=='→'?`${out.label} → ${out.next??'end'}`:`→ ${out.next??'end'}`;
+        const chip=el('button',label,'story-atlas-preview-choice');
         chip.type='button';
         chip.onclick=()=>{if(out.next&&out.next!=='end')goTo(out.next);};
         choices.append(chip);
