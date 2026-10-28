@@ -21,7 +21,7 @@ export function buildArtCatalog(files, sprites, backgrounds) {
   for(const file of baggageAssets)active.add(file);
   const entries = files.map(file => {
     const base = file.split('/').at(-1);
-    const person = Object.keys(RENTAL_PEOPLE).find(id => base.startsWith('rental-'+id+'-')) ?? Object.keys({...PEOPLE,...EPISODIC_PEOPLE}).find(id => base === id + '.webp' || base.startsWith(id + '-'));
+    const person = Object.keys(RENTAL_PEOPLE).find(id => base.startsWith('rental-'+id+'-')) ?? Object.keys({...PEOPLE,...RENTAL_PEOPLE,...EPISODIC_PEOPLE}).find(id => base === id + '.webp' || base.startsWith(id + '-'));
     const image = /\.(webp|png|svg|jpe?g)$/i.test(file);
     const icon = /icon|poster|sketch/.test(base);
     const background = Object.hasOwn(backgrounds, base.replace(/\.webp$/, ''));
@@ -30,8 +30,9 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const composite = /^(milica-table-|(?:dragan|jelena)-kitchen-)/.test(base);
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
-    const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /^dragan-evening-.*-v[12]\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
+    const specialPose = /-(?:swim|camera|workshop|door|headphones|guide|napkin|show|wave|riverside|pointing)(?:-|\.)/.test(base);
+    const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !specialPose && !/kitchen|dream/.test(base) ? 'friendly' : null);
+    const look = /-swim-/.test(base) ? 'У воды' : specialPose ? 'Сюжетная поза' : /^dragan-evening-.*-v[12]\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? ((Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) || Object.values(HOME_BACKGROUNDS).includes(file) || file.startsWith('baggage/search-carousel')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
