@@ -47,6 +47,14 @@
 >
 > Мы не придумываем новых слов. Мы договариваемся: говорить честно, не прятаться и не обещать лишнего.
 
+## Ранняя ночь с Николой после свидания (глава 3)
+
+Вход после `date_kiss` или `date_hand`, только если `companion=nikola` и пол игрока — мужской. Цепочка:
+
+`nikola_park` → `nikola_park_invite` → (`nikola_park_decline` | `nikola_park_home` → `nikola_park_door` → `nikola_park_closer` → `nikola_park_prep` → `nikola_park_sex` → один из `nikola_park_cum_*` → `nikola_park_afterglow`) → `nikola_park_morning` → `chapter_three_close`.
+
+Сцены с `adult:true` (`closer` и дальше до afterglow) пропускаются на `nikola_park_morning`, если «Взрослые сцены · 18+» выключены. Текст — подробный, игрок актив, Никола снизу. Иллюстрации: часть — заглушки с чёрными плашками под inpaint (`artwork/nikola-early-night/INPAINT.md`).
+
 ## Аэропорт: Никола у пекарни (глава 1)
 
 В прологе, после разговора с Николой («Кажется, мне интересна не только выпечка»), у игрока появился третий вариант: **«Тихо предложить отойти в сторону»**. Узлы в `public/romance-scenes.js`: `nikola_aside` (разговор) → `nikola_aside_yes` (18+, сейчас затемнение) → `nikola_aside_after` (возвращение к стойке).

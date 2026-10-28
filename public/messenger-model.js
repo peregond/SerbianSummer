@@ -47,7 +47,7 @@ function messageBody(page, meta, text) {
   }
   return { text: stripMessageQuotes(full), context: '' };
 }
-export function messengerFrame({ sceneId, node, index, flags = {}, journal = [], action, text, choiceText }) {
+export function messengerFrame({ sceneId, node, index, flags = {}, journal = [], action, text, choiceText, profile = {} }) {
   let current = messageAt(sceneId, node, index, flags);
   // A phone reply may follow a narrated thought on the same legacy page.
   if (!current && action?.kind === 'reply') {
@@ -66,7 +66,7 @@ export function messengerFrame({ sceneId, node, index, flags = {}, journal = [],
   if(nikolaPhoto&&index>1)messages.push({direction:'incoming',text:'',photo:nikolaPhoto,time:node.time??''});
   const meetingChoice = sceneId==='courtyard_arrival'&&index===2;
   const rawChoices = meetingChoice ? node.choices : action?.kind === 'reply' ? action.options : (!action || action.kind === 'tap') && index === node.pages.length - 1 ? node.choices : null;
-  const choices=rawChoices?.filter(choice=>choiceVisible(choice,flags));
+  const choices=rawChoices?.filter(choice=>choiceVisible(choice,flags,profile));
   const inline = !choices?.length && actual?.direction === 'incoming' ? INLINE_CHAT_REPLIES[sceneId]?.[index] : null;
   const draft = actual?.direction === 'outgoing' ? messageBody(node.pages[index], actual, text) : null;
   return {

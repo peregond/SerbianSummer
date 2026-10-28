@@ -9,7 +9,12 @@ for (const id of ids) {
   assert.ok(NODES[id].pages.length <= 5, id);
   assert.ok(fs.existsSync(new URL('../public/assets/' + NODES[id].bg + '.webp', import.meta.url)), NODES[id].bg);
 }
-for (const id of ['date_kiss','date_hand','date_slow','date_friends','date_messages']) assert.equal(NODES[id].next, 'ada_tired');
+for (const id of ['date_slow','date_friends','date_messages']) assert.equal(NODES[id].next, 'ada_tired');
+for (const id of ['date_kiss','date_hand']) {
+  assert.equal(NODES[id].next, null);
+  assert.ok(NODES[id].choices.some(choice => choice.next === 'nikola_park'));
+  assert.ok(NODES[id].choices.some(choice => choice.next === 'ada_tired'));
+}
 assert.equal(NODES.ada_home.next, 'chapter_three_close');
 assert.equal(NODES.chapter_three_close.next, 'third_morning');
 assert.equal(NODES.ada_pebbles.next, 'ada_melon_pebbles');

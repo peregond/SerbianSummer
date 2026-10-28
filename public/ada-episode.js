@@ -150,5 +150,9 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     n('Автобус пахнет кремом от солнца и арбузом.','The bus smells of sunscreen and watermelon.'),
     n('Завтра банк. Сегодня — чистая усталость, и она мне подходит.','Tomorrow is the bank. Today is a clean tiredness, and it suits me.')
   ],'chapter_three_close',{time:'21:55',bg:'ada-promenade-v1',adaPortrait:true,journal:['ada_rest'],exitAction:{kind:'tap',label:T('Вернуться домой','Go back home'),object:T('Автобус','The bus')}});
-  for(const id of ['date_kiss','date_hand','date_slow','date_friends','date_messages'])if(NODES[id]?.next==='chapter_three_close')NODES[id].next='ada_tired';
+  for(const id of ['date_kiss','date_hand','date_slow','date_friends','date_messages']){
+    const node=NODES[id];if(!node)continue;
+    if(node.next==='chapter_three_close')node.next='ada_tired';
+    for(const choice of node.choices??[])if(choice.next==='chapter_three_close')choice.next='ada_tired';
+  }
 }

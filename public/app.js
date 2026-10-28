@@ -274,7 +274,7 @@ function renderGame({skipMessenger=false}={}) {
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
   setMusicScene(cueFor(node));
-  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
+  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
     if(cardWanted&&previousChapter&&(previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0||previousChapter!==chapter.id&&state.node==='rental_day_'+chapter.day&&state.index===0))showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
@@ -337,7 +337,7 @@ function renderGame({skipMessenger=false}={}) {
   $('rewind').disabled=!state.rewind?.length;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
-  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags))) {
+  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags,state.profile))) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
     button.addEventListener('click',()=>choose(choice));$('choices').append(button);
@@ -457,7 +457,7 @@ function openRoomInteraction(mode='arrival'){
 function openDistrictMap(){
   showScreen('scene-quest');
   const node=NODES[state.node];
-  questDispose=mountDistrictMap($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags)),flags:state.flags,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
+  questDispose=mountDistrictMap($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),flags:state.flags,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openViewingQuest(){
@@ -468,7 +468,7 @@ function openViewingQuest(){
 function openBankGuide(){
   showScreen('scene-quest');
   const node=NODES[state.node];
-  questDispose=mountBankGuide($('scene-quest'),{mask:state.flags[BANK_FLAG]??0,choices:node.choices.filter(choice=>choiceVisible(choice,state.flags)),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onRead:mask=>{state.flags[BANK_FLAG]=mask;save();},onChoose:choice=>choose(choice)});
+  questDispose=mountBankGuide($('scene-quest'),{mask:state.flags[BANK_FLAG]??0,choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onRead:mask=>{state.flags[BANK_FLAG]=mask;save();},onChoose:choice=>choose(choice)});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openBaggage(){
@@ -509,7 +509,7 @@ function performBeat(option={}, {render=true}={}) {
   return true;
 }
 function choose(choice, {render=true}={}) {
-  if(transitionLock||panel.open||!['game','messenger','scene-quest'].includes(view)||!choiceVisible(choice,state.flags))return false;
+  if(transitionLock||panel.open||!['game','messenger','scene-quest'].includes(view)||!choiceVisible(choice,state.flags,state.profile))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
