@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {NODES,BACKGROUNDS,JOURNAL,presentationFor} from '../public/story.js';
 import {choiceVisible} from '../public/romance.js';
 import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from '../public/nikola-early-night.js';
@@ -24,6 +25,10 @@ assert.equal(NODES.nikola_park_decline.next,'chapter_three_close');
 assert.ok(JOURNAL.nikola_early_night);
 
 for(const file of Object.keys(NIKOLA_EARLY_NIGHT_BACKGROUNDS))assert.ok(BACKGROUNDS[file],file);
+for(const id of chain)for(const page of NODES[id].pages??[{}]){
+ const bg=presentationFor(NODES[id],page,{}).bg;
+ assert.ok(fs.existsSync(new URL(`../public/assets/${bg}.webp`,import.meta.url)),`${id}: missing ${bg}.webp`);
+}
 assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[0],{}).bg,'nikola-bed-moan-v1');
 assert.equal(presentationFor(NODES.nikola_park_sex,NODES.nikola_park_sex.pages[1],{}).bg,'nikola-climax-face-v1');
 assert.equal(presentationFor(NODES.nikola_park_cum_inside,NODES.nikola_park_cum_inside.pages[0],{}).bg,'nikola-after-bliss-v1');
