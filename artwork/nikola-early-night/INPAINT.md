@@ -13,6 +13,8 @@
 | `nikola-bedroom-seductive-v1.webp` | Соблазнительный взгляд — белые трусы |
 | `nikola-door-kiss-v1.webp` | У двери — белые трусы |
 | `nikola-briefs-lookdown-v1.webp` | На кровати, взгляд вниз — белые трусы (заменён в сцене) |
+| `nikola-briefs-touch-v2.webp` | Касание: глаза закрыты, прикусил губу — от `bed-smile`, inpaint лица (заменил `touch-v1`) |
+| `nikola-ready-back-v1.webp` | На коленях спиной, взгляд через плечо, белые трусы — img2img от `jock-ready-v1` + inpaint низа (заменил `jock-ready-v1`) |
 | `nikola-briefs-bed-smile-v1.webp` | На кровати, смотрит и улыбается — локальный ComfyUI, Pony Realism img2img (`tools/comfy_one.py`) |
 | `nikola-bed-moan-v1.webp` | Стон на кровати — белые трусы |
 | `nikola-climax-face-v1.webp` | Крупный план оргазма |

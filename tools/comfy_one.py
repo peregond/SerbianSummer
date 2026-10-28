@@ -58,7 +58,7 @@ def workflow(a):
                                                      'width': a.width, 'height': a.height, 'crop': 'center'}},
         '5': {'class_type': 'VAEEncode', 'inputs': {'pixels': ['4', 0], 'vae': ['1', 2]}},
         '6': {'class_type': 'CLIPTextEncode', 'inputs': {'text': a.positive, 'clip': ['2', 0]}},
-        '7': {'class_type': 'CLIPTextEncode', 'inputs': {'text': NEGATIVE, 'clip': ['2', 0]}},
+        '7': {'class_type': 'CLIPTextEncode', 'inputs': {'text': NEGATIVE + ', ' + a.negative_extra, 'clip': ['2', 0]}},
         '8': {'class_type': 'KSampler', 'inputs': {
             'model': ['1', 0], 'positive': ['6', 0], 'negative': ['7', 0], 'latent_image': ['5', 0],
             'seed': a.seed, 'steps': a.steps, 'cfg': a.cfg, 'sampler_name': a.sampler,
@@ -96,6 +96,7 @@ def main():
     p.add_argument('--size', default='768x1344', help='WxH the input is scaled to before sampling')
     p.add_argument('--clip-skip', type=int, default=-2, help='-2 for Pony, -1 for Juggernaut')
     p.add_argument('--sampler', default='dpmpp_2m_sde')
+    p.add_argument('--negative-extra', default='')
     a = p.parse_args()
     a.width, a.height = map(int, a.size.split('x'))
 
