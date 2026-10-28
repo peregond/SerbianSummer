@@ -32,7 +32,13 @@ export function mountWorkshopEntry(container, open, onUnlock=()=>{}) {
 
 export async function mountWorkshop(container, { sprites, backgrounds, nodes, chapters, start, back }) {
   container.classList.add('workshop');
-  const backButton = el('button', '← К настройкам', 'text-button'); backButton.onclick = back;
+  const panel = container.closest('dialog') || document.getElementById('panel');
+  const setAtlasWide = on => {
+    if (!panel) return;
+    panel.classList.toggle('workshop-wide', !!on);
+  };
+  const leave = () => { setAtlasWide(false); back(); };
+  const backButton = el('button', '← К настройкам', 'text-button'); backButton.onclick = leave;
   const intro = el('p', 'Персонажи, эмоции, ресурсы и внутренняя карта сюжета. Здесь можно смотреть изображения, пробелы в наборе и ID сцен.', 'workshop-intro');
   const loading = el('p', 'Загрузка…'); container.replaceChildren(backButton, intro, loading);
   let catalog;
@@ -91,6 +97,8 @@ export async function mountWorkshop(container, { sprites, backgrounds, nodes, ch
     results.replaceChildren();
     status.textContent='';
     const artViews = view !== 'story';
+    setAtlasWide(view === 'story');
+    container.dataset.workshopView = view;
     controls.hidden = !artViews;
     looks.hidden = view !== 'characters' && view !== 'supporting';
     category.hidden = view !== 'assets'; archives.hidden = view !== 'characters'; search.hidden = view === 'gaps' || view === 'story';

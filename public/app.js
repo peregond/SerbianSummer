@@ -545,7 +545,7 @@ function goBack() {
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   save();renderGame();
 }
-panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map');});
+panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map','workshop-wide');});
 function openChapters() {
   if(panel.open)panel.close();
   const source=['game','messenger','ending'].includes(view)?state:saved;
@@ -572,7 +572,7 @@ function confirmChapter(chapter,source){
   actions.append(start,download,cancel);content.append(p,actions);
 }
 function openPanel(kind) {
-  panel.classList.remove('chapter-map');
+  panel.classList.remove('chapter-map','workshop-wide');
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
@@ -608,7 +608,7 @@ function openPanel(kind) {
     mountWorkshopEntry(content,()=>{
       $('panel-title').textContent=t('Мастерская');
       mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,back:()=>{
-        content.classList.remove('workshop');panel.close();openPanel('settings');
+        content.classList.remove('workshop');panel.classList.remove('workshop-wide');panel.close();openPanel('settings');
       }});
     },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
   }
