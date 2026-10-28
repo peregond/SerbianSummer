@@ -24,7 +24,7 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     'ada-melon-cafe-v1':{label:T('АДА · АРБУЗ','ADA · WATERMELON'),description:T('Пляжное кафе и холодная лубеница','A beach cafe and a cold watermelon'),position:'50% 48%'}
   });
   const swim={
-    nikola:['nikola-swim-buzz-v3','Никола в плавательных шортах у озера'],
+    nikola:['nikola-swim-short-buzz-v4','Никола в коротких плавательных шортах у озера'],
     milica:['milica-swim-v1','Милица в майке и шортах для пляжа'],
     dragan:['dragan-swim-v1','Драган в плавательных шортах'],
     jelena:['jelena-swim-v1','Йелена в майке и шортах для пляжа'],
@@ -34,7 +34,7 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     vuk:['vuk-swim-v1','Вук в плавательных шортах']
   };
   for(const [id,[file,alt]] of Object.entries(swim))CHARACTER_SPRITES[id].swim={file,alt:T(alt,{
-    nikola:'Nikola in swim shorts by the lake',milica:'Milica in a tank top and shorts for the beach',dragan:'Dragan in swim shorts',jelena:'Jelena in a tank top and shorts for the beach',ana:'Ana in a tank top and shorts for the beach',stefan:'Stefan in swim shorts',marko:'Marko in swim shorts',vuk:'Vuk in swim shorts'
+    nikola:'Nikola in shorter swim shorts by the lake',milica:'Milica in a tank top and shorts for the beach',dragan:'Dragan in swim shorts',jelena:'Jelena in a tank top and shorts for the beach',ana:'Ana in a tank top and shorts for the beach',stefan:'Stefan in swim shorts',marko:'Marko in swim shorts',vuk:'Vuk in swim shorts'
   }[id])};
   Object.assign(JOURNAL,{
     ada_rest:{title:T('Отдых на Аде','A rest at Ada'),tag:T('ГЛАВА 3 · АДА','CHAPTER 3 · ADA'),text:T('Устал{a} и поехал{a} на Аду Циганлију просто полежать. Это не свидание. Там были галька, вышка, арбуз и дорога домой.','I was tired and went to Ada Ciganlija just to lie down. It was not a date. There were pebbles, a tower, watermelon and the way home.')}
