@@ -9,7 +9,9 @@ for (const id of ids) {
   assert.ok(NODES[id].pages.length <= 5, id);
   assert.ok(fs.existsSync(new URL('../public/assets/' + NODES[id].bg + '.webp', import.meta.url)), NODES[id].bg);
 }
-for (const id of ['date_slow','date_friends','date_messages']) assert.equal(NODES[id].next, 'ada_tired');
+for (const id of ['date_slow','date_friends']) assert.equal(NODES[id].next, 'ada_tired');
+assert.equal(NODES.date_messages.next, 'chapter_three_close', 'staying home does not force a trip to Ada');
+assert.equal(NODES.nikola_park_decline.next, 'ada_tired');
 for (const id of ['date_kiss','date_hand']) {
   assert.equal(NODES[id].next, null);
   assert.ok(NODES[id].choices.some(choice => choice.next === 'nikola_park'));
@@ -29,7 +31,8 @@ assert.match(JSON.stringify(NODES.ada_melon_pebbles.pages), /делю|Делит
 assert.match(JSON.stringify(NODES.ada_melon_bridge.pages), /делю|Делить|берёт свою долю|делит дольку/i);
 assert.match(JSON.stringify(NODES.ada_melon_pebbles.pages), /дольк/i);
 assert.match(JSON.stringify(NODES.ada_melon_bridge.pages), /дольк/i);
-assert.match(JSON.stringify(NODES.ada_tired.pages), /не свидание/i);
+assert.match(JSON.stringify(NODES.ada_tired.pages), /без новых планов|просто устал/i);
+assert.match(JOURNAL.ada_rest.text, /без новых планов|просто полежать/i);
 assert.equal(JOURNAL.ada_rest.tag, 'ГЛАВА 3 · АДА');
 assert.equal(presentationFor(NODES.ada_pebbles, NODES.ada_pebbles.pages[1], {adaWith:'alone', companion:'milica'}).character, null);
 assert.equal(NODES.ada_pebbles.pages[1].speaker, 'Лана');

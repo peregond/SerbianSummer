@@ -26,7 +26,7 @@ export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,m
   });
   const s=(pages,next,extra={})=>scene(pages,next,{bg:'first-room',location:'БЕЛГРАД · ПЕРВЫЙ АДРЕС',time:'18:25',chapter:'Глава 1 · Своя дверь',...extra});
   const h=(pages,next,extra={})=>s(pages,next,{hostPortrait:true,...extra});
-  const morning=(pages,next,extra={})=>s(pages,next,{time:'09:10',chapter:'Глава 1 · Первое утро',day:'ВТОРОЙ ДЕНЬ',...extra});
+  const morning=(pages,next,extra={})=>s(pages,next,{time:'09:10',chapter:'Глава 1 · Первое утро',day:'ДЕНЬ 1',...extra});
   const host=text=>({speaker:'host',text});
   const contact=(text,nikolaText,milicaText)=>({speaker:'contact',text,contactText:{nikola:nikolaText??text,milica:milicaText??text},message:true});
   Object.assign(NODES,{
@@ -116,11 +116,11 @@ export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,m
     room_alone:s([
       n('Оставшись в комнате, я первым делом сажусь на край кровати. Вещи уже разложены, а пустой чемодан стоит в углу, будто всё ещё не уверен в наших намерениях.'),
       n('Только теперь замечаю, как устали плечи. Снимаю обувь. За окном кто-то поливает цветы, и вода недолго стучит по подоконнику ниже.'),
-      n('Я отправляю близким: «Я уже в квартире. Ключи есть». Потом фотографирую стол у окна — первый уголок, который сегодня можно назвать своим.'),
+      n('Я пишу маме: «Я уже в квартире. Ключи есть». Потом фотографирую стол у окна — первый уголок, который сегодня можно назвать своим.'),
       n('На телефоне несколько разговоров, которые ещё утром не существовали. Есть вечер. И пока есть право распорядиться им без списка обязательств.')
     ],null,{time:'19:05',choices:[
       {label:'Написать новому знакомому из аэропорта',next:'evening_contact_plan',tone:'friendship',effect:{eveningWith:'contact'}},
-      {label:'Предложить {host.dative} короткую прогулку вдвоём',next:'host_evening_invite',tone:'romance',effect:{eveningWith:'host',hostBond:'romance'}},
+      {label:'Предложить {host.dative} вечернюю прогулку и ужин',next:'host_evening_invite',tone:'romance',effect:{eveningWith:'host',hostBond:'romance'}},
       {label:'Остаться дома, отдохнуть и посмотреть объявления',next:'room_rest',tone:'personal',effect:{eveningWith:'self'}}
     ]}),
     evening_contact_plan:s([
@@ -165,9 +165,9 @@ export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,m
       n('Домой я возвращаюсь с ощущением, что поиск квартиры можно превратить из тревоги в несколько понятных вопросов.')
     ],'night_messages',{bg:'riverside-evening',time:'20:34',companionPortrait:true,journal:['housing_plan']}),
     host_evening_invite:s([
-      y('«Если у тебя свободен вечер, давай пройдёмся немного? На этот раз без осмотра квартиры». '),
+      y('«Если у тебя свободен вечер, давай пройдёмся и где-нибудь поужинаем? На этот раз без осмотра квартиры». '),
       {...msg('host','«Через полчаса буду во дворе. Только переобуюсь». '),hostText:{dragan:'«С удовольствием. Через полчаса буду во дворе. И обещаю не показывать выключатели».',jelena:'«Давай. Через полчаса буду во дворе. Только теперь я могу задавать вопросы не про заселение?»'}},
-      n('Я улыбаюсь телефону. Потом обнаруживаю, что собираюсь на обычную короткую прогулку так, словно у меня уже есть любимая рубашка для Белграда.')
+      n('Я улыбаюсь телефону. Потом обнаруживаю, что собираюсь на вечернюю прогулку и ужин так, словно у меня уже есть любимая рубашка для Белграда.')
     ],'host_evening',{time:'19:20',journal:['host_spark']}),
     host_evening:h([
       n('Мы встречаемся у двери и почти сразу уходим со двора. Без чемодана путь кажется заметно короче.'),
@@ -195,7 +195,7 @@ export function extendChapter({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,n,y,m
     room_rest:s([
       n('Я выбираю остаться. Иногда самый интересный вариант — перестать изображать человека, у которого ещё есть силы.'),
       n('После душа нахожу в сумке зарядку, а на столе освобождаю место под еду. Маленькие победы перестают казаться маленькими.'),
-      y('«Сегодня отдохну. Но мне хочется встретиться в другой день». Пишу это без длинного оправдания.'),
+      y('«Сегодня просто отдохну дома. Напиши, как у тебя вечер — мне спокойнее знать». Пишу это без длинного оправдания.'),
       contact('«Конечно. Город и я завтра тоже будем здесь».','«Правильно. Завтра кифлы будут свежие, а я — чуть бодрее».','«Отдыхай. Я завтра тоже буду в городе. Даже кот разрешает». '),
       n('Я открываю объявления. Через пять минут понимаю, что смотрю не на квартиры, а на то, какие у людей шторы. Закрываю их до утра.')
     ],'night_messages',{time:'20:10',lighting:'night',journal:['quiet_evening']}),

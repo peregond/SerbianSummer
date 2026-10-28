@@ -87,8 +87,8 @@ export function applyMobilePacing({NODES,BACKGROUNDS,CHARACTER_SPRITES}){
   for(const [id,node] of Object.entries(NODES)){
     node.actions={...internal[id]};
     if(!node.choices){const rule=node.exitAction??endings[node.next];if(!rule)throw Error('Missing mobile action '+id);node.actions[node.pages.length-1]=structuredClone(rule);}
-    if(id==='last_message')node.actions[node.pages.length-1]=reply('Ответить Милице',{options:[{label:'«Спасибо. Напишу, когда доберусь»',tone:'friendship',effect:{milicaBond:'friendship'}},{label:'«Мне хочется увидеться ещё раз»',tone:'romance',effect:{milicaBond:'romance'}}]});
-    if(id==='nikola_last')node.actions[node.pages.length-1]=reply('Ответить Николе',{options:[{label:'«Круассан спас день. Спасибо!»',tone:'friendship',effect:{nikolaBond:'friendship'}},{label:'«Вернусь не только за круассаном»',tone:'romance',effect:{nikolaBond:'romance'}}]});
+    if(id==='last_message')node.actions[node.pages.length-1]=reply('Ответить Милице',{options:[{label:'«Спасибо. Напишу, когда доберусь»',tone:'friendship',effect:{lastMessageTone:'friendship'}},{label:'«Мне хочется увидеться ещё раз»',tone:'romance',effect:{lastMessageTone:'romance'}}]});
+    if(id==='nikola_last')node.actions[node.pages.length-1]=reply('Ответить Николе',{options:[{label:'«Кифла спасла день. Спасибо!»',tone:'friendship',effect:{lastMessageTone:'friendship'}},{label:'«Вернусь не только за кифлой»',tone:'romance',effect:{lastMessageTone:'romance'}}]});
     if(id==='nikola_daydream')node.actions[node.pages.length-1]=tap('Взять стакан воды','Вода');
     if(id==='room_rest')node.actions[node.pages.length-1]=check('Устроиться на вечер',['Зарядка','Вода','Закрытые объявления'],{effect:{eveningRestReady:true}});
     if(id==='host_evening_close'||id==='host_evening_goodnight')node.actions[node.pages.length-1]=tap('Открыть дверь своей комнаты','Ключ',{bg:'courtyard-door'});

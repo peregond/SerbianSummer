@@ -2,14 +2,14 @@
 export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
  const contact=(nikola,milica)=>({speaker:'contact',text:milica,contactText:{nikola,milica}});
  const owner=(dragan,jelena)=>({speaker:'districtHost',text:dragan,districtText:{dragan,jelena}});
- const s=(pages,extra={})=>scene(pages,null,{bg:'first-room',location:'БЕЛГРАД · ВТОРОЙ ДЕНЬ',time:'12:30',day:'ВТОРОЙ ДЕНЬ',...extra});
+ const s=(pages,extra={})=>scene(pages,null,{bg:'first-room',location:'БЕЛГРАД · ДЕНЬ 1',time:'12:30',day:'ДЕНЬ 1',...extra});
  const out=label=>({kind:'tap',label,object:label});
  Object.assign(J,{
   housing_reply:{title:'Ответ после просмотра',tag:'ГЛАВА 3 · КВАРТИРА',text:'После просмотра выбран следующий шаг: запросить договор, взять время на сравнение или попросить другой вариант. Симпатия к человеку не заменяет условия аренды.'},
   bank_questions:{title:'До визита в банк',tag:'БАНК · СПИСОК ВОПРОСОВ',text:'Уточнить в выбранном банке возможность открытия счёта для своей ситуации, документы, подтверждение адреса и источника средств, тарифы и порядок записи. Требования и решение зависят от банка и обстоятельств заявителя. В игре счёт ещё не открыт.',link:'https://welcometoserbia.gov.rs/opening-bank-accounts-for-residents-and-non-residents',linkText:'Официальная информация о счетах'},
   work_route:{title:'Работа — отдельный выбор',tag:'РАБОТА · СЛЕДУЮЩИЙ ШАГ',text:'Выбран интересующий маршрут: работа по найму, своё дело или время на изучение вариантов. Основание проживания и право на работу нужно проверять по своей ситуации; регистрация бизнеса сама по себе не заменяет разрешения.',link:'https://welcometoserbia.gov.rs/temporary-residence',linkText:'Официальный портал о проживании'},
   second_date:{title:'Без аэропорта',tag:'ЛЮДИ · ВСТРЕЧА',text:'Состоялась новая встреча с человеком из аэропорта. Получилось выбрать свой темп: флиртовать, попросить поцелуй или остаться друзьями.'},
-  bank_appointment:{title:'Завтра — первый визит',tag:'ГЛАВА 3 · ПЛАН',text:'Подготовлены вопросы для банка и согласован следующий контакт. Конкретные документы и доступность услуг предстоит уточнить при рассмотрении. Счёт в сюжете ещё не открыт.'}
+  bank_appointment:{title:'Завтра — первый визит',tag:'ГЛАВА 3 · ПЛАН',text:'Подготовлены вопросы и выбран банк для завтрашнего визита. Конкретные документы и доступность услуг предстоит уточнить при рассмотрении. Счёт в сюжете ещё не открыт.'}
  });
  Object.assign(N,{
   next_steps:s([
@@ -78,11 +78,15 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    msg('Ася','«Хороший ответ. Составим список людей и вопросов. Срочность не должна изображать уверенность». '),
    n('Я закрываю пустую форму. Иногда первый полезный шаг — не заполнить её наугад.')
   ],{next:'afternoon_invite',journal:['work_route'],exitAction:out('Сохранить направления для изучения')}),
+  // Host/neighbour lines are appended in extendCast (soft home invite, not a locked dinner). Choices live on evening_plan.
   afternoon_invite:s([
    contact('Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.','Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.'),
    n('Время на экране — 18:40. Пишет {who.airport}: мы обменялись номерами ещё в аэропорту. Сегодня у меня было достаточно серьёзное лицо.'),
-   n('Теперь можно решить, каким будет вечер.')
-  ],{time:'18:40',choices:[
+   n('В чате с квартирой тоже короткое сообщение — на всякий случай, если вечер окажется домашним.')
+  ],{time:'18:40',next:'evening_plan',exitAction:out('Открыть сообщение')}),
+  evening_plan:s([
+   n('Сообщение от {who.airport} ещё открыто. Что отвечу?')
+  ],{time:'18:42',choices:[
    {label:'Предложить свидание у реки',tone:'romance',next:'date_river',effect:{eveningIntent:'romance'}},
    {label:'Встретиться за кофе по-дружески',tone:'friendship',next:'date_friends',effect:{eveningIntent:'friendship'}},
    {label:'Остаться дома и обменяться сообщениями',tone:'personal',next:'date_messages',effect:{eveningIntent:'quiet'}}
@@ -109,18 +113,19 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    n('Мы идём медленнее остальных. И впервые за два дня это не связано с чемоданом.')
   ],{bg:'riverside-evening',companionPortrait:true,next:'chapter_three_close',journal:['second_date'],exitAction:out('Пройти вдоль реки вместе')}),
   date_slow:s([
-   y('Я хочу узнавать тебя, а не пытаться успеть всё за первый вечер.'),
+   y('Я хочу узнавать тебя, а не пытаться успеть всё за одну встречу.'),
    contact('Тогда у нас хороший план. Без секундомера.','Мне нравится. Пусть у этой истории будет место между строчками.'),
    n('Мы выбираем скамейку с видом на реку. Ничего не произошло слишком рано. И ничего не потерялось.')
   ],{bg:'riverside-evening',companionPortrait:true,next:'chapter_three_close',journal:['second_date'],exitAction:out('Сесть рядом и дослушать разговор')}),
   date_friends:s([
    contact('Договорились. Я знаю место, где можно долго сидеть и никто не спросит про переезд.','Идёт. Покажу рисунок, а ты расскажешь самый нелепый момент дня.'),
-   n('Мы смеёмся, вспоминая моё уставшее селфи из такси. Теперь между нами нет ни экрана, ни стекла.'),
+   n('Мы смеёмся, вспоминая мой первый вечер в городе — сообщения, усталость и слишком серьёзное лицо. Теперь между нами нет ни экрана, ни стекла.'),
    n('Хорошо, когда в городе появляется человек, с которым можно просто смеяться.')
   ],{bg:'cafe-table',companionPortrait:true,next:'chapter_three_close',journal:['second_date'],exitAction:out('Выбрать место для следующего кофе')}),
   date_messages:s([
    y('Сегодня останусь дома. Но расскажи мне что-нибудь хорошее про свой день.'),
-   {...contact('Один человек заказал свидание вместо кифлы. Я до сих пор улыбаюсь.','Один человек отвлёк меня от рисунка. Пришлось признать, что иногда люди интереснее зданий.'),friendText:'Сегодня получилось познакомиться с хорошим человеком. И помочь ему немного освоиться. Неплохой день.'},
+   {...contact('Смена была долгой, но без чрезвычайных кифл. Хорошо, что ты написал{a}.','Вечер тихий: дорисовываю мост и иногда проверяю телефон. Хорошо, что ты на связи.'),friendText:'День без чрезвычайных новостей. Хорошо, что ты написал{a} — даже просто так.'},
+   n('В чате с квартирой всё ещё висит приглашение к ужину в восемь. Можно принять — или коротко поблагодарить и остаться наедине с телефоном.'),
    n('Я улыбаюсь экрану. Дистанция сегодня — не отказ от встречи, а возможность немного выдохнуть.')
   ],{lighting:'night',next:'chapter_three_close',exitAction:out('Пожелать спокойного вечера')}),
   chapter_three_close:s([
@@ -130,7 +135,7 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    n('Зато уже есть несколько решений, принятых своим голосом. И человек, которому хочется пожелать доброй ночи.')
   ],{time:'22:10',lighting:'night',next:'end',journal:['bank_appointment'],effectOnEnter:{chapterThreeComplete:true},exitAction:out('Сохранить план на завтра')})
  });
- for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'13:20':['bank_call'],'14:10':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
+ for(const [time,ids] of Object.entries({'13:12':['bank_asya'],'16:40':['bank_call'],'17:35':['work_business','work_employment','work_explore'],'19:40':['date_kiss','date_hand','date_slow'],'19:10':['date_friends'],'20:10':['date_messages']}))for(const id of ids)N[id].time=time;
  for(const id of ['date_river','date_kiss','date_hand','date_slow'])N[id].music='encounter';
  N.morning_ready.next='next_steps';N.morning_ready.exitAction=out('Продолжить · Условия квартиры');
 }

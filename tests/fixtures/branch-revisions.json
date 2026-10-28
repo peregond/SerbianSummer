@@ -1,7 +1,7 @@
 {
  "revised": {
   "last_message": {
-   "afterHash": "fbc4538f83d500e4adb74b02d99efee92e7ccbab4d9eadec54d77cb44f356b9d",
+   "afterHash": "ec646fe1d8879c31579161ff26617e1ae28db1cb60c86cea468f1a2f0ca17904",
    "before": {
     "location": "АЭРОПОРТ · ВЫХОД К ТАКСИ",
     "time": "17:44",
@@ -79,7 +79,7 @@
    }
   },
   "room_alone": {
-   "afterHash": "774375eea585744392319da51a832e6a895630ad4ba7b3ac40a4dd61c9760280",
+   "afterHash": "d07e0cd76ec256d0a70460437845c7909af944cb72e4cf3e10e1888e17cfbb34",
    "before": {
     "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
     "time": "19:05",
@@ -135,7 +135,7 @@
    }
   },
   "host_evening_invite": {
-   "afterHash": "9e65f068c48a54134a4133141f22c8cf3923ba9e116d2d2970f7c99df53419bb",
+   "afterHash": "523c71592dcd9775a54f86e2f6c4d551f984b7c132fde443290ca12ced481b4c",
    "before": {
     "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
     "time": "19:20",
@@ -777,7 +777,7 @@
    }
   },
   "housing_other": {
-   "afterHash": "d0ab150be83af95a382d054b34f2812422dd1ebc2ea243baddc077720b06c55a",
+   "afterHash": "43ec8612be1d7da343ea98a7b882db41354fbbfc9c5ad4c405d34d3bcfb56548",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "12:30",
@@ -827,7 +827,7 @@
    }
   },
   "bank_plan": {
-   "afterHash": "bb1575aeae32a4fd182c56b6498a52abf965952860680142113b5855760364e1",
+   "afterHash": "792e66052d8e2bb062fb640b4b129c948112967a5eecd115e5b2f2151ed46341",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "13:10",
@@ -872,7 +872,7 @@
    }
   },
   "bank_call": {
-   "afterHash": "79d69d3f3263ce058a69c27ff0898c4d09017fcc8cd84edf0a0fe444d836f0af",
+   "afterHash": "5ede41c0633df26a82114c396a2eab5601dc1aed7758d43adbfe3333c018940f",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "13:20",
@@ -939,7 +939,7 @@
    }
   },
   "work_crossroads": {
-   "afterHash": "6042efb3fb8071f03826cb3e08d1184c96a5536d0977a48f8d6a45b38ad33e42",
+   "afterHash": "5b698a81c17ed00b0326621777b73243a1127f421d29b5d64bd28d625e8e9833",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "14:00",
@@ -992,7 +992,7 @@
    }
   },
   "afternoon_invite": {
-   "afterHash": "f7981d2bc3cbf35c5254aca1bc92fae6d11fc574fbe942d95ae8428bf104d7ef",
+   "afterHash": "f7c074e4039e2b5415d0ad3ae6b5545613adffab27013475ac9b8236856a8461",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "18:40",
@@ -1223,7 +1223,7 @@
    }
   },
   "third_morning": {
-   "afterHash": "d5937cf2f84dbe7fd6a544beeee1a55a02bcb7f55421a6454757a4b1f3541f49",
+   "afterHash": "6613107c549e26459ba73fe6c8d0386817b6718bbc86af9d7eee5b6905d9281d",
    "before": {
     "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
     "time": "08:45",
@@ -2143,7 +2143,7 @@
    }
   },
   "date_kiss": {
-   "afterHash": "e6c373483733742d1cb9d9f2b8e4899f74ebdd8c1e8d335f319f0b5d814f1790",
+   "afterHash": "8ca3246a6335a060afc29822753866f026f5c7307b372df9853e9736e28294a2",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "19:40",
@@ -2202,7 +2202,7 @@
    }
   },
   "date_hand": {
-   "afterHash": "bac98819ccaf61089194349bb145c8647bd9d29f95e7463b2d57f6fbb1d1d2b6",
+   "afterHash": "989d7dd49a478c2816d6b0dd63da755d202b5015f43406b44177b055607103fb",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "19:40",
@@ -2253,7 +2253,7 @@
    }
   },
   "date_slow": {
-   "afterHash": "3a78ac51db12513697d9183b494130b6387d00c4eefe6c7e9543094a6c8e8ee4",
+   "afterHash": "82f87a71352010d5dcc1d8c0dd20a9e751c0d381e01de88be8072ee61fb0347c",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "19:40",
@@ -2304,7 +2304,7 @@
    }
   },
   "date_friends": {
-   "afterHash": "e6281cff35063cc55e820b140e4dbfa3d6774f3b89dc46ddf8792eb78fe2968f",
+   "afterHash": "c125feea4d5682c0a63cc4764b35a0c2146ee6fd311d21e3d281be86ac1a8aa5",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "19:10",
@@ -2354,7 +2354,7 @@
    }
   },
   "date_messages": {
-   "afterHash": "633031b1aec0b669a20b067ad97ea3e607a7c68f3201feb3e15816f4d03f6374",
+   "afterHash": "1e79b5c36aeae75051def54d06d2a23fdd3eaa32dabc0856cd55221a59526811",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "20:10",
@@ -2402,7 +2402,7 @@
    }
   },
   "work_summary": {
-   "afterHash": "7d172ed391466f2465127c267a0ac4d0f155cd1f6ef9a6bf283886a89575931f",
+   "afterHash": "d1e5fc8209e78e223b89d4c0a00fba6b2f355b22c25a8d828dac187e53bc1e8a",
    "before": {
     "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
     "time": "11:30",
@@ -2450,69 +2450,2979 @@
     "chapterId": "work",
     "chapter": "День 2 · Счёт и своё дело"
    }
+  },
+  "nikola_phone": {
+   "afterHash": "611513cea0e4e42b726809c54832ef08c61eeb31dbc10f0d3432451b17edef23",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:39",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Телефон вибрирует. Драган напоминает о ключах. На минуту возвращаюсь к плану, который был до этого знакомства."
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Здравствуйте! Вы уже прилетели?»",
+      "message": true
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Отлично. А во сколько примерно будете? Я встречу вас с ключами»."
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Хорошо, буду ждать. Напишите, когда окажетесь рядом».",
+      "friendText": "«Хорошо, буду ждать. Напишите, когда окажетесь рядом». ",
+      "action": {
+       "kind": "tap",
+       "label": "Отправить хозяину время прибытия",
+       "object": "Отправить сообщение",
+       "effect": {
+        "hostArrivalSent": true
+       }
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Убираю телефон. Похоже, пора прощаться с Николой и ехать к дому."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Никола достаёт телефон. На потёртом чехле наклейка с маленькой молнией."
+     },
+     {
+      "speaker": "nikola",
+      "text": "Давай свой номер. У меня есть предложение получше, чем каждый раз летать сюда за кофе.",
+      "friendText": "Давай обменяемся номерами. Пришлю адреса пекарен и кафе, которые обещал."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Записываю Nikola. Он диктует номер и просит сразу что-нибудь отправить.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть новый чат с Николой",
+       "object": "Чат Nikola",
+       "effect": {
+        "nikolaContactSaved": true
+       }
+      }
+     },
+     {
+      "speaker": "player",
+      "text": "Что написать?"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Что ждёшь конца моей смены. Мне будет приятно.",
+      "friendText": "Что булочка понравилась. Передам пекарю!"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Пишу. Никола читает, поднимает на меня глаза и улыбается. Теперь я тоже жду вечера.",
+      "friendText": "Отправляю. На его экране появляется моё имя. Никола кивает: теперь мы не потеряемся.",
+      "action": {
+       "kind": "tap",
+       "label": "Убрать телефон в карман",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "nikola_goodbye",
+    "character": "nikola",
+    "journal": [
+     "nikola_contact"
+    ],
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Отправить хозяину время прибытия",
+      "object": "Отправить сообщение",
+      "effect": {
+       "hostArrivalSent": true
+      }
+     },
+     "7": {
+      "kind": "tap",
+      "label": "Открыть новый чат с Николой",
+      "object": "Чат Nikola",
+      "effect": {
+       "nikolaContactSaved": true
+      }
+     },
+     "10": {
+      "kind": "tap",
+      "label": "Убрать телефон в карман",
+      "object": "Телефон"
+     }
+    },
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "next_steps": {
+   "afterHash": "b638965172301da6e6c9efbf259b4558c4dbd407f10f66777fa471622ac700ed",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "12:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "После просмотра Ася протягивает мне бутылку воды: «Сначала вода. Потом решения, которые стоят денег»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "На телефоне сообщение от {districtHost}: «Как впечатление? Могу прислать условия письменно». "
+     },
+     {
+      "speaker": "narrator",
+      "text": "Квартира уже перестала быть картинкой из объявления. Теперь нужно выбрать следующий шаг."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 1",
+    "choices": [
+     {
+      "label": "Попросить проект договора и полную стоимость",
+      "tone": "practical",
+      "next": "housing_written",
+      "effect": {
+       "housingDecision": "review"
+      }
+     },
+     {
+      "label": "Взять вечер на сравнение без обещаний",
+      "tone": "personal",
+      "next": "housing_wait",
+      "effect": {
+       "housingDecision": "compare"
+      }
+     },
+     {
+      "label": "Попросить ещё один вариант в этом районе",
+      "tone": "explore",
+      "next": "housing_other",
+      "effect": {
+       "housingDecision": "another"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "housing_written": {
+   "afterHash": "000b3db4bfc34862f8c944bcccdcb452dd4f588d06d9d7d2aa99347c7923f182",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "12:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Мне нравится квартира. Пришли, пожалуйста, все условия письменно — я спокойно прочитаю."
+     },
+     {
+      "speaker": "districtHost",
+      "text": "Конечно. Пришлю проект, а непонятные пункты обсудим отдельно.",
+      "districtText": {
+       "dragan": "Конечно. Пришлю проект, а непонятные пункты обсудим отдельно.",
+       "jelena": "Хорошо. Пришлю документ. Лучше задать все вопросы до решения."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я сохраняю файл, отмечаю непонятные пункты. Сегодня никаких переводов на эмоциях.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить вопросы к договору",
+       "object": "Сохранить вопросы к договору"
+      }
+     }
+    ],
+    "next": "bank_plan",
+    "day": "ДЕНЬ 1",
+    "districtPortrait": true,
+    "journal": [
+     "housing_reply"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить вопросы к договору",
+     "object": "Сохранить вопросы к договору"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить вопросы к договору",
+      "object": "Сохранить вопросы к договору"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "housing_wait": {
+   "afterHash": "379eda42cf6d52e46f9e4feafc1c0455c8cfcfc36b65ccad7cca4f7925642b3c",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "12:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Хочу сравнить варианты. Вернусь с ответом, когда разберусь с условиями."
+     },
+     {
+      "speaker": "districtHost",
+      "text": "Нормально. Квартира должна подойти тебе, а не наоборот.",
+      "districtText": {
+       "dragan": "Нормально. Квартира должна подойти тебе, а не наоборот.",
+       "jelena": "Мне нравится, когда человек умеет взять время. Напиши, когда решишь."
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Отправить такое сообщение оказалось легче, чем придумывать вежливое согласие.",
+      "action": {
+       "kind": "tap",
+       "label": "Добавить квартиру в сравнение",
+       "object": "Добавить квартиру в сравнение"
+      }
+     }
+    ],
+    "next": "bank_plan",
+    "day": "ДЕНЬ 1",
+    "districtPortrait": true,
+    "journal": [
+     "housing_reply"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Добавить квартиру в сравнение",
+     "object": "Добавить квартиру в сравнение"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Добавить квартиру в сравнение",
+      "object": "Добавить квартиру в сравнение"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "bank_asya": {
+   "afterHash": "e7dba13416447069d862b4c97f9485a7be6d647e9f82587005245f07d22e4d58",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "13:12",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "text": "«Три вопроса: открывают ли счёт в твоей ситуации, что принести и нужна ли запись. Не надо звучать идеально». ",
+      "message": true
+     },
+     {
+      "speaker": "player",
+      "text": "Мой английский сегодня умеет только показывать фотографию подъезда."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Значит, напишем коротко. Я рядом, но разговор твой». ",
+      "message": true,
+      "action": {
+       "kind": "tap",
+       "label": "Составить короткое обращение",
+       "object": "Составить короткое обращение"
+      }
+     }
+    ],
+    "next": "bank_call",
+    "day": "ДЕНЬ 1",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Составить короткое обращение",
+     "object": "Составить короткое обращение"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Составить короткое обращение",
+      "object": "Составить короткое обращение"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "work_business": {
+   "afterHash": "b2f80ed89847f1cb076bacdddb9c081c22e03c423351a1a3a60fff1616009eab",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "14:10",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "text": "«Познакомлю с бухгалтером. Сначала расскажешь, чем планируешь заниматься, и спросишь про форму бизнеса, расходы и обязанности». ",
+      "message": true
+     },
+     {
+      "speaker": "player",
+      "text": "То есть красивого названия для новой жизни недостаточно?"
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Недостаточно. Но как название папки с документами сойдёт». ",
+      "message": true,
+      "action": {
+       "kind": "tap",
+       "label": "Записать вопросы о своём деле",
+       "object": "Записать вопросы о своём деле"
+      }
+     }
+    ],
+    "next": "afternoon_invite",
+    "day": "ДЕНЬ 1",
+    "journal": [
+     "work_route"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Записать вопросы о своём деле",
+     "object": "Записать вопросы о своём деле"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Записать вопросы о своём деле",
+      "object": "Записать вопросы о своём деле"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "work_employment": {
+   "afterHash": "0617cfcd546a3513968fcac486caaa2c5e5f96f32ff380b8a29e3e63e745bf6c",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "14:10",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "text": "«Есть знакомые в местной команде. Начнём с рассказа о твоём опыте, а условия работы и оформления обсудишь отдельно». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я открываю резюме и убираю из первого абзаца три слова, за которыми невозможно понять, что я умею."
+     },
+     {
+      "speaker": "player",
+      "text": "Теперь хотя бы похоже на человека, которого можно пригласить поговорить.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить короткий рассказ о себе",
+       "object": "Сохранить короткий рассказ о себе"
+      }
+     }
+    ],
+    "next": "afternoon_invite",
+    "day": "ДЕНЬ 1",
+    "journal": [
+     "work_route"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить короткий рассказ о себе",
+     "object": "Сохранить короткий рассказ о себе"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить короткий рассказ о себе",
+      "object": "Сохранить короткий рассказ о себе"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "work_explore": {
+   "afterHash": "732805ab0b7b8d4dc9f4c01084f47e7d593343b1b78f544788278ba56c007e5d",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "14:10",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Пока не хочу выбирать на страхе. Сначала разберусь, какие есть варианты."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Хороший ответ. Составим список людей и вопросов. Срочность не должна изображать уверенность». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я закрываю пустую форму. Иногда первый полезный шаг — не заполнить её наугад.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить направления для изучения",
+       "object": "Сохранить направления для изучения"
+      }
+     }
+    ],
+    "next": "afternoon_invite",
+    "day": "ДЕНЬ 1",
+    "journal": [
+     "work_route"
+    ],
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить направления для изучения",
+     "object": "Сохранить направления для изучения"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить направления для изучения",
+      "object": "Сохранить направления для изучения"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "date_river": {
+   "afterHash": "1fc8517e5f6b27ddd59242b24b7bb834ef0ea2a68a79e3ecd5221b56c77923fb",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "19:25",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "У реки меня уже ждут. Сегодня между нами нет ни стойки, ни чемодана."
+     },
+     {
+      "speaker": "contact",
+      "text": "Я собиралась нарисовать мост. Но ты опять мешаешь мне смотреть на архитектуру.",
+      "contactText": {
+       "nikola": "Без аэропорта ты мне нравишься ещё больше. Видимо, дело было не в освещении.",
+       "milica": "Я собиралась нарисовать мост. Но ты опять мешаешь мне смотреть на архитектуру."
+      }
+     },
+     {
+      "speaker": "player",
+      "text": "Не прекращай. Мне нравится мешать."
+     },
+     {
+      "speaker": "contact",
+      "text": "Хорошо. Только потом не спрашивай, почему на рисунке одни люди.",
+      "contactText": {
+       "nikola": "Тогда придётся прогуляться подольше.",
+       "milica": "Хорошо. Только потом не спрашивай, почему на рисунке одни люди."
+      }
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 1",
+    "companionPortrait": true,
+    "choices": [
+     {
+      "label": "«Мне хочется тебя поцеловать. Можно?»",
+      "tone": "romance",
+      "next": "date_kiss",
+      "effect": {
+       "dateMoment": "kiss"
+      }
+     },
+     {
+      "label": "Предложить свою руку и идти рядом",
+      "tone": "romance",
+      "next": "date_hand",
+      "effect": {
+       "dateMoment": "hand"
+      }
+     },
+     {
+      "label": "«Мне хорошо рядом. Давай без спешки»",
+      "tone": "personal",
+      "next": "date_slow",
+      "effect": {
+       "dateMoment": "slow"
+      }
+     }
+    ],
+    "music": "encounter",
+    "actions": {},
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "chapter_three_close": {
+   "afterHash": "ca5938e3d0c80ac11990c01a12b5830f73f141150fdce10bf21e9e9622b26b46",
+   "before": {
+    "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
+    "time": "22:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Дома меня ждёт список вопросов для банка. На этот раз он не похож на контрольную."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«По работе договоримся завтра. А на консультации в банке не стесняйся просить объяснить ещё раз». ",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я ставлю напоминание. У меня пока нет ни готового разрешения на новую жизнь, ни обязанности остаться здесь навсегда."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Зато уже есть несколько решений, принятых своим голосом. И человек, которому хочется пожелать доброй ночи.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить · Своё дело",
+       "object": "Продолжить · Своё дело"
+      }
+     }
+    ],
+    "next": "third_morning",
+    "day": "ДЕНЬ 1",
+    "lighting": "night",
+    "journal": [
+     "bank_appointment"
+    ],
+    "effectOnEnter": {
+     "chapterThreeComplete": true
+    },
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить · Своё дело",
+     "object": "Продолжить · Своё дело"
+    },
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Продолжить · Своё дело",
+      "object": "Продолжить · Своё дело"
+     }
+    },
+    "chapterId": "districts",
+    "chapter": "День 1 · Район для жизни"
+   }
+  },
+  "phone": {
+   "afterHash": "8cb559936afde76e78afa070b7c6f48e278f2464fc5c544e122c7c39c7ee9e0b",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:36",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Телефон вибрирует между нашими чашками. Сообщение от Драгана. Я хватаю его так быстро, что Милица поднимает бровь."
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Во сколько примерно будете? До семи могу встретить сам. Если позже — оставлю ключи соседу».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Следом приходит ещё одно сообщение."
+     },
+     {
+      "speaker": "Мама",
+      "text": "«Ты уже в городе? Как там? Получилось поесть?»",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Пока на всё можно ответить: «Ещё в аэропорту». Но с ключами лучше договориться сейчас."
+     }
+    ],
+    "next": null,
+    "portrait": true,
+    "choices": [
+     {
+      "label": "Сначала договориться о ключах",
+      "next": "host",
+      "effect": {
+       "messageOrder": "host"
+      },
+      "tone": "practical"
+     },
+     {
+      "label": "Сначала ответить близкому человеку",
+      "next": "friend",
+      "effect": {
+       "messageOrder": "friend"
+      },
+      "tone": "friendship"
+     }
+    ],
+    "actions": {},
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "nikola_questions": {
+   "afterHash": "229008b71b6e2ffab71a0cd20938b41b5723a240c6b83f05c588aec701157aa8",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:35",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "К витрине подходит пожилой мужчина. Никола здоровается с ним по имени и, собирая заказ, успевает рассмешить."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мужчина уходит с таким же бумажным пакетом. Похоже, здесь его обычная остановка по дороге домой."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Когда у стойки снова становится тихо, Никола поворачивается ко мне."
+     },
+     {
+      "speaker": "player",
+      "text": "Ты каждый день видишь, как люди улетают. Самому не хочется?"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Хочется. Только иногда кажется, что все интересные рейсы вылетают раньше моего будильника.",
+      "action": {
+       "kind": "tap",
+       "label": "Уточнить, во сколько он начинает смену",
+       "object": "Задать вопрос"
+      }
+     },
+     {
+      "speaker": "player",
+      "text": "Рано встаёшь?"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Кто-то ведь должен печь твой завтрак."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Он кивает на пакет. Я отламываю ещё кусочек и улыбаюсь."
+     },
+     {
+      "speaker": "nikola",
+      "text": "Путешествовать люблю. Но возвращаться домой — тоже."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я смотрю в окно. Интересно, сколько нужно прожить в городе, чтобы начать скучать по нему в поездках?"
+     }
+    ],
+    "next": null,
+    "character": "nikola",
+    "choices": [
+     {
+      "label": "«Давай начнём с дружбы. Обменяемся любимыми местами?»",
+      "next": "nikola_friendship",
+      "tone": "friendship",
+      "effect": {
+       "nikolaBond": "friendship"
+      }
+     },
+     {
+      "label": "«Посоветуй место, с которого начать»",
+      "next": "nikola_places",
+      "effect": {
+       "nikolaInitiative": "places"
+      },
+      "tone": "practical"
+     },
+     {
+      "label": "«Кажется, мне интересна не только выпечка»",
+      "next": "nikola_flirt",
+      "effect": {
+       "nikolaInitiative": "flirt",
+       "nikolaBond": "romance"
+      },
+      "tone": "romance"
+     }
+    ],
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Уточнить, во сколько он начинает смену",
+      "object": "Задать вопрос"
+     }
+    },
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "nikola_flirt": {
+   "afterHash": "1c52f427cf7ae0584964f0066fadf37cbb6c1e351b4a218face264c422b180ca",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:37",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Никола замирает со стаканом в руке. Улыбку прячет не сразу — я успеваю её заметить.",
+      "emotion": "surprised"
+     },
+     {
+      "speaker": "nikola",
+      "text": "А я уже начал ревновать тебя к круассанам.",
+      "emotion": "shy"
+     },
+     {
+      "speaker": "player",
+      "text": "Они тоже хороши. Но твой номер я бы взял{a} охотнее.",
+      "action": {
+       "kind": "tap",
+       "label": "Выдержать его взгляд",
+       "object": "Посмотреть в глаза",
+       "effect": {
+        "nikolaEyeContact": true
+       }
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Он подаётся чуть ближе. Между нами всё ещё стойка, но смотреть друг на друга теперь совсем не трудно.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Записывай. После смены проверим, как у нас получается разговаривать без неё.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "narrator",
+      "text": "В голове сразу появляется несколько вариантов этого вечера. Один — с заметно меньшим количеством рабочей одежды."
+     }
+    ],
+    "next": null,
+    "character": "nikola",
+    "journal": [
+     "nikola_spark"
+    ],
+    "choices": [
+     {
+      "label": "На секунду представить Николу без футболки",
+      "next": "nikola_daydream",
+      "effect": {
+       "nikolaDaydream": true
+      },
+      "tone": "dream"
+     },
+     {
+      "label": "Улыбнуться: «Тогда договоримся после смены»",
+      "next": "nikola_invite",
+      "effect": {
+       "nikolaDaydream": false
+      },
+      "tone": "romance"
+     },
+     {
+      "label": "Тихо предложить отойти в сторону",
+      "tone": "romance",
+      "next": "nikola_aside",
+      "effect": {
+       "nikolaAside": "asked"
+      }
+     }
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Выдержать его взгляд",
+      "object": "Посмотреть в глаза",
+      "effect": {
+       "nikolaEyeContact": true
+      }
+     }
+    },
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "milica_flirt": {
+   "afterHash": "f1b48fda764632491d09ed3737f26be04698655d023e1b3996d5a274e0bf85a3",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Кофе — отличный предлог. Но сейчас я смотрю совсем не на кофе."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Милица на секунду перестаёт вертеть стаканчик. Потом улыбается — уже совсем без истории про кофейный автомат."
+     },
+     {
+      "speaker": "milica",
+      "text": "Я заметила. На следующую встречу можешь прийти без предлога. И без чемодана."
+     },
+     {
+      "speaker": "player",
+      "text": "Считай, договорились."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она опускает взгляд к блокноту, но не убирает улыбку. Я чувствую, как начинает нравиться этот день.",
+      "action": {
+       "kind": "tap",
+       "label": "Отставить пустой стакан",
+       "object": "Стакан"
+      }
+     }
+    ],
+    "next": "pause",
+    "portrait": true,
+    "journal": [
+     "milica_spark"
+    ],
+    "legacyOnly": true,
+    "chapterId": "prologue",
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Отставить пустой стакан",
+      "object": "Стакан"
+     }
+    },
+    "seatedMilica": true
+   }
+  },
+  "nikola_compliment": {
+   "afterHash": "c5a258015015f19c4cab4734cd6b609b52d84824f8d6df8c2ee27e89ee1f9d49",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:33",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Никола смотрит вниз, будто на фартуке неожиданно нашлось что-то очень важное. Но лёгкий румянец уже успел его выдать.",
+      "emotion": "shy"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Обычно здесь хвалят тесто. Мне нужно немного времени, чтобы придумать ответ.",
+      "emotion": "shy"
+     },
+     {
+      "speaker": "player",
+      "text": "Не спеши. Я как раз учусь этому слову.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Тогда у нас обоих хорошо получается.",
+      "emotion": "flirty"
+     }
+    ],
+    "next": "nikola_questions",
+    "character": "nikola",
+    "choices": [
+     {
+      "label": "На секунду представить Николу без футболки",
+      "next": "nikola_daydream_early",
+      "tone": "dream",
+      "effect": {
+       "nikolaDaydream": true,
+       "nikolaBond": "romance"
+      }
+     },
+     {
+      "label": "Остаться в разговоре: «Мне нравится твоя улыбка»",
+      "next": "nikola_questions",
+      "tone": "romance",
+      "effect": {
+       "nikolaBond": "romance"
+      }
+     }
+    ],
+    "legacyOnly": true,
+    "chapterId": "prologue",
+    "actions": {}
+   }
+  },
+  "quick_milica": {
+   "afterHash": "440ac1dd121bf6203182e63a10393ce7d2e8197d5e81fe83d2654ba167956261",
+   "before": {
+    "location": "АЭРОПОРТ · КОФЕ И ЗНАКОМСТВО",
+    "time": "17:18",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Если нажать ещё раз, он всё равно выдаст только кофе. Чудес от него не дождёшься.",
+      "emotion": "laughing"
+     },
+     {
+      "speaker": "player",
+      "text": "А я-то надеюсь хотя бы на приятное знакомство."
+     },
+     {
+      "speaker": "milica",
+      "text": "Милица. Вот с этим могу помочь.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "player",
+      "text": "{full}. Уже нравится этот аэропорт."
+     }
+    ],
+    "portrait": true,
+    "journal": [
+     "milica"
+    ],
+    "choices": [
+     {
+      "label": "«Ты всегда так соблазняешь людей у автомата?»",
+      "tone": "romance",
+      "next": "quick_milica_tease",
+      "effect": {
+       "milicaBond": "romance"
+      }
+     },
+     {
+      "label": "«Спасёшь меня от этих кнопок?»",
+      "tone": "friendship",
+      "next": "quick_coffee",
+      "effect": {
+       "milicaBond": "friendship"
+      }
+     },
+     {
+      "label": "«Поможешь разобраться с адресом?»",
+      "tone": "practical",
+      "next": "quick_milica_address",
+      "effect": {
+       "greeting": "honest",
+       "milicaBond": "friendship"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "milica_chemistry": {
+   "afterHash": "5744cd986a4a22f9b874fb4f45796fefca5ecf23f0270dcdef1ba51a165dfa47",
+   "before": {
+    "location": "АЭРОПОРТ · КОФЕ И ЗНАКОМСТВО",
+    "time": "17:18",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Быстро ты осваиваешься. Обычно сначала спрашивают про погоду.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "player",
+      "text": "Жарко. Особенно рядом с тобой."
+     },
+     {
+      "speaker": "milica",
+      "text": "Заход так себе. Но смотришь ты хорошо. Ладно, засчитано.",
+      "emotion": "laughing"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она смеётся и придвигает телефон. Открывает контакты."
+     },
+     {
+      "speaker": "milica",
+      "text": "Давай обменяемся номерами. Посмотрим, хватит ли тебе смелости пригласить меня куда-нибудь ещё.",
+      "emotion": "flirty",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть контакты на телефоне",
+       "object": "Контакты"
+      }
+     }
+    ],
+    "portrait": true,
+    "next": "contact",
+    "journal": [
+     "milica_spark"
+    ],
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Открыть контакты на телефоне",
+      "object": "Контакты"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "quick_nikola": {
+   "afterHash": "e6ad9acdba68c2f8bae91d45c43a639cc6e1965cade5dbad8a461575d3c9b75c",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:18",
+    "pages": [
+     {
+      "speaker": "nikola",
+      "text": "Добро пожаловать. Кофе? И пару мягких булочек к нему?",
+      "emotion": "friendly"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я киваю, но смотрю мимо витрины — на широкие плечи и загорелые руки. Никола замечает это раньше, чем я успеваю отвести глаза."
+     },
+     {
+      "speaker": "nikola",
+      "text": "Я Никола. Если что, со мной тоже можно заговорить. Не обязательно только смотреть.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "player",
+      "text": "{full}. Хорошо, что предупредил. Я как раз подбираю слова."
+     }
+    ],
+    "character": "nikola",
+    "journal": [
+     "nikola",
+     "pastry"
+    ],
+    "choices": [
+     {
+      "label": "«У тебя в меню только выпечка или можно заказать свидание?»",
+      "tone": "romance",
+      "next": "quick_nikola_tease",
+      "effect": {
+       "nikolaBond": "romance",
+       "nikolaMoment": "compliment"
+      }
+     },
+     {
+      "label": "«Посоветуй что-нибудь вкусное для первого дня»",
+      "tone": "friendship",
+      "next": "quick_nikola_friend",
+      "effect": {
+       "nikolaBond": "friendship"
+      }
+     },
+     {
+      "label": "«Кофе с собой и подскажи выход к такси»",
+      "tone": "practical",
+      "next": "nikola_directions",
+      "effect": {
+       "nikolaBond": "friendship"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "quick_nikola_tease": {
+   "afterHash": "929d36295c5ec1b3b73621202ecb2775bf17df59c18cf3b695694e692cea08b7",
+   "before": {
+    "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
+    "time": "17:18",
+    "pages": [
+     {
+      "speaker": "nikola",
+      "text": "Свидания — после смены. Но для тебя могу придержать вечер.",
+      "emotion": "flirty"
+     },
+     {
+      "speaker": "player",
+      "text": "А попробовать можно уже сейчас?"
+     },
+     {
+      "speaker": "nikola",
+      "text": "Булочки — пожалуйста. А с остальным придётся подождать, пока я сниму рабочую форму.",
+      "emotion": "laughing"
+     },
+     {
+      "speaker": "narrator",
+      "text": "Он улыбается и не отводит глаз. Потом первым опускает взгляд к пакету. Кажется, я тоже сумел{a} его смутить."
+     }
+    ],
+    "character": "nikola",
+    "journal": [
+     "nikola_spark"
+    ],
+    "choices": [
+     {
+      "label": "«Напиши после смены. Продолжим без стойки между нами»",
+      "tone": "romance",
+      "next": "nikola_invite",
+      "effect": {
+       "nikolaBond": "romance",
+       "nikolaBold": true
+      }
+     },
+     {
+      "label": "На секунду представить Николу без футболки",
+      "tone": "dream",
+      "next": "nikola_daydream_early",
+      "effect": {
+       "nikolaBond": "romance",
+       "nikolaDaydream": true
+      }
+     },
+     {
+      "label": "«Договорились. А пока расскажи о городе»",
+      "tone": "friendship",
+      "next": "nikola_questions",
+      "effect": {
+       "nikolaBond": "friendship"
+      }
+     },
+     {
+      "label": "Представить его в фартуке, с кремом от круассана",
+      "tone": "dream",
+      "next": "nikola_dream_cream",
+      "effect": {
+       "nikolaBond": "romance",
+       "nikolaDaydream": true
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "bank_visit": {
+   "afterHash": "8d78e2889e61ea6874c64e2be6bf3a1b8775a8d2f89293df2bdd86a32bb6e6c0",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "09:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "В банке прохладно. Я сажусь за небольшой стол и достаю папку. Паспорт сверху, под ним — распечатка вчерашнего письма и подготовленные подтверждения."
+     },
+     {
+      "speaker": "Сотрудник банка",
+      "text": "«Давайте уточним вашу ситуацию. После разговора отправим список дальнейших шагов письменно».",
+      "message": true
+     },
+     {
+      "speaker": "player",
+      "text": "Спасибо. Я записал{a} вопросы, чтобы не вспоминать их уже у выхода."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "choices": [
+     {
+      "label": "Уточнить, какие подтверждения нужны именно мне",
+      "tone": "practical",
+      "next": "bank_documents",
+      "effect": {
+       "bankVisitFocus": "documents"
+      }
+     },
+     {
+      "label": "Сначала разобраться в тарифах и обслуживании",
+      "tone": "practical",
+      "next": "bank_cost",
+      "effect": {
+       "bankVisitFocus": "cost"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "bank_documents": {
+   "afterHash": "476ee199453c0c1f534e6d8c35a2e31d92db901bd1a5f9a2b1540ef800655d1e",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Я раскладываю документы рядом с письмом и нахожу в списке подтверждение адреса. Напротив ещё нет отметки."
+     },
+     {
+      "speaker": "Сотрудник банка",
+      "text": "«Вот этот документ проверим. Если понадобится другой, укажем в письме, какое подтверждение подходит и как его передать».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я отмечаю проверенное, а недостающее обвожу. Возвращаю паспорт в обложку и закрываю папку: теперь в ней документы, а не мои догадки.",
+      "action": {
+       "kind": "tap",
+       "label": "Записать недостающие подтверждения",
+       "object": "Записать недостающие подтверждения"
+      }
+     }
+    ],
+    "next": "bank_followup",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Записать недостающие подтверждения",
+     "object": "Записать недостающие подтверждения"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Записать недостающие подтверждения",
+      "object": "Записать недостающие подтверждения"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "bank_cost": {
+   "afterHash": "f149ca4e5924ebb0e4c191b30b4ff7c9fcdbfabb56ad44d88acf37090eeb1fc1",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Покажите, пожалуйста, стоимость обслуживания и условия переводов. Хочу понимать расходы заранее."
+     },
+     {
+      "speaker": "Сотрудник банка",
+      "text": "«Конечно. Пришлём действующие тарифы. Если появятся вопросы по отдельной операции, уточните до её выполнения».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я прошу повторить один пункт медленнее. Никто не вздыхает. Жаль, что мне не сказали раньше, насколько полезна эта простая просьба.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить вопросы к тарифам",
+       "object": "Сохранить вопросы к тарифам"
+      }
+     }
+    ],
+    "next": "bank_followup",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить вопросы к тарифам",
+     "object": "Сохранить вопросы к тарифам"
+    },
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить вопросы к тарифам",
+      "object": "Сохранить вопросы к тарифам"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "bank_followup": {
+   "afterHash": "a79c032641318b21d3df4e2b15d09ae9a4e20fa126af6fd7174cd17bcc4391d4",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "У выхода приходит письмо из банка. В нём — отмеченные пункты, тарифы и контакт для следующего вопроса."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Счёт ещё не открыт. Но я больше не пытаюсь угадать, что делать дальше."
+     },
+     {
+      "speaker": "Ася",
+      "text": "«Как прошло? Я рядом с мастерской. Приходи, у нас как раз освободился стол».",
+      "message": true,
+      "action": {
+       "kind": "checklist",
+       "label": "Разобрать письмо после визита",
+       "items": [
+        "Сохранить письмо и тарифы",
+        "Отметить, что нужно дополнить",
+        "Записать следующий контакт"
+       ],
+       "effect": {
+        "bankVisitComplete": true
+       }
+      }
+     }
+    ],
+    "next": "asya_meeting",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "checklist",
+     "label": "Разобрать письмо после визита",
+     "items": [
+      "Сохранить письмо и тарифы",
+      "Отметить, что нужно дополнить",
+      "Записать следующий контакт"
+     ],
+     "effect": {
+      "bankVisitComplete": true
+     }
+    },
+    "journal": [
+     "bank_followup"
+    ],
+    "actions": {
+     "2": {
+      "kind": "checklist",
+      "label": "Разобрать письмо после визита",
+      "items": [
+       "Сохранить письмо и тарифы",
+       "Отметить, что нужно дополнить",
+       "Записать следующий контакт"
+      ],
+      "effect": {
+       "bankVisitComplete": true
+      }
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "asya_meeting": {
+   "afterHash": "2533c549fde96fa61dad0bcca46cc3d5bffeb61c781072f26fefa3ac42d0a60c",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Ася машет мне через открытую дверь. Зелёная прядь падает на глаза; она сдувает её и отодвигает ноутбук от тарелки абрикосов."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "Проходи. Сегодня встречаемся без чужой квартиры. Можно даже не спрашивать про депозит."
+     },
+     {
+      "speaker": "player",
+      "text": "Тогда задам сложный вопрос. Абрикосы общие?"
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "laughing",
+      "text": "Теперь да. Вот и первая полезная договорённость за день.",
+      "action": {
+       "kind": "tap",
+       "label": "Сесть рядом с Асей",
+       "object": "Сесть рядом с Асей"
+      }
+     }
+    ],
+    "next": "luka_hello",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сесть рядом с Асей",
+     "object": "Сесть рядом с Асей"
+    },
+    "character": "asya",
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Сесть рядом с Асей",
+      "object": "Сесть рядом с Асей"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "luka_hello": {
+   "afterHash": "697c5026511e7f91bb2a4480b27deba396c9a038c7f8a447e236dd4aa7a8884a",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "От соседнего стола поднимается широкоплечий мужчина с короткой стрижкой. Он закрывает ноутбук, прежде чем протянуть руку."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "friendly",
+      "text": "Лука. Я бухгалтер. Но сначала можно просто рассказать, что ты хочешь делать. Таблицу откроем потом."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "laughing",
+      "text": "Он умеет объяснять без выражения «ну это же очевидно». Поэтому я вас и знакомлю."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "То, что давно понятно мне, не обязано быть очевидным тебе. Начнём с твоего плана?",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть заметку о работе",
+       "object": "Открыть заметку о работе"
+      }
+     }
+    ],
+    "next": "work_routes",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Открыть заметку о работе",
+     "object": "Открыть заметку о работе"
+    },
+    "character": "luka",
+    "journal": [
+     "luka"
+    ],
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Открыть заметку о работе",
+      "object": "Открыть заметку о работе"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "work_routes": {
+   "afterHash": "591fd17d2c2253906f19f92743efce283231d21dc6b3eb763a00149dd1a7bbfe",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Вчера я выбрал{a} своё дело. Сейчас хочется проверить, выдержит ли эта идея разговор о реальных расходах.",
+      "workText": {
+       "business": "Вчера я выбрал{a} своё дело. Сейчас хочется проверить, выдержит ли эта идея разговор о реальных расходах.",
+       "employment": "Вчера меня больше интересовала работа в команде. Лука кивает: для этого не нужно притворяться предпринимателем.",
+       "explore": "Вчера я решил{a} пока изучать варианты. Сегодня это всё ещё хороший ответ."
+      }
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "Можно продолжить выбранный путь. Можно передумать. Моя задача — помочь задать вопросы, а не выбрать жизнь вместо тебя."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я разворачиваю к себе чистую страницу. С чего начнём сегодня?"
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "luka",
+    "choices": [
+     {
+      "label": "Хочу подготовиться к своему делу",
+      "tone": "practical",
+      "next": "work_own",
+      "effect": {
+       "workRoute": "business"
+      }
+     },
+     {
+      "label": "Хочу разобраться с работой в команде",
+      "tone": "practical",
+      "next": "work_team",
+      "effect": {
+       "workRoute": "employment"
+      }
+     },
+     {
+      "label": "Сначала сравню варианты и расходы",
+      "tone": "personal",
+      "next": "work_options",
+      "effect": {
+       "workRoute": "explore"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "work_own": {
+   "afterHash": "5d77e92fd5001005d96adc6c9b1e5aa7524e94cb4dcb21bdf409f734628b008b",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Я могу рассказать, чем умею зарабатывать. Но пока не понимаю, как превратить это в понятную заявку."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "Тогда начни обычными словами: что ты делаешь и для кого. Затем проверим подходящую форму, деятельность и адрес."
+     },
+     {
+      "speaker": "narrator",
+      "text": "В заметке появляется первое описание, которое не похоже на рекламный слоган. Лука просит оставить рядом место для уточнений.",
+      "action": {
+       "kind": "tap",
+       "label": "Записать деятельность простыми словами",
+       "object": "Записать деятельность простыми словами"
+      }
+     }
+    ],
+    "next": "business_budget",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Записать деятельность простыми словами",
+     "object": "Записать деятельность простыми словами"
+    },
+    "character": "luka",
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Записать деятельность простыми словами",
+      "object": "Записать деятельность простыми словами"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "work_team": {
+   "afterHash": "204a59cf305a4ab33a29e1b862c67feb60083a2375a570c83aef65e32aabe9fa",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "thoughtful",
+      "text": "У знакомой команды скоро открытая встреча. Я могу представить тебя, а вы уже обсудите опыт и задачи."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "А вопросы о договоре, оформлении и праве на работу стоит задать отдельно. Бизнес регистрировать для этого разговора не требуется."
+     },
+     {
+      "speaker": "player",
+      "text": "Отлично. Встреча с людьми мне сейчас понятнее, чем фирма с красивым названием.",
+      "action": {
+       "kind": "tap",
+       "label": "Подготовить короткий рассказ об опыте",
+       "object": "Подготовить короткий рассказ об опыте"
+      }
+     }
+    ],
+    "next": "employment_followup",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Подготовить короткий рассказ об опыте",
+     "object": "Подготовить короткий рассказ об опыте"
+    },
+    "character": "asya",
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Подготовить короткий рассказ об опыте",
+      "object": "Подготовить короткий рассказ об опыте"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "work_options": {
+   "afterHash": "21a897e664cfe8a790a46a0019855d0db7f7c2bbaeef15b840f28f9e1e6d2c66",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Я пока не знаю, какой вариант мне подойдёт. Хочется сравнить их без ощущения, что завтра всё закроется."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "Тогда сравним. Какой доход ожидаешь, какие расходы выдержишь и сколько неопределённости тебе сейчас по силам?"
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "И оставим клетку «пока не знаю». Она тоже полезная.",
+      "action": {
+       "kind": "tap",
+       "label": "Разделить вопросы на известные и открытые",
+       "object": "Разделить вопросы на известные и открытые"
+      }
+     }
+    ],
+    "next": "explore_followup",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Разделить вопросы на известные и открытые",
+     "object": "Разделить вопросы на известные и открытые"
+    },
+    "character": "luka",
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Разделить вопросы на известные и открытые",
+      "object": "Разделить вопросы на известные и открытые"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "business_budget": {
+   "afterHash": "e426a69750d1f1851c99a170599bcde8737b17cd4e3eb3d6866f18afff99d82d",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "Посчитай расходы даже для месяца без заказов. Обязательные платежи, помощь бухгалтера, банк и запас на обычную жизнь. Точные суммы проверим под твою ситуацию."
+     },
+     {
+      "speaker": "player",
+      "text": "Вот тут моя таблица обычно делает вид, что кофе — производственная необходимость."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "laughing",
+      "text": "Как бухгалтер я попрошу пояснение. Как человек — прекрасно понимаю."
+     },
+     {
+      "speaker": "narrator",
+      "text": "За шуткой становится видна важная вещь: начать своё дело и быть готов{a} его содержать — не совсем одно и то же."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "luka",
+    "choices": [
+     {
+      "label": "Собрать черновик для проверки перед подачей в APR",
+      "tone": "practical",
+      "next": "business_ready",
+      "effect": {
+       "businessDecision": "draft"
+      }
+     },
+     {
+      "label": "Взять паузу и сначала пересчитать бюджет",
+      "tone": "personal",
+      "next": "business_pause",
+      "effect": {
+       "businessDecision": "wait"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "business_ready": {
+   "afterHash": "c16c687f3ea88f11679144036b5b2f0b37122c5b8ab7dd40418ca322920cf597",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "У APR есть бумажная и электронная подача. Проверим, какой способ тебе доступен, как подтвердить личность и что нужно для выбранного варианта."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я добавляю в папку описание деятельности, вопросы об адресе, паспорт и список оставшихся проверок. Пока это только черновик."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "И отдельно проверим проживание. Регистрация предпринимателя сама по себе не даёт разрешения остаться в стране.",
+      "action": {
+       "kind": "checklist",
+       "label": "Собрать черновик, не отправляя заявку",
+       "items": [
+        "Описание деятельности и адресные вопросы",
+        "Бюджет и документы для проверки",
+        "Способ подачи и оставшиеся вопросы"
+       ],
+       "effect": {
+        "businessDraftReady": true
+       }
+      }
+     }
+    ],
+    "next": "work_summary",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "checklist",
+     "label": "Собрать черновик, не отправляя заявку",
+     "items": [
+      "Описание деятельности и адресные вопросы",
+      "Бюджет и документы для проверки",
+      "Способ подачи и оставшиеся вопросы"
+     ],
+     "effect": {
+      "businessDraftReady": true
+     }
+    },
+    "character": "luka",
+    "journal": [
+     "business_draft"
+    ],
+    "actions": {
+     "2": {
+      "kind": "checklist",
+      "label": "Собрать черновик, не отправляя заявку",
+      "items": [
+       "Описание деятельности и адресные вопросы",
+       "Бюджет и документы для проверки",
+       "Способ подачи и оставшиеся вопросы"
+      ],
+      "effect": {
+       "businessDraftReady": true
+      }
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "business_pause": {
+   "afterHash": "141e77bb3261fa4c2f43a2c4ad03b337165b921af8be49270cfd9e9fbb2ec332",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Я хочу вернуться к этому с бюджетом, которому сам{a} верю. Давай пока ничего не подавать."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "thoughtful",
+      "text": "Хорошо. Отправлю список вопросов, а ты спокойно посмотришь цифры. Пауза — тоже решение."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Он закрывает таблицу без разочарованного вздоха. Я замечаю, как расслабились плечи.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить вопросы и отложить подачу",
+       "object": "Сохранить вопросы и отложить подачу"
+      }
+     }
+    ],
+    "next": "work_summary",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить вопросы и отложить подачу",
+     "object": "Сохранить вопросы и отложить подачу"
+    },
+    "character": "luka",
+    "journal": [
+     "work_research"
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить вопросы и отложить подачу",
+      "object": "Сохранить вопросы и отложить подачу"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "employment_followup": {
+   "afterHash": "716f84d1de7e76ca6ebf0587aae7f3ce52525cd72276bd3f1db2673db0acdf92",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "Расскажи в двух предложениях, что ты умеешь. Только без фразы «решаю комплексные задачи». Ею здесь уже можно стены красить."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я убираю лишние слова. Остаются опыт, интерес к работе и вопросы, на которые хочется получить честные ответы."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "Вот теперь похоже на приглашение к разговору. Перешлю знакомство, когда скажешь, что готов{a}.",
+      "action": {
+       "kind": "checklist",
+       "label": "Сохранить подготовку к знакомству с командой",
+       "items": [
+        "Опыт и интересующие задачи",
+        "Условия и договор",
+        "Вопросы об оформлении работы"
+       ],
+       "effect": {
+        "employmentIntroReady": true
+       }
+      }
+     }
+    ],
+    "next": "work_summary",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "checklist",
+     "label": "Сохранить подготовку к знакомству с командой",
+     "items": [
+      "Опыт и интересующие задачи",
+      "Условия и договор",
+      "Вопросы об оформлении работы"
+     ],
+     "effect": {
+      "employmentIntroReady": true
+     }
+    },
+    "character": "asya",
+    "journal": [
+     "employment_questions"
+    ],
+    "actions": {
+     "2": {
+      "kind": "checklist",
+      "label": "Сохранить подготовку к знакомству с командой",
+      "items": [
+       "Опыт и интересующие задачи",
+       "Условия и договор",
+       "Вопросы об оформлении работы"
+      ],
+      "effect": {
+       "employmentIntroReady": true
+      }
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "explore_followup": {
+   "afterHash": "7531a31be28f0dc4cd5fda7641fb4a08f13894e7b3f460ba6b32153af942f1a1",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "На странице получаются две колонки и несколько честных пробелов. Раньше я бы назвал{a} их провалом планирования."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "friendly",
+      "text": "Если сейчас не хватает данных, следующий шаг — найти их. Не угадать ответ погромче."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "И после этого поесть. Удивительно, сколько плохих решений принимается натощак.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить сравнение и открытые вопросы",
+       "object": "Сохранить сравнение и открытые вопросы"
+      }
+     }
+    ],
+    "next": "work_summary",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить сравнение и открытые вопросы",
+     "object": "Сохранить сравнение и открытые вопросы"
+    },
+    "character": "asya",
+    "journal": [
+     "work_research"
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить сравнение и открытые вопросы",
+      "object": "Сохранить сравнение и открытые вопросы"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_break": {
+   "afterHash": "0b6a34f4421f3b9fedfe7e49d6a2a84a99be37f530eb70a15fa671b8311ac08d",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "14:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "До кафе мы успеваем ровно за первыми каплями. Дождь делает улицу блестящей, а людей — неожиданно разговорчивыми."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "Мы здесь надолго. У меня один зонт на троих и совершенно неподходящая вера в прогноз."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "flirty",
+      "text": "Зато теперь никто не обязан смотреть в таблицу. Можно смотреть в окно. Или друг на друга."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "choices": [
+     {
+      "label": "Задержаться у окна с Асей",
+      "tone": "explore",
+      "next": "rain_asya",
+      "effect": {
+       "rainWith": "asya"
+      }
+     },
+     {
+      "label": "Поговорить с Лукой уже не о работе",
+      "tone": "explore",
+      "next": "rain_luka",
+      "effect": {
+       "rainWith": "luka"
+      }
+     },
+     {
+      "label": "Сесть всем вместе и просто поболтать",
+      "tone": "friendship",
+      "next": "rain_friends",
+      "effect": {
+       "rainWith": "friends"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_asya": {
+   "afterHash": "141226b7efd3533dbc2d4093266515a40076f4a5ab76951e2a55ee2dc920b246",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "Знаешь, когда я приехала, у меня тоже было лицо человека, который забыл подготовиться к собственной жизни."
+     },
+     {
+      "speaker": "player",
+      "text": "А теперь ты выдаёшь абрикосы и знакомишь с людьми. Значительный карьерный рост."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "thoughtful",
+      "text": "Не поверишь, я всё ещё иногда просто хочу, чтобы кто-нибудь позвал меня гулять. Без вопроса про квартиру."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "asya",
+    "journal": [
+     "asya_personal"
+    ],
+    "choices": [
+     {
+      "label": "«Тогда я зову. И мне хочется, чтобы это было свидание»",
+      "tone": "romance",
+      "next": "rain_asya_close",
+      "effect": {
+       "asyaBond": "romance"
+      }
+     },
+     {
+      "label": "«Давай в выходные соберёмся погулять с друзьями»",
+      "tone": "friendship",
+      "next": "rain_friends",
+      "effect": {
+       "asyaBond": "friendship"
+      }
+     },
+     {
+      "label": "Спросить про её дворовые кинопоказы",
+      "tone": "practical",
+      "next": "rain_friends",
+      "effect": {
+       "asyaBond": "friendship"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_asya_close": {
+   "afterHash": "64af629b0a7ba5f34a9c0d1a1c411fcebf0801a3bf42a930d53d88996c1e796c",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Ася на секунду замолкает. Потом улыбается уже без привычной спешки."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "flirty",
+      "text": "Мне нравится, что ты уточнил{a}. Я бы тоже хотела свидание."
+     },
+     {
+      "speaker": "player",
+      "text": "Тогда обещаю хотя бы первые десять минут не спрашивать про документы."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "flirty",
+      "text": "Десять минут? Щедро. Можно я пока возьму тебя за руку?"
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "asya",
+    "music": "encounter",
+    "journal": [
+     "rain_memory"
+    ],
+    "choices": [
+     {
+      "label": "Подать ей ладонь и улыбнуться",
+      "tone": "romance",
+      "next": "chapter_four_close",
+      "effect": {
+       "asyaHand": true
+      }
+     },
+     {
+      "label": "«Мне хочется чуть медленнее. Но на свидание я приду»",
+      "tone": "personal",
+      "next": "chapter_four_close",
+      "effect": {
+       "asyaHand": false
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_luka": {
+   "afterHash": "2e2c1d6379d8c79f0f5c133a1de7de893c8cc9f6fdb94803e7b920fadf31ae3c",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "player",
+      "text": "Ты правда всегда такой спокойный или это профессиональный приём?"
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "laughing",
+      "text": "Я однажды забыл ключи внутри квартиры и три часа ждал на лестнице. Спокойствие сильно помогает, когда больше ничего не помогает."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Он смеётся, и за деловой сдержанностью вдруг становится видно совсем другого человека. Мне хочется познакомиться и с ним тоже."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "luka",
+    "choices": [
+     {
+      "label": "«Пригласишь меня куда-нибудь, где нет таблиц?»",
+      "tone": "romance",
+      "next": "rain_luka_close",
+      "effect": {
+       "lukaBond": "romance"
+      }
+     },
+     {
+      "label": "«Покажешь как-нибудь свой любимый маршрут по городу?»",
+      "tone": "friendship",
+      "next": "rain_friends",
+      "effect": {
+       "lukaBond": "friendship"
+      }
+     },
+     {
+      "label": "Поблагодарить за помощь и спокойно допить кофе",
+      "tone": "practical",
+      "next": "rain_friends",
+      "effect": {
+       "lukaBond": "practical"
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_luka_close": {
+   "afterHash": "d735eed26611bbeacb675c93548741d0291325963f31d31c3397088353077109",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "flirty",
+      "text": "Да. Только это будет отдельное приглашение, без консультации и папки. У меня есть маршрут вдоль реки."
+     },
+     {
+      "speaker": "player",
+      "text": "Хорошо. На прогулке я предпочитаю смотреть на человека, а не на его расчёты."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Лука слегка склоняет голову и смотрит прямо на меня. Теперь его улыбку трудно назвать просто вежливой."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "flirty",
+      "text": "Тогда можно я сейчас подам тебе руку? А гулять пойдём, когда дождь закончится."
+     }
+    ],
+    "next": null,
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить разговор",
+     "object": "Продолжить разговор"
+    },
+    "character": "luka",
+    "music": "encounter",
+    "journal": [
+     "rain_memory"
+    ],
+    "choices": [
+     {
+      "label": "Оставить свою ладонь в его руке",
+      "tone": "romance",
+      "next": "chapter_four_close",
+      "effect": {
+       "lukaHand": true
+      }
+     },
+     {
+      "label": "«Пока просто посиди рядом. Мне и так хорошо»",
+      "tone": "personal",
+      "next": "chapter_four_close",
+      "effect": {
+       "lukaHand": false
+      }
+     }
+    ],
+    "actions": {},
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "rain_friends": {
+   "afterHash": "6140859f66e781546cd1bdf73ab139828641316d0189a796e2c75d1981401aa9",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "11:30",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Мы собираем чашки на одном столе. Ася рассказывает про дворовые показы: проектор, простыня и соседи, которые приносят слишком много еды."
+     },
+     {
+      "speaker": "Лука",
+      "character": "luka",
+      "emotion": "friendly",
+      "text": "В прошлый раз фильм пришлось поставить на паузу. Кот сел прямо перед проектором."
+     },
+     {
+      "speaker": "Ася",
+      "character": "asya",
+      "emotion": "friendly",
+      "text": "У него была важная сцена. В этот раз приходи тоже. Кот, кажется, уже согласился.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить приглашение на дворовой показ",
+       "object": "Сохранить приглашение на дворовой показ"
+      }
+     }
+    ],
+    "next": "chapter_four_close",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Сохранить приглашение на дворовой показ",
+     "object": "Сохранить приглашение на дворовой показ"
+    },
+    "character": "asya",
+    "journal": [
+     "rain_memory",
+     "asya_personal"
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Сохранить приглашение на дворовой показ",
+      "object": "Сохранить приглашение на дворовой показ"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "chapter_four_close": {
+   "afterHash": "4fe282715ab290dc22880553f54c9a1197698a7e5899d10e5484d923fd6f5aa8",
+   "before": {
+    "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
+    "time": "20:45",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "К вечеру дождь заканчивается. Я возвращаюсь домой с письмом из банка и заметками, которые наконец могу объяснить своими словами."
+     },
+     {
+      "speaker": "contact",
+      "text": "Как прошёл день? У меня появился новый рисунок. В этот раз кое-кто прячет за спиной не букет, а зонт.",
+      "contactText": {
+       "nikola": "Ну что, день тебя не съел? Расскажешь при встрече. Я заодно оставил тебе кое-что вкусное.",
+       "milica": "Как прошёл день? У меня появился новый рисунок. В этот раз кое-кто прячет за спиной не букет, а зонт."
+      },
+      "message": true
+     },
+     {
+      "speaker": "Ася",
+      "text": "«В субботу кинопоказ во дворе. Приходи. А завтра спокойно разберём, какие вопросы по проживанию у тебя ещё остались».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я добавляю в календарь два разных дела: документы — и вечер во дворе. Кажется, новая жизнь начинает помещаться не только в папку.",
+      "action": {
+       "kind": "tap",
+       "label": "Продолжить · День 3",
+       "object": "Продолжить · День 3"
+      }
+     }
+    ],
+    "next": "d3_start",
+    "day": "ДЕНЬ 2",
+    "exitAction": {
+     "kind": "tap",
+     "label": "Продолжить · День 3",
+     "object": "Продолжить · День 3"
+    },
+    "lighting": "night",
+    "journal": [
+     "residence_questions"
+    ],
+    "effectOnEnter": {
+     "chapterFourComplete": true
+    },
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Продолжить · День 3",
+      "object": "Продолжить · День 3"
+     }
+    },
+    "chapterId": "work",
+    "chapter": "День 2 · Счёт и своё дело"
+   }
+  },
+  "nikola_last": {
+   "afterHash": "9b94617ad9065c9c815e772886509b40b902a16f8022e8f011205b2912c70fa4",
+   "before": {
+    "location": "АЭРОПОРТ · ВЫХОД К ТАКСИ",
+    "time": "17:44",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Отхожу от стойки, прижимая к себе тёплый пакет. Телефон снова вибрирует."
+     },
+     {
+      "speaker": "Никола",
+      "text": "«{short}, напиши, когда доберёшься. И прибереги аппетит: вечером дам тебе распробовать мои булочки 😉».",
+      "message": true,
+      "friendText": "«{full}, напиши, когда доберёшься. Адреса кафе пришлю вечером»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Оборачиваюсь. Никола обслуживает следующего покупателя, но успевает поймать мой взгляд.",
+      "action": {
+       "kind": "tap",
+       "label": "Поднять пакет вместо прощального жеста",
+       "object": "Помахать пакетом"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я поднимаю пакет, будто чокаюсь с ним через весь зал. Он смеётся."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Ещё час назад я никого здесь не знал{a}. Теперь обещание написать кажется самой приятной частью плана.",
+      "friendText": "В новом городе у меня уже есть знакомый. Можно будет рассказать, как прошло заселение."
+     },
+     {
+      "speaker": "narrator",
+      "text": "У выхода солнце бьёт в глаза. Пора посмотреть на Белград за пределами аэропорта.",
+      "action": {
+       "kind": "reply",
+       "label": "Ответить Николе",
+       "options": [
+        {
+         "label": "«Круассан спас день. Спасибо!»",
+         "tone": "friendship",
+         "effect": {
+          "nikolaBond": "friendship"
+         }
+        },
+        {
+         "label": "«Вернусь не только за круассаном»",
+         "tone": "romance",
+         "effect": {
+          "nikolaBond": "romance"
+         }
+        }
+       ]
+      }
+     }
+    ],
+    "next": "road_start",
+    "journal": [
+     "next"
+    ],
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Поднять пакет вместо прощального жеста",
+      "object": "Помахать пакетом"
+     },
+     "5": {
+      "kind": "reply",
+      "label": "Ответить Николе",
+      "options": [
+       {
+        "label": "«Круассан спас день. Спасибо!»",
+        "tone": "friendship",
+        "effect": {
+         "nikolaBond": "friendship"
+        }
+       },
+       {
+        "label": "«Вернусь не только за круассаном»",
+        "tone": "romance",
+        "effect": {
+         "nikolaBond": "romance"
+        }
+       }
+      ]
+     }
+    },
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "weeks": {
+   "afterHash": "18fb1c8a1715142eb89706f0569e89f87d76b47e49b13fa81f7657f816f7c49a",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Нескольких недель хватит, чтобы найти любимую пекарню."
+     },
+     {
+      "speaker": "player",
+      "text": "А дальше?"
+     },
+     {
+      "speaker": "milica",
+      "text": "Начнёшь сравнивать с ней все остальные. Тут-то и появятся проблемы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она не спрашивает, что должно случиться за эти недели. Можно просто приехать и посмотреть."
+     },
+     {
+      "speaker": "narrator",
+      "text": "«Пока». Сегодня это слово почему-то звучит спокойнее.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "new_life": {
+   "afterHash": "2f97b592e9903a3343a8f4348340009de60a7bef646620c954377dd2efd55dc9",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Милица на секунду замолкает. Мы только познакомились, а я уже выдал{a} ей столько серьёзного."
+     },
+     {
+      "speaker": "milica",
+      "text": "Надеюсь, у тебя получится. Только разреши себе передумать, если захочется."
+     },
+     {
+      "speaker": "player",
+      "text": "Ты будто и сама об этом думала.",
+      "action": {
+       "kind": "tap",
+       "label": "Отложить телефон и посмотреть на Милицу",
+       "object": "Послушать ответ"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она проводит пальцем по краю блокнота."
+     },
+     {
+      "speaker": "milica",
+      "text": "Бывает. Но для такого разговора нужен кофе получше."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я не расспрашиваю. Похоже, у неё тоже есть история, которую пока рано рассказывать.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Отложить телефон и посмотреть на Милицу",
+      "object": "Послушать ответ"
+     },
+     "5": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "unsure": {
+   "afterHash": "07a6dc634b5156edfc0cafb3eaaa0266bd9df9ea64f12d0d939acac674b45b80",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Тоже ответ."
+     },
+     {
+      "speaker": "player",
+      "text": "Родственникам он почему-то не нравится."
+     },
+     {
+      "speaker": "milica",
+      "text": "Скажи, что приехал{a} из-за климата. С погодой спорить сложнее."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мы смеёмся. За окном дрожит от жары воздух. Климат, по крайней мере, не подведёт."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Приятно, когда от тебя не требуют определиться прямо сейчас.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "host": {
+   "afterHash": "7af9eeaabe6b36b4537bb6ca9d8b76acb3c17276c2c095857f456818796b46ad",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Пишу Драгану: «Уже еду». Стираю и исправляю на «Скоро выезжаю». Всё-таки ключи у него, а кофе ещё у меня."
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Хорошо. Напишите, когда будете рядом. Не торопитесь».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Маме отвечаю: «Пока в аэропорту. Пью кофе. Всё нормально»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Немного подумав, добавляю: «Уже лучше»."
+     },
+     {
+      "speaker": "milica",
+      "text": "С ключами договорились? Тогда можно допить и ехать.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть контакты на телефоне",
+       "object": "Контакты"
+      }
+     }
+    ],
+    "next": "contact",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Открыть контакты на телефоне",
+      "object": "Контакты"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "friend": {
+   "afterHash": "7216a57d5ac687431ee1e76f68849dd89bead6be04eabae983e79a3cbd46497c",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "«Тут очень светло», — печатаю я. Смотрю на сообщение и дописываю ещё пару строк."
+     },
+     {
+      "speaker": "narrator",
+      "text": "«Сейчас поеду заселяться. Кофе уже есть. И знакомая тоже»."
+     },
+     {
+      "speaker": "Мама",
+      "text": "«Ну вот. А ты переживал{a}. Напиши, когда доберёшься».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Драгану отправляю примерное время приезда. Он почти сразу отвечает: «Хорошо, буду ждать»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Меня уже ждут. Пусть пока только хозяин оплаченной комнаты, но и это приятно.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть контакты на телефоне",
+       "object": "Контакты"
+      }
+     }
+    ],
+    "next": "contact",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Открыть контакты на телефоне",
+      "object": "Контакты"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "contact": {
+   "afterHash": "cecf3082e4d183ec0bad306e3ad9fc04b0d364118d263ac2bca09d245b2ebdda",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Милица смотрит на время. По экрану телефона тянется тонкая трещина."
+     },
+     {
+      "speaker": "milica",
+      "text": "Мне скоро пора. Работа, кот — всё ещё ждут."
+     },
+     {
+      "speaker": "player",
+      "text": "Спасибо, что спасла от автомата."
+     },
+     {
+      "speaker": "milica",
+      "text": "Да он уже почти сдался.",
+      "action": {
+       "kind": "tap",
+       "label": "Достать телефон для обмена контактами",
+       "object": "Телефон"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она забрасывает сумку на плечо, но телефон не убирает.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Давай запишу твой номер. Я живу недалеко от твоей комнаты. Если заблудишься — напиши.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я называю номер. В моих контактах появляется Milica — среди людей, которых я знаю много лет.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Только пришли ещё номер дома. По одной фотографии двери я тебя не найду.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить Milica в контактах",
+       "object": "Добавить контакт",
+       "effect": {
+        "milicaContactSaved": true
+       }
+      },
+      "seatedMilica": false
+     },
+     {
+      "speaker": "player",
+      "text": "А если просто написать, что я на месте?",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Этому я тоже обрадуюсь.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она смотрит мне в глаза чуть дольше. Кажется, написать можно будет и без повода.",
+      "friendText": "Она смотрит прямо на меня. Приятно знать, что в новом городе уже есть кому написать.",
+      "action": {
+       "kind": "checklist",
+       "label": "Собраться перед выходом",
+       "items": [
+        "Телефон",
+        "Чемодан",
+        "Адрес"
+       ],
+       "effect": {
+        "departureChecked": true
+       },
+       "feedback": "Всё с собой."
+      },
+      "seatedMilica": false
+     }
+    ],
+    "next": "exit",
+    "portrait": true,
+    "journal": [
+     "contact"
+    ],
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Достать телефон для обмена контактами",
+      "object": "Телефон"
+     },
+     "7": {
+      "kind": "tap",
+      "label": "Сохранить Milica в контактах",
+      "object": "Добавить контакт",
+      "effect": {
+       "milicaContactSaved": true
+      }
+     },
+     "10": {
+      "kind": "checklist",
+      "label": "Собраться перед выходом",
+      "items": [
+       "Телефон",
+       "Чемодан",
+       "Адрес"
+      ],
+      "effect": {
+       "departureChecked": true
+      },
+      "feedback": "Всё с собой."
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "room_rest": {
+   "afterHash": "d2085ffebd018f72b4e5b84ff4ee5e2e4e7b37f848a7fec65c42540fa7b6b7a6",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "20:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Я выбираю остаться. Иногда самый интересный вариант — перестать изображать человека, у которого ещё есть силы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "После душа нахожу в сумке зарядку, а на столе освобождаю место под еду. Маленькие победы перестают казаться маленькими."
+     },
+     {
+      "speaker": "player",
+      "text": "«Сегодня отдохну. Но мне хочется встретиться в другой день». Пишу это без длинного оправдания."
+     },
+     {
+      "speaker": "contact",
+      "text": "«Конечно. Город и я завтра тоже будем здесь».",
+      "contactText": {
+       "nikola": "«Правильно. Завтра кифлы будут свежие, а я — чуть бодрее».",
+       "milica": "«Отдыхай. Я завтра тоже буду в городе. Даже кот разрешает». "
+      },
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я открываю объявления. Через пять минут понимаю, что смотрю не на квартиры, а на то, какие у людей шторы. Закрываю их до утра.",
+      "action": {
+       "kind": "checklist",
+       "label": "Устроиться на вечер",
+       "items": [
+        "Зарядка",
+        "Вода",
+        "Закрытые объявления"
+       ],
+       "effect": {
+        "eveningRestReady": true
+       }
+      }
+     }
+    ],
+    "next": "night_messages",
+    "chapter": "День 0 · Своя дверь",
+    "lighting": "night",
+    "journal": [
+     "quiet_evening"
+    ],
+    "actions": {
+     "4": {
+      "kind": "checklist",
+      "label": "Устроиться на вечер",
+      "items": [
+       "Зарядка",
+       "Вода",
+       "Закрытые объявления"
+      ],
+      "effect": {
+       "eveningRestReady": true
+      }
+     }
+    },
+    "chapterId": "arrival"
+   }
   }
  },
  "added": [
-  "flat_intro",
-  "flat_enter_ana",
-  "flat_after_ana",
-  "flat_enter_stefan",
-  "flat_after_stefan",
-  "flat_enter_marko",
-  "flat_after_marko",
-  "flat_enter_vuk",
-  "flat_after_vuk",
-  "flat_coffee",
-  "flat_coffee_warm",
-  "flat_coffee_calm",
-  "flat_decision",
-  "flat_terms",
-  "flat_price_full",
-  "flat_price_basic",
-  "flat_price_warm100",
-  "flat_price_warm150",
-  "flat_contract",
-  "flat_questions",
-  "flat_signed",
-  "flat_move_day",
-  "flat_arrive",
-  "flat_settle",
-  "bank_visit_api",
-  "bank_api_docs",
-  "bank_api_cost",
-  "bank_visit_alta",
-  "bank_alta_wait",
-  "bank_alta_window",
-  "bank_alta_book",
-  "bank_visit_adriatic",
+  "ada_arrive",
+  "ada_bridge",
+  "ada_home",
+  "ada_melon_bridge",
+  "ada_melon_pebbles",
+  "ada_pebbles",
+  "ada_pick",
+  "ada_tired",
   "bank_adriatic_docs",
   "bank_adriatic_list",
+  "bank_alta_book",
+  "bank_alta_wait",
+  "bank_alta_window",
+  "bank_api_cost",
+  "bank_api_docs",
+  "bank_visit_adriatic",
+  "bank_visit_alta",
+  "bank_visit_api",
+  "evening_plan",
+  "flat_after_ana",
+  "flat_after_marko",
+  "flat_after_stefan",
+  "flat_after_vuk",
+  "flat_arrive",
+  "flat_coffee",
+  "flat_coffee_calm",
+  "flat_coffee_warm",
+  "flat_contract",
+  "flat_decision",
+  "flat_enter_ana",
+  "flat_enter_marko",
+  "flat_enter_stefan",
+  "flat_enter_vuk",
+  "flat_intro",
+  "flat_move_day",
+  "flat_price_basic",
+  "flat_price_full",
+  "flat_price_warm100",
+  "flat_price_warm150",
+  "flat_questions",
+  "flat_settle",
+  "flat_signed",
+  "flat_terms",
   "host_old_town",
   "host_terrace",
   "host_terrace_meal",
-  "ada_tired",
-  "ada_arrive",
-  "ada_pick",
-  "ada_pebbles",
-  "ada_bridge",
-  "ada_melon_pebbles",
-  "ada_melon_bridge",
-  "ada_home",
-  "zemun_cobbles",
-  "zemun_gardos",
-  "zemun_quay",
   "nikola_park",
-  "nikola_park_invite",
-  "nikola_park_decline",
-  "nikola_park_home",
-  "nikola_park_door",
+  "nikola_park_afterglow",
   "nikola_park_closer",
-  "nikola_park_prep",
-  "nikola_park_sex",
+  "nikola_park_cum_chest",
   "nikola_park_cum_inside",
   "nikola_park_cum_jock",
-  "nikola_park_cum_chest",
-  "nikola_park_afterglow",
-  "nikola_park_morning"
+  "nikola_park_decline",
+  "nikola_park_door",
+  "nikola_park_home",
+  "nikola_park_invite",
+  "nikola_park_morning",
+  "nikola_park_prep",
+  "nikola_park_sex",
+  "zemun_cobbles",
+  "zemun_gardos",
+  "zemun_quay"
  ]
 }

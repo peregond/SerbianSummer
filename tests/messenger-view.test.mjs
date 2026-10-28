@@ -18,7 +18,7 @@ globalThis.requestAnimationFrame=fn=>{fn();return 1;};
 globalThis.cancelAnimationFrame=()=>{};
 const all=(node)=>[node,...node.children.flatMap(all)];
 const nodes=cls=>all(root).filter(n=>(n.className??'').split(' ').includes(cls));
-const replies=[{text:'Круассан спас день. Спасибо!',tone:'friendship'},{text:'Вернусь не только за круассаном',tone:'romance'}];
+const replies=[{text:'Кифла спасла день. Спасибо!',tone:'friendship'},{text:'Вернусь не только за кифлой',tone:'romance'}];
 let sends=0,nexts=0,accept=false;
 const dispose=mountMessenger(root,{contact:'Никола',messages:[{direction:'incoming',text:'Напиши, когда доберёшься'}],replies,context:'У выхода солнце бьёт в глаза.',draft:null,time:'17:44'},{onSend:()=>{sends++;return accept;},onContinue:()=>nexts++,onBack(){},onMenu(){},onSettings(){},canRewind:false});
 assert.equal(nodes('chat-reply').length,2,'Both ready replies are immediately rendered');

@@ -130,7 +130,7 @@ export function extendHousing({NODES,JOURNAL}){
   ],null,{time:'12:30',choices:[
     choice('Принять цену как есть','Accept the price as it is','flat_price_full','practical',{flatDiscount:0}),
     choice('Вежливо попросить скидку','Politely ask for a discount','flat_price_basic','practical',{flatDiscount:50}),
-    choice('Спросить о большей скидке: мы ведь уже успели познакомиться','Ask about a bigger discount, since we have already got to know each other','flat_price_warm100','romance',{flatDiscount:100},{flag:'flatWarmth',equals:1}),
+    choice('Спросить о большей скидке: нам уже спокойно разговаривать','Ask about a bigger discount; talking already feels easy','flat_price_warm100','friendship',{flatDiscount:100},{flag:'flatWarmth',equals:1}),
     choice('Спросить о большей скидке: мне здесь хорошо, и с квартирой, и с тобой','Ask about a bigger discount; I feel good here, with the flat and with you','flat_price_warm150','romance',{flatDiscount:150},{flag:'flatWarmth',equals:2}),
     choice('Пока подумать и вернуться на карту','Think it over and go back to the map','district_map','personal')
   ]});
@@ -192,7 +192,7 @@ export function extendHousing({NODES,JOURNAL}){
     N('Дверь новой квартиры открывается моим ключом. Он тяжелее ключа от временной комнаты.','The door of the new flat opens with my own key. It is heavier than the key to the temporary room.',{portrait:false}),
     H('Вот опись. Пройдём по комнатам: мебель, счётчики, ключи. Если что-то записано неверно, скажи, и исправим.','Here is the inventory. Let us walk through the rooms: furniture, meters, keys. If something is written wrongly, say so and we will correct it.'),
     {speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...counterpartLines.ana),districtText:Object.fromEntries(Object.entries(counterpartLines).map(([owner,pair])=>[owner,T(...pair)]))},
-    AM('Поздравляю с новым адресом! Банк подождёт до вечера, сначала дом.','Congratulations on the new address! The bank can wait until the evening; home comes first.'),
+    AM('Поздравляю с новым адресом! Гид по банкам можно вечером, а в отделение — завтра. Сначала дом.','Congratulations on the new address! The bank guide can wait until evening, and the branch until tomorrow. Home comes first.'),
     N('{districtHost} уходит, оставив мне ключи. Квартира впервые полностью моя.','{districtHost} leaves me the keys. The flat is entirely mine for the first time.')
   ],'flat_settle',{time:'15:20',exitAction:tap('Осмотреться в своей квартире','Look around my own flat')});
   finish('flat_settle',[
