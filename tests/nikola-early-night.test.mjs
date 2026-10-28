@@ -5,7 +5,7 @@ import {choiceVisible} from '../public/romance.js';
 import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from '../public/nikola-early-night.js';
 
 const parkChoice=NODES.date_kiss.choices.find(c=>c.next==='nikola_park');
-const homeChoice=NODES.date_kiss.choices.find(c=>c.next==='chapter_three_close');
+const homeChoice=NODES.date_kiss.choices.find(c=>c.next==='ada_tired');
 assert.ok(parkChoice);assert.ok(homeChoice);
 assert.deepEqual(NODES.date_hand.choices.map(c=>c.next).sort(),NODES.date_kiss.choices.map(c=>c.next).sort());
 
