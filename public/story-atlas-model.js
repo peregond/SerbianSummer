@@ -173,24 +173,24 @@ export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
   const depth=new Map();
   const queue=[];
   if(root&&local.has(root)){depth.set(root,0);queue.push(root);}
-  for(const id of seedIds){
-    if(!depth.has(id)){depth.set(id,0);queue.push(id);}
-  }
   for(let i=0;i<queue.length;i++){
     const id=queue[i];
     const d=depth.get(id);
     for(const out of atlas.scenes[id]?.outs??[]){
       const next=out.next;
-      if(!next||next==='end'||!local.has(next))continue;
-      if(!depth.has(next)||depth.get(next)>d+1){
-        depth.set(next,d+1);
-        queue.push(next);
-      }
+      if(!next||next==='end'||!local.has(next)||depth.has(next))continue;
+      depth.set(next,d+1);
+      queue.push(next);
     }
   }
-  let minD=0;
-  for(const d of depth.values())minD=Math.min(minD,d);
-  for(const [id,d] of depth)depth.set(id,d-minD);
+  let maxD=0;
+  for(const d of depth.values())maxD=Math.max(maxD,d);
+  for(const id of seedIds){
+    if(depth.has(id))continue;
+    // Unreachable from chapter start: park after the main flow.
+    maxD+=1;
+    depth.set(id,maxD);
+  }
 
   const columns=new Map();
   for(const id of seedIds){

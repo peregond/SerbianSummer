@@ -9,8 +9,8 @@
 .story-atlas-summary{font-size:13px;color:var(--muted);margin:0}
 .story-atlas-layout{display:grid;gap:14px}
 .story-atlas-schema{display:grid;grid-template-rows:auto minmax(220px,42vh);gap:8px;border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
-.story-atlas-schema-toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--sea) 12%)}
-.story-atlas-zoom{min-height:36px;padding:6px 12px;font-size:13px}
+.story-atlas-schema-toolbar{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--sea) 12%)}
+.story-atlas-zoom{flex:0 0 auto;width:auto;min-width:40px;min-height:36px;padding:6px 12px;font-size:13px}
 .story-atlas-schema-viewport{position:relative;min-height:220px;overflow:hidden;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;background:
   radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 0) 0 0/18px 18px}
 .story-atlas-schema-viewport.is-panning{cursor:grabbing}
