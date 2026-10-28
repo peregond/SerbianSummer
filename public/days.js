@@ -110,7 +110,7 @@ export function extendCast({NODES:N}){
  const L=(ru,en,message=true)=>({speaker:'Лука',character:'luka',emotion:'friendly',text:T(ru,en),message});
  const owner=(dragan,jelena)=>({speaker:'districtHost',cameo:true,emotion:'friendly',text:T(...dragan),districtText:{dragan:T(...dragan),jelena:T(...jelena)}});
  const neighbour=(whenDragan,whenJelena)=>({speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...whenDragan),districtText:{dragan:T(...whenDragan),jelena:T(...whenJelena)}});
- // Day 1: the owner of the flat and the other host look in while the afternoon plans take shape.
+ // Day 1: the owner and neighbour finish afternoon_invite; evening choices stay on evening_plan so they are not shown under the bread line.
  N.afternoon_invite.pages.push(
   owner(['Ужин сегодня в восемь, если захочешь — присоединяйся.','Dinner is at eight tonight; join us if you like.'],['Ужин сегодня в восемь, если захочешь — присоединяйся.','Dinner is at eight tonight; join us if you like.']),
   neighbour(['Я принесу хлеб из пекарни на углу.','I will bring bread from the bakery on the corner.'],['Я принесу хлеб из пекарни на углу.','I will bring bread from the bakery on the corner.']));

@@ -82,6 +82,10 @@ assert.ok(messageAt('date_messages',NODES.date_messages,1,{companion:'nikola'}),
 assert.equal(messageAt('date_messages',NODES.date_messages,1,{companion:'nikola'}).direction,'incoming');
 assert.equal(messageAt('date_messages',NODES.date_messages,0,{companion:'nikola'}).direction,'outgoing');
 assert.match(pageText(NODES.afternoon_invite.pages[1],{companion:'nikola'}),/\{who\.airport\}|Никола/);
+assert.equal(NODES.afternoon_invite.choices,undefined,'airport evening choices are not under Ana’s bread line');
+assert.equal(NODES.afternoon_invite.next,'evening_plan');
+assert.equal(NODES.afternoon_invite.pages.at(-1).speaker,'ownerCounterpart');
+assert.deepEqual(NODES.evening_plan.choices.map(c=>c.next),['date_river','date_friends','date_messages']);
 // ---- Names ----
 const dmitry={gender:'male',nameId:'dmitry'};
 assert.equal(callsByShortName('Никола',{companion:'nikola',nikolaBond:'romance'}),true);

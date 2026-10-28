@@ -78,11 +78,15 @@ export function extendNextChapter({NODES:N,JOURNAL:J,n,y,msg,scene}){
    msg('Ася','«Хороший ответ. Составим список людей и вопросов. Срочность не должна изображать уверенность». '),
    n('Я закрываю пустую форму. Иногда первый полезный шаг — не заполнить её наугад.')
   ],{next:'afternoon_invite',journal:['work_route'],exitAction:out('Сохранить направления для изучения')}),
+  // Host/neighbour lines are appended in extendCast; choices live on evening_plan so Ana’s last line is not mixed with the airport evening menu.
   afternoon_invite:s([
    contact('Я после смены. Как твой день? Предлагаю поговорить о чём-нибудь, что не требует копии паспорта.','Я закончила рисунок. Можем встретиться — на этот раз автомат нам не понадобится.'),
    n('Время на экране — 18:40. Пишет {who.airport}: мы обменялись номерами ещё в аэропорту. Сегодня у меня было достаточно серьёзное лицо.'),
    n('Теперь можно решить, каким будет вечер.')
-  ],{time:'18:40',choices:[
+  ],{time:'18:40',next:'evening_plan',exitAction:out('Открыть сообщение')}),
+  evening_plan:s([
+   n('Сообщение от {who.airport} всё ещё на экране. Каким будет вечер?')
+  ],{time:'18:42',choices:[
    {label:'Предложить свидание у реки',tone:'romance',next:'date_river',effect:{eveningIntent:'romance'}},
    {label:'Встретиться за кофе по-дружески',tone:'friendship',next:'date_friends',effect:{eveningIntent:'friendship'}},
    {label:'Остаться дома и обменяться сообщениями',tone:'personal',next:'date_messages',effect:{eveningIntent:'quiet'}}
