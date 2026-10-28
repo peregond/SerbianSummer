@@ -35,8 +35,8 @@ assert.equal(presentationFor(NODES.ada_arrive, NODES.ada_arrive.pages[2], {adaWi
 assert.equal(presentationFor(NODES.ada_arrive, NODES.ada_arrive.pages[2], {adaWith:'nikola', companion:'nikola'}).emotion, 'swim');
 assert.equal(presentationFor(NODES.ada_arrive, NODES.ada_arrive.pages[2], {adaWith:'milica', companion:'milica'}).character, 'milica');
 assert.equal(presentationFor(NODES.ada_home, NODES.ada_home.pages[1], {adaWith:'alone', companion:'nikola'}).character, null);
-assert.equal(CHARACTER_SPRITES.nikola.swim.file, 'nikola-swim-short-buzz-v4');
-for (const file of ['nikola-swim-short-buzz-v4','milica-swim-v1','dragan-swim-v1','jelena-swim-v1','ana-swim-v1','stefan-swim-v1','marko-swim-v1','vuk-swim-v1']) {
+assert.equal(CHARACTER_SPRITES.nikola.swim.file, 'nikola-swim-short-buzz-v3');
+for (const file of ['nikola-swim-short-buzz-v3','milica-swim-v1','dragan-swim-v1','jelena-swim-v1','ana-swim-v1','stefan-swim-v1','marko-swim-v1','vuk-swim-v1']) {
   assert.ok(fs.existsSync(new URL('../public/assets/' + file + '.webp', import.meta.url)), file);
 }
 const tired = NODES.ada_tired.choices;

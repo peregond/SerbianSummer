@@ -24,7 +24,7 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     'ada-melon-cafe-v1':{label:T('АДА · АРБУЗ','ADA · WATERMELON'),description:T('Пляжное кафе и холодная лубеница','A beach cafe and a cold watermelon'),position:'50% 48%'}
   });
   const swim={
-    nikola:['nikola-swim-short-buzz-v4','Никола в коротких плавательных шортах у озера'],
+    nikola:['nikola-swim-short-buzz-v3','Никола в коротких плавательных шортах у озера'],
     milica:['milica-swim-v1','Милица в майке и шортах для пляжа'],
     dragan:['dragan-swim-v1','Драган в плавательных шортах'],
     jelena:['jelena-swim-v1','Йелена в майке и шортах для пляжа'],
