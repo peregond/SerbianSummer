@@ -100,7 +100,9 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       if(out.tone)button.append(document.createTextNode(` · ${out.tone}`));
       button.onclick=()=>{
         if(!out.next||out.next==='end'||!atlas.scenes[out.next])return;
-        selected=out.next;renderList();renderDetail(atlas.scenes[out.next]);
+        selected=out.next;
+        if(search.value){search.value='';}
+        renderList();renderDetail(atlas.scenes[out.next]);
       };
       item.append(button);outs.append(item);
     }
