@@ -12,7 +12,8 @@
 | `nikola-park-nervous-laugh-v1.webp` | Нервный смех — белые трусы |
 | `nikola-bedroom-seductive-v1.webp` | Соблазнительный взгляд — белые трусы |
 | `nikola-door-kiss-v1.webp` | У двери — белые трусы |
-| `nikola-briefs-lookdown-v1.webp` | На кровати, взгляд вниз — белые трусы |
+| `nikola-briefs-lookdown-v1.webp` | На кровати, взгляд вниз — белые трусы (заменён в сцене) |
+| `nikola-briefs-bed-smile-v1.webp` | На кровати, смотрит и улыбается — локальный ComfyUI, Pony Realism img2img (`tools/comfy_one.py`) |
 | `nikola-bed-moan-v1.webp` | Стон на кровати — белые трусы |
 | `nikola-climax-face-v1.webp` | Крупный план оргазма |
 | `nikola-afterglow-smile-v1.webp` | После, улыбка — белые трусы |
