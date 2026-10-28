@@ -2,6 +2,7 @@ import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=2';
 import {extendHousing} from './housing-story.js?v=1';
 import {extendBank} from './bank-story.js?v=2';
 import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=2';
+import {applyEarlyCityArt} from './early-city-art.js?v=1';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=5';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
@@ -719,6 +720,7 @@ extendHousing({NODES,JOURNAL});
 extendBank({NODES,JOURNAL});
 extendHostEvening({NODES,JOURNAL});
 for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v2',alt:'Драган в вечерней рубашке'};
+applyEarlyCityArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 // Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
