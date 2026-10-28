@@ -53,11 +53,13 @@ export function joinNames(names,and){return names.length<2?names.join(''):names.
 export function choiceVisible(choice,flags={}){
  const when=choice.when;if(!when)return true;
  if(when.all)return when.all.every(each=>choiceVisible({when:each},flags));
+ if(when.not&&choiceVisible({when:when.not},flags))return false;
  if(Object.hasOwn(when,'bit')&&!((flags[when.flag]??0)&when.bit))return false;
  if(Object.hasOwn(when,'notBit')&&((flags[when.flag]??0)&when.notBit))return false;
  if(when.flag){
   if(Object.hasOwn(when,'equals')&&flags[when.flag]!==when.equals)return false;
   if(Object.hasOwn(when,'notEquals')&&flags[when.flag]===when.notEquals)return false;
+  if(Array.isArray(when.in)&&!when.in.includes(flags[when.flag]))return false;
  }
  if(when.partner){
   if(!isAvailable(when.partner,flags))return false;

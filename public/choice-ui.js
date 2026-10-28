@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=0.16.1';
+import {t} from './i18n.js?v=0.16.1-chat3';
 const PEOPLE = {
   marko:{id:'marko',name:'Марко',gender:'male'},vuk:{id:'vuk',name:'Вук',gender:'male'},stefan:{id:'stefan',name:'Стефан',gender:'male'},ana:{id:'ana',name:'Ана',gender:'female'},
   luka: { id:'luka', name:'Лука', gender:'male' },
@@ -38,7 +38,7 @@ function person(value) {
 function recipientFor(choice,node,flags) {
   if(choice.next==='road_contact')return person(flags.companion??'milica');
   // A destination selected by this answer takes priority over the current scene.
-  for(const key of ['companion','host','districtOwner','rainWith','chapterFiveWith','eveningWith']){
+  for(const key of ['companion','host','districtOwner','rainWith','chapterFiveWith','eveningWith','adaWith']){
     const selected=person(choice.effect?.[key]==='companion'?flags.companion:choice.effect?.[key]==='host'?flags.districtOwner:choice.effect?.[key]);
     if(selected)return selected;
   }

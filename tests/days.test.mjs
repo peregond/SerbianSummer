@@ -43,7 +43,7 @@ for(const d of DAYS.filter(d=>![1,2,12,15,16,21,29,30].includes(d.n))){
 }
 // Every day shows two people of different genders on every path (the prologue and day 0 are one prelude, since the prologue
 // is where the player meets one of two airport people).
-const GENDER={nikola:'m',milica:'f',dragan:'m',jelena:'f',asya:'f',luka:'m','nikola-evening':'m','Никола':'m','Милица':'f','Драган':'m','Йелена':'f','Ася':'f','Лука':'m'};
+const GENDER={nikola:'m',milica:'f',dragan:'m',jelena:'f',asya:'f',luka:'m','nikola-evening':'m','Никола':'m','Милица':'f','Драган':'m','Йелена':'f','Ася':'f','Лука':'m','Лана':'f','Ненад':'m','Боян':'m','Весна':'f'};
 const group=id=>id==='arrival'?'prologue':id;
 for(const companion of ['nikola','milica'])for(const host of ['dragan','jelena'])for(const districtOwner of ['dragan','jelena'])for(const workRoute of ['business','employment','explore']){
  const flags={companion,host,districtOwner,workRoute,district:'dorcol'};
