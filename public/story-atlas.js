@@ -87,10 +87,24 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     const node=graph?.byId?.[id];
     if(!node)return;
     const rect=schemaViewport.getBoundingClientRect();
+    if(!rect.width||!rect.height)return;
     const cx=node.x+graph.nodeW/2;
     const cy=node.y+graph.nodeH/2;
     panX=rect.width/2-cx*scale;
     panY=rect.height/2-cy*scale;
+    applyTransform();
+  }
+
+  function fitGraph(){
+    if(!graph)return;
+    const rect=schemaViewport.getBoundingClientRect();
+    if(!rect.width||!rect.height)return;
+    const pad=48;
+    const sx=(rect.width-pad)/Math.max(graph.width,1);
+    const sy=(rect.height-pad)/Math.max(graph.height,1);
+    scale=Math.min(1.15,Math.max(0.35,Math.min(sx,sy)));
+    panX=(rect.width-graph.width*scale)/2;
+    panY=(rect.height-graph.height*scale)/2;
     applyTransform();
   }
 
@@ -293,13 +307,13 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     }
     crawl=[selected];
     renderAll();
-    requestAnimationFrame(()=>centerOn(selected));
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{fitGraph();centerOn(selected);}));
   });
   legacyBox.addEventListener('change',()=>renderAll());
 
   zoomIn.onclick=()=>{scale=Math.min(2.2,scale+0.12);applyTransform();centerOn(selected);};
-  zoomOut.onclick=()=>{scale=Math.max(0.45,scale-0.12);applyTransform();centerOn(selected);};
-  zoomReset.onclick=()=>{scale=1;panX=16;panY=16;applyTransform();};
+  zoomOut.onclick=()=>{scale=Math.max(0.35,scale-0.12);applyTransform();centerOn(selected);};
+  zoomReset.onclick=()=>fitGraph();
   fitBtn.onclick=()=>centerOn(selected);
 
   schemaViewport.addEventListener('pointerdown',event=>{
@@ -331,8 +345,8 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   },{passive:false});
 
   renderAll();
-  requestAnimationFrame(()=>{
-    scale=1;panX=16;panY=16;applyTransform();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    fitGraph();
     centerOn(selected);
-  });
+  }));
 }
