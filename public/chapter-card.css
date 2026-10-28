@@ -21,3 +21,8 @@
 
 .screen.chapter-card{background-position:center;background-size:cover}
 .chapter-card-simple{width:100%;text-shadow:0 2px 12px #102632cc}.chapter-card-simple .chapter-card-title{font:700 clamp(34px,10vw,56px)/1.14 Lora,Georgia,serif;color:#fff7e6;margin:12px 0}.chapter-card-save-copy{margin:28px 0 12px;color:#fff7e6;font-weight:600;line-height:1.45}.chapter-card-account{width:100%;min-height:52px;border:1px solid #fff1c7;border-radius:12px;background:#122e3ac7;color:#fff7e6;font-weight:700}.chapter-card-simple .primary{margin-top:12px}
+.screen.chapter-card{position:relative;padding-top:calc(var(--safe-top,0px) + 76px)}
+.chapter-card-tools{position:absolute;top:calc(var(--safe-top,0px) + 6px);left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:2}
+.chapter-card-tools button{display:grid;place-items:center;width:44px;height:44px;padding:10px;border:1px solid #d5e2dd70;border-radius:10px;background:#153c4cf0;color:#fff7e6;box-shadow:0 2px 8px #102b4633}
+.chapter-card-tools button:nth-child(2){margin-left:auto;margin-right:8px}
+.chapter-card-tools svg{display:block;width:22px;height:22px}

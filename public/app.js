@@ -369,6 +369,15 @@ function drawEndingPrompt(){
 }
 function drawChapterCard(previous,next){
   const card=$('chapter-card');card.replaceChildren();
+  const nav=document.createElement('nav');nav.className='chapter-card-tools';nav.setAttribute('aria-label',t('Игровое меню'));
+  for(const [selector,label,action] of [
+    ['.game-tools [data-action="game-menu"]','Меню',()=>openPanel('game-menu')],
+    ['.home-utilities [data-action="chapters"]','Главы',openChapters],
+    ['.game-tools [data-action="settings"]','Настройки',()=>openPanel('settings')]
+  ]){
+    const button=document.querySelector(selector).cloneNode(true);button.removeAttribute('data-action');button.setAttribute('aria-label',t(label));button.title=t(label);button.addEventListener('click',action);nav.append(button);
+  }
+  card.append(nav);
   if(next.id==='arrival'||(next.day&&next.day<=5)){
     const images={arrival:'courtyard-door',1:'belgrade-courtyard-morning',2:'bank-consultation',3:'belgrade-kiosk-street',4:'belgrade-courtyard',5:'belgrade-river-noon'};
     card.style.backgroundImage=`linear-gradient(180deg,#10263255 0%,#10263299 50%,#0b1c2de8 100%),url('./assets/${images[next.day??next.id]}.webp')`;
@@ -548,7 +557,7 @@ function goBack() {
 panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map');});
 function openChapters() {
   if(panel.open)panel.close();
-  const source=['game','messenger','ending'].includes(view)?state:saved;
+  const source=['game','messenger','ending','chapter-card'].includes(view)?state:saved;
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const current=source?chapterFor(source,NODES):null;
