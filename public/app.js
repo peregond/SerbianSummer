@@ -5,7 +5,7 @@ import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=0.16.1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=0.16.1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.1-evening2';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.2-atlas';
 import {mountRoomInteraction} from './room-interaction.js?v=2';
 import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=3';
 import {mountBankGuide} from './bank-guide.js?v=1';
@@ -554,7 +554,7 @@ function goBack() {
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   save();renderGame();
 }
-panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map');});
+panel.addEventListener('close',()=>{if(!panel.open)panel.classList.remove('chapter-map','workshop-wide');});
 function openChapters() {
   if(panel.open)panel.close();
   const source=['game','messenger','ending','chapter-card'].includes(view)?state:saved;
@@ -581,7 +581,7 @@ function confirmChapter(chapter,source){
   actions.append(start,download,cancel);content.append(p,actions);
 }
 function openPanel(kind) {
-  panel.classList.remove('chapter-map');
+  panel.classList.remove('chapter-map','workshop-wide');
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
@@ -616,8 +616,8 @@ function openPanel(kind) {
     $('menu-home').addEventListener('click',()=>{panel.close();home();});
     mountWorkshopEntry(content,()=>{
       $('panel-title').textContent=t('Мастерская');
-      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,back:()=>{
-        content.classList.remove('workshop');panel.close();openPanel('settings');
+      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,back:()=>{
+        content.classList.remove('workshop');panel.classList.remove('workshop-wide');panel.close();openPanel('settings');
       }});
     },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
   }

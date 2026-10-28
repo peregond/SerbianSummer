@@ -44,7 +44,7 @@ assert.ok(fantasyOnly.missing.includes('flirty'), 'Fantasy artwork must not hide
 const archiveOnly = buildArtCatalog(['luka-friendly.webp'], {}, {}).people.find(p => p.id === 'luka');
 assert.ok(archiveOnly.missing.includes('friendly'), 'An archived portrait must not hide missing current artwork');
 const translations = JSON.parse(fs.readFileSync(new URL('../public/locales/en.json', import.meta.url)));
-for (const label of [...Object.values(PEOPLE), ...Object.values(EMOTIONS), 'Промокод', 'Мастерская', 'Чего не хватает']) assert.ok(translations[label], label);
+for (const label of [...Object.values(PEOPLE), ...Object.values(EMOTIONS), 'Промокод', 'Мастерская', 'Чего не хватает', 'Сюжет', 'Персонажи, эмоции, ресурсы и внутренняя карта сюжета. Здесь можно смотреть изображения, пробелы в наборе и ID сцен.']) assert.ok(translations[label], label);
 console.log('Workshop: promo entry, complete inventory, active/draft/archive status, expression gaps, translations and story immutability checked.');
 
 const preparedUnderwear=catalog.people.filter(person=>person.underwear);
