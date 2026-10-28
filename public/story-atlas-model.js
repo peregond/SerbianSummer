@@ -41,10 +41,13 @@ function walkChapter(nodes,start,boundaries){
   return order;
 }
 
-export function buildStoryAtlas(nodes,chapters,start='quick_arrival'){
+export function buildStoryAtlas(nodes,chapters,start='quick_arrival',options={}){
   const boundaries=new Set(chapters.map(chapter=>chapter.start));
   const scenes={};
   for(const [id,node] of Object.entries(nodes)){
+    const frame=options.presentationFor
+      ?resolveSceneFrame(node,{presentationFor:options.presentationFor,sprites:options.sprites,flags:options.flags,profile:options.profile})
+      :null;
     scenes[id]={
       id,
       chapterId:node.chapterId??null,
@@ -57,7 +60,8 @@ export function buildStoryAtlas(nodes,chapters,start='quick_arrival'){
       outs:outsOf(node),
       legacyOnly:!!node.legacyOnly,
       adult:!!node.adult,
-      music:node.music??null
+      music:node.music??null,
+      frame
     };
   }
   const chapterRows=chapters.map(chapter=>{
@@ -127,11 +131,32 @@ export function filterAtlasScenes(atlas,{chapterId='all',query='',includeLegacy=
   }).sort((a,b)=>a.id.localeCompare(b.id,'en'));
 }
 
-const NODE_W=210;
-const NODE_H=108;
-const COL_GAP=64;
-const ROW_GAP=28;
+const NODE_W=220;
+const NODE_H=158;
+const COL_GAP=56;
+const ROW_GAP=24;
 const PAD=28;
+
+/** Resolve background/portrait URLs for a story node (first page, neutral flags). */
+export function resolveSceneFrame(node,{presentationFor,sprites,flags={},profile={gender:'female'}}={}){
+  if(!node?.pages?.length||typeof presentationFor!=='function')return null;
+  try{
+    const page=node.pages[0];
+    const presentation=presentationFor(node,page,flags,profile);
+    const emotion=presentation.emotion??'friendly';
+    const sprite=presentation.character?sprites?.[presentation.character]?.[emotion]??sprites?.[presentation.character]?.friendly:null;
+    const bgKey=presentation.cg||presentation.bg;
+    if(!bgKey&&!sprite)return null;
+    return{
+      bg:bgKey?`./assets/${bgKey}.webp`:null,
+      portrait:sprite?`./assets/${sprite.file}.webp`:null,
+      alt:sprite?.alt||presentation.description||'',
+      composite:!!presentation.composite||!!presentation.seated
+    };
+  }catch{
+    return null;
+  }
+}
 
 function nodePreview(scene){
   if(!scene)return '';
@@ -245,6 +270,7 @@ export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
         label:id,
         meta:scene?.location||scene?.chapter||'',
         preview:nodePreview(scene),
+        frame:scene?.frame??null,
         outs:scene?.outs??[],
         external:false
       };
@@ -277,6 +303,7 @@ export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
             label:next,
             meta:atlas.scenes[next]?.chapter||tSafeExit(next),
             preview:nodePreview(atlas.scenes[next]),
+            frame:atlas.scenes[next]?.frame??null,
             outs:[],
             external:true
           };

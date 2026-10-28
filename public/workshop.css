@@ -10,6 +10,9 @@
 .story-atlas-layout{display:grid;gap:14px}
 .story-atlas-preview{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--paper) 90%,var(--gold) 10%)}
 .story-atlas-preview-empty{margin:0;font-size:13px;color:var(--muted)}
+.story-atlas-preview-body{display:grid;gap:12px;grid-template-columns:minmax(0,1fr);align-items:stretch}
+.story-atlas-preview-frame{position:relative;width:100%;aspect-ratio:16/10;max-height:160px;border-radius:10px;overflow:hidden;background:#1a2a33;border:1px solid var(--line)}
+.story-atlas-preview-copy{display:grid;gap:8px;min-width:0}
 .story-atlas-preview-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .story-atlas-preview-meta{font-size:12px;color:var(--muted)}
 .story-atlas-preview-chapter{margin:0;font-size:13px}
@@ -19,6 +22,13 @@
 .story-atlas-preview-choices{display:flex;flex-wrap:wrap;gap:8px}
 .story-atlas-preview-choice{flex:0 1 auto;width:auto;min-height:34px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px;text-align:left;cursor:pointer}
 .story-atlas-preview-choice:hover{border-color:var(--sea)}
+.story-atlas-frame-bg,.story-atlas-frame-portrait{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;pointer-events:none}
+.story-atlas-frame-portrait{object-fit:contain;object-position:center bottom;z-index:1}
+.story-atlas-preview-frame.is-composite .story-atlas-frame-portrait{display:none}
+@media(min-width:720px){
+  .story-atlas-preview-body{grid-template-columns:minmax(180px,.7fr) minmax(0,1.3fr)}
+  .story-atlas-preview-frame{max-height:180px}
+}
 .story-atlas-schema{display:grid;grid-template-rows:auto minmax(220px,42vh);gap:0;border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
 .story-atlas-schema-toolbar{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--sea) 12%)}
 .story-atlas-zoom{flex:0 0 auto;width:auto;min-width:40px;min-height:36px;padding:6px 12px;font-size:13px}
@@ -35,10 +45,12 @@
 .story-atlas-edge-label{fill:var(--ink);font-size:11px;text-anchor:middle;dominant-baseline:middle}
 .story-atlas-edge-label-bg{fill:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%);stroke:var(--line);stroke-width:1}
 .story-atlas-nodes{position:absolute;inset:0}
-.story-atlas-node{position:absolute;display:grid;align-content:start;gap:3px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer;-webkit-font-smoothing:antialiased;overflow:hidden}
+.story-atlas-node{position:absolute;display:grid;grid-template-rows:minmax(0,1fr) auto;align-content:stretch;gap:0;padding:0;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer;-webkit-font-smoothing:antialiased;overflow:hidden}
+.story-atlas-node-frame{position:relative;min-height:72px;background:#1a2a33;overflow:hidden}
+.story-atlas-node-copy{display:grid;gap:2px;padding:6px 8px 8px;min-width:0}
 .story-atlas-node strong{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.25;overflow-wrap:anywhere}
 .story-atlas-node-meta{font-size:10px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.story-atlas-node-preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;font-size:11px;line-height:1.35;color:var(--ink);opacity:.82;margin:0;text-align:left}
+.story-atlas-node-preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;font-size:11px;line-height:1.3;color:var(--ink);opacity:.82;margin:0;text-align:left}
 .story-atlas-node.is-selected{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--paper));box-shadow:0 0 0 2px color-mix(in srgb,var(--sea) 28%,transparent)}
 .story-atlas-node.is-root{border-color:color-mix(in srgb,var(--gold) 70%,var(--line))}
 .story-atlas-node.is-external{border-style:dashed;opacity:.9;background:color-mix(in srgb,var(--paper) 80%,var(--muted) 20%)}
