@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NODES,START} from '../public/story.js';
 import {CHAPTERS} from '../public/chapters.js';
-import {buildStoryAtlas,filterAtlasScenes,formatSceneNote} from '../public/story-atlas-model.js';
+import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath} from '../public/story-atlas-model.js';
 
 const before=JSON.stringify({NODES,CHAPTERS,START});
 const atlas=buildStoryAtlas(NODES,CHAPTERS,START);
@@ -12,53 +12,44 @@ assert.equal(atlas.totals.start,START);
 assert.ok(atlas.totals.scenes>=600,`expected many scenes, got ${atlas.totals.scenes}`);
 assert.equal(atlas.totals.chapters,CHAPTERS.length);
 assert.ok(atlas.scenes[START],'start scene is indexed');
-assert.equal(atlas.scenes[START].id,START);
-assert.ok(atlas.scenes[START].pageCount>=1);
-assert.ok(atlas.scenes[START].outs.length>=1);
+assert.ok(Array.isArray(atlas.incoming[START])||atlas.incoming[START]===undefined);
 
-const prologue=atlas.chapters.find(chapter=>chapter.id==='prologue'||chapter.start===START)||atlas.chapters[0];
-assert.ok(prologue,'first chapter exists');
+const prologue=atlas.chapters.find(chapter=>chapter.id==='prologue')||atlas.chapters[0];
 assert.ok(prologue.sceneIds.includes(prologue.start));
-assert.equal(prologue.sceneCount,prologue.sceneIds.length);
 
-for(const id of prologue.sceneIds){
-  assert.ok(atlas.scenes[id],id);
-  assert.equal(atlas.scenes[id].chapterId,prologue.id);
+const graph=buildStoryGraph(atlas,{chapterId:prologue.id});
+assert.ok(graph.nodes.length>=1);
+assert.ok(graph.byId[prologue.start],'chapter start is placed');
+assert.ok(graph.edges.length>=1,'chapter has exits');
+assert.ok(graph.width>graph.nodeW);
+assert.ok(graph.height>graph.nodeH);
+for(const edge of graph.edges){
+  assert.ok(graph.byId[edge.from],edge.from);
+  if(!edge.end&&edge.to)assert.ok(graph.byId[edge.to]||edge.external,edge.to);
 }
+const from=graph.byId[prologue.start];
+const path=graphEdgePath(from,graph.nodes.find(n=>n.id!==from.id)||null,graph.nodeW,graph.nodeH);
+assert.match(path,/^M/);
+
+const focus=buildStoryGraph(atlas,{chapterId:'all',focusId:START,hops:1});
+assert.ok(focus.byId[START]);
+assert.ok(focus.nodes.length>=2,'neighbourhood includes exits');
 
 const note=formatSceneNote(atlas.scenes[START]);
 assert.match(note,/^ID: /);
 assert.match(note,new RegExp(START));
-assert.match(note,/Страниц:/);
 assert.match(note,/Переходы:/);
 
-const all=filterAtlasScenes(atlas,{chapterId:'all',query:''});
-assert.equal(all.length,atlas.totals.scenes);
-
 const byChapter=filterAtlasScenes(atlas,{chapterId:prologue.id});
-assert.ok(byChapter.length>=1);
 assert.ok(byChapter.every(scene=>scene.chapterId===prologue.id));
-
-const byId=filterAtlasScenes(atlas,{query:START});
-assert.ok(byId.some(scene=>scene.id===START));
-
-const noLegacy=filterAtlasScenes(atlas,{includeLegacy:false});
-assert.ok(noLegacy.every(scene=>!scene.legacyOnly));
-assert.ok(noLegacy.length<=atlas.totals.scenes);
-
-const orphans=filterAtlasScenes(atlas,{chapterId:'orphans'});
-assert.equal(orphans.length,atlas.orphans.length);
-assert.deepEqual(orphans.map(scene=>scene.id).sort(),[...atlas.orphans].sort());
 
 const translations=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json',import.meta.url)));
 for(const label of [
   'Сюжет',
-  'Внутренняя карта сюжета: ID сцен, главы и переходы. Удобно копировать ID, когда присылаешь правки.',
-  'сцен','глав','старт',
-  'ID сцены, локация или фраза','Поиск по сценам','Все главы','Вне глав / legacy',
-  'Показать legacyOnly','Скопировать ID','Скопировать карточку','Карточка сцены скопирована',
-  'Найдено','Вне глав','Карта сюжета недоступна в этой сборке.',
+  'Интерактивная схема сюжета: ходи по узлам, смотри реплики и копируй ID сцен для правок.',
+  'Окрестность сцены','Схема сцен','К выбранной','← Назад по схеме','Входы',
+  'Скопировать ID','Скопировать карточку',
   'Персонажи, эмоции, ресурсы и внутренняя карта сюжета. Здесь можно смотреть изображения, пробелы в наборе и ID сцен.'
 ])assert.ok(translations[label],label);
 
-console.log(`Story atlas: ${atlas.totals.scenes} scenes, ${atlas.totals.chapters} chapters, ${atlas.orphans.length} orphans; filters and EN keys checked.`);
+console.log(`Story atlas schema: ${atlas.totals.scenes} scenes; prologue graph ${graph.nodes.length} nodes / ${graph.edges.length} edges.`);

@@ -4,17 +4,31 @@
 
 .workshop-supporting-status{padding:10px 12px;margin:8px 0;border:1px solid var(--line);border-radius:12px}.workshop-supporting-status h4{font-size:14px;margin:0 0 4px}.workshop-supporting-status p{font-size:12px;line-height:1.5;margin:0;color:var(--muted)}
 
-/* Story atlas (workshop · Сюжет) */
+/* Story atlas (workshop · Сюжет) — interactive schema */
 .story-atlas{display:grid;gap:12px;margin-top:4px}
 .story-atlas-summary{font-size:13px;color:var(--muted);margin:0}
 .story-atlas-layout{display:grid;gap:14px}
-.story-atlas-list{display:grid;gap:8px;max-height:min(38vh,360px);overflow:auto;padding-right:2px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-.story-atlas-count{font-size:12px;color:var(--muted);margin:0}
-.story-atlas-item{display:grid;gap:2px;width:100%;text-align:left;min-height:52px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit}
-.story-atlas-item[aria-pressed=true]{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 12%,var(--paper))}
-.story-atlas-item strong{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
-.story-atlas-item-meta,.story-atlas-item small{font-size:12px;color:var(--muted)}
-.story-atlas-detail{border:1px solid var(--line);border-radius:12px;padding:14px;background:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%)}
+.story-atlas-schema{display:grid;grid-template-rows:auto minmax(220px,42vh);gap:8px;border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
+.story-atlas-schema-toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--sea) 12%)}
+.story-atlas-zoom{min-height:36px;padding:6px 12px;font-size:13px}
+.story-atlas-schema-viewport{position:relative;min-height:220px;overflow:hidden;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;background:
+  radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 0) 0 0/18px 18px}
+.story-atlas-schema-viewport.is-panning{cursor:grabbing}
+.story-atlas-schema-canvas{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.story-atlas-edges{position:absolute;inset:0;color:color-mix(in srgb,var(--sea) 55%,var(--muted));pointer-events:none;overflow:visible}
+.story-atlas-edge{fill:none;stroke:currentColor;stroke-width:2;opacity:.75}
+.story-atlas-edge.is-active{color:var(--sea);opacity:1;stroke-width:2.5}
+.story-atlas-edge.is-external{stroke-dasharray:5 5;opacity:.55}
+.story-atlas-edge.is-end{opacity:.4}
+.story-atlas-edge-label{fill:var(--muted);font-size:11px;text-anchor:middle}
+.story-atlas-nodes{position:absolute;inset:0}
+.story-atlas-node{position:absolute;display:grid;align-content:center;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer}
+.story-atlas-node strong{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.25;overflow-wrap:anywhere}
+.story-atlas-node small{font-size:10px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-atlas-node.is-selected{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--paper));box-shadow:0 0 0 2px color-mix(in srgb,var(--sea) 28%,transparent)}
+.story-atlas-node.is-root{border-color:color-mix(in srgb,var(--gold) 70%,var(--line))}
+.story-atlas-node.is-external{border-style:dashed;opacity:.9;background:color-mix(in srgb,var(--paper) 80%,var(--muted) 20%)}
+.story-atlas-detail{border:1px solid var(--line);border-radius:12px;padding:14px;background:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%);max-height:min(48vh,420px);overflow:auto;-webkit-overflow-scrolling:touch}
 .story-atlas-empty{font-size:14px;line-height:1.55;color:var(--muted);margin:0}
 .story-atlas-detail-head{display:grid;gap:10px;margin-bottom:14px}
 .story-atlas-id-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -23,6 +37,8 @@
 .story-atlas-chips{display:flex;flex-wrap:wrap;gap:6px}
 .story-atlas-chip{font-size:11px;line-height:1.3;padding:5px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
 .story-atlas-chip.warn{color:var(--wine);border-color:color-mix(in srgb,var(--wine) 35%,var(--line))}
+.story-atlas-trail{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}
+.story-atlas-trail small{color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px}
 .story-atlas-detail h3{font-size:15px;margin:16px 0 8px}
 .story-atlas-pages,.story-atlas-outs{margin:0;padding-left:18px;display:grid;gap:8px}
 .story-atlas-pages li,.story-atlas-outs li{font-size:13px;line-height:1.45}
@@ -30,85 +46,62 @@
 .story-atlas-pages p{margin:2px 0 0}
 .story-atlas-link{display:inline;min-height:0;padding:0;font-size:13px;text-align:left}
 
-/* Wide web / Safari desktop: expand the Story atlas panel */
+/* Wide web / Safari desktop: expand Story atlas into a crawlable map */
 @media(min-width:860px){
   #panel.workshop-wide{
-    width:min(1120px,calc(100vw - 48px));
+    width:min(1180px,calc(100vw - 48px));
     max-width:none;
-    height:min(860px,calc(100dvh - 48px));
+    height:min(880px,calc(100dvh - 48px));
     max-height:calc(100dvh - 48px);
     display:flex;
     flex-direction:column;
     overflow:hidden;
   }
   #panel.workshop-wide:not([open]){display:none}
-  #panel.workshop-wide .panel-heading{
-    flex:none;
-    padding:16px 24px 12px;
-  }
+  #panel.workshop-wide .panel-heading{flex:none;padding:14px 24px 10px}
   #panel.workshop-wide #panel-content.workshop{
-    flex:1;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    gap:0;
-    padding:8px 24px 20px;
-    overflow:hidden;
+    flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 24px 18px;overflow:hidden;
   }
   #panel.workshop-wide .workshop > .text-button{flex:none;align-self:flex-start}
-  #panel.workshop-wide .workshop-intro{flex:none;margin:8px 0 12px}
-  #panel.workshop-wide .workshop-tabs{flex:none;margin-bottom:4px}
-  #panel.workshop-wide .workshop-tabs button{flex:0 1 auto;min-width:7.5rem;padding:10px 14px}
+  #panel.workshop-wide .workshop > .workshop-intro{display:none}
+  #panel.workshop-wide .workshop-tabs{
+    flex:none;display:flex;flex-wrap:nowrap;gap:8px;margin:0 0 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+  }
+  #panel.workshop-wide .workshop-tabs button{
+    flex:0 0 auto;width:auto;min-width:0;padding:8px 14px;white-space:nowrap;
+  }
   #panel.workshop-wide #panel-content.workshop > div[aria-live]{
-    flex:1;
-    min-height:0;
-    display:flex;
-    flex-direction:column;
-    overflow:hidden;
+    flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
   }
-  #panel.workshop-wide .workshop > p[role=status]{flex:none;margin:8px 0 0}
+  #panel.workshop-wide .workshop > p[role=status]{flex:none;margin:6px 0 0}
   #panel.workshop-wide .story-atlas{
-    flex:1;
-    min-height:0;
-    grid-template-rows:auto auto auto minmax(0,1fr);
-    height:100%;
+    flex:1;min-height:0;grid-template-rows:auto auto minmax(0,1fr);height:100%;
   }
+  #panel.workshop-wide .story-atlas > .workshop-intro{display:none}
   #panel.workshop-wide .story-atlas-controls{
-    display:grid;
-    grid-template-columns:minmax(0,1.5fr) minmax(200px,.9fr) auto;
-    gap:12px;
-    align-items:center;
-    margin:4px 0 8px;
+    display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.4fr) auto;gap:12px;align-items:center;margin:0 0 8px;
   }
   #panel.workshop-wide .story-atlas-layout{
-    grid-template-columns:minmax(280px,.85fr) minmax(0,1.35fr);
-    align-items:stretch;
-    min-height:0;
-    height:100%;
+    grid-template-columns:minmax(0,1.55fr) minmax(300px,.9fr);align-items:stretch;min-height:0;height:100%;
   }
-  #panel.workshop-wide .story-atlas-list,
+  #panel.workshop-wide .story-atlas-schema{
+    min-height:0;height:100%;grid-template-rows:auto minmax(0,1fr);
+  }
+  #panel.workshop-wide .story-atlas-schema-viewport{min-height:0}
   #panel.workshop-wide .story-atlas-detail{
-    max-height:none;
-    height:100%;
-    min-height:0;
-    overflow:auto;
-    overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch;
+    max-height:none;height:100%;min-height:0;overflow:auto;padding:18px 20px;
+    overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   }
-  #panel.workshop-wide .story-atlas-detail{padding:18px 20px}
   #panel.workshop-wide .story-atlas-id{font-size:16px;padding:8px 10px}
   #panel.workshop-wide .story-atlas-id-row .secondary{min-height:40px}
-  #panel.workshop-wide .story-atlas-pages,
-  #panel.workshop-wide .story-atlas-outs{font-size:14px}
 }
 
 @media(min-width:1200px){
   #panel.workshop-wide{
-    width:min(1280px,calc(100vw - 64px));
-    height:min(900px,calc(100dvh - 56px));
+    width:min(1360px,calc(100vw - 64px));
+    height:min(920px,calc(100dvh - 56px));
   }
   #panel.workshop-wide .story-atlas-layout{
-    grid-template-columns:minmax(320px,.8fr) minmax(0,1.4fr);
-    gap:18px;
+    grid-template-columns:minmax(0,1.7fr) minmax(340px,.85fr);gap:18px;
   }
 }
