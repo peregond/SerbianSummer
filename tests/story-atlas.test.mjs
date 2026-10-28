@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NODES,START} from '../public/story.js';
 import {CHAPTERS} from '../public/chapters.js';
-import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath} from '../public/story-atlas-model.js';
+import {buildStoryAtlas,buildStoryGraph,filterAtlasScenes,formatSceneNote,graphEdgePath,scaleStoryGraph,scenePreviewLines} from '../public/story-atlas-model.js';
 
 const before=JSON.stringify({NODES,CHAPTERS,START});
 const atlas=buildStoryAtlas(NODES,CHAPTERS,START);
@@ -31,6 +31,11 @@ const from=graph.byId[prologue.start];
 const path=graphEdgePath(from,graph.nodes.find(n=>n.id!==from.id)||null,graph.nodeW,graph.nodeH);
 assert.match(path,/^M/);
 
+const zoomed=scaleStoryGraph(graph,1.5);
+assert.equal(zoomed.nodeW,graph.nodeW*1.5);
+assert.ok(Math.abs(zoomed.byId[prologue.start].x-graph.byId[prologue.start].x*1.5)<0.01);
+assert.ok(scenePreviewLines(atlas.scenes[START]).length>=1);
+
 const focus=buildStoryGraph(atlas,{chapterId:'all',focusId:START,hops:1});
 assert.ok(focus.byId[START]);
 assert.ok(focus.nodes.length>=2,'neighbourhood includes exits');
@@ -47,6 +52,7 @@ const translations=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json
 for(const label of [
   'Сюжет',
   'Интерактивная схема сюжета: ходи по узлам, смотри реплики и копируй ID сцен для правок.',
+  'Превью сцены появится после выбора узла.',
   'Окрестность сцены','Схема сцен','К выбранной','← Назад по схеме','Входы',
   'Скопировать ID','Скопировать карточку',
   'Персонажи, эмоции, ресурсы и внутренняя карта сюжета. Здесь можно смотреть изображения, пробелы в наборе и ID сцен.'

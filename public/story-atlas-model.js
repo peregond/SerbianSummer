@@ -129,9 +129,29 @@ export function filterAtlasScenes(atlas,{chapterId='all',query='',includeLegacy=
 
 const NODE_W=168;
 const NODE_H=64;
-const COL_GAP=56;
-const ROW_GAP=28;
+const COL_GAP=72;
+const ROW_GAP=36;
 const PAD=28;
+
+/** Scale a layout graph without CSS transform — keeps text crisp while zooming. */
+export function scaleStoryGraph(graph,scale=1){
+  const s=Math.max(0.35,Math.min(2.4,scale));
+  if(!graph)return graph;
+  if(Math.abs(s-1)<0.001)return{...graph,scale:1,byId:{...graph.byId}};
+  const nodes=graph.nodes.map(node=>({...node,x:node.x*s,y:node.y*s}));
+  const byId=Object.fromEntries(nodes.map(node=>[node.id,node]));
+  return{
+    ...graph,
+    scale:s,
+    nodes,
+    byId,
+    edges:graph.edges.map(edge=>({...edge})),
+    nodeW:graph.nodeW*s,
+    nodeH:graph.nodeH*s,
+    width:graph.width*s,
+    height:graph.height*s
+  };
+}
 
 /** Layered left-to-right graph for one chapter (or orphans / focus neighbourhood). */
 export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
@@ -269,15 +289,33 @@ function tSafeExit(next){
   return next==='end'?'end':'→';
 }
 
-export function graphEdgePath(fromNode,toNode,nodeW,nodeH){
+export function graphEdgePath(fromNode,toNode,nodeW,nodeH,lane=0){
   const x1=fromNode.x+nodeW;
   const y1=fromNode.y+nodeH/2;
+  const bend=lane*14;
   if(!toNode){
     const x2=x1+36;
-    return`M${x1} ${y1} L${x2} ${y1}`;
+    return`M${x1} ${y1} L${x2} ${y1+bend}`;
   }
   const x2=toNode.x;
   const y2=toNode.y+nodeH/2;
   const mid=x1+(x2-x1)/2;
-  return`M${x1} ${y1} C${mid} ${y1}, ${mid} ${y2}, ${x2} ${y2}`;
+  return`M${x1} ${y1} C${mid} ${y1+bend}, ${mid} ${y2+bend}, ${x2} ${y2}`;
+}
+
+export function graphEdgeLabelPoint(fromNode,toNode,nodeW,nodeH,lane=0){
+  if(!toNode)return{x:fromNode.x+nodeW+18,y:fromNode.y+nodeH/2+lane*14-10};
+  return{
+    x:(fromNode.x+nodeW+toNode.x)/2,
+    y:(fromNode.y+toNode.y)/2+nodeH/2+lane*14-18
+  };
+}
+
+export function scenePreviewLines(scene,limit=2){
+  if(!scene)return[];
+  return(scene.pages??[]).slice(0,limit).map(page=>({
+    speaker:page.speaker,
+    text:page.text,
+    message:!!page.message
+  }));
 }

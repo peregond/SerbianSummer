@@ -8,9 +8,21 @@
 .story-atlas{display:grid;gap:12px;margin-top:4px}
 .story-atlas-summary{font-size:13px;color:var(--muted);margin:0}
 .story-atlas-layout{display:grid;gap:14px}
-.story-atlas-schema{display:grid;grid-template-rows:auto minmax(220px,42vh);gap:8px;border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
+.story-atlas-preview{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:color-mix(in srgb,var(--paper) 90%,var(--gold) 10%)}
+.story-atlas-preview-empty{margin:0;font-size:13px;color:var(--muted)}
+.story-atlas-preview-head{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.story-atlas-preview-meta{font-size:12px;color:var(--muted)}
+.story-atlas-preview-chapter{margin:0;font-size:13px}
+.story-atlas-preview-lines{display:grid;gap:6px}
+.story-atlas-preview-line{margin:0;font-size:13px;line-height:1.45}
+.story-atlas-preview-line small{color:var(--muted)}
+.story-atlas-preview-choices{display:flex;flex-wrap:wrap;gap:8px}
+.story-atlas-preview-choice{flex:0 1 auto;width:auto;min-height:34px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:inherit;font-size:12px;text-align:left;cursor:pointer}
+.story-atlas-preview-choice:hover{border-color:var(--sea)}
+.story-atlas-schema{display:grid;grid-template-rows:auto minmax(220px,42vh);gap:0;border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
 .story-atlas-schema-toolbar{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;align-items:center;padding:8px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--paper) 88%,var(--sea) 12%)}
 .story-atlas-zoom{flex:0 0 auto;width:auto;min-width:40px;min-height:36px;padding:6px 12px;font-size:13px}
+.story-atlas-zoom-label{margin-left:auto;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .story-atlas-schema-viewport{position:relative;min-height:220px;overflow:hidden;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none;background:
   radial-gradient(circle at 1px 1px,color-mix(in srgb,var(--line) 70%,transparent) 1px,transparent 0) 0 0/18px 18px}
 .story-atlas-schema-viewport.is-panning{cursor:grabbing}
@@ -20,9 +32,10 @@
 .story-atlas-edge.is-active{color:var(--sea);opacity:1;stroke-width:2.5}
 .story-atlas-edge.is-external{stroke-dasharray:5 5;opacity:.55}
 .story-atlas-edge.is-end{opacity:.4}
-.story-atlas-edge-label{fill:var(--muted);font-size:11px;text-anchor:middle}
+.story-atlas-edge-label{fill:var(--ink);font-size:11px;text-anchor:middle;dominant-baseline:middle}
+.story-atlas-edge-label-bg{fill:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%);stroke:var(--line);stroke-width:1}
 .story-atlas-nodes{position:absolute;inset:0}
-.story-atlas-node{position:absolute;display:grid;align-content:center;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer}
+.story-atlas-node{position:absolute;display:grid;align-content:center;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer;-webkit-font-smoothing:antialiased}
 .story-atlas-node strong{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.25;overflow-wrap:anywhere}
 .story-atlas-node small{font-size:10px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .story-atlas-node.is-selected{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--paper));box-shadow:0 0 0 2px color-mix(in srgb,var(--sea) 28%,transparent)}
@@ -46,7 +59,7 @@
 .story-atlas-pages p{margin:2px 0 0}
 .story-atlas-link{display:inline;min-height:0;padding:0;font-size:13px;text-align:left}
 
-/* Wide web / Safari desktop: expand Story atlas into a crawlable map */
+/* Wide web / Safari: full workshop shell for every tab */
 @media(min-width:860px){
   #panel.workshop-wide{
     width:min(1180px,calc(100vw - 48px));
@@ -70,17 +83,30 @@
   #panel.workshop-wide .workshop-tabs button{
     flex:0 0 auto;width:auto;min-width:0;padding:8px 14px;white-space:nowrap;
   }
+  #panel.workshop-wide .workshop-controls{
+    flex:none;grid-template-columns:minmax(0,1.4fr) minmax(160px,.7fr) minmax(160px,.7fr) auto;align-items:center;margin:0 0 10px;
+  }
   #panel.workshop-wide #panel-content.workshop > div[aria-live]{
-    flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;
+    flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   }
   #panel.workshop-wide .workshop > p[role=status]{flex:none;margin:6px 0 0}
+  #panel.workshop-wide .workshop-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+  #panel.workshop-wide .workshop-card img{height:220px}
+  #panel.workshop-wide .workshop-person{padding:14px 0}
+  #panel.workshop-wide .workshop-person h3{font-size:22px}
+
+  /* Story tab fills the shell: preview + schema + detail */
+  #panel.workshop-wide #panel-content.workshop[data-workshop-view=story] > div[aria-live]{
+    display:flex;flex-direction:column;overflow:hidden;
+  }
   #panel.workshop-wide .story-atlas{
-    flex:1;min-height:0;grid-template-rows:auto auto minmax(0,1fr);height:100%;
+    flex:1;min-height:0;grid-template-rows:auto auto auto minmax(0,1fr);height:100%;
   }
   #panel.workshop-wide .story-atlas > .workshop-intro{display:none}
   #panel.workshop-wide .story-atlas-controls{
     display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.4fr) auto;gap:12px;align-items:center;margin:0 0 8px;
   }
+  #panel.workshop-wide .story-atlas-preview{flex:none}
   #panel.workshop-wide .story-atlas-layout{
     grid-template-columns:minmax(0,1.55fr) minmax(300px,.9fr);align-items:stretch;min-height:0;height:100%;
   }
@@ -101,6 +127,7 @@
     width:min(1360px,calc(100vw - 64px));
     height:min(920px,calc(100dvh - 56px));
   }
+  #panel.workshop-wide .workshop-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
   #panel.workshop-wide .story-atlas-layout{
     grid-template-columns:minmax(0,1.7fr) minmax(340px,.85fr);gap:18px;
   }
