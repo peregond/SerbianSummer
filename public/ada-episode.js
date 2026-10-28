@@ -37,7 +37,7 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     nikola:'Nikola in shorter swim shorts by the lake',milica:'Milica in a tank top and shorts for the beach',dragan:'Dragan in swim shorts',jelena:'Jelena in a tank top and shorts for the beach',ana:'Ana in a tank top and shorts for the beach',stefan:'Stefan in swim shorts',marko:'Marko in swim shorts',vuk:'Vuk in swim shorts'
   }[id])};
   Object.assign(JOURNAL,{
-    ada_rest:{title:T('Отдых на Аде','A rest at Ada'),tag:T('ГЛАВА 3 · АДА','CHAPTER 3 · ADA'),text:T('Устал{a} и поехал{a} на Аду Циганлију просто полежать. Это не свидание. Там были галька, вышка, арбуз и дорога домой.','I was tired and went to Ada Ciganlija just to lie down. It was not a date. There were pebbles, a tower, watermelon and the way home.')}
+    ada_rest:{title:T('Отдых на Аде','A rest at Ada'),tag:T('ГЛАВА 3 · АДА','CHAPTER 3 · ADA'),text:T('Устал{a} и поехал{a} на Аду Циганлију просто полежать. Без новых планов на вечер. Там были галька, вышка, арбуз и дорога домой.','I was tired and went to Ada Ciganlija just to lie down. No new plans for the evening. There were pebbles, a tower, watermelon and the way home.')}
   });
   const n=(ru,en,extra={})=>({speaker:'narrator',text:T(ru,en),...extra});
   const LANA=T('Лана','Lana'),NENAD=T('Ненад','Nenad'),BOJAN=T('Боян','Bojan'),VESNA=T('Весна','Vesna');
@@ -110,12 +110,12 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
   ],'ada_melon_bridge',{time:'21:28',bg:'ada-nenad-bridge-v1',exitAction:{kind:'tap',label:T('Купить лубеницу','Buy the watermelon'),object:T('Лубеница','Watermelon')}});
   for(const page of NODES.ada_bridge.pages)page.portrait=false;
   const share=varied('Я ем медленно и никуда не спешу.','I eat slowly and I am not hurrying anywhere.',{
-    alone:T('Я покупаю дольку и отдаю половину продавцу. Мы едим молча. Делить лубеницу — ещё не свидание.','I buy a slice and give half to the seller. We eat in silence. Sharing a watermelon is still not a date.'),
-    nikola:T('Никола берёт свою долю и молчит. Мы просто едим. Это не свидание, и так даже лучше.','Nikola takes his share and stays quiet. We just eat. It is not a date, and that is even better.'),
+    alone:T('Я покупаю дольку и отдаю половину продавцу. Мы едим молча. Просто доедаем — без новых планов.','I buy a slice and give half to the seller. We eat in silence. Just finishing the fruit — no new plans.'),
+    nikola:T('Никола берёт свою долю и молчит. Мы просто едим. Просто доедаем и молчим — без новых планов.','Nikola takes his share and stays quiet. We just eat. Just finishing the fruit in silence — no new plans.'),
     milica:T('Милица сначала рисует корку, потом всё-таки ест. Блокнот остаётся закрытым.','Milica draws the rind first, then eats after all. The notebook stays shut.'),
     dragan:T('Драган говорит, что арбуз — единственный десерт, который не нужно планировать.','Dragan says watermelon is the only dessert that does not need planning.'),
     jelena:T('Йелена делит дольку поровну и не превращает это в разговор о квартире.','Jelena splits the slice evenly and does not turn it into a talk about the flat.'),
-    ana:T('Ана фотографирует корку, не меня, и только потом откусывает.','Ana photographs the rind, not me, and only then takes a bite.'),
+    ana:T('Ана крутит корку в руках, камера остаётся в сумке, и только потом откусывает.','Ana turns the rind in her hands, the camera stays in her bag, and only then takes a bite.'),
     stefan:T('Стефан вытирает руки и смеётся: сегодня стол чинить не нужно.','Stefan wipes his hands and laughs: the table does not need fixing today.'),
     marko:T('Марко сначала предлагает салфетку, потом вспоминает, что можно просто есть.','Marko offers a napkin first, then remembers that we can just eat.'),
     vuk:T('Вук снимает наушники на время дольки. Это и есть весь жест.','Vuk takes off his headphones for the slice. That is the whole gesture.')
@@ -138,11 +138,11 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
     n('Свет становится плоским и золотым. Я споласкиваю руки у колонки.','The light goes flat and gold. I rinse my hands at a tap.'),
     varied('Я один{a}, и мне этого хватает.','I am on my own, and that is enough.',{
       alone:T('Я один{a}, и мне этого хватает.','I am on my own, and that is enough.'),
-      nikola:T('Мы с Николой идём к автобусу и не называем это свиданием. Так честнее.','Nikola and I walk to the bus and do not call this a date. That is more honest.'),
+      nikola:T('Мы с Николой идём к автобусу молча. После реки этого достаточно.','Nikola and I walk to the bus in silence. After the river, that is enough.'),
       milica:T('Мы с Милицей идём молча. Блокнот так и не открылся. Это тоже был отдых.','Milica and I walk in silence. The notebook never opened. That was a rest too.'),
       dragan:T('Драган провожает до остановки и не достаёт ключи. Сегодня они не нужны.','Dragan walks me to the stop and does not take out his keys. They are not needed today.'),
       jelena:T('Йелена машет уже из тени деревьев. Мы не назначаем следующий вечер.','Jelena waves from the shade of the trees. We do not set another evening.'),
-      ana:T('Ана говорит, что кадр с арбузом ей важнее любого портрета. Мы расходимся у автобуса.','Ana says the shot of the watermelon matters more to her than any portrait. We part at the bus.'),
+      ana:T('Ана говорит, что сегодня ей важнее тишина, чем любой кадр. Мы расходимся у автобуса.','Ana says silence matters more to her today than any shot. We part at the bus.'),
       stefan:T('Стефан зевает первым и считает это победой.','Stefan yawns first and counts that as a victory.'),
       marko:T('Марко не даёт советов на дорожку. Я благодарю его именно за это.','Marko offers no advice for the road. I thank him for exactly that.'),
       vuk:T('Вук снова надевает наушники и кивает. Этого прощания достаточно.','Vuk puts his headphones back on and nods. That goodbye is enough.')

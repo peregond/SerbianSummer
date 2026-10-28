@@ -11,7 +11,7 @@ assert.equal(NODES.rain_break.bg, 'belgrade-rain-cafe');
 assert.equal(NODES.chapter_four_close.next, 'd3_start');
 assert.equal(NODES.chapter_four_close.pages.length, 4);
 assert.equal(JOURNAL.zemun_walk.tag, 'ГЛАВА 4 · ЗЕМУН');
-assert.match(JOURNAL.zemun_walk.text, /не свидание/);
+assert.match(JOURNAL.zemun_walk.text, /темп вечера|кафе на кее/i);
 assert.equal(BACKGROUNDS['zemun-gardos-v1'].label, 'ЗЕМУН · ГАРДОШ');
 const joined = chain.map(id => JSON.stringify(NODES[id].pages)).join('\n');
 assert.match(joined, /брусчат/i);

@@ -166,6 +166,6 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}
  N.nikola_park_morning=scene([
   note('Утром его уже нет в кровати — смена в пекарне. На столе кифла в бумаге и записка корявым почерком: «Горячее. Приходи, когда захочешь. — Н.»','In the morning he is already gone from the bed — bakery shift. On the table a kifla in paper and a note in uneven handwriting: “Something hot. Come whenever you like. — N.”'),
   note('Джоки сушатся на спинке стула. Я улыбаюсь и закрываю дверь его квартиры так же тихо, как мы вчера её открывали.','The jockstrap is drying on the chair back. I smile and close his flat door as quietly as we opened it yesterday.')
- ],'chapter_three_close',{...place('КВАРТИРА НИКОЛЫ · УТРО','NIKOLA’S FLAT · MORNING','07:40',HOME_BG),journal:['nikola_early_night']});
+ ],'chapter_three_close',{...place('КВАРТИРА НИКОЛЫ · УТРО','NIKOLA’S FLAT · MORNING','07:40',HOME_BG),day:T('ДЕНЬ 2','DAY 2'),journal:['nikola_early_night']});
  // next rewritten to third_morning after Day 2 exists (wireNikolaEarlyNightExits).
 }

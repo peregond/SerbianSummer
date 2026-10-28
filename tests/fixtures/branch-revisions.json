@@ -1,7 +1,7 @@
 {
  "revised": {
   "last_message": {
-   "afterHash": "fbc4538f83d500e4adb74b02d99efee92e7ccbab4d9eadec54d77cb44f356b9d",
+   "afterHash": "ec646fe1d8879c31579161ff26617e1ae28db1cb60c86cea468f1a2f0ca17904",
    "before": {
     "location": "АЭРОПОРТ · ВЫХОД К ТАКСИ",
     "time": "17:44",
@@ -135,7 +135,7 @@
    }
   },
   "host_evening_invite": {
-   "afterHash": "d124303b61b778d4aa4cbef13af16be096ec6f3837b91898f5aa4bf010cca44d",
+   "afterHash": "523c71592dcd9775a54f86e2f6c4d551f984b7c132fde443290ca12ced481b4c",
    "before": {
     "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
     "time": "19:20",
@@ -872,7 +872,7 @@
    }
   },
   "bank_call": {
-   "afterHash": "d35ad8b9056c5d3cf0380eb99541822056d925d530de83cf756ed11bd749d288",
+   "afterHash": "5ede41c0633df26a82114c396a2eab5601dc1aed7758d43adbfe3333c018940f",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "13:20",
@@ -2253,7 +2253,7 @@
    }
   },
   "date_slow": {
-   "afterHash": "bfe85bb70946d24219a87994e8e38ba226cdfa3d533d0e63a5532b4095678c8a",
+   "afterHash": "82f87a71352010d5dcc1d8c0dd20a9e751c0d381e01de88be8072ee61fb0347c",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "19:40",
@@ -2354,7 +2354,7 @@
    }
   },
   "date_messages": {
-   "afterHash": "41f2d77403c78c302376ddff0e157b28d7b3e3017fe300af02171c83831b8f4a",
+   "afterHash": "1e79b5c36aeae75051def54d06d2a23fdd3eaa32dabc0856cd55221a59526811",
    "before": {
     "location": "БЕЛГРАД · ВТОРОЙ ДЕНЬ",
     "time": "20:10",
@@ -2452,7 +2452,7 @@
    }
   },
   "nikola_phone": {
-   "afterHash": "07eb1fb28ef70aa6a9231c6226077baae2443aaea8aa917697d5a1c45ad02a70",
+   "afterHash": "611513cea0e4e42b726809c54832ef08c61eeb31dbc10f0d3432451b17edef23",
    "before": {
     "location": "ХЛЕБ & КИФЛЕ · АЭРОПОРТ",
     "time": "17:39",
@@ -3251,7 +3251,7 @@
    }
   },
   "milica_flirt": {
-   "afterHash": "4460afdc24d667006476a2a96ab852b1eb653a266bf1204234fd1d76dc892780",
+   "afterHash": "f1b48fda764632491d09ed3737f26be04698655d023e1b3996d5a274e0bf85a3",
    "before": {
     "location": "АЭРОПОРТ · У ОКНА",
     "time": "17:24",
@@ -3414,7 +3414,7 @@
    }
   },
   "milica_chemistry": {
-   "afterHash": "b2cc4df7c9f0b418d6ffd479cef77da2a668171abca998c90a3bd7a8eebb40a6",
+   "afterHash": "5744cd986a4a22f9b874fb4f45796fefca5ecf23f0270dcdef1ba51a165dfa47",
    "before": {
     "location": "АЭРОПОРТ · КОФЕ И ЗНАКОМСТВО",
     "time": "17:18",
@@ -3735,7 +3735,7 @@
    }
   },
   "bank_followup": {
-   "afterHash": "7e6ec2896d28403bac9f3c20b33c4be73862641eecd186b06dbd765a28cc663e",
+   "afterHash": "a79c032641318b21d3df4e2b15d09ae9a4e20fa126af6fd7174cd17bcc4391d4",
    "before": {
     "location": "БЕЛГРАД · ТРЕТИЙ ДЕНЬ",
     "time": "11:30",
@@ -4831,7 +4831,7 @@
    }
   },
   "nikola_last": {
-   "afterHash": "3e346fa9b4903bc1f2eb72cbdafc3d0c0cfcab1e3ec0800c875f7bb6067180a7",
+   "afterHash": "9b94617ad9065c9c815e772886509b40b902a16f8022e8f011205b2912c70fa4",
    "before": {
     "location": "АЭРОПОРТ · ВЫХОД К ТАКСИ",
     "time": "17:44",
@@ -4922,6 +4922,442 @@
     },
     "chapterId": "prologue",
     "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "weeks": {
+   "afterHash": "18fb1c8a1715142eb89706f0569e89f87d76b47e49b13fa81f7657f816f7c49a",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Нескольких недель хватит, чтобы найти любимую пекарню."
+     },
+     {
+      "speaker": "player",
+      "text": "А дальше?"
+     },
+     {
+      "speaker": "milica",
+      "text": "Начнёшь сравнивать с ней все остальные. Тут-то и появятся проблемы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она не спрашивает, что должно случиться за эти недели. Можно просто приехать и посмотреть."
+     },
+     {
+      "speaker": "narrator",
+      "text": "«Пока». Сегодня это слово почему-то звучит спокойнее.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "new_life": {
+   "afterHash": "2f97b592e9903a3343a8f4348340009de60a7bef646620c954377dd2efd55dc9",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Милица на секунду замолкает. Мы только познакомились, а я уже выдал{a} ей столько серьёзного."
+     },
+     {
+      "speaker": "milica",
+      "text": "Надеюсь, у тебя получится. Только разреши себе передумать, если захочется."
+     },
+     {
+      "speaker": "player",
+      "text": "Ты будто и сама об этом думала.",
+      "action": {
+       "kind": "tap",
+       "label": "Отложить телефон и посмотреть на Милицу",
+       "object": "Послушать ответ"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она проводит пальцем по краю блокнота."
+     },
+     {
+      "speaker": "milica",
+      "text": "Бывает. Но для такого разговора нужен кофе получше."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я не расспрашиваю. Похоже, у неё тоже есть история, которую пока рано рассказывать.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "2": {
+      "kind": "tap",
+      "label": "Отложить телефон и посмотреть на Милицу",
+      "object": "Послушать ответ"
+     },
+     "5": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "unsure": {
+   "afterHash": "07a6dc634b5156edfc0cafb3eaaa0266bd9df9ea64f12d0d939acac674b45b80",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "milica",
+      "text": "Тоже ответ."
+     },
+     {
+      "speaker": "player",
+      "text": "Родственникам он почему-то не нравится."
+     },
+     {
+      "speaker": "milica",
+      "text": "Скажи, что приехал{a} из-за климата. С погодой спорить сложнее."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Мы смеёмся. За окном дрожит от жары воздух. Климат, по крайней мере, не подведёт."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Приятно, когда от тебя не требуют определиться прямо сейчас.",
+      "action": {
+       "kind": "tap",
+       "label": "Проверить новое сообщение",
+       "object": "Телефон"
+      }
+     }
+    ],
+    "next": "phone",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Проверить новое сообщение",
+      "object": "Телефон"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "host": {
+   "afterHash": "7af9eeaabe6b36b4537bb6ca9d8b76acb3c17276c2c095857f456818796b46ad",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Пишу Драгану: «Уже еду». Стираю и исправляю на «Скоро выезжаю». Всё-таки ключи у него, а кофе ещё у меня."
+     },
+     {
+      "speaker": "Драган · хозяин",
+      "text": "«Хорошо. Напишите, когда будете рядом. Не торопитесь».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Маме отвечаю: «Пока в аэропорту. Пью кофе. Всё нормально»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Немного подумав, добавляю: «Уже лучше»."
+     },
+     {
+      "speaker": "milica",
+      "text": "С ключами договорились? Тогда можно допить и ехать.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть контакты на телефоне",
+       "object": "Контакты"
+      }
+     }
+    ],
+    "next": "contact",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Открыть контакты на телефоне",
+      "object": "Контакты"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "friend": {
+   "afterHash": "7216a57d5ac687431ee1e76f68849dd89bead6be04eabae983e79a3cbd46497c",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "«Тут очень светло», — печатаю я. Смотрю на сообщение и дописываю ещё пару строк."
+     },
+     {
+      "speaker": "narrator",
+      "text": "«Сейчас поеду заселяться. Кофе уже есть. И знакомая тоже»."
+     },
+     {
+      "speaker": "Мама",
+      "text": "«Ну вот. А ты переживал{a}. Напиши, когда доберёшься».",
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Драгану отправляю примерное время приезда. Он почти сразу отвечает: «Хорошо, буду ждать»."
+     },
+     {
+      "speaker": "narrator",
+      "text": "Меня уже ждут. Пусть пока только хозяин оплаченной комнаты, но и это приятно.",
+      "action": {
+       "kind": "tap",
+       "label": "Открыть контакты на телефоне",
+       "object": "Контакты"
+      }
+     }
+    ],
+    "next": "contact",
+    "portrait": true,
+    "actions": {
+     "4": {
+      "kind": "tap",
+      "label": "Открыть контакты на телефоне",
+      "object": "Контакты"
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "contact": {
+   "afterHash": "cecf3082e4d183ec0bad306e3ad9fc04b0d364118d263ac2bca09d245b2ebdda",
+   "before": {
+    "location": "АЭРОПОРТ · У ОКНА",
+    "time": "17:24",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Милица смотрит на время. По экрану телефона тянется тонкая трещина."
+     },
+     {
+      "speaker": "milica",
+      "text": "Мне скоро пора. Работа, кот — всё ещё ждут."
+     },
+     {
+      "speaker": "player",
+      "text": "Спасибо, что спасла от автомата."
+     },
+     {
+      "speaker": "milica",
+      "text": "Да он уже почти сдался.",
+      "action": {
+       "kind": "tap",
+       "label": "Достать телефон для обмена контактами",
+       "object": "Телефон"
+      }
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она забрасывает сумку на плечо, но телефон не убирает.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Давай запишу твой номер. Я живу недалеко от твоей комнаты. Если заблудишься — напиши.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я называю номер. В моих контактах появляется Milica — среди людей, которых я знаю много лет.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Только пришли ещё номер дома. По одной фотографии двери я тебя не найду.",
+      "action": {
+       "kind": "tap",
+       "label": "Сохранить Milica в контактах",
+       "object": "Добавить контакт",
+       "effect": {
+        "milicaContactSaved": true
+       }
+      },
+      "seatedMilica": false
+     },
+     {
+      "speaker": "player",
+      "text": "А если просто написать, что я на месте?",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "milica",
+      "text": "Этому я тоже обрадуюсь.",
+      "seatedMilica": false
+     },
+     {
+      "speaker": "narrator",
+      "text": "Она смотрит мне в глаза чуть дольше. Кажется, написать можно будет и без повода.",
+      "friendText": "Она смотрит прямо на меня. Приятно знать, что в новом городе уже есть кому написать.",
+      "action": {
+       "kind": "checklist",
+       "label": "Собраться перед выходом",
+       "items": [
+        "Телефон",
+        "Чемодан",
+        "Адрес"
+       ],
+       "effect": {
+        "departureChecked": true
+       },
+       "feedback": "Всё с собой."
+      },
+      "seatedMilica": false
+     }
+    ],
+    "next": "exit",
+    "portrait": true,
+    "journal": [
+     "contact"
+    ],
+    "actions": {
+     "3": {
+      "kind": "tap",
+      "label": "Достать телефон для обмена контактами",
+      "object": "Телефон"
+     },
+     "7": {
+      "kind": "tap",
+      "label": "Сохранить Milica в контактах",
+      "object": "Добавить контакт",
+      "effect": {
+       "milicaContactSaved": true
+      }
+     },
+     "10": {
+      "kind": "checklist",
+      "label": "Собраться перед выходом",
+      "items": [
+       "Телефон",
+       "Чемодан",
+       "Адрес"
+      ],
+      "effect": {
+       "departureChecked": true
+      },
+      "feedback": "Всё с собой."
+     }
+    },
+    "seatedMilica": true,
+    "chapterId": "prologue",
+    "chapter": "Пролог · Жара на посадке"
+   }
+  },
+  "room_rest": {
+   "afterHash": "d2085ffebd018f72b4e5b84ff4ee5e2e4e7b37f848a7fec65c42540fa7b6b7a6",
+   "before": {
+    "location": "БЕЛГРАД · ПЕРВЫЙ АДРЕС",
+    "time": "20:10",
+    "pages": [
+     {
+      "speaker": "narrator",
+      "text": "Я выбираю остаться. Иногда самый интересный вариант — перестать изображать человека, у которого ещё есть силы."
+     },
+     {
+      "speaker": "narrator",
+      "text": "После душа нахожу в сумке зарядку, а на столе освобождаю место под еду. Маленькие победы перестают казаться маленькими."
+     },
+     {
+      "speaker": "player",
+      "text": "«Сегодня отдохну. Но мне хочется встретиться в другой день». Пишу это без длинного оправдания."
+     },
+     {
+      "speaker": "contact",
+      "text": "«Конечно. Город и я завтра тоже будем здесь».",
+      "contactText": {
+       "nikola": "«Правильно. Завтра кифлы будут свежие, а я — чуть бодрее».",
+       "milica": "«Отдыхай. Я завтра тоже буду в городе. Даже кот разрешает». "
+      },
+      "message": true
+     },
+     {
+      "speaker": "narrator",
+      "text": "Я открываю объявления. Через пять минут понимаю, что смотрю не на квартиры, а на то, какие у людей шторы. Закрываю их до утра.",
+      "action": {
+       "kind": "checklist",
+       "label": "Устроиться на вечер",
+       "items": [
+        "Зарядка",
+        "Вода",
+        "Закрытые объявления"
+       ],
+       "effect": {
+        "eveningRestReady": true
+       }
+      }
+     }
+    ],
+    "next": "night_messages",
+    "chapter": "День 0 · Своя дверь",
+    "lighting": "night",
+    "journal": [
+     "quiet_evening"
+    ],
+    "actions": {
+     "4": {
+      "kind": "checklist",
+      "label": "Устроиться на вечер",
+      "items": [
+       "Зарядка",
+       "Вода",
+       "Закрытые объявления"
+      ],
+      "effect": {
+       "eveningRestReady": true
+      }
+     }
+    },
+    "chapterId": "arrival"
    }
   }
  },

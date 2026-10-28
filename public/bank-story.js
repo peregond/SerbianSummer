@@ -43,7 +43,7 @@ export function extendBank({NODES,JOURNAL}){
   // bank_call was a phone call to an employee; it is now the preparation for the visit (same three pages, same checklist).
   const call=NODES.bank_call;
   call.time='16:40';
-  call.pages[0]={...call.pages[0],speaker:'player',text:T('Звонить не буду: на такие вопросы отвечают «приходите лично». Соберу папку и пойду в отделение с документами.','I will not call: questions like these get the answer “come in person”. I will pack a folder and go to the branch with my papers.')};
+  call.pages[0]={...call.pages[0],speaker:'player',text:T('Звонить не буду: на такие вопросы отвечают «приходите лично». Соберу папку сегодня — в отделение пойду завтра.','I will not call: questions like these get the answer “come in person”. I will pack a folder today — and go to the branch tomorrow.')};
   call.pages[1]=AM('Папка: паспорт, подтверждение адреса, список вопросов. Остальное банк спросит сам. Прийти спокойно уже половина дела.','The folder: passport, proof of address, a list of questions. The bank will ask the rest itself. Arriving calmly is half the job.');
   call.pages[2]={...call.pages[2],text:T('Это ещё не «счёт открыт». Зато у меня есть понятный план: личный визит и папка, в которой всё на месте.','This is not “the account is open” yet. But I have a clear plan: an in-person visit and a folder with everything in place.')};
   for(const id of ['work_crossroads'])NODES[id].time='17:20';
@@ -98,7 +98,7 @@ export function extendBank({NODES,JOURNAL}){
     S(staff.alta,'Завтра в десять есть время у специалиста, который говорит по-английски. Запишу вас.','Tomorrow at ten a specialist who speaks English has time. I will book you in.'),
     P('Да, пожалуйста. Мне так спокойнее: приду с заполненной анкетой.','Yes, please. I feel calmer that way: I will come with the questionnaire filled in.'),
     N('Талон с датой лежит в папке. Не самый эффектный результат, зато без суеты.','The slip with the date lies in the folder. Not the most dramatic result, but without the rush.',{portrait:false})
-  ],'bank_followup',{time:'09:55',exitAction:tap('Убрать талон в папку','Put the slip in the folder')});
+  ],'bank_followup',{time:'09:55',exitAction:tap('Убрать талон в папку','Put the slip in the folder',{effect:{bankBookedOnly:true}})});
 
   finish('bank_visit_adriatic',[
     N('Международный отдел Adriatic Bank на втором этаже. Лифт ждёт дольше, чем я ожидал{a}, а тишина в коридоре звучит официально.','The international department of Adriatic Bank is on the second floor. The lift takes longer than I expected and the silence in the corridor sounds official.'),
@@ -119,6 +119,13 @@ export function extendBank({NODES,JOURNAL}){
     S(staff.adriatic,'Конечно. Отправлю письмом сегодня. Если что-то в списке будет непонятно, спросите до визита.','Of course. I will send it by email today. If anything in the list is unclear, ask before the visit.'),
     N('Бумаг я не подписываю и не оставляю. Список придёт письмом, а решение будет только после проверки.','I sign nothing and leave nothing behind. The list will come by email and the decision comes only after a check.',{portrait:false})
   ],'bank_followup',{time:'10:30',exitAction:tap('Сохранить вопросы к тарифам','Save my questions about fees',{effect:{bankVisitFocus:'cost'}})});
+
+  // Booking-only Alta path has a slip for tomorrow, not today's marked email.
+  const follow=NODES.bank_followup;
+  if(follow?.pages?.[0]){
+    follow.pages[0]={...follow.pages[0],text:T('У выхода приходит письмо из банка. В нём — отмеченные пункты, тарифы и контакт для следующего вопроса.','At the exit, the bank’s email arrives. It contains the marked items, fees and a contact for my next question.'),byFlag:{flag:'bankBookedOnly',text:{true:T('У выхода в папке только талон на завтра. Письмо со списком и тарифами обещали после приёма.','At the exit the folder holds only tomorrow’s slip. They promised the list and fees by email after the appointment.'),default:T('У выхода приходит письмо из банка. В нём — отмеченные пункты, тарифы и контакт для следующего вопроса.','At the exit, the bank’s email arrives. It contains the marked items, fees and a contact for my next question.')}}};
+    follow.pages[2]={...follow.pages[2],text:T('«Как прошло? Я рядом с мастерской. Приходи, у нас как раз освободился стол».','‘How did it go? I am by the workspace. Come over, a table has just become free.’'),byFlag:{flag:'bankBookedOnly',text:{true:T('«Записался{a}? Я рядом с мастерской. Приходи — расскажешь про талон, у нас как раз освободился стол».','‘Did you get an appointment? I am by the workspace. Come over — tell me about the slip; a table has just become free.’'),default:T('«Как прошло? Я рядом с мастерской. Приходи, у нас как раз освободился стол».','‘How did it go? I am by the workspace. Come over, a table has just become free.’')}}};
+  }
 }
 
 // Day 2: the chosen branch replaces the generic visit. Older saves without a choice keep the original scenes.

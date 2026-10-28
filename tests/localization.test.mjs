@@ -53,7 +53,7 @@ const dmitry={gender:'male',nameId:'dmitry'};
 assert.match(interpolate(pageText(NODES.nikola_last.pages[1],{nikolaBond:'romance'}),dmitry,catalog),/«Дима,/);
 assert.match(interpolate(pageText(NODES.nikola_last.pages[1],{nikolaBond:'friendship'}),dmitry,catalog),/«Дмитрий,/);
 const replies=NODES.nikola_last.actions[5].options.map(o=>o.label);
-assert.deepEqual(replies,['«Круассан спас день. Спасибо!»','«Вернусь не только за круассаном»']);
+assert.deepEqual(replies,['«Кифла спасла день. Спасибо!»','«Вернусь не только за кифлой»']);
 assert.match(NODES.road_contact.pages[0].text,/селфи из такси/);
 for(const p of NODES.road_contact.pages)assert.ok(!/пал(?:ец|ьца)/i.test(JSON.stringify(p)));
 assert.equal(NODES.road_contact.pages.length,4);

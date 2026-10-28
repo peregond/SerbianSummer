@@ -599,7 +599,7 @@ Object.assign(NODES,{
   ],'terminal',{bg:'sunlit-passage',journal:['first_breath']}),
   milica_flirt:coffee([
     y('Кофе оказался хорошим предлогом. Но мне хочется увидеться с тобой и без аэропорта.'),
-    n('Милица на секунду перестаёт вертеть чашку. Потом улыбается — уже совсем без истории про кофейный автомат.'),
+    n('Милица на секунду перестаёт вертеть стакан. Потом улыбается — уже совсем без истории про кофейный автомат.'),
     m('Тогда в следующий раз выберем место с видом на город. И без табло вылетов.'),
     y('Считай, договорились.'),
     n('Она опускает взгляд к блокноту, но не убирает улыбку. Я чувствую, как начинает нравиться этот день.')
@@ -660,10 +660,10 @@ for(const [time,ids] of Object.entries({
   '17:26':['nikola_recommend','nikola_sweet'],
   '17:28':['nikola_name'],
   '17:31':['nikola_weeks','nikola_new','nikola_unsure'],
-  '17:33':['nikola_break','nikola_banter','nikola_compliment','nikola_directions'],
+  '17:33':['nikola_break','nikola_banter','nikola_compliment','nikola_directions','weeks','new_life','unsure'],
   '17:35':['nikola_questions'],
   '17:37':['nikola_flirt','nikola_invite','nikola_places','nikola_friendship'],
-  '17:38':['nikola_daydream'],
+  '17:38':['nikola_daydream','host','friend','contact'],
   '17:42':['nikola_goodbye']
 }))for(const id of ids)NODES[id].time=time;
 // Both early compliments and the later invitation keep the optional fantasy reachable.
@@ -744,9 +744,16 @@ export function pageText(page,flags={},locale=getLanguage()) {
   const callToken=value=>typeof value==='string'&&value.includes('{call}')?value.replaceAll('{call}',callsByShortName(page.speaker,flags)?'{short}':'{full}'):value;
   let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.districtText?.[RENTAL_TEXT_KEY[flags.districtOwner]]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
   if(page.friendText){
-   const milicaPage=page.speaker==='Милица'||page.speaker==='milica'||(page.contactText&&flags.companion==='milica');
-   const nikolaPage=page.speaker==='Никола'||page.speaker==='nikola'||(page.contactText&&flags.companion==='nikola')||(!milicaPage&&!page.contactText&&!page.hostText&&!page.districtText);
-   if((milicaPage&&flags.milicaBond==='friendship')||(nikolaPage&&flags.nikolaBond==='friendship'))text=page.friendText;
+   const who=flags.companion;
+   const milicaSpeak=page.speaker==='Милица'||page.speaker==='milica';
+   const nikolaSpeak=page.speaker==='Никола'||page.speaker==='nikola';
+   let useMilica=false,useNikola=false;
+   if(milicaSpeak)useMilica=true;
+   else if(nikolaSpeak)useNikola=true;
+   else if(page.contactText){useMilica=who==='milica';useNikola=who==='nikola';}
+   else if(who==='milica'||who==='nikola'){useMilica=who==='milica';useNikola=who==='nikola';}
+   else if(!page.hostText&&!page.districtText)useNikola=true;
+   if((useMilica&&flags.milicaBond==='friendship')||(useNikola&&flags.nikolaBond==='friendship'))text=page.friendText;
   }
   return resolveStoryText(callToken(text),flags,locale);
 }

@@ -32,7 +32,7 @@ assert.match(JSON.stringify(NODES.ada_melon_bridge.pages), /делю|Делит�
 assert.match(JSON.stringify(NODES.ada_melon_pebbles.pages), /дольк/i);
 assert.match(JSON.stringify(NODES.ada_melon_bridge.pages), /дольк/i);
 assert.match(JSON.stringify(NODES.ada_tired.pages), /без новых планов|просто устал/i);
-assert.match(JOURNAL.ada_rest.text, /не свидание/i);
+assert.match(JOURNAL.ada_rest.text, /без новых планов|просто полежать/i);
 assert.equal(JOURNAL.ada_rest.tag, 'ГЛАВА 3 · АДА');
 assert.equal(presentationFor(NODES.ada_pebbles, NODES.ada_pebbles.pages[1], {adaWith:'alone', companion:'milica'}).character, null);
 assert.equal(NODES.ada_pebbles.pages[1].speaker, 'Лана');
