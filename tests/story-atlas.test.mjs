@@ -20,6 +20,7 @@ assert.ok(prologue.sceneIds.includes(prologue.start));
 const graph=buildStoryGraph(atlas,{chapterId:prologue.id});
 assert.ok(graph.nodes.length>=1);
 assert.ok(graph.byId[prologue.start],'chapter start is placed');
+assert.ok(graph.byId[prologue.start].preview,'nodes carry scene preview text');
 assert.ok(graph.edges.length>=1,'chapter has exits');
 assert.ok(graph.width>graph.nodeW);
 assert.ok(graph.height>graph.nodeH);

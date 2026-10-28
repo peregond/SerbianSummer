@@ -127,11 +127,18 @@ export function filterAtlasScenes(atlas,{chapterId='all',query='',includeLegacy=
   }).sort((a,b)=>a.id.localeCompare(b.id,'en'));
 }
 
-const NODE_W=168;
-const NODE_H=64;
-const COL_GAP=72;
-const ROW_GAP=36;
+const NODE_W=210;
+const NODE_H=108;
+const COL_GAP=64;
+const ROW_GAP=28;
 const PAD=28;
+
+function nodePreview(scene){
+  if(!scene)return '';
+  const page=scene.pages?.[0];
+  if(!page?.text)return scene.location||scene.chapter||'';
+  return page.text;
+}
 
 /** Scale a layout graph without CSS transform — keeps text crisp while zooming. */
 export function scaleStoryGraph(graph,scale=1){
@@ -237,6 +244,7 @@ export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
         y:PAD+row*(NODE_H+ROW_GAP),
         label:id,
         meta:scene?.location||scene?.chapter||'',
+        preview:nodePreview(scene),
         outs:scene?.outs??[],
         external:false
       };
@@ -268,6 +276,7 @@ export function buildStoryGraph(atlas,{chapterId,focusId=null,hops=1}={}){
             y:PAD+row*(NODE_H+ROW_GAP),
             label:next,
             meta:atlas.scenes[next]?.chapter||tSafeExit(next),
+            preview:nodePreview(atlas.scenes[next]),
             outs:[],
             external:true
           };

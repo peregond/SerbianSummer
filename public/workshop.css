@@ -35,12 +35,14 @@
 .story-atlas-edge-label{fill:var(--ink);font-size:11px;text-anchor:middle;dominant-baseline:middle}
 .story-atlas-edge-label-bg{fill:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%);stroke:var(--line);stroke-width:1}
 .story-atlas-nodes{position:absolute;inset:0}
-.story-atlas-node{position:absolute;display:grid;align-content:center;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer;-webkit-font-smoothing:antialiased}
+.story-atlas-node{position:absolute;display:grid;align-content:start;gap:3px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit;text-align:left;box-shadow:0 1px 0 color-mix(in srgb,var(--ink) 8%,transparent);cursor:pointer;-webkit-font-smoothing:antialiased;overflow:hidden}
 .story-atlas-node strong{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.25;overflow-wrap:anywhere}
-.story-atlas-node small{font-size:10px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-atlas-node-meta{font-size:10px;color:var(--muted);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.story-atlas-node-preview{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;font-size:11px;line-height:1.35;color:var(--ink);opacity:.82;margin:0;text-align:left}
 .story-atlas-node.is-selected{border-color:var(--sea);background:color-mix(in srgb,var(--sea) 14%,var(--paper));box-shadow:0 0 0 2px color-mix(in srgb,var(--sea) 28%,transparent)}
 .story-atlas-node.is-root{border-color:color-mix(in srgb,var(--gold) 70%,var(--line))}
 .story-atlas-node.is-external{border-style:dashed;opacity:.9;background:color-mix(in srgb,var(--paper) 80%,var(--muted) 20%)}
+.story-atlas-node.is-external .story-atlas-node-preview{opacity:.7}
 .story-atlas-detail{border:1px solid var(--line);border-radius:12px;padding:14px;background:color-mix(in srgb,var(--paper) 92%,var(--sea) 8%);max-height:min(48vh,420px);overflow:auto;-webkit-overflow-scrolling:touch}
 .story-atlas-empty{font-size:14px;line-height:1.55;color:var(--muted);margin:0}
 .story-atlas-detail-head{display:grid;gap:10px;margin-bottom:14px}
@@ -126,8 +128,9 @@
 
 @media(min-width:1200px){
   #panel.workshop-wide{
-    width:min(1360px,calc(100vw - 64px));
-    height:min(920px,calc(100dvh - 56px));
+    width:calc(100vw - 40px);
+    height:calc(100dvh - 40px);
+    inset:20px;
   }
   #panel.workshop-wide .workshop-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
   #panel.workshop-wide .story-atlas-layout{

@@ -361,6 +361,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     const layer=el('div','','story-atlas-nodes');
     const fontSize=Math.max(11,Math.round(12*Math.min(1.15,scale)));
     const metaSize=Math.max(9,Math.round(10*Math.min(1.1,scale)));
+    const previewSize=Math.max(10,Math.round(11*Math.min(1.1,scale)));
     for(const node of graph.nodes){
       if(!legacyBox.checked&&atlas.scenes[node.id]?.legacyOnly&&node.id!==selected)continue;
       const button=el('button','','story-atlas-node');
@@ -377,9 +378,14 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
       title.style.fontSize=`${fontSize}px`;
       button.append(title);
       if(node.meta){
-        const meta=el('small',node.meta);
+        const meta=el('small',node.meta,'story-atlas-node-meta');
         meta.style.fontSize=`${metaSize}px`;
         button.append(meta);
+      }
+      if(node.preview){
+        const previewLine=el('span',node.preview,'story-atlas-node-preview');
+        previewLine.style.fontSize=`${previewSize}px`;
+        button.append(previewLine);
       }
       button.onclick=()=>goTo(node.id);
       layer.append(button);
