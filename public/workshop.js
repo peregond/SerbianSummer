@@ -1,6 +1,7 @@
 import {unlockPreview} from './chapter-access.js?v=0.16.1';
 import { t } from './i18n.js?v=0.16.1';
 import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=11';
+import { mountStoryAtlas } from './story-atlas.js?v=1';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -29,10 +30,10 @@ export function mountWorkshopEntry(container, open, onUnlock=()=>{}) {
   container.append(form);
 }
 
-export async function mountWorkshop(container, { sprites, backgrounds, back }) {
+export async function mountWorkshop(container, { sprites, backgrounds, nodes, chapters, start, back }) {
   container.classList.add('workshop');
   const backButton = el('button', '← К настройкам', 'text-button'); backButton.onclick = back;
-  const intro = el('p', 'Персонажи, эмоции и ресурсы игры. Здесь можно смотреть изображения и находить пробелы в наборе.', 'workshop-intro');
+  const intro = el('p', 'Персонажи, эмоции, ресурсы и внутренняя карта сюжета. Здесь можно смотреть изображения, пробелы в наборе и ID сцен.', 'workshop-intro');
   const loading = el('p', 'Загрузка…'); container.replaceChildren(backButton, intro, loading);
   let catalog;
   try {
@@ -55,8 +56,9 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   const archives = el('label', '', 'workshop-archive-toggle');
   const checkbox = el('input'); checkbox.type = 'checkbox'; archives.append(checkbox, document.createTextNode(t('Показать прежние версии')));
   const results = el('div'); results.setAttribute('aria-live', 'polite');
-  controls.append(search, category, archives); container.append(tabs, controls, results);
-  let view = 'characters';
+  const status = el('p','','workshop-intro'); status.setAttribute('role','status');
+  controls.append(search, category, archives); container.append(tabs, controls, results, status);
+  let view = 'story';
   const looks = el('select'); looks.setAttribute('aria-label', t('Образ персонажа'));
   for (const value of ['all', ...new Set(catalog.entries.filter(e=>e.character).map(e=>e.look))]) { const option=el('option',value==='all'?'Все образы':value);option.value=value;looks.append(option); }
   controls.insertBefore(looks, archives);
@@ -87,8 +89,17 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
   }
   function render() {
     results.replaceChildren();
-    category.hidden = view !== 'assets'; archives.hidden = view !== 'characters'; search.hidden = view === 'gaps';
+    status.textContent='';
+    const artViews = view !== 'story';
+    controls.hidden = !artViews;
+    looks.hidden = view !== 'characters' && view !== 'supporting';
+    category.hidden = view !== 'assets'; archives.hidden = view !== 'characters'; search.hidden = view === 'gaps' || view === 'story';
     for (const button of tabs.children) button.setAttribute('aria-pressed', String(button.dataset.view === view));
+    if (view === 'story') {
+      if(!nodes||!chapters){results.append(el('p','Карта сюжета недоступна в этой сборке.','workshop-missing'));return;}
+      mountStoryAtlas(results,{nodes,chapters,start,status});
+      return;
+    }
     if (view === 'gaps') {
       results.append(el('p', t('Набор эмоций') + ': ' + Object.values(EMOTIONS).map(label=>t(label)).join(', ') + '. ' + t('Каждый образ проверяется отдельно.'), 'workshop-intro'));
       for (const person of [...catalog.people,...catalog.rentals]) {
@@ -123,7 +134,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, back }) {
     }
     if (!results.children.length) results.append(el('p', 'Ничего не найдено'));
   }
-  for (const [value, label] of Object.entries({ characters: 'Персонажи', supporting: 'Эпизодические', assets: 'Ассеты', gaps: 'Чего не хватает' })) {
+  for (const [value, label] of Object.entries({ story: 'Сюжет', characters: 'Персонажи', supporting: 'Эпизодические', assets: 'Ассеты', gaps: 'Чего не хватает' })) {
     const button = el('button', label, 'secondary'); button.dataset.view = value; button.onclick = () => { view = value; render(); }; tabs.append(button);
   }
   looks.addEventListener('change', render); search.addEventListener('input', render); category.addEventListener('change', render); checkbox.addEventListener('change', render); render();
