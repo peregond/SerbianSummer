@@ -1,6 +1,7 @@
 import {BAGGAGE_ITEMS} from './baggage-model.js?v=1';
 import {HOME_PORTRAITS,HOME_BACKGROUNDS} from './home-hero-model.js?v=1';
 import {EPISODIC_PEOPLE} from './episodic-cast.js?v=2';
+import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from './nikola-early-night.js?v=0.16.1';
 export const PEOPLE = {
   milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена',
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',
@@ -27,12 +28,13 @@ export function buildArtCatalog(files, sprites, backgrounds) {
     const background = Object.hasOwn(backgrounds, base.replace(/\.webp$/, ''));
     // Composite character scenes remain part of their portrait gallery. A location
     // named after someone (for example Luka’s office) is still a background.
-    const composite = /^(milica-table-|(?:dragan|jelena)-kitchen-)/.test(base);
+    const intimacy = file.startsWith('workshop/nikola-intimacy/') || (base !== 'nikola-apartment-night-v1.webp' && Object.hasOwn(NIKOLA_EARLY_NIGHT_BACKGROUNDS, base.replace(/\.webp$/, '')));
+    const composite = intimacy || /^(milica-table-|(?:dragan|jelena)-kitchen-)/.test(base);
     const character = image && !icon && (!background || composite) ? person : undefined;
     const draft = file.startsWith('workshop/');
     const specialPose = /-(?:swim|camera|workshop|door|headphones|guide|napkin|show|wave|riverside|pointing)(?:-|\.)/.test(base);
-    const emotion = Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !specialPose && !/kitchen|dream/.test(base) ? 'friendly' : null);
-    const look = /-swim-/.test(base) ? 'У воды' : specialPose ? 'Сюжетная поза' : /^dragan-evening-.*-v[12]\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
+    const emotion = intimacy ? null : Object.keys(EMOTIONS).find(mood => base.includes('-' + mood)) ?? (character && !specialPose && !/kitchen|dream/.test(base) ? 'friendly' : null);
+    const look = intimacy ? 'Интимные сцены · 18+' : /-swim-/.test(base) ? 'У воды' : specialPose ? 'Сюжетная поза' : /^dragan-evening-.*-v[12]\.webp$/.test(base) ? 'Вечерняя прогулка' : file.startsWith('home/') ? 'Главный экран' : Object.hasOwn(EPISODIC_PEOPLE,person) ? 'Эпизодический образ' : /dream-underwear/.test(base) ? 'Бельё' : /masked/.test(base) ? 'На службе · riot-экипировка' : /uniform/.test(base) ? 'В форме без балаклавы' : /casual/.test(base) ? 'Без формы' : /two-looks/.test(base) ? 'В форме и без формы' : /kitchen/.test(base) ? 'На кухне' : /table/.test(base) ? 'За столиком' : /evening/.test(base) ? 'После смены' : /dream/.test(base) ? 'Фантазия' : person === 'milos' ? 'Без формы' : 'Основной образ';
     const category = character ? 'characters' : image ? ((Object.hasOwn(backgrounds, base.replace(/\.webp$/, '')) || Object.values(HOME_BACKGROUNDS).includes(file) || file.startsWith('baggage/search-carousel')) ? 'backgrounds' : 'images') : /\.(m4a|mp3|ogg|wav)$/i.test(file) ? 'audio' : /\.(ttf|woff2?)$/i.test(file) ? 'fonts' : 'other';
     const retired = file === 'workshop/milos-two-looks-draft.webp';
     return { file, character, category, image, emotion, look, status: retired ? 'archive' : active.has(file) ? 'active' : draft ? 'draft' : character ? 'archive' : 'asset' };
