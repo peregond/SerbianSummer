@@ -15,11 +15,11 @@ const SCENE={
  touch:'nikola-briefs-touch-v2',
  moan:'nikola-bed-moan-v1',
  jock:'nikola-ready-back-v1',
- fuck:'nikola-jock-fuck-v1',
+ fuck:'nikola-sex-moan-v1',
  climax:'nikola-climax-face-v1',
- cumInside:'nikola-cum-inside-v1',
- cumJock:'nikola-cum-jock-v1',
- cumChest:'nikola-cum-chest-v1',
+ cumInside:'nikola-after-bliss-v1',
+ cumJock:'nikola-after-laugh-v1',
+ cumChest:'nikola-after-tender-v1',
  afterglow:'nikola-afterglow-smile-v1'
 };
 
@@ -34,11 +34,11 @@ export const NIKOLA_EARLY_NIGHT_BACKGROUNDS={
  [SCENE.touch]:{label:T('НИКОЛА · КАСАНИЕ','NIKOLA · TOUCH'),description:T('Никола на кровати в белых трусах, глаза закрыты, прикусил губу','Nikola on the bed in white briefs, eyes closed, biting his lip'),position:'50% 40%'},
  [SCENE.moan]:{label:T('НИКОЛА · СТОН','NIKOLA · MOAN'),description:T('Никола в белых трусах на кровати, стонет','Nikola in white briefs on the bed, moaning'),position:'50% 40%'},
  [SCENE.jock]:{label:T('НИКОЛА · НА КОЛЕНЯХ','NIKOLA · KNEELING'),description:T('Никола на коленях на кровати, оглядывается через плечо','Nikola kneeling on the bed, looking back over his shoulder'),position:'50% 40%'},
- [SCENE.fuck]:{label:T('НИКОЛА · СЕКС','NIKOLA · SEX'),description:T('Заглушка: секс с цензурными плашками под inpaint','Placeholder: sex with censor bars for inpaint'),position:'50% 40%'},
+ [SCENE.fuck]:{label:T('НИКОЛА · СЕКС','NIKOLA · SEX'),description:T('Никола на спине, запрокинул голову и стонет','Nikola on his back, head thrown back, moaning'),position:'50% 40%'},
  [SCENE.climax]:{label:T('НИКОЛА · ОРГАЗМ','NIKOLA · CLIMAX'),description:T('Крупный план лица Николы в оргазме','Close-up of Nikola’s face at climax'),position:'50% 30%'},
- [SCENE.cumInside]:{label:T('НИКОЛА · ФИНИШ ВНУТРЬ','NIKOLA · FINISH INSIDE'),description:T('Заглушка финиша внутрь; чёрные плашки под inpaint','Placeholder for finishing inside; black bars for inpaint'),position:'50% 40%'},
- [SCENE.cumJock]:{label:T('НИКОЛА · ФИНИШ НА ДЖОКИ','NIKOLA · FINISH ON JOCK'),description:T('Заглушка финиша на джоки; чёрные плашки под inpaint','Placeholder for finishing on the jock; black bars for inpaint'),position:'50% 40%'},
- [SCENE.cumChest]:{label:T('НИКОЛА · ФИНИШ НА ГРУДЬ','NIKOLA · FINISH ON CHEST'),description:T('Заглушка финиша на грудь; чёрные плашки под inpaint','Placeholder for finishing on the chest; black bars for inpaint'),position:'50% 40%'},
+ [SCENE.cumInside]:{label:T('НИКОЛА · ФИНИШ ВНУТРЬ','NIKOLA · FINISH INSIDE'),description:T('Никола на спине, мокрый от пота, блаженно улыбается','Nikola on his back, damp with sweat, smiling blissfully'),position:'50% 40%'},
+ [SCENE.cumJock]:{label:T('НИКОЛА · ФИНИШ НА ДЖОКИ','NIKOLA · FINISH ON JOCK'),description:T('Никола на спине смеётся с закрытыми глазами','Nikola on his back, laughing with his eyes closed'),position:'50% 40%'},
+ [SCENE.cumChest]:{label:T('НИКОЛА · ФИНИШ НА ГРУДЬ','NIKOLA · FINISH ON CHEST'),description:T('Никола на спине, нежно смотрит на меня снизу вверх','Nikola on his back, looking up at me tenderly'),position:'50% 40%'},
  [SCENE.afterglow]:{label:T('НИКОЛА · ПОСЛЕ','NIKOLA · AFTER'),description:T('Никола в белых трусах после, мягкая улыбка','Nikola in white briefs after, a soft smile'),position:'50% 40%'}
 };
 

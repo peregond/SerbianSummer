@@ -67,6 +67,10 @@ def workflow(a):
         '10': {'class_type': 'SaveImage', 'inputs': {'images': ['9', 0],
                                                      'filename_prefix': f'SerbianSummer/nikola/one-{a.tag}'}},
     }
+    if not a.image:
+        del wf['3'], wf['4']
+        wf['5'] = {'class_type': 'EmptyLatentImage', 'inputs': {'width': a.width, 'height': a.height, 'batch_size': 1}}
+        wf['8']['inputs']['denoise'] = 1.0
     if a.face_ref:
         wf.update({
             '20': {'class_type': 'IPAdapterUnifiedLoader', 'inputs': {'model': ['1', 0], 'preset': 'PLUS FACE (portraits)'}},
@@ -83,7 +87,7 @@ def workflow(a):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--tag', required=True)
-    p.add_argument('--image', default='nikola-one-briefs-base.png')
+    p.add_argument('--image', default='nikola-one-briefs-base.png', help="Comfy input image; '' for text-to-image")
     p.add_argument('--ckpt', default='ponyRealism_v21MainVAE.safetensors')
     p.add_argument('--seed', type=int, default=20261028)
     p.add_argument('--denoise', type=float, default=0.42)

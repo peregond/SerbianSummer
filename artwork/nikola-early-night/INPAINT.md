@@ -15,6 +15,10 @@
 | `nikola-briefs-lookdown-v1.webp` | На кровати, взгляд вниз — белые трусы (заменён в сцене) |
 | `nikola-briefs-touch-v2.webp` | Касание: глаза закрыты, прикусил губу — от `bed-smile`, inpaint лица (заменил `touch-v1`) |
 | `nikola-ready-back-v1.webp` | На коленях спиной, взгляд через плечо, белые трусы — img2img от `jock-ready-v1` + inpaint низа (заменил `jock-ready-v1`) |
+| `nikola-sex-moan-v1.webp` | На спине, стонет — img2img от `bed-moan-v1` (заменил `jock-fuck-v1`) |
+| `nikola-after-bliss-v1.webp` | После, блаженная улыбка — img2img от `bed-moan-v1` (заменил `cum-inside-v1`) |
+| `nikola-after-laugh-v1.webp` | После, смеётся — img2img от `bed-moan-v1` (заменил `cum-jock-v1`) |
+| `nikola-after-tender-v1.webp` | После, нежный взгляд — img2img от `bed-moan-v1` (заменил `cum-chest-v1`) |
 | `nikola-briefs-bed-smile-v1.webp` | На кровати, смотрит и улыбается — локальный ComfyUI, Pony Realism img2img (`tools/comfy_one.py`) |
 | `nikola-bed-moan-v1.webp` | Стон на кровати — белые трусы |
 | `nikola-climax-face-v1.webp` | Крупный план оргазма |
