@@ -2,6 +2,8 @@ import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=2';
 import {extendHousing} from './housing-story.js?v=1';
 import {extendBank} from './bank-story.js?v=2';
 import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=2';
+import {applyEarlyCityArt} from './early-city-art.js?v=1';
+import {extendAdaEpisode,adaCompany} from './ada-episode.js?v=1';
 import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
 import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=5';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
@@ -721,6 +723,8 @@ extendHousing({NODES,JOURNAL});
 extendBank({NODES,JOURNAL});
 extendHostEvening({NODES,JOURNAL});
 for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v2',alt:'Драган в вечерней рубашке'};
+applyEarlyCityArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
+extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES});
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 // Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
@@ -759,7 +763,8 @@ export function presentationFor(node,page,flags={},profile={}) {
   const extra=extraVisualFor(page,flags);
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
-  const character=hug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const company=node.adaPortrait?adaCompany(flags):null;
+  const character=hug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??company??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   const eveningMood=character==='dragan'&&EVENING_NODES.some(id=>NODES[id]===node)?'evening-'+(['friendly','thoughtful','laughing','flirty'].includes(page.emotion)?page.emotion:'friendly'):null;
   const rentalMood=rentalOwner({districtOwner:character})&&page===node.pages[0]
     ? (node===NODES['rental_flirt_'+character]?'flirty':node===NODES['rental_friends_'+character]?'laughing':node===NODES['rental_terms_'+character]?'thoughtful':null)
@@ -769,7 +774,7 @@ export function presentationFor(node,page,flags={},profile={}) {
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,
-    emotion:eveningMood??rentalMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly'))),daydream
+    emotion:(node.adaPortrait&&company&&CHARACTER_SPRITES[company]?.swim?'swim':null)??eveningMood??rentalMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly'))),daydream
   };
 }
 
