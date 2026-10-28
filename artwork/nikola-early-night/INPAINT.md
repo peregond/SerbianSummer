@@ -17,18 +17,19 @@
 | `nikola-climax-face-v1.webp` | Крупный план оргазма |
 | `nikola-afterglow-smile-v1.webp` | После, улыбка — белые трусы |
 
-## Заглушки с чёрными плашками (дорисовать)
+## ComfyUI (догенерация)
 
-| Файл | Что должно быть под плашкой | Референс лица |
-|---|---|---|
-| `nikola-briefs-bulge-v1.webp` | Белые CK briefs, рельеф стояка | `nikola-dream-bare-buzz-v3.webp` |
-| `nikola-briefs-touch-v1.webp` | Ладонь на натянутых briefs | то же |
-| `nikola-jock-ready-v1.webp` | Белые CK jockstraps, открытый зад | то же |
-| `nikola-jock-fuck-v1.webp` | Проникновение, джоки сдвинуты (часть уже сценa с силуэтом) | то же |
-| `nikola-cum-inside-v1.webp` | Финиш внутрь, сперма из него | то же |
-| `nikola-cum-jock-v1.webp` | Финиш на белые джоки / пояс | то же |
-| `nikola-cum-chest-v1.webp` | Финиш на грудь (частично цензура) | то же |
-| `nikola-afterglow-v1.webp` | После, нижняя часть тела | то же |
+Эти кадры перегенерированы через ComfyUI туннель (`tools/comfy_nikola_gen.py`, чекпоинт `waiIllustriousSDXL_v170`, img2img от shirtless-рефа). Можно ещё крутить seed/denoise локально.
+
+| Файл | Содержание |
+|---|---|
+| `nikola-briefs-bulge-v1.webp` | Shirtless, белые briefs, рельеф стояка |
+| `nikola-briefs-touch-v1.webp` | Касание / ближе к briefs |
+| `nikola-jock-ready-v1.webp` | Джоки, взгляд через плечо |
+| `nikola-jock-fuck-v1.webp` | Секс / джоки |
+| `nikola-cum-inside-v1.webp` | Финиш внутрь |
+| `nikola-cum-jock-v1.webp` | Финиш на джоки |
+| `nikola-cum-chest-v1.webp` | Финиш на грудь |
 
 ## Как дорисовать
 
