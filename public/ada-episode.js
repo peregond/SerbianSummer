@@ -55,14 +55,14 @@ export function extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES}){
   const company=id=>({label:T(...id.label),next:'ada_arrive',tone:id.tone,effect:{adaWith:id.who},when:id.when});
   const samePerson=(who,bondFlag)=>({not:all({flag:'host',equals:who},bond(bondFlag))});
   finish('ada_tired',[
-    n('Вечер получился длинным. Я не расстроен{a}. Я просто устал{a}.','The evening turned out long. I am not upset. I am just tired.'),
+    n('Вечер получился полным. Я не расстроен{a} — просто устал{a} и хочу тишины.','The evening turned out full. I am not upset — I am just tired and want quiet.'),
     n('Не хочу ещё один разговор про депозит. Хочу лечь там, где город звучит как вода.','I do not want another conversation about the deposit. I want to lie down where the city sounds like water.'),
     n('Ада Циганлија — озеро внутри Белграда. Туда едут специально, чтобы ничего не решать.','Ada Ciganlija is a lake inside Belgrade. People go there on purpose in order to decide nothing.'),
-    n('Можно поехать одному. Можно позвать того, с кем мы уже просто знакомы. Это не свидание.','I can go alone. I can ask someone I am already simply acquainted with. This is not a date.')
+    n('Можно поехать одному. Можно позвать того, с кем уже спокойно молчать. Без новых планов на вечер.','I can go alone. I can ask someone with whom silence already feels easy. No new plans for the evening.')
   ],null,{bg:'room-window',location:T('БЕЛГРАД · УСТАЛОСТЬ','BELGRADE · TIRED'),time:'20:40',choices:[
     {label:T('Поехать одному и просто полежать','Go alone and just lie down'),next:'ada_arrive',tone:'personal',effect:{adaWith:'alone'}},
-    company({who:'nikola',tone:'friendship',label:['Написать Николе: «Не свидание. Хочу полежать у воды»','Text Nikola: “Not a date. I want to lie by the water”'],when:all({flag:'companion',equals:'nikola'},bond('nikolaBond'))}),
-    company({who:'milica',tone:'friendship',label:['Написать Милице: «Не свидание. Хочу полежать у воды»','Text Milica: “Not a date. I want to lie by the water”'],when:all({flag:'companion',equals:'milica'},bond('milicaBond'))}),
+    company({who:'nikola',tone:'friendship',label:['Написать Николе: «Хочу полежать у воды. Без планов»','Text Nikola: “I want to lie by the water. No plans”'],when:all({flag:'companion',equals:'nikola'},bond('nikolaBond'))}),
+    company({who:'milica',tone:'friendship',label:['Написать Милице: «Хочу полежать у воды. Без планов»','Text Milica: “I want to lie by the water. No plans”'],when:all({flag:'companion',equals:'milica'},bond('milicaBond'))}),
     company({who:'dragan',tone:'friendship',label:['Позвать Драгана просто полежать, без ключей','Ask Dragan to just lie down, with no keys involved'],when:all({flag:'host',equals:'dragan'},bond('hostBond'))}),
     company({who:'jelena',tone:'friendship',label:['Позвать Йелену просто полежать, без ключей','Ask Jelena to just lie down, with no keys involved'],when:all({flag:'host',equals:'jelena'},bond('hostBond'))}),
     company({who:'dragan',tone:'friendship',label:['Позвать Драгана, который показывал квартиру','Ask Dragan, who showed the flat'],when:all({flag:'rentalCast',notEquals:'new'},{flag:'districtOwner',equals:'dragan'},bond('districtBond'),samePerson('dragan','hostBond'))}),

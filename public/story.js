@@ -306,12 +306,12 @@ export const NODES = {
     n('До сих пор на все вопросы в моей жизни существовал ответ «ещё в аэропорту». Скоро придётся придумать другой.')
   ], null, { time: '17:36', choices: [
     { label: 'Сначала договориться о ключах', next: 'host', effect: { messageOrder: 'host' } },
-    { label: 'Сначала ответить близкому человеку', next: 'friend', effect: { messageOrder: 'friend' } }
+    { label: 'Сначала ответить маме', next: 'friend', effect: { messageOrder: 'friend' } }
   ] }),
   host: coffee([
     n('Я пишу, что уже еду. Исправляю на «скоро выезжаю». Не хочется начинать со вранья человеку, у которого мои ключи.'),
     msg('Драган · хозяин', '«Хорошо. Напишите, когда будете рядом. Не торопитесь».'),
-    n('Второму собеседнику отправляю: «Пока в аэропорту. Пью кофе. Всё нормально».'),
+    n('Маме отвечаю: «Пока в аэропорту. Пью кофе. Всё нормально».'),
     n('Затем, подумав, добавляю: «Уже лучше».'),
     m('Есть ключи — есть план. Можно двигаться дальше.')
   ], 'contact'),
@@ -465,7 +465,7 @@ Object.assign(NODES, {
     n('Слово «вернуться» зависает между нами. Для него оно, кажется, означает что-то очень определённое.')
   ],null,{choices:[
     {label:'«Покажешь потом свой Белград?»',next:'nikola_invite',effect:{nikolaInitiative:'invite'}},
-    {label:'«Посоветуй место, с которого начать»',next:'nikola_places',effect:{nikolaInitiative:'places'}},
+    {label:'«Посоветуй место, с которого начать»',next:'nikola_places',effect:{nikolaInitiative:'places',nikolaBond:'friendship'}},
     {label:'«Кажется, мне интересна не только выпечка»',next:'nikola_flirt',effect:{nikolaInitiative:'flirt'}}
   ]}),
   nikola_flirt: bakery([
@@ -553,8 +553,9 @@ NODES.exit.pages.at(-1).bg='taxi-pickup';
 NODES.exit.pages.at(-1).portrait=false;
 NODES.last_message.bg='taxi-pickup';
 NODES.last_message.location='АЭРОПОРТ · ВЫХОД К ТАКСИ';
-NODES.nikola_last.bg='taxi-pickup';
-NODES.nikola_last.location='АЭРОПОРТ · ВЫХОД К ТАКСИ';
+NODES.nikola_last.bg='bakery-corner';
+NODES.nikola_last.location='ХЛЕБ & КИФЛЕ · АЭРОПОРТ';
+Object.assign(NODES.nikola_last.pages.at(-1),{bg:'taxi-pickup',location:'АЭРОПОРТ · ВЫХОД К ТАКСИ',portrait:false});
 
 // Shared choice language for the whole game: a label and an icon, never colour alone.
 export const CHOICE_TONES = {
@@ -598,7 +599,7 @@ Object.assign(NODES,{
   ],'terminal',{bg:'sunlit-passage',journal:['first_breath']}),
   milica_flirt:coffee([
     y('Кофе оказался хорошим предлогом. Но мне хочется увидеться с тобой и без аэропорта.'),
-    n('Милица на секунду перестаёт вертеть стаканчик. Потом улыбается — уже совсем без истории про кофейный автомат.'),
+    n('Милица на секунду перестаёт вертеть чашку. Потом улыбается — уже совсем без истории про кофейный автомат.'),
     m('Тогда в следующий раз выберем место с видом на город. И без табло вылетов.'),
     y('Считай, договорились.'),
     n('Она опускает взгляд к блокноту, но не убирает улыбку. Я чувствую, как начинает нравиться этот день.')
@@ -668,10 +669,10 @@ for(const [time,ids] of Object.entries({
 // Both early compliments and the later invitation keep the optional fantasy reachable.
 NODES.nikola_daydream_early={...structuredClone(NODES.nikola_daydream),next:'nikola_questions'};
 NODES.nikola_compliment.choices=[
-  {label:'На секунду представить Николу без футболки',next:'nikola_daydream_early',tone:'dream',effect:{nikolaDaydream:true,nikolaBond:'romance'}},
+  {label:'На секунду представить Николу без поло',next:'nikola_daydream_early',tone:'dream',effect:{nikolaDaydream:true,nikolaBond:'romance'}},
   {label:'Остаться в разговоре: «Мне нравится твоя улыбка»',next:'nikola_questions',tone:'romance',effect:{nikolaBond:'romance'}}
 ];
-NODES.nikola_flirt.choices[0].label='На секунду представить Николу без футболки';
+NODES.nikola_flirt.choices[0].label='На секунду представить Николу без поло';
 NODES.nikola_invite.choices=[
   {label:'Задержать взгляд и позволить себе короткую фантазию',next:'nikola_daydream',tone:'dream',effect:{nikolaDaydream:true,nikolaBond:'romance'}},
   {label:'Договориться о встрече и обменяться контактами',next:'nikola_phone',tone:'romance',effect:{nikolaBond:'romance'}}
@@ -742,7 +743,11 @@ export function pageText(page,flags={},locale=getLanguage()) {
   const rentalPicked=rentalVariants?.[flags['rentalStep_'+flags.districtOwner]]??rentalVariants?.default;
   const callToken=value=>typeof value==='string'&&value.includes('{call}')?value.replaceAll('{call}',callsByShortName(page.speaker,flags)?'{short}':'{full}'):value;
   let text=picked??rentalPicked??partnerPicked??page.contactText?.[flags.companion]??page.hostText?.[flags.host]??page.districtText?.[flags.districtOwner]??page.districtText?.[RENTAL_TEXT_KEY[flags.districtOwner]]??page.workText?.[flags.workRoute]??page.workText?.business??page.documentText?.[flags.residenceApplication]??page.documentText?.review??page.cinemaHelpText?.[flags.cinemaHelp]??page.cinemaHelpText?.projector??page.filmText?.[flags.cinemaFilm]??page.filmText?.warm??page.finalText?.[flags.finalWith==='airport'?flags.companion:flags.finalWith]??page.finalText?.friends??page.planText?.[flags.cinemaPlan]??page.planText?.undecided??page.text;
-  if(page.friendText&&(flags.nikolaBond==='friendship'||flags.milicaBond==='friendship'))text=page.friendText;
+  if(page.friendText){
+   const milicaPage=page.speaker==='Милица'||page.speaker==='milica'||(page.contactText&&flags.companion==='milica');
+   const nikolaPage=page.speaker==='Никола'||page.speaker==='nikola'||(page.contactText&&flags.companion==='nikola')||(!milicaPage&&!page.contactText&&!page.hostText&&!page.districtText);
+   if((milicaPage&&flags.milicaBond==='friendship')||(nikolaPage&&flags.nikolaBond==='friendship'))text=page.friendText;
+  }
   return resolveStoryText(callToken(text),flags,locale);
 }
 

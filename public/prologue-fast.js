@@ -25,7 +25,7 @@ export function extendFastPrologue(N){
   y('{full}. Уже нравится местный сервис.')
  ],{journal:['milica'],choices:[
   {label:'«Ты всегда так соблазняешь людей у автомата?»',tone:'romance',next:'quick_milica_tease',effect:{milicaBond:'romance'}},
-  {label:'«Спасёшь меня от этих кнопок?»',tone:'friendship',next:'quick_coffee',effect:{milicaBond:'friendship'}},
+  {label:'«Тогда пойдём к столику — продолжим знакомство»',tone:'friendship',next:'quick_coffee',effect:{milicaBond:'friendship'}},
   {label:'«Поможешь разобраться с адресом?»',tone:'practical',next:'quick_milica_address',effect:{greeting:'honest'}}
  ]});
  N.quick_milica_tease=cafe([
@@ -51,9 +51,9 @@ export function extendFastPrologue(N){
   m('Ты быстро осваиваешься. Некоторые начинают с погоды.','flirty'),
   y('Жарко. Особенно за этим столиком.'),
   m('Слабый заход. Но взгляд хороший, засчитаем.','laughing'),
-  n('Она придвигает телефон. На экране новый контакт, а не прогноз погоды.'),
-  m('Записывай номер. Проверим, сохраняется ли эта смелость за пределами аэропорта.','flirty')
- ],{next:'contact',journal:['milica_spark']});
+  n('Она улыбается так, будто город можно на минуту отложить.'),
+  m('Хватит аэропорта на сегодня. Дальше — только если тебе тоже интересно.','flirty')
+ ],{next:'phone',journal:['milica_spark'],exitAction:{kind:'tap',label:'Проверить сообщения перед выходом',object:'Телефон'}});
  N.quick_nikola=bakery([
   k('Добро пожаловать. Кофе, кифла или сначала прийти в себя?','friendly'),
   n('Он подаёт пакет. Полоска света ложится на его предплечье; я чуть не забываю, что нужно было заказать.'),
@@ -62,7 +62,7 @@ export function extendFastPrologue(N){
  ],{journal:['nikola','pastry'],choices:[
   {label:'«У тебя в меню только выпечка или можно заказать свидание?»',tone:'romance',next:'quick_nikola_tease',effect:{nikolaBond:'romance',nikolaMoment:'compliment'}},
   {label:'«Посоветуй что-нибудь вкусное для первого дня»',tone:'friendship',next:'quick_nikola_friend',effect:{nikolaBond:'friendship'}},
-  {label:'«Кофе с собой и подскажи выход к такси»',tone:'practical',next:'nikola_directions'}
+  {label:'«Подскажи выход к такси — и что взять с собой в дорогу»',tone:'practical',next:'nikola_directions'}
  ]});
  N.quick_nikola_tease=bakery([
   k('Свидания после смены. И без очереди, если ты оставишь номер.','flirty'),
@@ -71,7 +71,7 @@ export function extendFastPrologue(N){
   n('Он выдерживает мой взгляд. Теперь совершенно ясно: шутка ему понравилась.')
  ],{journal:['nikola_spark'],choices:[
   {label:'«Хорошо. Но после смены я продолжу флиртовать»',tone:'romance',next:'nikola_invite',effect:{nikolaBond:'romance',nikolaBold:true}},
-  {label:'На секунду представить Николу без футболки',tone:'dream',next:'nikola_daydream_early',effect:{nikolaBond:'romance',nikolaDaydream:true}},
+  {label:'На секунду представить Николу без поло',tone:'dream',next:'nikola_daydream_early',effect:{nikolaBond:'romance',nikolaDaydream:true}},
   {label:'«Договорились. А пока расскажи о городе»',tone:'friendship',next:'nikola_questions',effect:{nikolaBond:'friendship'}}
  ]});
  N.quick_nikola_friend=bakery([
