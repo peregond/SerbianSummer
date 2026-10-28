@@ -6,7 +6,7 @@ export const rentalCounterpart=flags=>({ana:'stefan',stefan:'ana',marko:'ana',vu
 export function registerRentalPortraits(sprites){
  for(const[id,name]of Object.entries(RENTAL_NAMES)){
   sprites[id]={friendly:{file:`workshop/rental-${id}-sport-draft`,alt:name+' в спортивной одежде'}};
-  for(const emotion of ['thoughtful','laughing','flirty']){
+  for(const emotion of ['thoughtful','laughing','flirty','shy','surprised','confident','worried']){
    const regenerated=(emotion==='thoughtful'&&id!=='ana')||(emotion==='laughing'&&id==='stefan');
    sprites[id][emotion]={file:`workshop/rental-${id}-${emotion}-${regenerated?'v2':'v1'}`,alt:name+' в спортивной одежде'};
   }
