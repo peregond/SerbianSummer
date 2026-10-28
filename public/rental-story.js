@@ -69,7 +69,7 @@ function extendRentalBeats(NODES,scene){
    ...(number==='22'?Object.keys(people).map(person=>({...choose(['Согласиться на свидание','Agree to a date'],chapter.start,'romance',{rentalStep:'date'}),when:{flag:'rentalBond_'+person,equals:'romance'}})):[]),
    ...(number==='25'?Object.keys(people).map(person=>({...choose(['Спросить, можно ли поцеловать','Ask if a kiss is welcome'],'rental_kiss_'+person,'romance',{}),when:{flag:'rentalStep_'+person,equals:'date'}})):[])
   ];
-  const response=say('districtHost',dialogue[1]);
+  const response=say('districtHost',dialogue[1],{emotion:({7:'confident',19:'worried',25:'shy'})[number]??'friendly'});
   if(individual[number])response.byFlag={flag:'districtOwner',text:Object.fromEntries(Object.entries(individual[number]).map(([key,value])=>[key,T(...value)]))};
   if(number==='25'){delete response.byFlag;response.text=T('Рядом с тобой спокойно. Спасибо, что можно никуда не торопиться.','I feel peaceful beside you. Thank you for letting us take our time.');}
   const thought=say('narrator',dialogue[0]);
