@@ -38,7 +38,7 @@ export const NIKOLA_EARLY_NIGHT_BACKGROUNDS={
  [SCENE.afterglow]:{label:T('НИКОЛА · ПОСЛЕ','NIKOLA · AFTER'),description:T('Никола в белых трусах после, мягкая улыбка','Nikola in white briefs after, a soft smile'),position:'50% 40%'}
 };
 
-export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,y,scene}){
+export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,scene}){
  Object.assign(BACKGROUNDS,NIKOLA_EARLY_NIGHT_BACKGROUNDS);
  const note=(ru,en)=>n(T(ru,en));
  const me=(ru,en)=>({speaker:'player',text:T(ru,en)});
