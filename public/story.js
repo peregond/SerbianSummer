@@ -49,6 +49,7 @@ export const STORY_VERSION = 1;
 export const START = 'quick_arrival';
 // Positions are chosen for the shorter illustration area above a phone's dialogue panel.
 export const BACKGROUNDS = {
+  'nikola-hug-background-v1': { label:'БЕЛГРАД · НАБЕРЕЖНАЯ', description:'Никола обнимает силуэт героя на вечерней набережной', position:'50% 50%' },
   'belgrade-courtyard-evening-v1': { label:'БЕЛГРАД · ДВОР', description:'Вечерний двор с освещёнными окнами', position:'50% 50%' },
   'courtyard-door-evening-v1': { label:'БЕЛГРАД · ДВЕРЬ', description:'Дверь во дворе при свете вечерней лампы', position:'50% 50%' },
   'airport-apron': { label:'АЭРОПОРТ · ПЕРРОН', description:'Летнее небо, самолёт и перрон аэропорта Белграда', position:'50% 55%' },
@@ -773,21 +774,22 @@ export function presentationFor(node,page,flags={},profile={}) {
   const daydream=page.daydream??node.daydream??false;
   const visual=prologueVisualFor(node,page,daydream);
   const hug=node===NODES.host_evening_close&&page===node.pages[4]&&(flags.host??'dragan')==='dragan'&&['male','female'].includes(profile.gender);
-  const bg=hug?'belgrade-courtyard-evening-v1':visual?.bg??baseBg;
-  const cg=hug?`dragan-hug-neutral-${profile.gender}-layer-v1`:null;
+  const nikolaHug=profile.gender==='male'&&SLOTS.includes(flags.lastPartner)&&identityOf(flags.lastPartner,flags)==='nikola'&&[1,2,3].some(i=>node===NODES[`love1_${i}_yes`])&&page===node.pages[1];
+  const bg=nikolaHug?'nikola-hug-background-v1':hug?'belgrade-courtyard-evening-v1':visual?.bg??baseBg;
+  const cg=nikolaHug?'nikola-hug-foreground-v1':hug?`dragan-hug-neutral-${profile.gender}-layer-v1`:null;
   const metadata=BACKGROUNDS[bg];
   const dynamicCharacter=node.hostPortrait?(flags.host??'dragan'):node.districtPortrait?(flags.districtOwner??'jelena'):node.companionPortrait?(flags.companion==='nikola'?'nikola-evening':'milica'):null;
   const extra=extraVisualFor(page,flags);
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
   const company=node.adaPortrait?adaCompany(flags):null;
-  const character=hug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??company??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const character=hug||nikolaHug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??company??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
   const eveningMood=character==='dragan'&&EVENING_NODES.some(id=>NODES[id]===node)?'evening-'+(['friendly','thoughtful','laughing','flirty'].includes(page.emotion)?page.emotion:'friendly'):null;
   const rentalMood=rentalOwner({districtOwner:character})&&page===node.pages[0]
     ? (node===NODES['rental_flirt_'+character]?'flirty':node===NODES['rental_friends_'+character]?'laughing':node===NODES['rental_terms_'+character]?'thoughtful':null)
     : null;
   return {
-    bg,cg,description:hug?'Драган обнимает силуэт игрока во дворе':node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!seated||!!kitchenStage||!!visual?.composite,composite:!!hug||!!kitchenStage||!!seated||!!visual?.composite,
+    bg,cg,description:hug?'Драган обнимает силуэт игрока во дворе':node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!nikolaHug||!!seated||!!kitchenStage||!!visual?.composite,composite:!!hug||!!nikolaHug||!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,

@@ -30,6 +30,7 @@ function walk(id,ancestors=[]) {
 const stats=walk(START);
 // Older entrances remain loadable, but a new playthrough never goes backwards to them.
 for(const [id,node]of Object.entries(NODES))if(node.legacyOnly)walk(id);
+usedBackgrounds.add(presentationFor(NODES.love1_1_yes,NODES.love1_1_yes.pages[1],{lastPartner:'airport',companion:'nikola'},{gender:'male'}).bg);
 assert.equal(visited.size,Object.keys(NODES).length,'Unreachable scene');assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
 assert.equal(presentationFor(NODES.nikola_daydream,NODES.nikola_daydream.pages[4]).daydream,false);
 assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{})).length,3,'three original district routes remain available in the original story');
