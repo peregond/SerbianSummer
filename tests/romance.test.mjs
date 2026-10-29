@@ -2,8 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {NODES,pageText,resolveStoryText} from '../public/story.js';
 import {SLOTS,isAvailable,partnersAt,stageOf,loversOf,loveNames,choiceVisible,applyRomanceEffect,nameOf,identityOf} from '../public/romance.js';
-import {APP_VERSION} from '../public/release.js';
-const {configureTranslations,setLanguage}=await import('../public/i18n.js?v='+APP_VERSION);
+const {configureTranslations,setLanguage}=await import('../public/i18n.js?v=0.16.1');
 const dictionary=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json',import.meta.url),'utf8'));
 // Availability follows what the player chose earlier, never a default.
 assert.deepEqual(SLOTS.filter(slot=>isAvailable(slot,{})),[]);

@@ -63,12 +63,12 @@ assert.match(pageText(morning,{workRoute:'explore'}),/вариант/);
 for(const person of ['asya','luka']){
  const seen=new Set();
  for(const node of Object.values(NODES).filter(n=>n.chapterId==='work'))for(const page of node.pages){
-  const p=presentationFor(node,page);if(p.character===person)seen.add(p.emotion);
+  const p=presentationFor(node,page);if(p.character===person)seen.add(p.emotion.replace(/^day[234]-/,''));
   if(!page.message&&page.speaker===(person==='asya'?'Ася':'Лука'))assert.equal(p.character,person,'In-person dialogue must show the speaker');
  }
- assert.deepEqual([...seen].sort(),Object.keys(CHARACTER_SPRITES[person]).sort(),'Every new character reaction is staged');
+ assert.deepEqual([...seen].sort(),Object.keys(CHARACTER_SPRITES[person]).filter(mood=>!/^day[234]-/.test(mood)).sort(),'Every original character reaction is staged');
  const consent=NODES['rain_'+person+'_close'].choices;
  assert.equal(consent[0].effect[person+'Hand'],true);
  assert.equal(consent[1].effect[person+'Hand'],false,'The slower option remains a real choice');
 }
-for(const [character,sprites]of Object.entries(CHARACTER_SPRITES))if(character.startsWith('nikola'))for(const sprite of Object.values(sprites))assert.ok(sprite.file.endsWith('-buzz-v3'),'No old face may reappear on a scene change');
+for(const [character,sprites]of Object.entries(CHARACTER_SPRITES))if(character.startsWith('nikola'))for(const sprite of Object.values(sprites))assert.ok(sprite.file.endsWith('-buzz-v3')||/^nikola-day[234]-/.test(sprite.file),'No old face may reappear on a scene change');

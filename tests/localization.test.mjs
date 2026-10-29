@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {APP_VERSION} from '../public/release.js';
-const {configureTranslations,detectLanguage,getLanguage,setLanguage,t,translateHistory}=await import('../public/i18n.js?v='+APP_VERSION);
+// Match the story's i18n module identity; asset cache versions need not equal the visible release version.
+const {configureTranslations,detectLanguage,getLanguage,setLanguage,t,translateHistory}=await import('../public/i18n.js?v=0.16.1');
 import {NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES,CHOICE_TONES,pageText,resolveStoryText,interpolate} from '../public/story.js';
 import {CHAPTERS} from '../public/chapters.js';
 const dictionary=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json',import.meta.url)));
