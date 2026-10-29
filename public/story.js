@@ -727,6 +727,17 @@ extendHostEvening({NODES,JOURNAL});
 for(const mood of ['friendly','thoughtful','laughing','flirty'])CHARACTER_SPRITES.dragan['evening-'+mood]={file:'dragan-evening-'+mood+'-v2',alt:'Драган в вечерней рубашке'};
 applyEarlyCityArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 extendAdaEpisode({NODES,JOURNAL,BACKGROUNDS,CHARACTER_SPRITES});
+// Alternate everyday outfits have their own filenames but retain the existing cast identities.
+const DAY_LOOKS={
+ 'nikola-evening':{2:['friendly'],3:['friendly','laughing','flirty'],4:['friendly']},
+ milica:{2:['friendly'],3:['friendly','laughing'],4:['friendly']},
+ asya:{2:['friendly'],3:['friendly','laughing','thoughtful'],4:['friendly']},
+ luka:{2:['friendly'],3:['friendly','laughing','flirty'],4:['friendly']}
+};
+for(const [character,days] of Object.entries(DAY_LOOKS))for(const [day,moods] of Object.entries(days))for(const mood of moods){
+ const name=character==='nikola-evening'?'nikola':character;
+ CHARACTER_SPRITES[character][`day${day}-${mood}`]={file:`${name}-day${day}-${mood}-v1`,alt:CHARACTER_SPRITES[character].friendly.alt};
+}
 // Morning after Nikola’s early night is already the next calendar day — skip the shared 22:10 epilogue.
 if(NODES.nikola_park_morning&&NODES.third_morning){
  NODES.nikola_park_morning.next='third_morning';
@@ -788,12 +799,15 @@ export function presentationFor(node,page,flags={},profile={}) {
   const rentalMood=rentalOwner({districtOwner:character})&&page===node.pages[0]
     ? (node===NODES['rental_flirt_'+character]?'flirty':node===NODES['rental_friends_'+character]?'laughing':node===NODES['rental_terms_'+character]?'thoughtful':null)
     : null;
+  const mood=(node.adaPortrait&&company&&CHARACTER_SPRITES[company]?.swim?'swim':null)??eveningMood??rentalMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly')));
+  const day=({work:2,'day-3':3,'day-4':4})[node.chapterId];
+  const dayMood=day&&!daydream&&!page.message&&character&&CHARACTER_SPRITES[character]?.[`day${day}-${mood}`]?`day${day}-${mood}`:mood;
   return {
     bg,cg,description:hug?'Драган обнимает силуэт игрока во дворе':node.map?'Схематическая карта районов Белграда':metadata.description,position:page.position??metadata.position,insert:!!page.insert,seated:!!nikolaHug||!!seated||!!kitchenStage||!!visual?.composite,composite:!!hug||!!nikolaHug||!!kitchenStage||!!seated||!!visual?.composite,
     location:daydream?'НА МГНОВЕНИЕ · ВООБРАЖЕНИЕ':page.location??(page.action?.bg||page.bg||node.districtBg||hasRestagedLocation(node)?metadata.label:node.location??metadata.label),
     time:daydream?'На секунду':extra.time??page.time??node.time,character,
     contactPortrait:visual?.hideContact?null:episode?.mode==='contact'?episode:null,
-    emotion:(node.adaPortrait&&company&&CHARACTER_SPRITES[company]?.swim?'swim':null)??eveningMood??rentalMood??(episode?.mode==='scene'||(character&&Object.hasOwn(CHARACTER_SPRITES,character)&&!CHARACTER_SPRITES[character][extra.emotion??page.reactions?.[character]??page.emotion??node.emotion??'friendly'])?'friendly':extra.emotion??(daydream?(page.emotion??node.emotion??'friendly'):(page.reactions?.[character]??page.emotion??'friendly'))),daydream
+    emotion:dayMood,daydream
   };
 }
 

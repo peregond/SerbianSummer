@@ -1,6 +1,6 @@
 import {unlockPreview} from './chapter-access.js?v=0.16.1';
 import { t } from './i18n.js?v=0.16.1';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=13';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=14';
 import { mountStoryAtlas } from './story-atlas.js?v=4';
 
 const el = (tag, text, className) => {
