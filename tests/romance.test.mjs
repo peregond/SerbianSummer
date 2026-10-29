@@ -68,7 +68,7 @@ assert.equal(resolveStoryText('Позвать {who.airport.acc}, пойти с {
 assert.equal(resolveStoryText('{who.luka.acc} {who.milos.ins}',{},'ru'),'Луку Милошем');
 setLanguage('ru');
 // The endings remember who is close: three counts, three endings.
-for(const [id,key] of [['stay_lovers','оста'],['leave_lovers','провожа'],['return_lovers','ждёт|ждут']]){
+for(const id of ['stay_lovers','leave_lovers','return_lovers']){
  const page=NODES[id].pages[0];assert.notEqual(pageText(page,{}),pageText(page,{lovers:'asya',loverCount:1,lastPartner:'asya'}));
  assert.match(pageText(page,{lovers:'asya,luka,milos',loverCount:3}),/Ася, Лука и Милош/);
 }

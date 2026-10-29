@@ -12,7 +12,7 @@ const people={
 const tr={};const T=(ru,en)=>(tr[ru]=en,ru);const say=(speaker,pair,extra={})=>({speaker,text:T(...pair),...extra});
 const choose=(pair,next,tone,effect={})=>({label:T(...pair),next,tone,effect});
 const line=(ru,en)=>[ru,en];
-export function extendRentalStory({NODES,scene,n,y}){
+export function extendRentalStory({NODES,scene}){
  const old=NODES.district_map.choices;for(const choice of old)choice.when={flag:'rentalCast',notEquals:'new'};
  for(const id of ['ana','stefan','marko','vuk']){
   const p=people[id],first='rental_first_'+id,hub='rental_hub_'+id;
