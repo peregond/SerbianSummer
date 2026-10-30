@@ -1,3 +1,4 @@
+import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=1';
 import {t} from './i18n.js?v=0.16.1';
 import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.1-art9';
 import {
@@ -60,7 +61,7 @@ async function copyText(value){
   }
 }
 
-export function mountStoryAtlas(container,{nodes,chapters,start,status}){
+export function mountStoryAtlas(container,{nodes,chapters,start,status,initialScene}){
   const atlas=buildStoryAtlas(nodes,chapters,start,{
     presentationFor,
     sprites:CHARACTER_SPRITES,
@@ -117,7 +118,8 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   root.append(intro,summary,controls,preview,layout);
   container.append(root);
 
-  let selected=prologue?.start||atlas.totals.start;
+  let selected=resolveSceneReference(nodes,initialScene)||prologue?.start||atlas.totals.start;
+  if(initialScene&&atlas.scenes[selected]?.chapterId)chapter.value=atlas.scenes[selected].chapterId;
   let crawl=[selected];
   let scale=1;
   let panX=0;
@@ -205,7 +207,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     if(frame)body.append(frame);
     const copy=el('div','','story-atlas-preview-copy');
     const head=el('div','','story-atlas-preview-head');
-    head.append(el('code',scene.id,'story-atlas-id'));
+    head.append(el('code',sceneCode(scene.id)+' · '+scene.id,'story-atlas-id'));
     const meta=[];
     if(scene.location)meta.push(scene.location);
     if(scene.time)meta.push(scene.time);
@@ -243,14 +245,16 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
     }
     const head=el('header','','story-atlas-detail-head');
     const idRow=el('div','','story-atlas-id-row');
-    const code=el('code',scene.id,'story-atlas-id');
+    const code=el('code',sceneCode(scene.id)+' · '+scene.id,'story-atlas-id');
     const copyId=el('button',t('Скопировать ID'),'secondary');
     copyId.type='button';
-    copyId.onclick=async()=>{if(await copyText(scene.id))setStatus(t('ID скопирован: ')+scene.id);};
+    copyId.onclick=async()=>{if(await copyText(sceneCode(scene.id)))setStatus(t('ID скопирован: ')+sceneCode(scene.id));};
     const copyNote=el('button',t('Скопировать карточку'),'secondary');
     copyNote.type='button';
-    copyNote.onclick=async()=>{if(await copyText(formatSceneNote(scene)))setStatus(t('Карточка сцены скопирована'));};
-    idRow.append(code,copyId,copyNote);
+    copyNote.onclick=async()=>{if(await copyText(sceneCode(scene.id)+"\n"+sceneLink(scene.id,location.href)+"\n"+formatSceneNote(scene)))setStatus(t('Карточка сцены скопирована'));};
+    const copyLink=el('button',t('Скопировать ссылку'),'secondary');
+    copyLink.type='button';copyLink.onclick=async()=>{if(await copyText(sceneLink(scene.id,location.href)))setStatus(t('Ссылка скопирована'));};
+    idRow.append(code,copyId,copyLink,copyNote);
     head.append(idRow);
     if(scene.chapter)head.append(el('p',scene.chapter,'story-atlas-meta'));
     const chips=el('div','','story-atlas-chips');
@@ -447,7 +451,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   }
 
   search.addEventListener('input',()=>{
-    const q=search.value.trim();
+    const q=resolveSceneReference(nodes,search.value.trim())||search.value.trim();
     if(!q)return;
     const rows=filterAtlasScenes(atlas,{
       chapterId:chapter.value==='focus'?'all':chapter.value,
@@ -461,7 +465,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status}){
   });
   search.addEventListener('keydown',event=>{
     if(event.key!=='Enter')return;
-    const q=search.value.trim();
+    const q=resolveSceneReference(nodes,search.value.trim())||search.value.trim();
     if(atlas.scenes[q]){
       if(atlas.scenes[q].chapterId)chapter.value=atlas.scenes[q].chapterId;
       goTo(q);

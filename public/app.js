@@ -5,7 +5,7 @@ import {renderHomeHero} from './home-hero.js?v=1';
 import {renderEpisodeContact} from './episode-contact.js?v=0.16.1';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
 import {drawChapterMap} from './chapter-map.js?v=0.16.1';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.4-art14';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.5';
 import {mountRoomInteraction} from './room-interaction.js?v=2';
 import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=4';
 import {mountBankGuide} from './bank-guide.js?v=1';
@@ -32,7 +32,7 @@ import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
 import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.4';
+import {APP_VERSION} from './release.js?v=0.16.5';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -614,9 +614,14 @@ function openPanel(kind) {
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
     $('menu-home').addEventListener('click',()=>{panel.close();home();});
+    if(new URL(location.href).searchParams.has('scene')){
+      const hint=document.createElement('p');
+      hint.textContent=getLanguage()==='en'?'Scene link: enter your workshop code below to view it. Your game progress will not change.':'Ссылка на сцену: введи промокод мастерской ниже, чтобы открыть её. Прогресс игры не изменится.';
+      content.prepend(hint);
+    }
     mountWorkshopEntry(content,()=>{
       $('panel-title').textContent=t('Мастерская');
-      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,back:()=>{
+      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:new URL(location.href).searchParams.get('scene'),back:()=>{
         content.classList.remove('workshop');panel.classList.remove('workshop-wide');panel.close();openPanel('settings');
       }});
     },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
@@ -709,3 +714,6 @@ refreshMusicControls();
 
 cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{saved=validateSave(input);state=structuredClone(saved);await writeSave(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
 cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account')){history.replaceState(null,'',location.pathname);openAccount();}});
+
+// Reference links open the read-only workshop gate, never restore a scene into a save.
+if(new URL(location.href).searchParams.has('scene'))openPanel('settings');

@@ -50,3 +50,5 @@ yarn-error.log*
 .DS_Store
 
 public/phone-check.html
+
+/node_modules
