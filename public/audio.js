@@ -1,3 +1,4 @@
+import {syncSfx} from './sfx.js?v=0.16.6';
 // Original local cues. Audio is enabled only after the player's explicit gesture.
 let context,master,active=false,volume=.55,desired='prologue',current=null,revision=0;
 const players=new Map();
@@ -38,17 +39,18 @@ async function playDesired(){
  }
 }
 export function musicPlaying(){return active&&[...players.values()].some(p=>!p.audio.paused);}
-export function setVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));if(master)master.gain.value=volume;else for(const [key,p]of players)p.audio.volume=key===current?volume:0;}
+export function setVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));syncSfx({volume});if(master)master.gain.value=volume;else for(const [key,p]of players)p.audio.volume=key===current?volume:0;}
 export function setMusicScene(key){
  desired=Object.hasOwn(files,key)?key:'prologue';
  if(active&&(current!==desired||players.get(current)?.audio.paused))void playDesired();
 }
 export async function setMusic(enabled){
- active=!!enabled;
+ active=!!enabled;syncSfx({enabled:active});
  if(!active){revision++;for(const p of players.values())p.audio.pause();notify();return true;}
  const ok=await playDesired();if(!ok){active=false;revision++;for(const p of players.values())p.audio.pause();notify();}return ok;
 }
 document.addEventListener('visibilitychange',()=>{
+ syncSfx({hidden:document.hidden});
  if(document.hidden){revision++;for(const p of players.values())p.audio.pause();}
  else if(active)void playDesired();
 });

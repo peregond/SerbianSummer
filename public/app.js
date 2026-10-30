@@ -18,21 +18,24 @@ import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-nikola-hug1';
 import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.1-chat3';
 import {STAGES} from './days.js?v=0.16.1';
-import {cueFor} from './music-cues.js?v=0.16.5';
+import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
+import {cueFor} from './music-cues.js?v=0.16.6';
+import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
+import {setAmbience,playSting} from './sfx.js?v=0.16.6';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
 import {drawBeatAction} from './beat-action.js?v=0.16.1';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.4-day-looks';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
-import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.5';
+import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.6';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
 import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.5';
+import {APP_VERSION} from './release.js?v=0.16.6';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -59,7 +62,7 @@ const panel=$('panel');
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
-let lastChapterId=null,wantCard=false,cardContext=null;
+let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -100,7 +103,7 @@ function validateSave(input) {
   if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл сохранения не подходит к версии пролога.');
   if (input.node!=='end' && !Object.hasOwn(NODES,input.node)) throw new Error('Неизвестная сцена в сохранении.');
   if (!Number.isInteger(input.index) || input.index<0 || (input.node!=='end' && input.index>=NODES[input.node].pages.length)) throw new Error('Не удалось восстановить реплику.');
-  if (!Array.isArray(input.log) || input.log.length>1500 || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
+  if (!Array.isArray(input.log) || input.log.length>MAX_LOG_RECORDS || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
   if (!Array.isArray(input.journal) || input.journal.some(id=>!Object.hasOwn(JOURNAL,id))) throw new Error('Повреждён дневник.');
   if(!input.flags || typeof input.flags!=='object' || Array.isArray(input.flags)) throw new Error('Повреждены данные выборов.');
   return { formatVersion:1, storyVersion:STORY_VERSION, profile:{gender:input.profile.gender,nameId:input.profile.nameId,namesCatalogVersion:catalog.version}, node:input.node,index:input.node==='end'?0:input.index, flags:{...input.flags},journal:[...new Set(input.journal)],log:input.log.map(e=>({speaker:e.speaker,text:e.text,choice:!!e.choice,...logVoice(e)})),updatedAt:Number(input.updatedAt)||Date.now(),completed:input.node==='end',chapterMarks:readChapterMarks(input.chapterMarks,NODES,JOURNAL,input.log.length),rewind:readRewind(input.rewind,NODES,JOURNAL,input.log.length) };
@@ -169,7 +172,7 @@ function showScreen(id) {
 }
 function home() {
   renderHomeHero($('home'),$('home-art'),$('home-cast'),saved);
-  setMusicScene('prologue');
+  setMusicScene('prologue');setAmbience(null);lastStingNode=null;
   $('new-game').disabled=false;
   $('resume').hidden=!saved;
   $('new-game').classList.toggle('secondary-light',!!saved);
@@ -273,7 +276,8 @@ function renderGame({skipMessenger=false}={}) {
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
-  setMusicScene(cueFor(node));
+  setMusicScene(cueFor(node));setAmbience(ambienceFor(node));
+  if(state.node!==lastStingNode){lastStingNode=state.node;const sting=stingFor(state.node);if(sting)playSting(sting);}
   const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
@@ -411,6 +415,7 @@ function drawChapterCard(previous,next){
   inner.append(start);card.append(inner);
 }
 function showChapterCard(previous,next){
+  playSting('chime');
   cardContext={previous,next};drawChapterCard(previous,next);showScreen('chapter-card');
   $('chapter-card-start').focus({preventScroll:true});
 }
@@ -525,7 +530,7 @@ function choose(choice, {render=true}={}) {
   applyEffects(choice.effect);enterNode(choice.next);recordPage();wantCard=true;save();if(render)renderGame();return true;
 }
 function renderEnding() {
-  setMusicScene('prologue');
+  setMusicScene('prologue');setAmbience(null);lastStingNode=null;
   showScreen('ending');
   $('ending-rewind').disabled=!state.rewind?.length;
   const continuation=continuationFor(state);

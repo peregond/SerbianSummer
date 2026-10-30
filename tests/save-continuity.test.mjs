@@ -37,7 +37,7 @@ for(const [from,target]of [['viewing_life','district_map'],['morning_ready','nex
 // A save that already had a bank choice or hostTop keeps them as ordinary flags.
 const modern=normalizeProgress(save('bank_plan',0,{rentalCast:'new',bankChoice:'alta',bankRead:3,hostTop:'white',hostMeal:'ajvar',flatQuest:63,flatDiscount:150,flatWarmth:2,rentalMoved:true}));
 assert.equal(modern.flags.bankChoice,'alta');
-assert.ok(Object.keys(modern.flags).length<=150);
+assert.ok(Object.keys(modern.flags).length<=250);
 // Going back: the two-step rewind restores flags changed by the viewing quest and by an effect-only step.
 {
   const state=normalizeProgress(save('flat_enter_ana',4,{rentalCast:'new',district:'dorcol',districtOwner:'ana'}));

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {NODES,JOURNAL,START} from '../public/story.js';
 import {CHAPTERS,chapterFor,continuationFor,rememberChapter,restartChapter,readChapterMarks} from '../public/chapters.js';
 import {normalizeProgress} from '../lib/save-format.js';
+import {MAX_FLAGS,MAX_LOG_RECORDS} from '../public/save-limits.js';
 import {forwardTargets} from './graph-helpers.mjs';
 
 const residence=CHAPTERS.find(c=>c.id==='residence'),courtyard=CHAPTERS.find(c=>c.id==='courtyard');
@@ -149,8 +150,8 @@ const FLAT_LOOP_ALLOWANCE=100;
 // The visual room interaction stores one extra mask; inline chat acknowledgements add at most four records.
 maxFlags+=1;
 const logBound=Math.max(...starts.map(maxLogs))+4+FLAT_LOOP_ALLOWANCE;
-assert.ok(maxFlags<=150,`A complete story save could reach ${maxFlags} flags, over the format limit`);
-assert.ok(logBound<=1500,`A complete story save could reach ${logBound} log records, over the format limit`);
+assert.ok(maxFlags<=MAX_FLAGS,`A complete story save could reach ${maxFlags} flags, over the format limit`);
+assert.ok(logBound<=MAX_LOG_RECORDS,`A complete story save could reach ${logBound} log records, over the format limit`);
 console.log(`Chapters 5/6: old-save migration, replay isolation, consent and open plans checked; conservative persistence bounds ${maxFlags} flags / ${logBound} log records.`);
 
 assert.equal(NODES.business_pause.next,'work_summary','The earlier chapter 4 pause must retain its original target');
