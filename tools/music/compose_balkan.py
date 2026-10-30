@@ -8,7 +8,7 @@ the borrowed grammar: modes with a flat seventh or a raised fourth, additive met
 9/8 = 2+2+2+3) taken at an easy tempo, plucked arpeggios and small ornaments.
 
 Usage:  python3 tools/music/compose_balkan.py [--out public/assets] [--only arrival,district]
-Requires numpy and ffmpeg (AAC). Cues: arrival, district, bank, daily, rain.
+Requires numpy and ffmpeg (AAC). Cues: arrival, district, bank, daily, rain (the first five), then evening, night, flat, walk, docs, clock.
 """
 import argparse
 import subprocess
@@ -23,6 +23,8 @@ MODES = {
     'dorian': [0, 2, 3, 5, 7, 9, 10],
     'mixolydian': [0, 2, 4, 5, 7, 9, 10],
     'lydian': [0, 2, 4, 6, 7, 9, 11],
+    'aeolian': [0, 2, 3, 5, 7, 8, 10],
+    'ionian': [0, 2, 4, 5, 7, 9, 11],
 }
 CHORD_TONES = {'triad': [0, 2, 4], 'seventh': [0, 2, 4, 6]}
 
@@ -311,6 +313,86 @@ CUES['rain'] = dict(
               A((6, 3), (7, 1), (8, 4)), A((7, 2), (6, 2), (4, 4)), A((3, 4), (None, 4)), A((0, 6), (None, 2))]},
     form=[(8, {'pad', 'bass'}, None), (16, {'pad', 'bass', 'pluck', 'lead', 'shaker'}, ('A', 0)),
           (12, {'pad', 'bass', 'pluck', 'lead', 'shaker'}, ('B', 0)), (4, {'pad', 'bass'}, None)], wet=0.3)
+
+# ---- more cues for days 0-5: one per mood, picked by place in public/music-cues.js ------------------------------------
+
+# Evening by the river, in a kafana or on Ada: E Aeolian, a slow 6/8 (3+3) with a warm clarinet.
+CUES['evening'] = dict(
+    seed=61, groups=[3, 3], eighth=0.36, mode='aeolian', tonic=52, lead_tonic=64, lead_kind='clarinet',
+    chords=[0, 6, 5, 6, 0, 3, 4, 0], mix=dict(pad=1.1, bass=0.9, pluck=1.0, drums=0.6, shaker=0.7, lead=1.0),
+    drum_pattern={0: 'D', 3: 'T', 5: 'k'},
+    melodies={
+        'A': [A((4, 3), (2, 2), (3, 1)), A((4, 2), (3, 1), (2, 3)), A((2, 3), (1, 2), (0, 1)), A((0, 4), (None, 2)),
+              A((4, 3), (5, 2), (4, 1)), A((7, 3), (6, 2), (5, 1)), A((4, 2), (3, 2), (2, 2)), A((0, 5), (None, 1))],
+        'B': [A((7, 3), (6, 2), (7, 1)), A((8, 2), (7, 1), (6, 3)), A((5, 3), (4, 2), (5, 1)), A((4, 4), (None, 2)),
+              A((7, 3), (9, 2), (8, 1)), A((7, 3), (6, 2), (5, 1)), A((4, 2), (3, 2), (2, 2)), A((0, 5), (None, 1))]},
+    form=[(8, {'pad', 'bass', 'shaker'}, None), (16, {'pad', 'bass', 'shaker', 'pluck', 'lead'}, ('A', 0)),
+          (16, {'pad', 'bass', 'shaker', 'pluck', 'lead', 'drums'}, ('B', 0)), (8, {'pad', 'bass', 'pluck'}, None)], wet=0.27)
+
+# Late at night in the room: D Aeolian, very slow 4/4, almost no rhythm, a few flute notes over the pad.
+CUES['night'] = dict(
+    seed=67, groups=[2, 2, 2, 2], eighth=0.50, mode='aeolian', tonic=50, lead_tonic=62, lead_kind='flute', ornament=False,
+    chords=[0, 5, 3, 6, 0, 5, 6, 0], mix=dict(pad=1.25, bass=0.75, pluck=0.65, lead=0.85),
+    drum_pattern={},
+    melodies={
+        'A': [A((4, 4), (None, 4)), A((3, 3), (2, 1), (1, 4)), A((2, 4), (None, 4)), A((1, 2), (0, 2), (-1, 4)),
+              A((0, 6), (None, 2)), A((2, 3), (3, 1), (4, 4)), A((3, 2), (2, 2), (1, 4)), A((0, 8))],
+        'B': [A((7, 4), (None, 4)), A((6, 3), (5, 1), (4, 4)), A((5, 4), (None, 4)), A((4, 2), (3, 2), (2, 4)),
+              A((2, 6), (None, 2)), A((4, 3), (5, 1), (6, 4)), A((5, 2), (4, 2), (3, 4)), A((0, 8))]},
+    form=[(4, {'pad', 'bass'}, None), (12, {'pad', 'bass', 'pluck', 'lead'}, ('A', 0)),
+          (8, {'pad', 'bass', 'pluck', 'lead'}, ('B', 0)), (4, {'pad', 'bass'}, None)], wet=0.32)
+
+# Looking at flats: C Ionian, a bright, bouncy 6/8, plucked strings in front.
+CUES['flat'] = dict(
+    seed=71, groups=[3, 3], eighth=0.28, mode='ionian', tonic=48, lead_tonic=72, lead_kind='flute',
+    chords=[0, 3, 4, 0, 0, 3, 4, 0], mix=dict(pad=0.7, bass=1.0, pluck=1.2, drums=0.9, shaker=1.0, lead=0.95),
+    drum_pattern={0: 'D', 2: 'k', 3: 'T', 5: 'k'}, shaker_offbeat=1,
+    melodies={
+        'A': [A((4, 2), (2, 1), (4, 2), (5, 1)), A((4, 3), (2, 3)), A((2, 2), (3, 1), (4, 2), (2, 1)), A((0, 4), (None, 2)),
+              A((5, 2), (4, 1), (5, 2), (7, 1)), A((7, 3), (5, 3)), A((4, 2), (2, 1), (1, 2), (2, 1)), A((0, 5), (None, 1))],
+        'B': [A((7, 2), (9, 1), (7, 2), (5, 1)), A((4, 3), (5, 3)), A((7, 2), (8, 1), (9, 2), (7, 1)), A((7, 4), (None, 2)),
+              A((9, 2), (11, 1), (9, 2), (7, 1)), A((7, 3), (4, 3)), A((5, 2), (4, 1), (2, 2), (1, 1)), A((0, 5), (None, 1))]},
+    form=[(8, {'bass', 'pluck', 'shaker'}, None), (16, {'bass', 'pluck', 'shaker', 'lead', 'pad'}, ('A', 0)),
+          (16, {'bass', 'pluck', 'shaker', 'lead', 'pad', 'drums'}, ('B', 0)), (8, {'bass', 'pluck', 'pad'}, None)])
+
+# A stroll through the old streets and quays: E Mixolydian, a lilting 8/8 as 3+3+2.
+CUES['walk'] = dict(
+    seed=79, groups=[3, 3, 2], eighth=0.22, mode='mixolydian', tonic=52, lead_tonic=64, lead_kind='clarinet',
+    chords=[0, 3, 0, 4, 0, 6, 3, 0], mix=dict(pad=0.9, bass=0.95, pluck=1.1, drums=0.8, shaker=0.9, lead=1.0),
+    drum_pattern={0: 'D', 3: 'T', 5: 'k', 6: 'T'},
+    melodies={
+        'A': [A((2, 3), (4, 3), (2, 2)), A((3, 2), (2, 1), (1, 3), (0, 2)), A((2, 3), (4, 3), (5, 2)), A((4, 4), (2, 2), (None, 2)),
+              A((5, 3), (7, 3), (5, 2)), A((4, 2), (5, 1), (4, 3), (2, 2)), A((1, 3), (2, 3), (1, 2)), A((0, 6), (None, 2))],
+        'B': [A((7, 3), (9, 3), (7, 2)), A((6, 2), (7, 1), (5, 3), (4, 2)), A((5, 3), (7, 3), (9, 2)), A((7, 4), (5, 2), (None, 2)),
+              A((9, 3), (11, 3), (9, 2)), A((8, 2), (9, 1), (7, 3), (5, 2)), A((4, 3), (5, 3), (4, 2)), A((0, 6), (None, 2))]},
+    form=[(8, {'bass', 'pluck', 'shaker'}, None), (16, {'bass', 'pluck', 'shaker', 'lead', 'pad'}, ('A', 0)),
+          (16, {'bass', 'pluck', 'shaker', 'lead', 'pad', 'drums'}, ('B', 0)), (8, {'bass', 'pluck', 'pad'}, None)])
+
+# Papers and counters (day 4, the registration): A Aeolian, a patient 7/8 (3+2+2), flute and a light pluck.
+CUES['docs'] = dict(
+    seed=83, groups=[3, 2, 2], eighth=0.30, mode='aeolian', tonic=57, lead_tonic=69, lead_kind='flute',
+    chords=[0, 4, 5, 3, 0, 4, 6, 0], mix=dict(pad=1.0, bass=0.9, pluck=1.1, drums=0.6, shaker=0.8, lead=0.95),
+    drum_pattern={0: 'D', 3: 'k', 5: 'k'},
+    melodies={
+        'A': [A((2, 3), (1, 2), (2, 2)), A((4, 3), (2, 2), (1, 2)), A((0, 3), (2, 2), (3, 2)), A((2, 5), (None, 2)),
+              A((4, 3), (5, 2), (4, 2)), A((3, 3), (2, 2), (1, 2)), A((2, 2), (1, 2), (0, 3)), A((0, 5), (None, 2))],
+        'B': [A((7, 3), (6, 2), (7, 2)), A((9, 3), (7, 2), (6, 2)), A((5, 3), (7, 2), (8, 2)), A((7, 5), (None, 2)),
+              A((9, 3), (8, 2), (7, 2)), A((6, 3), (5, 2), (4, 2)), A((5, 2), (4, 2), (2, 3)), A((0, 5), (None, 2))]},
+    form=[(8, {'pad', 'bass', 'shaker'}, None), (16, {'pad', 'bass', 'shaker', 'pluck', 'lead'}, ('A', 0)),
+          (16, {'pad', 'bass', 'shaker', 'pluck', 'lead', 'drums'}, ('B', 0)), (8, {'pad', 'bass', 'pluck'}, None)], wet=0.24)
+
+# Counting the days (day 5): F Dorian, a ticking 3/4 with a steady shaker and a thoughtful flute.
+CUES['clock'] = dict(
+    seed=89, groups=[2, 2, 2], eighth=0.30, mode='dorian', tonic=53, lead_tonic=65, lead_kind='flute',
+    chords=[0, 3, 4, 0, 3, 6, 4, 0], mix=dict(pad=0.9, bass=0.9, pluck=1.2, drums=0.7, shaker=1.3, lead=0.95),
+    drum_pattern={0: 'D', 2: 'k', 4: 'k'},
+    melodies={
+        'A': [A((4, 2), (2, 2), (4, 2)), A((5, 2), (4, 2), (2, 2)), A((3, 2), (2, 2), (1, 2)), A((2, 4), (None, 2)),
+              A((4, 2), (5, 2), (7, 2)), A((6, 2), (5, 2), (4, 2)), A((3, 2), (2, 2), (1, 2)), A((0, 4), (None, 2))],
+        'B': [A((7, 2), (9, 2), (7, 2)), A((8, 2), (7, 2), (5, 2)), A((6, 2), (5, 2), (4, 2)), A((5, 4), (None, 2)),
+              A((7, 2), (8, 2), (9, 2)), A((10, 2), (9, 2), (7, 2)), A((6, 2), (5, 2), (4, 2)), A((0, 4), (None, 2))]},
+    form=[(8, {'pad', 'bass', 'shaker'}, None), (16, {'pad', 'bass', 'shaker', 'pluck', 'lead'}, ('A', 0)),
+          (16, {'pad', 'bass', 'shaker', 'pluck', 'lead', 'drums'}, ('B', 0)), (8, {'pad', 'bass', 'pluck'}, None)], wet=0.2)
 
 
 def write_m4a(stereo, path, bitrate='104k'):
