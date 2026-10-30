@@ -1,3 +1,4 @@
+import {MAX_LOG_RECORDS} from '../public/save-limits.js';
 import assert from 'node:assert/strict';
 import {NODES,JOURNAL,pageText} from '../public/story.js';
 import {CHAPTERS,continuationFor,chapterFor,rememberChapter,restartChapter} from '../public/chapters.js';
@@ -44,7 +45,7 @@ const base={formatVersion:1,storyVersion:1,profile:{gender:'female',nameId:'anna
 assert.equal(continuationFor(base),'d22_start');
 const done=normalizeProgress({...base,flags:{...base.flags,chapterSevenComplete:true,finalChoice:'stay'},log:Array.from({length:700},()=>({speaker:'Ты',text:'x'}))});
 assert.equal(continuationFor(done),null);assert.equal(chapterFor(done,NODES).id,'answer');
-assert.throws(()=>normalizeProgress({...base,log:Array.from({length:1501},()=>({speaker:'Ты',text:'x'}))}));
+assert.throws(()=>normalizeProgress({...base,log:Array.from({length:MAX_LOG_RECORDS+1},()=>({speaker:'Ты',text:'x'}))}));
 // Chapter 7 can be replayed from its entrance, discarding the final decision but keeping chapter 6 history.
 const play={...normalizeProgress({...base,node:'decision_morning',flags:{chapterSixComplete:true},log:[{speaker:'Ты',text:'x'}]})};
 play.chapterMarks={};rememberChapter(play,NODES);
