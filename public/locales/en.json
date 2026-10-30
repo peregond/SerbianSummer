@@ -5080,5 +5080,9 @@
   "Конец ветки / без next": "End of branch / no next",
   "Найдено": "Found",
   "Вне глав": "Outside chapters",
-  "Карта сюжета недоступна в этой сборке.": "Story map is unavailable in this build."
+  "Карта сюжета недоступна в этой сборке.": "Story map is unavailable in this build.",
+  "Музыка и звуки": "Music and sounds",
+  "Громкость звуков": "Sound volume",
+  "Тише": "Quieter",
+  "Громче": "Louder"
 }

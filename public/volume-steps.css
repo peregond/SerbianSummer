@@ -1,0 +1,10 @@
+.stepper-group[hidden]{display:none}
+.stepper-setting{align-items:center}
+.stepper{display:flex;align-items:center;gap:8px;flex:none}
+.stepper button{width:48px;height:48px;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink);font-size:24px;font-weight:600;line-height:1;padding:0}
+.stepper button:active:not(:disabled){background:var(--sea);border-color:var(--sea);color:var(--paper)}
+.stepper-bars{display:flex;align-items:flex-end;gap:3px;height:24px}
+.stepper-bars i{display:block;width:5px;height:10px;border-radius:2px;background:var(--line)}
+.stepper-bars i:nth-child(n+4){height:14px}.stepper-bars i:nth-child(n+7){height:19px}.stepper-bars i:nth-child(n+10){height:24px}
+.stepper-bars i.on{background:var(--sea)}
+@media (prefers-reduced-motion:no-preference){.stepper-bars i{transition:background-color .12s}}

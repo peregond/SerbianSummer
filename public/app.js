@@ -21,21 +21,23 @@ import {STAGES} from './days.js?v=0.16.1';
 import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
 import {cueFor} from './music-cues.js?v=0.16.6';
 import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
-import {setAmbience,playSting} from './sfx.js?v=0.16.6';
+import {setAmbience,playSting} from './sfx.js?v=0.16.7';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
 import {drawBeatAction} from './beat-action.js?v=0.16.1';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.4-day-looks';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
-import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.6';
+import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
+import {setSfxVolume} from './sfx.js?v=0.16.7';
+import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
 import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.6';
+import {APP_VERSION} from './release.js?v=0.16.7';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -48,13 +50,14 @@ const catalog = await fetch('./names.json').then(r => { if(!r.ok) throw new Erro
 const settings = readLocal('settings', { textSize:18, music:false, volume:.55 });
 settings.textSize = Math.max(16,Math.min(24,Number(settings.textSize)||18));
 settings.music = settings.music === true;
-settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
+settings.volume = snapVolume(settings.volume,.55);
+settings.sfxVolume = snapVolume(settings.sfxVolume,settings.volume);// first run after 0.16.7: sounds start at the music's level, as before
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
 function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':['interaction','room-interaction','scene-quest'].includes(document.body.dataset.screen)?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
-setVolume(settings.volume);
+setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
 let saved = null, state = null, view = 'home', creationStep = 0, expandedNames = false, transitionLock = false;
 let draft = readLocal('draft', { gender:null, nameId:null });
@@ -608,12 +611,13 @@ function openPanel(kind) {
     else for(const id of state.journal) {const entry=JOURNAL[id];const article=document.createElement('article');article.className='journal-entry';const tag=document.createElement('p');tag.className='entry-tag';tag.textContent=t(entry.tag);const title=document.createElement('h3');title.textContent=t(entry.title);const body=document.createElement('p');body.textContent=t(entry.text);article.append(tag,title,body);if(entry.link){const a=document.createElement('a');a.href=entry.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t(entry.linkText);article.append(a);}content.append(article);}
   } else {
     $('panel-title').textContent=t('Настройки');
-    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting" id="volume-row" ${settings.music?'':'hidden'}><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><div class="settings-actions"><button id="account-settings" class="primary">Мой прогресс · аккаунт</button><button class="secondary" id="menu-home">На главный экран</button></div><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
+    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка и звуки</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><div class="stepper-group" id="volume-row" ${settings.music?'':'hidden'}>${stepperMarkup({id:'music-vol',label:'Громкость музыки',volume:settings.volume})}${stepperMarkup({id:'sfx-vol',label:'Громкость звуков',volume:settings.sfxVolume})}</div><label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><div class="settings-actions"><button id="account-settings" class="primary">Мой прогресс · аккаунт</button><button class="secondary" id="menu-home">На главный экран</button></div><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
     $('font-size').addEventListener('input',event=>{settings.textSize=Number(event.target.value);$('font-label').textContent=t(settings.textSize+' px');document.documentElement.style.setProperty('--text-size',settings.textSize+'px');writeLocal('settings',settings);fitScene();});
     $('music-toggle').addEventListener('change',event=>{applyMusic(event.target.checked);$('volume-row').hidden=!event.target.checked;});
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
-    $('music-volume').addEventListener('input',event=>{settings.volume=Number(event.target.value)/100;setVolume(settings.volume);$('volume-label').textContent=t(event.target.value+'%');writeLocal('settings',settings);});
+    bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
+    bindStepper(content,{id:'sfx-vol',volume:settings.sfxVolume,onChange:value=>{settings.sfxVolume=value;setSfxVolume(value);playSting('ding');writeLocal('settings',settings);}});
     $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
     $('screen-info').addEventListener('click',showScreenInfo);
     $('install-guide').addEventListener('click',showInstallGuide);

@@ -26,13 +26,14 @@ function apply(){
  if(!live()){for(const audio of loops.values()){audio.pause();audio.volume=0;}for(const audio of shots.values())audio.pause();}
  if(live()&&loops.size&&!timer)timer=setInterval(step,STEP_MS);
 }
-// Called by audio.js whenever the music switch, the volume or the page visibility changes.
+// Called by audio.js whenever the music switch or the page visibility changes.
 export function syncSfx(state){
  if('enabled' in state)enabled=!!state.enabled;
  if('hidden' in state)hidden=!!state.hidden;
- if('volume' in state)volume=Math.max(0,Math.min(1,Number(state.volume)||0));
  apply();
 }
+// The sounds have their own volume, separate from the music's.
+export function setSfxVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));apply();}
 export function setAmbience(key){desired=Object.hasOwn(AMBIENCE,key)?key:null;apply();}
 export function playSting(key){
  if(!live()||!Object.hasOwn(STINGS,key))return false;
