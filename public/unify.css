@@ -61,3 +61,6 @@
 /* long action buttons are capsules (multi-line choices and cards keep their corners) */
 :root{--radius-pill:999px}
 .primary,.secondary,.dialogue-navigation .next-button,.theme-options button,.settings-actions button,.confirm-actions button{border-radius:var(--radius-pill)}
+/* the start button on the home screen keeps the warm accent: it has to stand out on the picture */
+.home .primary{background:var(--wine);border-radius:var(--radius-pill);box-shadow:0 5px 16px #a6382540}
+.home .primary:hover,.home .primary:active{background:var(--wine-dark)}
