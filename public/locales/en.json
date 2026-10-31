@@ -5087,5 +5087,20 @@
   "Громче": "Louder",
   "Меньше": "Smaller",
   "Крупнее": "Larger",
-  "Сначала возьмём ключи, потом решим.": "Keys first, then we'll decide."
+  "Сначала возьмём ключи, потом решим.": "Keys first, then we'll decide.",
+  "Назад": "Back",
+  "Выбери героя и внешность.": "Choose your hero and look.",
+  "Начни вводить имя или выбери из списка.": "Start typing a name or pick one from the list.",
+  "Начни вводить имя": "Start typing a name",
+  "Имя героя": "Hero's name",
+  "Внешность": "Look",
+  "Короткая стрижка": "Short hair",
+  "Волнистые волосы": "Wavy hair",
+  "Светлые волосы": "Blond hair",
+  "Борода": "Beard",
+  "Кудри": "Curly hair",
+  "Длинные волосы": "Long hair",
+  "Каре": "Bob",
+  "Пучок": "Bun",
+  "Хвост": "Ponytail"
 }

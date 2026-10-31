@@ -32,6 +32,8 @@ import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
 import {clampSize,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
 import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
 import {panelToolButtons} from './panel-tools.js?v=0.16.7';
+import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
+import {mountNamePicker} from './name-picker.js?v=0.16.7';
 import {setSfxVolume} from './sfx.js?v=0.16.7';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
@@ -62,7 +64,7 @@ systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyThe
 applyTheme();
 setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
-let saved = null, state = null, view = 'home', creationStep = 0, expandedNames = false, transitionLock = false;
+let saved = null, state = null, view = 'home', creationStep = 0, transitionLock = false;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 // Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
@@ -120,7 +122,8 @@ function validateSave(input) {
   return { formatVersion:1, storyVersion:STORY_VERSION, profile:{gender:input.profile.gender,nameId:input.profile.nameId,namesCatalogVersion:catalog.version}, node:input.node,index:input.node==='end'?0:input.index, flags:{...input.flags},journal:[...new Set(input.journal)],log:input.log.map(e=>({speaker:e.speaker,text:e.text,choice:!!e.choice,...logVoice(e)})),updatedAt:Number(input.updatedAt)||Date.now(),completed:input.node==='end',chapterMarks:readChapterMarks(input.chapterMarks,NODES,JOURNAL,input.log.length),rewind:readRewind(input.rewind,NODES,JOURNAL,input.log.length) };
 }
 try { const candidate=await loadSave(); if(candidate){saved=validateSave(candidate);rememberChapter(saved,NODES,true);} } catch { toast('Сохранение не прочиталось. Можно начать заново или импортировать файл.'); }
-if(!['male','female'].includes(draft.gender)) draft={gender:null,nameId:null};
+if(!['male','female'].includes(draft.gender)) draft={gender:null,nameId:null,look:null};
+if(draft.gender&&!lookFor(draft.gender,draft.look)) draft.look=defaultLook(draft.gender);
 if(draft.nameId && !named(draft)) draft.nameId=null;
 
 function toast(text) {
@@ -207,42 +210,79 @@ function renderAdultChoice(visible) {
   const note=document.createElement('small');note.textContent=t('Близость без подробностей, только по взаимному согласию. Это можно изменить в настройках в любой момент.');title.append(note);
   $('adult-choice-toggle').checked=!!settings.adult;
 }
-function beginCreation() { creationStep=0;expandedNames=false;renderCreation(); }
+function beginCreation() { creationStep=0;renderCreation(); }
+const GENDER_ICON={
+  male:'<svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10" cy="14" r="5"/><path d="M14 10l6-6M15 4h5v5"/></svg>',
+  female:'<svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="5"/><path d="M12 14v8M9 19h6"/></svg>'
+};
 function renderCreation() {
   showScreen('creation');
-  const options=$('creation-options');options.replaceChildren();
-  $('step-label').textContent=t(creationStep===0?'ШАГ 01 / 02':'ШАГ 02 / 02');
+  const screen=$('creation'),options=$('creation-options');options.replaceChildren();
+  // restart the entrance animation once per step (never on a tap inside the step)
+  screen.classList.remove('animate');void screen.offsetWidth;screen.classList.add('animate');
+  $('step-label').textContent=`${creationStep+1} / 2`;
+  [...$('step-bar').children].forEach((bar,i)=>bar.classList.toggle('on',i<=creationStep));
   $('creation-title').textContent=t(creationStep===0?'Кем ты будешь?':'Как тебя зовут?');
-  $('creation-description').textContent=t(creationStep===0?'Начнём с главного героя.':'Выбери имя, с которым начнётся это лето.');
+  $('creation-description').textContent=t(creationStep===0?'Выбери героя и внешность.':'Начни вводить имя или выбери из списка.');
   $('name-preview').hidden=true;
-  renderAdultChoice(creationStep===1);
+  renderAdultChoice(creationStep===0);
   $('creation-next').textContent=t(creationStep===0?'Дальше →':'Начать историю →');
   $('creation-next').disabled=creationStep===0?!draft.gender:!validProfile(draft);
-  if(creationStep===0) {
-    options.className='gender-options';
-    for(const [gender,description] of [['male','«Ты уже добрался?»'],['female','«Ты уже добралась?»']]) {
-      const button=document.createElement('button');button.type='button';button.className='gender-option';button.setAttribute('aria-pressed',String(draft.gender===gender));
-      const strong=document.createElement('strong');strong.textContent=t(catalog.genders[gender].label);
-      const small=document.createElement('small');small.textContent=t(description);button.append(strong,small);
-      button.addEventListener('click',()=>{if(draft.gender!==gender) draft.nameId=null;draft.gender=gender;writeLocal('draft',draft);renderCreation();options.querySelector(`[aria-pressed="true"]`)?.focus();});options.append(button);
+  if(creationStep===0) renderHeroStep(options); else renderNameStep(options);
+}
+function renderHeroStep(options) {
+  options.className='hero-setup';
+  const genders=document.createElement('div');genders.className='gender-options';
+  const looks=document.createElement('section');looks.className='look-section';looks.setAttribute('aria-labelledby','look-title');
+  const title=document.createElement('p');title.id='look-title';title.className='look-title';title.textContent=t('Внешность');
+  const row=document.createElement('div');row.className='look-options';row.setAttribute('role','radiogroup');row.setAttribute('aria-labelledby','look-title');
+  const hint=document.createElement('p');hint.className='look-hint';hint.setAttribute('aria-live','polite');
+  looks.append(title,row,hint);
+  const genderButtons=new Map();
+  const paintLooks=()=>{
+    looks.hidden=!draft.gender;row.replaceChildren();if(!draft.gender)return;
+    for(const look of LOOKS[draft.gender]){
+      const button=document.createElement('button');button.type='button';button.className='look-option';button.setAttribute('role','radio');
+      button.setAttribute('aria-checked',String(draft.look===look.id));button.setAttribute('aria-label',t(look.label));button.innerHTML=avatarMarkup(draft.gender,look.id,{size:64});
+      button.addEventListener('click',()=>{draft.look=look.id;writeLocal('draft',draft);for(const other of row.children)other.setAttribute('aria-checked',String(other===button));hint.textContent=t(look.label);});
+      row.append(button);
     }
-  } else {
-    options.className='name-options';
-    const group=catalog.genders[draft.gender].names;
-    for(const name of group.filter(n=>expandedNames||n.featured||n.id===draft.nameId)) {
-      const button=document.createElement('button');button.type='button';button.className='name-option';button.textContent=t(name.full.nominative);button.setAttribute('aria-pressed',String(draft.nameId===name.id));
-      button.addEventListener('click',()=>{draft.nameId=name.id;writeLocal('draft',draft);renderCreation();options.querySelector('[aria-pressed="true"]')?.focus();});options.append(button);
-    }
-    if(!expandedNames) { const more=document.createElement('button');more.className='more-names';more.textContent=t('Ещё имена +');more.style.gridColumn='1 / -1';more.addEventListener('click',()=>{expandedNames=true;renderCreation();});options.append(more); }
-    if(validProfile(draft)) {
-      const name=named(draft);const preview=$('name-preview');preview.hidden=false;preview.textContent=t(getLanguage()==='en'?`‘${t(name.familiar.nominative)}, have you arrived yet?’`:`«${name.familiar.nominative}, ты уже ${draft.gender==='female'?'добралась':'добрался'}?»`);
-      const hint=document.createElement('small');hint.textContent=t(getLanguage()==='en'?`${t(name.full.nominative)} for introductions. ${t(name.familiar.nominative)} with friends.`:`${name.full.nominative} — для знакомства. ${name.familiar.nominative} — для своих.`);preview.append(hint);
-    }
+    hint.textContent=t(lookFor(draft.gender,draft.look)?.label??'');
+  };
+  for(const [gender,description] of [['male','«Ты уже добрался?»'],['female','«Ты уже добралась?»']]) {
+    const button=document.createElement('button');button.type='button';button.className='gender-option';button.setAttribute('aria-pressed',String(draft.gender===gender));
+    button.insertAdjacentHTML('beforeend',GENDER_ICON[gender]);
+    const strong=document.createElement('strong');strong.textContent=t(catalog.genders[gender].label);
+    const small=document.createElement('small');small.textContent=t(description);button.append(strong,small);
+    button.addEventListener('click',()=>{
+      if(draft.gender!==gender){draft.nameId=null;draft.gender=gender;draft.look=defaultLook(gender);writeLocal('draft',draft);paintLooks();}
+      for(const [key,other] of genderButtons)other.setAttribute('aria-pressed',String(key===gender));
+      $('creation-next').disabled=false;
+    });
+    genderButtons.set(gender,button);genders.append(button);
   }
+  paintLooks();options.append(genders,looks);
+}
+function updateNamePreview() {
+  $('creation-next').disabled=!validProfile(draft);
+  const preview=$('name-preview');
+  if(!validProfile(draft)){preview.hidden=true;return;}
+  const name=named(draft);preview.hidden=false;preview.textContent=t(getLanguage()==='en'?`‘${t(name.familiar.nominative)}, have you arrived yet?’`:`«${name.familiar.nominative}, ты уже ${draft.gender==='female'?'добралась':'добрался'}?»`);
+  const hint=document.createElement('small');hint.textContent=t(getLanguage()==='en'?`${t(name.full.nominative)} for introductions. ${t(name.familiar.nominative)} with friends.`:`${name.full.nominative} — для знакомства. ${name.familiar.nominative} — для своих.`);preview.append(hint);
+}
+function renderNameStep(options) {
+  options.className='name-step';
+  mountNamePicker(options,{
+    names:catalog.genders[draft.gender].names,selectedId:draft.nameId,label:text=>t(text),
+    placeholder:t('Начни вводить имя'),listLabel:t('Имя героя'),avatar:avatarMarkup(draft.gender,draft.look,{size:52}),
+    onSelect:id=>{draft.nameId=id;writeLocal('draft',draft);updateNamePreview();},
+    onClear:()=>{draft.nameId=null;writeLocal('draft',draft);updateNamePreview();}
+  });
+  updateNamePreview();
 }
 function startGame() {
   if(!validProfile(draft))return;
-  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new'},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
+  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new',heroLook:lookFor(draft.gender,draft.look)?draft.look:defaultLook(draft.gender)},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
   if(settings.music) applyMusic(true);
   enterNode(START);recordPage();save();renderGame();
 }
