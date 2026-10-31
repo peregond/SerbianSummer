@@ -10,7 +10,9 @@ export function drawBeatAction(container,hotspots,action,{text,perform,tones,nod
     const caption=document.createElement('p');caption.className='beat-caption';caption.textContent=t(text(action.label));container.append(caption);
     const list=document.createElement('div');list.className='beat-checklist';const checked=new Set();
     const done=document.createElement('button');done.type='button';done.className='primary beat-complete';done.textContent=t('Готово');done.disabled=true;
-    for(const item of action.items){const button=document.createElement('button');button.type='button';button.setAttribute('aria-pressed','false');button.textContent=t('○ '+item);button.addEventListener('click',()=>{if(checked.has(item))checked.delete(item);else checked.add(item);button.setAttribute('aria-pressed',String(checked.has(item)));button.textContent=t((checked.has(item)?'✓ ':'○ ')+item);done.disabled=checked.size!==action.items.length;});list.append(button);}
+    // each item is a pill with a round check mark (drawn in CSS); the label keeps its translation key, which starts with a glyph
+    const paint=(button,item,on)=>{const label=t((on?'✓ ':'○ ')+item).slice(2);button.replaceChildren(Object.assign(document.createElement('span'),{className:'check'}),document.createTextNode(label));button.setAttribute('aria-pressed',String(on));};
+    for(const item of action.items){const button=document.createElement('button');button.type='button';paint(button,item,false);button.addEventListener('click',()=>{if(checked.has(item))checked.delete(item);else checked.add(item);paint(button,item,checked.has(item));done.disabled=checked.size!==action.items.length;});list.append(button);}
     done.addEventListener('click',()=>{if(checked.size===action.items.length)perform();});container.append(list,done);return;
   }
 }

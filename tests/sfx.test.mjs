@@ -22,9 +22,9 @@ assert.equal(stingFor('flat_signed'),'signed');assert.equal(stingFor('morning_st
 const made=[];
 globalThis.Audio=class{paused=true;volume=1;currentTime=0;plays=0;constructor(src){this.src=src;made.push(this);}play(){this.paused=false;this.plays++;return Promise.resolve();}pause(){this.paused=true;}};
 const intervals=[];globalThis.setInterval=fn=>{intervals.push(fn);return intervals.length;};globalThis.clearInterval=()=>{};
-const {syncSfx,setAmbience,playSting}=await import('../public/sfx.js');
+const {syncSfx,setSfxVolume,setAmbience,playSting}=await import('../public/sfx.js');
 setAmbience('rain');assert.equal(made.length,0,'Nothing loads before music is switched on');assert.equal(playSting('key'),false);
-syncSfx({enabled:true,volume:.5});assert.equal(made.length,1);assert.ok(made[0].src.endsWith('rain-amb.m4a'));assert.equal(made[0].plays,1);
+syncSfx({enabled:true});setSfxVolume(.5);assert.equal(made.length,1);assert.ok(made[0].src.endsWith('rain-amb.m4a'));assert.equal(made[0].plays,1);
 for(let i=0;i<20;i++)intervals.forEach(fn=>fn());assert.ok(Math.abs(made[0].volume-.25)<.02,'Ambience settles under the music ('+made[0].volume+')');
 setAmbience('rain');assert.equal(made[0].plays,1,'The same ambience does not restart');
 assert.equal(playSting('key'),true);assert.ok(made[1].src.endsWith('key-sting.m4a'));assert.equal(made[1].plays,1);
@@ -32,4 +32,5 @@ syncSfx({hidden:true});assert.ok(made.every(a=>a.paused));assert.equal(playSting
 syncSfx({hidden:false});assert.equal(made[0].paused,false);
 setAmbience(null);for(let i=0;i<40;i++)intervals.forEach(fn=>fn());assert.equal(made[0].paused,true,'Ambience fades out and pauses');
 syncSfx({enabled:false});assert.equal(playSting('ding'),false);
+syncSfx({enabled:true});setSfxVolume(.2);assert.equal(playSting('ding'),true);assert.ok(Math.abs(made.find(a=>a.src.endsWith('ding-sting.m4a')).volume-.17)<.001,'Sound volume is independent of the music volume');
 console.log('Sound effects: seven ambience loops and eight stingers exist, map to real scenes and follow the music switch.');

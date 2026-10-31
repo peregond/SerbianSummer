@@ -1,4 +1,4 @@
-import {syncSfx} from './sfx.js?v=0.16.6';
+import {syncSfx} from './sfx.js?v=0.16.7';
 // Original local cues. Audio is enabled only after the player's explicit gesture.
 let context,master,active=false,volume=.55,desired='prologue',current=null,revision=0;
 const players=new Map();
@@ -39,7 +39,7 @@ async function playDesired(){
  }
 }
 export function musicPlaying(){return active&&[...players.values()].some(p=>!p.audio.paused);}
-export function setVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));syncSfx({volume});if(master)master.gain.value=volume;else for(const [key,p]of players)p.audio.volume=key===current?volume:0;}
+export function setVolume(value){volume=Math.max(0,Math.min(1,Number(value)||0));if(master)master.gain.value=volume;else for(const [key,p]of players)p.audio.volume=key===current?volume:0;}
 export function setMusicScene(key){
  desired=Object.hasOwn(files,key)?key:'prologue';
  if(active&&(current!==desired||players.get(current)?.audio.paused))void playDesired();

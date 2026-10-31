@@ -21,48 +21,70 @@ import {STAGES} from './days.js?v=0.16.1';
 import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
 import {cueFor} from './music-cues.js?v=0.16.6';
 import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
-import {setAmbience,playSting} from './sfx.js?v=0.16.6';
+import {setAmbience,playSting} from './sfx.js?v=0.16.7';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
-import {drawBeatAction} from './beat-action.js?v=0.16.1';
+import {drawBeatAction} from './beat-action.js?v=0.16.7';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.4-day-looks';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
-import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.6';
+import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
+import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
+import {splitToFit} from './text-fit.js?v=0.16.7';
+import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
+import {panelToolButtons} from './panel-tools.js?v=0.16.7';
+import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
+import {mountNamePicker} from './name-picker.js?v=0.16.7';
+import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.16.7';
+import {setSfxVolume} from './sfx.js?v=0.16.7';
+import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
 import { CloudProgress } from './cloud.js?v=0.9.0';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.1';
 import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.6';
+import {APP_VERSION} from './release.js?v=0.16.7';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
 try{await initialiseLanguage();translationsReady=true;}catch{setLanguage('ru');}
 const applyStaticLanguage=captureStaticUi(document);
 applyStaticLanguage();
-function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');for(const button of document.querySelectorAll('[data-language]'))button.setAttribute('aria-pressed',String(button.dataset.language===getLanguage()));document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
+function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
 updateLanguageUi();
 const catalog = await fetch('./names.json').then(r => { if(!r.ok) throw new Error('Не удалось загрузить имена'); return r.json(); });
 const settings = readLocal('settings', { textSize:18, music:false, volume:.55 });
-settings.textSize = Math.max(16,Math.min(24,Number(settings.textSize)||18));
+settings.textSize = clampSize(settings.textSize);
 settings.music = settings.music === true;
-settings.volume = Number.isFinite(settings.volume) ? Math.max(0,Math.min(1,settings.volume)) : .55;
+settings.volume = snapVolume(settings.volume,.55);
+settings.sfxVolume = snapVolume(settings.sfxVolume,settings.volume);// first run after 0.16.7: sounds start at the music's level, as before
 settings.theme=['system','light','dark'].includes(settings.theme)?settings.theme:'system';
 const systemTheme=window.matchMedia('(prefers-color-scheme: dark)');
 function applyTheme(){const dark=settings.theme==='dark'||(settings.theme==='system'&&systemTheme.matches);document.documentElement.dataset.theme=dark?'dark':'light';document.querySelector('meta[name="theme-color"]').content=document.body.dataset.screen==='home'?'#102b46':['interaction','room-interaction','scene-quest'].includes(document.body.dataset.screen)?'#192e3a':document.body.dataset.screen==='messenger'?(dark?MESSENGER_CONFIG.chrome.dark:MESSENGER_CONFIG.chrome.light):document.body.dataset.screen==='chapter-card'?'#0a2630':dark?'#182a31':'#fff3d8';}
 systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyTheme();});
 applyTheme();
-setVolume(settings.volume);
+setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
-let saved = null, state = null, view = 'home', creationStep = 0, expandedNames = false, transitionLock = false;
+document.documentElement.style.setProperty('--text-lines', String(textLines(settings.textSize)));
+let saved = null, state = null, view = 'home', creationStep = 0, transitionLock = false;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
+// Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
+const panelTools=document.createElement('div');panelTools.className='panel-tools';let toolsFresh=false;
+const nativeShowModal=panel.showModal.bind(panel);
+let hideClose=false;
+panel.showModal=()=>{if(!toolsFresh)panelTools.remove();toolsFresh=false;$('close-panel').hidden=hideClose;hideClose=false;nativeShowModal();};
+function setPanelTools(items){panelTools.replaceChildren(...panelToolButtons(items,t));$('close-panel').before(panelTools);toolsFresh=true;}
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
 let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
+// A line longer than the dialogue box is shown in several screens: textChunks, the one on view is chunkIndex.
+let textChunks=[''],chunkIndex=0,chunkKey='',chunkWidth=0,showLastChunk=false;
+// The chapter label above a line is for people coming into the game (new game, continue, chapter picked on the map); a chapter
+// reached by playing was already announced by its title card. labelKey is the line the label belongs to.
+let pendingLabel=false,labelKey='';
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -109,7 +131,8 @@ function validateSave(input) {
   return { formatVersion:1, storyVersion:STORY_VERSION, profile:{gender:input.profile.gender,nameId:input.profile.nameId,namesCatalogVersion:catalog.version}, node:input.node,index:input.node==='end'?0:input.index, flags:{...input.flags},journal:[...new Set(input.journal)],log:input.log.map(e=>({speaker:e.speaker,text:e.text,choice:!!e.choice,...logVoice(e)})),updatedAt:Number(input.updatedAt)||Date.now(),completed:input.node==='end',chapterMarks:readChapterMarks(input.chapterMarks,NODES,JOURNAL,input.log.length),rewind:readRewind(input.rewind,NODES,JOURNAL,input.log.length) };
 }
 try { const candidate=await loadSave(); if(candidate){saved=validateSave(candidate);rememberChapter(saved,NODES,true);} } catch { toast('Сохранение не прочиталось. Можно начать заново или импортировать файл.'); }
-if(!['male','female'].includes(draft.gender)) draft={gender:null,nameId:null};
+if(!['male','female'].includes(draft.gender)) draft={gender:null,nameId:null,look:null};
+if(draft.gender&&!lookFor(draft.gender,draft.look)) draft.look=defaultLook(draft.gender);
 if(draft.nameId && !named(draft)) draft.nameId=null;
 
 function toast(text) {
@@ -127,8 +150,8 @@ async function applyMusic(enabled) {
 }
 function chooseSound(continueGame) {
   setMusic(false);
-  $('panel-title').textContent=t('Добавим музыку?');
-  $('panel-content').innerHTML=html('<p class="confirm-copy">Спокойная мелодия для первого дня в Белграде. Включить?</p><div class="confirm-actions"><button id="sound-yes" class="primary">С музыкой</button><button id="sound-no" class="secondary">Без музыки</button></div><p class="sound-hint">Звук и громкость всегда можно изменить в настройках.</p>');
+  $('panel-title').textContent=t('Добавим музыку и звуки?');hideClose=true;
+  $('panel-content').innerHTML=html('<p class="confirm-copy">Спокойная музыка и тихие звуки города для первого дня в Белграде. Включить?</p><div class="confirm-actions"><button id="sound-yes" class="primary">Включить</button><button id="sound-no" class="secondary">Без звука</button></div><p class="sound-hint">Звук и громкость всегда можно изменить в настройках.</p>');
   for(const [id,enabled] of [['sound-yes',true],['sound-no',false]])$(id).addEventListener('click',()=>{applyMusic(enabled);panel.close();continueGame();});
   panel.showModal();
 }
@@ -196,44 +219,81 @@ function renderAdultChoice(visible) {
   const note=document.createElement('small');note.textContent=t('Близость без подробностей, только по взаимному согласию. Это можно изменить в настройках в любой момент.');title.append(note);
   $('adult-choice-toggle').checked=!!settings.adult;
 }
-function beginCreation() { creationStep=0;expandedNames=false;renderCreation(); }
+function beginCreation() { creationStep=0;renderCreation(); }
+const GENDER_ICON={
+  male:'<svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10" cy="14" r="5"/><path d="M14 10l6-6M15 4h5v5"/></svg>',
+  female:'<svg class="gender-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="9" r="5"/><path d="M12 14v8M9 19h6"/></svg>'
+};
 function renderCreation() {
   showScreen('creation');
-  const options=$('creation-options');options.replaceChildren();
-  $('step-label').textContent=t(creationStep===0?'ШАГ 01 / 02':'ШАГ 02 / 02');
+  const screen=$('creation'),options=$('creation-options');options.replaceChildren();
+  // restart the entrance animation once per step (never on a tap inside the step)
+  screen.classList.remove('animate');void screen.offsetWidth;screen.classList.add('animate');
+  $('step-label').textContent=`${creationStep+1} / 2`;
+  [...$('step-bar').children].forEach((bar,i)=>bar.classList.toggle('on',i<=creationStep));
   $('creation-title').textContent=t(creationStep===0?'Кем ты будешь?':'Как тебя зовут?');
-  $('creation-description').textContent=t(creationStep===0?'Начнём с главного героя.':'Выбери имя, с которым начнётся это лето.');
+  $('creation-description').textContent=t(creationStep===0?'Выбери героя и внешность.':'Начни вводить имя или выбери из списка.');
   $('name-preview').hidden=true;
-  renderAdultChoice(creationStep===1);
+  renderAdultChoice(creationStep===0);
   $('creation-next').textContent=t(creationStep===0?'Дальше →':'Начать историю →');
   $('creation-next').disabled=creationStep===0?!draft.gender:!validProfile(draft);
-  if(creationStep===0) {
-    options.className='gender-options';
-    for(const [gender,description] of [['male','«Ты уже добрался?»'],['female','«Ты уже добралась?»']]) {
-      const button=document.createElement('button');button.type='button';button.className='gender-option';button.setAttribute('aria-pressed',String(draft.gender===gender));
-      const strong=document.createElement('strong');strong.textContent=t(catalog.genders[gender].label);
-      const small=document.createElement('small');small.textContent=t(description);button.append(strong,small);
-      button.addEventListener('click',()=>{if(draft.gender!==gender) draft.nameId=null;draft.gender=gender;writeLocal('draft',draft);renderCreation();options.querySelector(`[aria-pressed="true"]`)?.focus();});options.append(button);
+  if(creationStep===0) renderHeroStep(options); else renderNameStep(options);
+}
+function renderHeroStep(options) {
+  options.className='hero-setup';
+  const genders=document.createElement('div');genders.className='gender-options';
+  const looks=document.createElement('section');looks.className='look-section';looks.setAttribute('aria-labelledby','look-title');
+  const title=document.createElement('p');title.id='look-title';title.className='look-title';title.textContent=t('Внешность');
+  const row=document.createElement('div');row.className='look-options';row.setAttribute('role','radiogroup');row.setAttribute('aria-labelledby','look-title');
+  const hint=document.createElement('p');hint.className='look-hint';hint.setAttribute('aria-live','polite');
+  looks.append(title,row,hint);
+  const genderButtons=new Map();
+  const paintLooks=()=>{
+    looks.hidden=!draft.gender;row.replaceChildren();if(!draft.gender)return;
+    for(const look of LOOKS[draft.gender]){
+      const button=document.createElement('button');button.type='button';button.className='look-option';button.setAttribute('role','radio');
+      button.setAttribute('aria-checked',String(draft.look===look.id));button.setAttribute('aria-label',t(look.label));button.innerHTML=avatarMarkup(draft.gender,look.id,{size:64});
+      button.addEventListener('click',()=>{draft.look=look.id;writeLocal('draft',draft);for(const other of row.children)other.setAttribute('aria-checked',String(other===button));hint.textContent=t(look.label);});
+      row.append(button);
     }
-  } else {
-    options.className='name-options';
-    const group=catalog.genders[draft.gender].names;
-    for(const name of group.filter(n=>expandedNames||n.featured||n.id===draft.nameId)) {
-      const button=document.createElement('button');button.type='button';button.className='name-option';button.textContent=t(name.full.nominative);button.setAttribute('aria-pressed',String(draft.nameId===name.id));
-      button.addEventListener('click',()=>{draft.nameId=name.id;writeLocal('draft',draft);renderCreation();options.querySelector('[aria-pressed="true"]')?.focus();});options.append(button);
-    }
-    if(!expandedNames) { const more=document.createElement('button');more.className='more-names';more.textContent=t('Ещё имена +');more.style.gridColumn='1 / -1';more.addEventListener('click',()=>{expandedNames=true;renderCreation();});options.append(more); }
-    if(validProfile(draft)) {
-      const name=named(draft);const preview=$('name-preview');preview.hidden=false;preview.textContent=t(getLanguage()==='en'?`‘${t(name.familiar.nominative)}, have you arrived yet?’`:`«${name.familiar.nominative}, ты уже ${draft.gender==='female'?'добралась':'добрался'}?»`);
-      const hint=document.createElement('small');hint.textContent=t(getLanguage()==='en'?`${t(name.full.nominative)} for introductions. ${t(name.familiar.nominative)} with friends.`:`${name.full.nominative} — для знакомства. ${name.familiar.nominative} — для своих.`);preview.append(hint);
-    }
+    hint.textContent=t(lookFor(draft.gender,draft.look)?.label??'');
+  };
+  for(const [gender,description] of [['male','«Ты уже добрался?»'],['female','«Ты уже добралась?»']]) {
+    const button=document.createElement('button');button.type='button';button.className='gender-option';button.setAttribute('aria-pressed',String(draft.gender===gender));
+    button.insertAdjacentHTML('beforeend',GENDER_ICON[gender]);
+    const strong=document.createElement('strong');strong.textContent=t(catalog.genders[gender].label);
+    const small=document.createElement('small');small.textContent=t(description);button.append(strong,small);
+    button.addEventListener('click',()=>{
+      if(draft.gender!==gender){draft.nameId=null;draft.gender=gender;draft.look=defaultLook(gender);writeLocal('draft',draft);paintLooks();}
+      for(const [key,other] of genderButtons)other.setAttribute('aria-pressed',String(key===gender));
+      $('creation-next').disabled=false;
+    });
+    genderButtons.set(gender,button);genders.append(button);
   }
+  paintLooks();options.append(genders,looks);
+}
+function updateNamePreview() {
+  $('creation-next').disabled=!validProfile(draft);
+  const preview=$('name-preview');
+  if(!validProfile(draft)){preview.hidden=true;return;}
+  const name=named(draft);preview.hidden=false;preview.textContent=t(getLanguage()==='en'?`‘${t(name.familiar.nominative)}, have you arrived yet?’`:`«${name.familiar.nominative}, ты уже ${draft.gender==='female'?'добралась':'добрался'}?»`);
+  const hint=document.createElement('small');hint.textContent=t(getLanguage()==='en'?`${t(name.full.nominative)} for introductions. ${t(name.familiar.nominative)} with friends.`:`${name.full.nominative} — для знакомства. ${name.familiar.nominative} — для своих.`);preview.append(hint);
+}
+function renderNameStep(options) {
+  options.className='name-step';
+  mountNamePicker(options,{
+    names:catalog.genders[draft.gender].names,selectedId:draft.nameId,label:text=>t(text),
+    placeholder:t('Начни вводить имя'),listLabel:t('Имя героя'),avatar:avatarMarkup(draft.gender,draft.look,{size:52}),
+    onSelect:id=>{draft.nameId=id;writeLocal('draft',draft);updateNamePreview();},
+    onClear:()=>{draft.nameId=null;writeLocal('draft',draft);updateNamePreview();}
+  });
+  updateNamePreview();
 }
 function startGame() {
   if(!validProfile(draft))return;
-  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new'},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
+  state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new',heroLook:lookFor(draft.gender,draft.look)?draft.look:defaultLook(draft.gender)},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
   if(settings.music) applyMusic(true);
-  enterNode(START);recordPage();save();renderGame();
+  enterNode(START);recordPage();save();pendingLabel=true;renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
   const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:RENTAL_NAMES[rentalOwner(state.flags)]??(state.flags.districtOwner==='jelena'?'Йелена':'Драган'),bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:RENTAL_NAMES[rentalCounterpart(state.flags)]??(state.flags.districtOwner==='jelena'?'Драган':'Йелена'),narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
@@ -265,6 +325,7 @@ function showChapterLock(){
 }
 function renderGame({skipMessenger=false}={}) {
   state.index=visibleMessagePage(state.node,state.index);
+  if(pendingLabel){labelKey=state.node+'|'+state.index;pendingLabel=false;}
   if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
@@ -332,16 +393,26 @@ function renderGame({skipMessenger=false}={}) {
   $('game').dataset.speaker=speakerIdentity(page,state.flags);
   $('voice-label').textContent=t(presentation.daydream?'Воображение':page.speaker==='narrator'?'Про себя':page.speaker==='player'?'Вслух':'');
   $('voice-label').hidden=!$('voice-label').textContent;
-  const text=$('dialogue-text');text.textContent=t(interpolate(pageText(page,state.flags),state.profile,catalog));text.classList.toggle('message',!!page.message);
-  const isChoice=state.index===node.pages.length-1&&!!node.choices;
-  const action=beatActionAt(node,state.index);
+  const text=$('dialogue-text');text.classList.toggle('message',!!page.message);
+  const full=t(interpolate(pageText(page,state.flags),state.profile,catalog));
+  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0].join('|');
+  const fresh=key!==chunkKey;
+  if(fresh){chunkKey=key;chunkWidth=text.clientWidth;textChunks=splitToFit(full,candidate=>{text.textContent=candidate;return text.scrollHeight<=text.clientHeight+1;});chunkIndex=showLastChunk?textChunks.length-1:0;}
+  showLastChunk=false;chunkIndex=Math.min(chunkIndex,textChunks.length-1);text.textContent=textChunks[chunkIndex];
+  // choices and actions wait for the last screen of the line
+  const lastChunk=chunkIndex===textChunks.length-1;
+  const isChoice=lastChunk&&state.index===node.pages.length-1&&!!node.choices;
+  const action=lastChunk?beatActionAt(node,state.index):null;
   const inlineAction=!!action&&action.kind!=='tap';
   $('game').classList.toggle('has-beat',inlineAction);
   drawBeatAction($('beat-action'),$('beat-hotspots'),action,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),perform:performBeat,tones:CHOICE_TONES,node,flags:state.flags});
-  $('rewind').disabled=!state.rewind?.length;
+  $('rewind').disabled=!state.rewind?.length&&chunkIndex===0;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
-  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags,state.profile))) {
+  const shownChoices=isChoice?node.choices.filter(each=>choiceVisible(each,state.flags,state.profile)):[];
+  // four or more choices get slimmer buttons, so the picture does not shrink too much
+  $('choices').dataset.compact=String(shownChoices.length>=4);
+  if(isChoice)for(const choice of shownChoices) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
     button.addEventListener('click',()=>choose(choice));$('choices').append(button);
@@ -349,7 +420,7 @@ function renderGame({skipMessenger=false}={}) {
   $('journal-dot').hidden=state.journal.length===0;
 
   $('chapter-progress').textContent=t(chapter.number+' · Главы ↗');
-  $('chapter-heading').hidden=(state.node!==chapter.start&&state.node!=='rental_day_'+chapter.day)||state.index!==0;
+  $('chapter-heading').hidden=labelKey!==state.node+'|'+state.index;
   $('chapter-heading').textContent=t(chapter.number+' · '+chapter.title);
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
@@ -452,6 +523,8 @@ function fitScene() {
 }
 function advance({render=true,message=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
+  // a long line goes on to its next screen first
+  if(view==='game'&&chunkIndex<textChunks.length-1){chunkIndex++;if(render)renderGame();return true;}
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
   if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
@@ -554,7 +627,10 @@ function renderEnding() {
 }
 function goBack() {
   if(panel.open||transitionLock||!state||!['game','messenger','room-interaction','scene-quest','ending'].includes(view))return;
+  // inside a long line, back means the previous screen of the same line
+  if(view==='game'&&chunkIndex>0){chunkIndex--;renderGame();return;}
   if(!rewindStep(state))return;
+  showLastChunk=true;
   state.chapterMarks=readChapterMarks(state.chapterMarks,NODES,JOURNAL,state.log.length);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   save();renderGame();
@@ -579,7 +655,7 @@ function confirmChapter(chapter,source){
   const actions=document.createElement('div');actions.className='confirm-actions';
   const start=document.createElement('button');start.className='primary';start.textContent=t('Перейти к главе');start.addEventListener('click',()=>{
     const restored=structuredClone(source);if(!restartChapter(restored,chapter.id,NODES))return;
-    state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);renderGame();
+    state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);pendingLabel=true;renderGame();
   });
   const download=document.createElement('button');download.className='secondary';download.textContent=t('Скачать текущую историю');download.addEventListener('click',exportSave);
   const cancel=document.createElement('button');cancel.className='text-button';cancel.textContent=t('Остаться здесь');cancel.addEventListener('click',openChapters);
@@ -594,8 +670,10 @@ function openPanel(kind) {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
     for(const [label,run]of [['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
-    const details=document.createElement('details');details.className='reading-details';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
-    for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='text-button';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});details.append(button);}
+    const details=document.createElement('details');details.className='reading-details more-settings';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
+    const reading=document.createElement('div');reading.className='settings-actions';
+    for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});reading.append(button);}
+    details.append(reading);
     content.append(actions,details);
   } else if(kind==='history') {
     $('panel-title').textContent=t('История реплик');
@@ -608,17 +686,17 @@ function openPanel(kind) {
     else for(const id of state.journal) {const entry=JOURNAL[id];const article=document.createElement('article');article.className='journal-entry';const tag=document.createElement('p');tag.className='entry-tag';tag.textContent=t(entry.tag);const title=document.createElement('h3');title.textContent=t(entry.title);const body=document.createElement('p');body.textContent=t(entry.text);article.append(tag,title,body);if(entry.link){const a=document.createElement('a');a.href=entry.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t(entry.linkText);article.append(a);}content.append(article);}
   } else {
     $('panel-title').textContent=t('Настройки');
-    content.innerHTML=html(`<label class="setting"><span>Размер текста<small id="font-label">${settings.textSize} px</small></span><input id="font-size" aria-label="Размер текста" type="range" min="16" max="24" step="1" value="${settings.textSize}"></label><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">Тёмная</button></div></div><label class="setting"><span>Музыка</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><label class="setting" id="volume-row" ${settings.music?'':'hidden'}><span>Громкость<small id="volume-label">${Math.round(settings.volume*100)}%</small></span><input id="music-volume" aria-label="Громкость музыки" type="range" min="0" max="100" step="1" value="${Math.round(settings.volume*100)}"></label><label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><div class="settings-actions"><button id="account-settings" class="primary">Мой прогресс · аккаунт</button><button class="secondary" id="menu-home">На главный экран</button></div><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
+    content.innerHTML=html(`<label class="setting"><span>Музыка и звуки</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><div class="stepper-group" id="volume-row" ${settings.music?'':'hidden'}>${stepperMarkup({id:'music-vol',label:'Громкость музыки',volume:settings.volume})}${stepperMarkup({id:'sfx-vol',label:'Громкость звуков',volume:settings.sfxVolume})}</div><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">${THEME_ICONS.system}Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">${THEME_ICONS.light}Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">${THEME_ICONS.dark}Тёмная</button></div></div>${textSizeMarkup({size:settings.textSize})}<label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
-    $('font-size').addEventListener('input',event=>{settings.textSize=Number(event.target.value);$('font-label').textContent=t(settings.textSize+' px');document.documentElement.style.setProperty('--text-size',settings.textSize+'px');writeLocal('settings',settings);fitScene();});
+    bindTextSize(content,{size:settings.textSize,onChange:size=>{settings.textSize=size;document.documentElement.style.setProperty('--text-size',size+'px');document.documentElement.style.setProperty('--text-lines',String(textLines(size)));writeLocal('settings',settings);if(view==='game')renderGame();else fitScene();}});
     $('music-toggle').addEventListener('change',event=>{applyMusic(event.target.checked);$('volume-row').hidden=!event.target.checked;});
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
-    $('music-volume').addEventListener('input',event=>{settings.volume=Number(event.target.value)/100;setVolume(settings.volume);$('volume-label').textContent=t(event.target.value+'%');writeLocal('settings',settings);});
-    $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
+    bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
+    bindStepper(content,{id:'sfx-vol',volume:settings.sfxVolume,onChange:value=>{settings.sfxVolume=value;setSfxVolume(value);playSting('ding');writeLocal('settings',settings);}});
+    setPanelTools([{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
     $('screen-info').addEventListener('click',showScreenInfo);
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
-    $('menu-home').addEventListener('click',()=>{panel.close();home();});
     if(new URL(location.href).searchParams.has('scene')){
       const hint=document.createElement('p');
       hint.textContent=getLanguage()==='en'?'Scene link: enter your workshop code below to view it. Your game progress will not change.':'Ссылка на сцену: введи промокод мастерской ниже, чтобы открыть её. Прогресс игры не изменится.';
@@ -691,7 +769,7 @@ function confirmNewGame() {
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{const action=button.dataset.action;if(action==='home')home();else if(action==='fullscreen')requestImmersiveMode();else openPanel(action);}));
 window.addEventListener('ss-music-state',refreshMusicControls);
 $('new-game').addEventListener('click',confirmNewGame);$('replay').addEventListener('click',confirmNewGame);
-$('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
+$('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);pendingLabel=true;renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
 $('adult-choice-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
 $('creation-back').addEventListener('click',()=>{if(creationStep===1){creationStep=0;renderCreation();}else home();});
 $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.gender)return;creationStep=1;renderCreation();}else startGame();});
@@ -712,6 +790,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)fitScene()
 window.addEventListener('resize',fitScene);window.visualViewport?.addEventListener('resize',fitScene);
 document.addEventListener('fullscreenchange',fitScene);
 preloadSprite('milica');preloadSprite('nikola');
+mountLanguageSwitch($('language-switch'),LANGUAGES,getLanguage());
 document.querySelectorAll('[data-language]').forEach(button=>button.addEventListener('click',async()=>{if(button.dataset.language==='en'&&!translationsReady){try{await initialiseLanguage();translationsReady=true;}catch{toast('Не удалось загрузить английский перевод. Попробуй ещё раз.');return;}}setLanguage(button.dataset.language);writeLocal('language',getLanguage());applyStaticLanguage();updateLanguageUi();home();}));
 home();
 fitScene();
@@ -722,3 +801,7 @@ cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account'))
 
 // Reference links open the read-only workshop gate, never restore a scene into a save.
 if(new URL(location.href).searchParams.has('scene'))openPanel('settings');
+// The screens of a long line depend on the box width and on the fonts, so measure again when either changes.
+let resizeTimer=0;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(view==='game'&&state&&$('dialogue-text').clientWidth!==chunkWidth)renderGame();},200);});
+document.fonts?.ready.then(()=>{if(view==='game'&&state)renderGame();});
