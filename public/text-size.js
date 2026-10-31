@@ -6,7 +6,7 @@ const sizeText=size=>size+' px';
 export function textSizeMarkup({size}){
  const value=clampSize(size);
  return stepperMarkup({id:'text-size',label:'Размер текста',value,min:MIN_SIZE,max:MAX_SIZE,text:sizeText,down:'Меньше',up:'Крупнее'})
-  +`<div class="text-preview" id="text-size-preview" style="--text-size:${value}px" aria-hidden="true"><div class="speaker-name"><h2>Милица</h2></div><p class="dialogue-text">Сначала возьмём ключи, а потом решим, куда идти дальше. И не забудь воду: сегодня жарко.</p></div>`;
+  +`<div class="text-preview" id="text-size-preview" style="--text-size:${value}px" aria-hidden="true"><div class="speaker-name"><h2>Милица</h2></div><p class="dialogue-text">Сначала возьмём ключи, потом решим.</p></div>`;
 }
 // `onChange` gets the new size in px after every tap; the preview follows by itself.
 export function bindTextSize(root,{size,onChange}){

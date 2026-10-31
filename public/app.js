@@ -31,6 +31,7 @@ import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
 import {clampSize,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
 import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
+import {panelToolButtons} from './panel-tools.js?v=0.16.7';
 import {setSfxVolume} from './sfx.js?v=0.16.7';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
@@ -64,6 +65,11 @@ document.documentElement.style.setProperty('--text-size', settings.textSize+'px'
 let saved = null, state = null, view = 'home', creationStep = 0, expandedNames = false, transitionLock = false;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
+// Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
+const panelTools=document.createElement('div');panelTools.className='panel-tools';let toolsFresh=false;
+const nativeShowModal=panel.showModal.bind(panel);
+panel.showModal=()=>{if(!toolsFresh)panelTools.remove();toolsFresh=false;nativeShowModal();};
+function setPanelTools(items){panelTools.replaceChildren(...panelToolButtons(items,t));$('close-panel').before(panelTools);toolsFresh=true;}
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
@@ -613,18 +619,17 @@ function openPanel(kind) {
     else for(const id of state.journal) {const entry=JOURNAL[id];const article=document.createElement('article');article.className='journal-entry';const tag=document.createElement('p');tag.className='entry-tag';tag.textContent=t(entry.tag);const title=document.createElement('h3');title.textContent=t(entry.title);const body=document.createElement('p');body.textContent=t(entry.text);article.append(tag,title,body);if(entry.link){const a=document.createElement('a');a.href=entry.link;a.target='_blank';a.rel='noopener noreferrer';a.textContent=t(entry.linkText);article.append(a);}content.append(article);}
   } else {
     $('panel-title').textContent=t('Настройки');
-    content.innerHTML=html(`<label class="setting"><span>Музыка и звуки</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><div class="stepper-group" id="volume-row" ${settings.music?'':'hidden'}>${stepperMarkup({id:'music-vol',label:'Громкость музыки',volume:settings.volume})}${stepperMarkup({id:'sfx-vol',label:'Громкость звуков',volume:settings.sfxVolume})}</div><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">${THEME_ICONS.system}Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">${THEME_ICONS.light}Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">${THEME_ICONS.dark}Тёмная</button></div></div>${textSizeMarkup({size:settings.textSize})}<label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><div class="settings-actions"><button id="account-settings" class="primary">Мой прогресс · аккаунт</button><button class="secondary" id="menu-home">На главный экран</button></div><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
+    content.innerHTML=html(`<label class="setting"><span>Музыка и звуки</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><div class="stepper-group" id="volume-row" ${settings.music?'':'hidden'}>${stepperMarkup({id:'music-vol',label:'Громкость музыки',volume:settings.volume})}${stepperMarkup({id:'sfx-vol',label:'Громкость звуков',volume:settings.sfxVolume})}</div><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">${THEME_ICONS.system}Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">${THEME_ICONS.light}Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">${THEME_ICONS.dark}Тёмная</button></div></div>${textSizeMarkup({size:settings.textSize})}<label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
     bindTextSize(content,{size:settings.textSize,onChange:size=>{settings.textSize=size;document.documentElement.style.setProperty('--text-size',size+'px');writeLocal('settings',settings);fitScene();}});
     $('music-toggle').addEventListener('change',event=>{applyMusic(event.target.checked);$('volume-row').hidden=!event.target.checked;});
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
     bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
     bindStepper(content,{id:'sfx-vol',volume:settings.sfxVolume,onChange:value=>{settings.sfxVolume=value;setSfxVolume(value);playSting('ding');writeLocal('settings',settings);}});
-    $('account-settings').addEventListener('click',()=>{panel.close();openAccount();});
+    setPanelTools([{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
     $('screen-info').addEventListener('click',showScreenInfo);
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
-    $('menu-home').addEventListener('click',()=>{panel.close();home();});
     if(new URL(location.href).searchParams.has('scene')){
       const hint=document.createElement('p');
       hint.textContent=getLanguage()==='en'?'Scene link: enter your workshop code below to view it. Your game progress will not change.':'Ссылка на сцену: введи промокод мастерской ниже, чтобы открыть её. Прогресс игры не изменится.';

@@ -1,0 +1,4 @@
+.panel-tools{display:flex;gap:6px;margin:0 4px 0 auto;flex:none}
+.panel-tool{width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink)}
+.panel-tool:active{background:var(--sea);border-color:var(--sea);color:var(--paper)}
+#panel.workshop-wide .panel-tools{display:none}
