@@ -24,7 +24,7 @@ import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
 import {setAmbience,playSting} from './sfx.js?v=0.16.7';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
-import {drawBeatAction} from './beat-action.js?v=0.16.1';
+import {drawBeatAction} from './beat-action.js?v=0.16.7';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.4-day-looks';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';

@@ -23,7 +23,7 @@
 .dialogue-navigation{margin-bottom:max(10px,env(safe-area-inset-bottom))}
 #home .home-header{position:relative;z-index:10}
 /* every icon-only button is a circle */
-.home-utilities button,.game-header .game-tools button,.panel-tool,.panel-heading .close-button,#panel.chapter-map .panel-heading .close-button,.creation-header .icon-button,.stepper button,.dialogue-navigation .rewind-button{border-radius:var(--radius-round)}
+.home-utilities button,.game-header .game-tools button,.chapter-card-tools button,.panel-tool,.panel-heading .close-button,#panel.chapter-map .panel-heading .close-button,.creation-header .icon-button,.stepper button,.dialogue-navigation .rewind-button{border-radius:var(--radius-round)}
 /* the back button in a scene has to stay easy to find next to the big next button */
 .dialogue-navigation .rewind-button{border:1.5px solid var(--sea);background:#08786f1a;color:var(--sea)}
 .dialogue-navigation .rewind-button svg{width:24px;height:24px;stroke-width:2.4}
@@ -47,3 +47,14 @@
 #choices[data-compact=true]{gap:6px;margin:10px 0 6px}
 #choices[data-compact=true] .choice{min-height:0;padding:8px 12px;gap:10px}
 #choices[data-compact=true] .choice-label,#choices[data-compact=true] .choice{font-size:13px;line-height:1.35}
+/* action buttons: one system. Forward and confirm = green, filled; secondary = outlined; back and "undo" stay red; pills for checklists */
+.primary{background:var(--sea);color:var(--paper);border-radius:var(--radius-m);box-shadow:0 5px 16px #08786f33}
+.primary:hover,.primary:active{background:var(--sea-dark)}
+.primary:disabled{opacity:.45;box-shadow:none}
+.secondary{border-radius:var(--radius-m)}
+.beat-complete{min-height:var(--tap-large)}
+.beat-checklist{gap:8px}
+.beat-checklist button{display:flex;align-items:center;gap:8px;min-height:var(--tap);padding:8px 16px 8px 10px;border-radius:999px}
+.beat-checklist .check{flex:none;width:22px;height:22px;border:2px solid var(--sea);border-radius:50%;display:grid;place-items:center}
+.beat-checklist button[aria-pressed=true] .check{background:var(--sea)}
+.beat-checklist button[aria-pressed=true] .check:after{content:'';width:6px;height:11px;margin-top:-2px;border:solid var(--paper);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
