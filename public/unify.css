@@ -29,3 +29,9 @@
 .dialogue-navigation .rewind-button svg{width:24px;height:24px;stroke-width:2.4}
 .dialogue-navigation .rewind-button:disabled{opacity:.5}
 .dialogue-navigation .rewind-button:active:not(:disabled){background:var(--sea);color:var(--paper)}
+/* back is red, next is green */
+.dialogue-navigation .rewind-button{border-color:var(--wine);background:var(--wine);color:var(--paper);box-shadow:0 5px 16px #a6382526}
+.dialogue-navigation .rewind-button:disabled{opacity:.45;box-shadow:none}
+.dialogue-navigation .rewind-button:active:not(:disabled){background:var(--wine-dark);border-color:var(--wine-dark);color:var(--paper)}
+.dialogue-navigation .next-button{background:var(--sea);box-shadow:0 5px 16px #08786f33}
+.dialogue-navigation .next-button:active{background:var(--sea-dark)}
