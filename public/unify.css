@@ -35,3 +35,6 @@
 .dialogue-navigation .rewind-button:active:not(:disabled){background:var(--wine-dark);border-color:var(--wine-dark);color:var(--paper)}
 .dialogue-navigation .next-button{background:var(--sea);box-shadow:0 5px 16px #08786f33}
 .dialogue-navigation .next-button:active{background:var(--sea-dark)}
+/* the dialogue box has a fixed height (in lines, set from the text size), so the picture never resizes when a line is long */
+#game .dialogue-text{height:calc(var(--text-lines,4)*1.6em);min-height:0;line-height:1.6;overflow:hidden}
+.text-preview .dialogue-text{height:auto}

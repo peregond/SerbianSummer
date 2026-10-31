@@ -1,6 +1,8 @@
 // Text size as -/+ taps with a live preview of how a line of dialogue will look at that size.
 import {stepperMarkup,bindStepper} from './stepper.js?v=0.16.7';
 export const MIN_SIZE=16,MAX_SIZE=24,DEFAULT_SIZE=18;
+// Height of the dialogue box in lines: the bigger the text, the more lines (covers about nine lines in ten).
+export const textLines=size=>size<=18?4:size<=21?5:6;
 export const clampSize=value=>Math.max(MIN_SIZE,Math.min(MAX_SIZE,Math.round(Number(value))||DEFAULT_SIZE));
 const sizeText=size=>size+' px';
 export function textSizeMarkup({size}){

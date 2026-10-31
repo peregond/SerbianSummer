@@ -29,7 +29,8 @@ import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.1';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.4-day-looks';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
-import {clampSize,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
+import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
+import {splitToFit} from './text-fit.js?v=0.16.7';
 import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
 import {panelToolButtons} from './panel-tools.js?v=0.16.7';
 import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
@@ -65,6 +66,7 @@ systemTheme.addEventListener('change',()=>{if(settings.theme==='system')applyThe
 applyTheme();
 setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
+document.documentElement.style.setProperty('--text-lines', String(textLines(settings.textSize)));
 let saved = null, state = null, view = 'home', creationStep = 0, transitionLock = false;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
@@ -78,6 +80,8 @@ let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
 let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
+// A line longer than the dialogue box is shown in several screens: textChunks, the one on view is chunkIndex.
+let textChunks=[''],chunkIndex=0,chunkKey='',chunkWidth=0,showLastChunk=false;
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -385,13 +389,20 @@ function renderGame({skipMessenger=false}={}) {
   $('game').dataset.speaker=speakerIdentity(page,state.flags);
   $('voice-label').textContent=t(presentation.daydream?'Воображение':page.speaker==='narrator'?'Про себя':page.speaker==='player'?'Вслух':'');
   $('voice-label').hidden=!$('voice-label').textContent;
-  const text=$('dialogue-text');text.textContent=t(interpolate(pageText(page,state.flags),state.profile,catalog));text.classList.toggle('message',!!page.message);
-  const isChoice=state.index===node.pages.length-1&&!!node.choices;
-  const action=beatActionAt(node,state.index);
+  const text=$('dialogue-text');text.classList.toggle('message',!!page.message);
+  const full=t(interpolate(pageText(page,state.flags),state.profile,catalog));
+  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0].join('|');
+  const fresh=key!==chunkKey;
+  if(fresh){chunkKey=key;chunkWidth=text.clientWidth;textChunks=splitToFit(full,candidate=>{text.textContent=candidate;return text.scrollHeight<=text.clientHeight+1;});chunkIndex=showLastChunk?textChunks.length-1:0;}
+  showLastChunk=false;chunkIndex=Math.min(chunkIndex,textChunks.length-1);text.textContent=textChunks[chunkIndex];
+  // choices and actions wait for the last screen of the line
+  const lastChunk=chunkIndex===textChunks.length-1;
+  const isChoice=lastChunk&&state.index===node.pages.length-1&&!!node.choices;
+  const action=lastChunk?beatActionAt(node,state.index):null;
   const inlineAction=!!action&&action.kind!=='tap';
   $('game').classList.toggle('has-beat',inlineAction);
   drawBeatAction($('beat-action'),$('beat-hotspots'),action,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),perform:performBeat,tones:CHOICE_TONES,node,flags:state.flags});
-  $('rewind').disabled=!state.rewind?.length;
+  $('rewind').disabled=!state.rewind?.length&&chunkIndex===0;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
   if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags,state.profile))) {
@@ -505,6 +516,8 @@ function fitScene() {
 }
 function advance({render=true,message=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
+  // a long line goes on to its next screen first
+  if(view==='game'&&chunkIndex<textChunks.length-1){chunkIndex++;if(render)renderGame();return true;}
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
   if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
@@ -607,7 +620,10 @@ function renderEnding() {
 }
 function goBack() {
   if(panel.open||transitionLock||!state||!['game','messenger','room-interaction','scene-quest','ending'].includes(view))return;
+  // inside a long line, back means the previous screen of the same line
+  if(view==='game'&&chunkIndex>0){chunkIndex--;renderGame();return;}
   if(!rewindStep(state))return;
+  showLastChunk=true;
   state.chapterMarks=readChapterMarks(state.chapterMarks,NODES,JOURNAL,state.log.length);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
   save();renderGame();
@@ -665,7 +681,7 @@ function openPanel(kind) {
     $('panel-title').textContent=t('Настройки');
     content.innerHTML=html(`<label class="setting"><span>Музыка и звуки</span><input id="music-toggle" type="checkbox" ${settings.music?'checked':''}></label><div class="stepper-group" id="volume-row" ${settings.music?'':'hidden'}>${stepperMarkup({id:'music-vol',label:'Громкость музыки',volume:settings.volume})}${stepperMarkup({id:'sfx-vol',label:'Громкость звуков',volume:settings.sfxVolume})}</div><div class="setting theme-setting"><span>Тема</span><div class="theme-options" role="group" aria-label="Тема оформления"><button data-theme-preference="system" aria-pressed="${settings.theme==='system'}">${THEME_ICONS.system}Авто</button><button data-theme-preference="light" aria-pressed="${settings.theme==='light'}">${THEME_ICONS.light}Светлая</button><button data-theme-preference="dark" aria-pressed="${settings.theme==='dark'}">${THEME_ICONS.dark}Тёмная</button></div></div>${textSizeMarkup({size:settings.textSize})}<label class="setting"><span>Взрослые сцены · 18+<small>Без подробностей, только по согласию</small></span><input id="adult-toggle" type="checkbox" ${settings.adult?'checked':''}></label><details class="more-settings"><summary>Дополнительно</summary><div class="settings-actions"><button id="export-save" class="secondary" ${saved?'':'disabled'}>Скачать сохранение</button><label class="import-label">Загрузить сохранение<input id="import-save" type="file" accept="application/json,.json" hidden></label><button id="install-guide" class="secondary">На весь экран на iPhone</button><button id="screen-info" class="secondary">Сведения об экране</button></div></details><p class="settings-about">Прогресс хранится на этом устройстве. Войди в аккаунт, чтобы не потерять его.</p>`);
     document.querySelectorAll('[data-theme-preference]').forEach(button=>button.addEventListener('click',()=>{settings.theme=button.dataset.themePreference;writeLocal('settings',settings);applyTheme();document.querySelectorAll('[data-theme-preference]').forEach(option=>option.setAttribute('aria-pressed',String(option.dataset.themePreference===settings.theme)));}));
-    bindTextSize(content,{size:settings.textSize,onChange:size=>{settings.textSize=size;document.documentElement.style.setProperty('--text-size',size+'px');writeLocal('settings',settings);fitScene();}});
+    bindTextSize(content,{size:settings.textSize,onChange:size=>{settings.textSize=size;document.documentElement.style.setProperty('--text-size',size+'px');document.documentElement.style.setProperty('--text-lines',String(textLines(size)));writeLocal('settings',settings);if(view==='game')renderGame();else fitScene();}});
     $('music-toggle').addEventListener('change',event=>{applyMusic(event.target.checked);$('volume-row').hidden=!event.target.checked;});
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
     bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
@@ -778,3 +794,7 @@ cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account'))
 
 // Reference links open the read-only workshop gate, never restore a scene into a save.
 if(new URL(location.href).searchParams.has('scene'))openPanel('settings');
+// The screens of a long line depend on the box width and on the fonts, so measure again when either changes.
+let resizeTimer=0;
+window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(view==='game'&&state&&$('dialogue-text').clientWidth!==chunkWidth)renderGame();},200);});
+document.fonts?.ready.then(()=>{if(view==='game'&&state)renderGame();});
