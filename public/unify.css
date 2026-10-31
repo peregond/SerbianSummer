@@ -58,3 +58,6 @@
 .beat-checklist .check{flex:none;width:22px;height:22px;border:2px solid var(--sea);border-radius:50%;display:grid;place-items:center}
 .beat-checklist button[aria-pressed=true] .check{background:var(--sea)}
 .beat-checklist button[aria-pressed=true] .check:after{content:'';width:6px;height:11px;margin-top:-2px;border:solid var(--paper);border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+/* long action buttons are capsules (multi-line choices and cards keep their corners) */
+:root{--radius-pill:999px}
+.primary,.secondary,.dialogue-navigation .next-button,.theme-options button,.settings-actions button,.confirm-actions button{border-radius:var(--radius-pill)}
