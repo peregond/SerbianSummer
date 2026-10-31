@@ -82,6 +82,9 @@ let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=
 let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
 // A line longer than the dialogue box is shown in several screens: textChunks, the one on view is chunkIndex.
 let textChunks=[''],chunkIndex=0,chunkKey='',chunkWidth=0,showLastChunk=false;
+// The chapter label above a line is for people coming into the game (new game, continue, chapter picked on the map); a chapter
+// reached by playing was already announced by its title card. labelKey is the line the label belongs to.
+let pendingLabel=false,labelKey='';
 let currentArtFrame=null;
 const preloadedBackgrounds=new Map();
 const preloadedSprites=new Map();
@@ -290,7 +293,7 @@ function startGame() {
   if(!validProfile(draft))return;
   state={formatVersion:1,storyVersion:STORY_VERSION,profile:{gender:draft.gender,nameId:draft.nameId,namesCatalogVersion:catalog.version},node:START,index:0,flags:{rentalCast:'new',heroLook:lookFor(draft.gender,draft.look)?draft.look:defaultLook(draft.gender)},journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
   if(settings.music) applyMusic(true);
-  enterNode(START);recordPage();save();renderGame();
+  enterNode(START);recordPage();save();pendingLabel=true;renderGame();
 }
 function speakerName(page,locale=getLanguage()) {
   const names={contact:state.flags.companion==='nikola'?'Никола':'Милица',host:state.flags.host==='jelena'?'Йелена':'Драган',districtHost:RENTAL_NAMES[rentalOwner(state.flags)]??(state.flags.districtOwner==='jelena'?'Йелена':'Драган'),bankStaff:state.flags.bankSpark==='teodora'?'Теодора':'Лазар',mupStaff:state.flags.mupSpark==='strahinya'?'Страхиня':'Ивана',lovePartner:SLOTS.includes(state.flags.lastPartner)?nameOf(state.flags.lastPartner,state.flags):'Ася',contactCounterpart:state.flags.companion==='nikola'?'Милица':'Никола',ownerCounterpart:RENTAL_NAMES[rentalCounterpart(state.flags)]??(state.flags.districtOwner==='jelena'?'Драган':'Йелена'),narrator:named(state.profile).full.nominative,player:named(state.profile).full.nominative,milica:'Милица',nikola:'Никола'};
@@ -322,6 +325,7 @@ function showChapterLock(){
 }
 function renderGame({skipMessenger=false}={}) {
   state.index=visibleMessagePage(state.node,state.index);
+  if(pendingLabel){labelKey=state.node+'|'+state.index;pendingLabel=false;}
   if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
@@ -413,7 +417,7 @@ function renderGame({skipMessenger=false}={}) {
   $('journal-dot').hidden=state.journal.length===0;
 
   $('chapter-progress').textContent=t(chapter.number+' · Главы ↗');
-  $('chapter-heading').hidden=(state.node!==chapter.start&&state.node!=='rental_day_'+chapter.day)||state.index!==0;
+  $('chapter-heading').hidden=labelKey!==state.node+'|'+state.index;
   $('chapter-heading').textContent=t(chapter.number+' · '+chapter.title);
   $('scene-day').textContent=t(node.day??'ПЕРВЫЙ ДЕНЬ');
   fitScene();
@@ -648,7 +652,7 @@ function confirmChapter(chapter,source){
   const actions=document.createElement('div');actions.className='confirm-actions';
   const start=document.createElement('button');start.className='primary';start.textContent=t('Перейти к главе');start.addEventListener('click',()=>{
     const restored=structuredClone(source);if(!restartChapter(restored,chapter.id,NODES))return;
-    state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);renderGame();
+    state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);pendingLabel=true;renderGame();
   });
   const download=document.createElement('button');download.className='secondary';download.textContent=t('Скачать текущую историю');download.addEventListener('click',exportSave);
   const cancel=document.createElement('button');cancel.className='text-button';cancel.textContent=t('Остаться здесь');cancel.addEventListener('click',openChapters);
@@ -762,7 +766,7 @@ function confirmNewGame() {
 document.querySelectorAll('[data-action]').forEach(button=>button.addEventListener('click',()=>{const action=button.dataset.action;if(action==='home')home();else if(action==='fullscreen')requestImmersiveMode();else openPanel(action);}));
 window.addEventListener('ss-music-state',refreshMusicControls);
 $('new-game').addEventListener('click',confirmNewGame);$('replay').addEventListener('click',confirmNewGame);
-$('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
+$('resume').addEventListener('click',()=>{const resume=()=>{state=structuredClone(saved);if(settings.music)applyMusic(true);pendingLabel=true;renderGame();};if(settings.soundChosen)resume();else chooseSound(resume);});
 $('adult-choice-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
 $('creation-back').addEventListener('click',()=>{if(creationStep===1){creationStep=0;renderCreation();}else home();});
 $('creation-next').addEventListener('click',()=>{if(creationStep===0){if(!draft.gender)return;creationStep=1;renderCreation();}else startGame();});
