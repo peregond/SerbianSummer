@@ -34,6 +34,7 @@ import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
 import {panelToolButtons} from './panel-tools.js?v=0.16.7';
 import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
 import {mountNamePicker} from './name-picker.js?v=0.16.7';
+import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.16.7';
 import {setSfxVolume} from './sfx.js?v=0.16.7';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
 import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.1';
@@ -49,7 +50,7 @@ let translationsReady=false;
 try{await initialiseLanguage();translationsReady=true;}catch{setLanguage('ru');}
 const applyStaticLanguage=captureStaticUi(document);
 applyStaticLanguage();
-function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');for(const button of document.querySelectorAll('[data-language]'))button.setAttribute('aria-pressed',String(button.dataset.language===getLanguage()));document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
+function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
 updateLanguageUi();
 const catalog = await fetch('./names.json').then(r => { if(!r.ok) throw new Error('Не удалось загрузить имена'); return r.json(); });
 const settings = readLocal('settings', { textSize:18, music:false, volume:.55 });
@@ -70,7 +71,8 @@ const panel=$('panel');
 // Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
 const panelTools=document.createElement('div');panelTools.className='panel-tools';let toolsFresh=false;
 const nativeShowModal=panel.showModal.bind(panel);
-panel.showModal=()=>{if(!toolsFresh)panelTools.remove();toolsFresh=false;nativeShowModal();};
+let hideClose=false;
+panel.showModal=()=>{if(!toolsFresh)panelTools.remove();toolsFresh=false;$('close-panel').hidden=hideClose;hideClose=false;nativeShowModal();};
 function setPanelTools(items){panelTools.replaceChildren(...panelToolButtons(items,t));$('close-panel').before(panelTools);toolsFresh=true;}
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
@@ -141,8 +143,8 @@ async function applyMusic(enabled) {
 }
 function chooseSound(continueGame) {
   setMusic(false);
-  $('panel-title').textContent=t('Добавим музыку?');
-  $('panel-content').innerHTML=html('<p class="confirm-copy">Спокойная мелодия для первого дня в Белграде. Включить?</p><div class="confirm-actions"><button id="sound-yes" class="primary">С музыкой</button><button id="sound-no" class="secondary">Без музыки</button></div><p class="sound-hint">Звук и громкость всегда можно изменить в настройках.</p>');
+  $('panel-title').textContent=t('Добавим музыку и звуки?');hideClose=true;
+  $('panel-content').innerHTML=html('<p class="confirm-copy">Спокойная музыка и тихие звуки города для первого дня в Белграде. Включить?</p><div class="confirm-actions"><button id="sound-yes" class="primary">Включить</button><button id="sound-no" class="secondary">Без звука</button></div><p class="sound-hint">Звук и громкость всегда можно изменить в настройках.</p>');
   for(const [id,enabled] of [['sound-yes',true],['sound-no',false]])$(id).addEventListener('click',()=>{applyMusic(enabled);panel.close();continueGame();});
   panel.showModal();
 }
@@ -645,8 +647,10 @@ function openPanel(kind) {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
     for(const [label,run]of [['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
-    const details=document.createElement('details');details.className='reading-details';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
-    for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='text-button';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});details.append(button);}
+    const details=document.createElement('details');details.className='reading-details more-settings';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
+    const reading=document.createElement('div');reading.className='settings-actions';
+    for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});reading.append(button);}
+    details.append(reading);
     content.append(actions,details);
   } else if(kind==='history') {
     $('panel-title').textContent=t('История реплик');
@@ -763,6 +767,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)fitScene()
 window.addEventListener('resize',fitScene);window.visualViewport?.addEventListener('resize',fitScene);
 document.addEventListener('fullscreenchange',fitScene);
 preloadSprite('milica');preloadSprite('nikola');
+mountLanguageSwitch($('language-switch'),LANGUAGES,getLanguage());
 document.querySelectorAll('[data-language]').forEach(button=>button.addEventListener('click',async()=>{if(button.dataset.language==='en'&&!translationsReady){try{await initialiseLanguage();translationsReady=true;}catch{toast('Не удалось загрузить английский перевод. Попробуй ещё раз.');return;}}setLanguage(button.dataset.language);writeLocal('language',getLanguage());applyStaticLanguage();updateLanguageUi();home();}));
 home();
 fitScene();

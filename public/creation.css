@@ -1,6 +1,6 @@
 /* Hero creation (gender and look, then name): same icon buttons and cards as the settings. */
 .creation-header{min-height:68px}
-.creation-header .icon-button{width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:8px;background:transparent;color:var(--ink)}
+.creation-header .icon-button{width:var(--tap);height:var(--tap);display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:var(--radius-s);background:transparent;color:var(--ink)}
 .creation-header .icon-button:active{background:var(--sea);border-color:var(--sea);color:var(--paper)}
 .creation-steps{display:flex;align-items:center;gap:10px}
 .creation-steps #step-label{font-size:11px;letter-spacing:1.2px;color:var(--muted)}
@@ -27,19 +27,19 @@
 .look-hint{font-size:12px;color:var(--muted);margin:10px 0 0;min-height:1.4em}
 /* step 2: type a name */
 .name-step{margin-top:22px}
-.name-field{display:flex;align-items:center;gap:12px;padding:8px 10px 8px 8px;border:1px solid var(--line);border-radius:14px;background:#fffaf0}
+.name-field{display:flex;align-items:center;gap:12px;padding:8px 10px 8px 8px;border:1px solid var(--line);border-radius:var(--radius-m);background:#fffaf0}
 .name-field:focus-within{border-color:var(--sea);box-shadow:0 0 0 3px #08786f33}
 .name-avatar{flex:none;width:52px;height:52px}
 .name-avatar .hero-avatar{width:52px;height:52px;border-radius:50%}
 .name-field input{flex:1;min-width:0;height:52px;border:0;outline:0;background:transparent;color:var(--ink);font:500 22px/1.2 'Lora',Georgia,serif}
 .name-field input::placeholder{color:var(--muted);opacity:.75}
-.name-suggestions{list-style:none;margin:8px 0 0;padding:4px;border:1px solid var(--line);border-radius:12px;background:#fffaf0;max-height:260px;overflow-y:auto}
-.name-suggestions li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;min-height:48px;padding:10px 14px;border-radius:8px;font-size:17px}
+.name-suggestions{list-style:none;margin:8px 0 0;padding:4px;border:1px solid var(--line);border-radius:var(--radius-m);background:#fffaf0;max-height:260px;overflow-y:auto}
+.name-suggestions li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;min-height:48px;padding:10px 14px;border-radius:var(--radius-s);font-size:17px}
 .name-suggestions li small{color:var(--muted);font-size:13px}
 .name-suggestions li[aria-selected=true]{background:var(--sea);color:var(--paper)}
 .name-suggestions li[aria-selected=true] small{color:var(--paper)}
 .name-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.name-chip{min-height:44px;padding:8px 16px;border:1px solid var(--line);border-radius:22px;background:transparent;color:var(--ink);font-size:15px}
+.name-chip{min-height:var(--tap);padding:8px 16px;border:1px solid var(--line);border-radius:22px;background:transparent;color:var(--ink);font-size:15px}
 .name-chip[aria-pressed=true]{background:var(--sea);border-color:var(--sea);color:var(--paper)}
 :root[data-theme=dark] .name-field,:root[data-theme=dark] .name-suggestions{background:#1d2f33}
 /* motion: cards rise in when a step opens, the picked look pops; nothing moves for people who ask for less */
