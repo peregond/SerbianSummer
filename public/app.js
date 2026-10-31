@@ -409,7 +409,10 @@ function renderGame({skipMessenger=false}={}) {
   $('rewind').disabled=!state.rewind?.length&&chunkIndex===0;
   $('game').classList.toggle('has-choices',isChoice||inlineAction);
   $('next').hidden=isChoice||inlineAction;$('choices').hidden=!isChoice;$('choices').replaceChildren();
-  if(isChoice)for(const choice of node.choices.filter(each=>choiceVisible(each,state.flags,state.profile))) {
+  const shownChoices=isChoice?node.choices.filter(each=>choiceVisible(each,state.flags,state.profile)):[];
+  // four or more choices get slimmer buttons, so the picture does not shrink too much
+  $('choices').dataset.compact=String(shownChoices.length>=4);
+  if(isChoice)for(const choice of shownChoices) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
     button.addEventListener('click',()=>choose(choice));$('choices').append(button);
