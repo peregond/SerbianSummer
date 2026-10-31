@@ -39,3 +39,7 @@
 :root{--dialogue-line-height:1.45}
 #game .dialogue-text{height:calc(var(--text-lines,4)*var(--dialogue-line-height)*1em);min-height:0;line-height:var(--dialogue-line-height);overflow:hidden}
 .text-preview .dialogue-text{height:auto}
+/* the chapter label is a rounded badge over the picture, so it takes no room in the dialogue */
+#game .dialogue{position:relative}
+#game #chapter-heading{position:absolute;left:16px;bottom:calc(100% + 12px);margin:0;padding:6px 13px;border-radius:999px;background:var(--paper);color:var(--ink);box-shadow:0 2px 12px #0000003d;font-size:12px;line-height:1.3;z-index:3;pointer-events:none}
+#game #chapter-heading[hidden]{display:none}
