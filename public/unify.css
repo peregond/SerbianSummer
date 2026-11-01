@@ -68,3 +68,4 @@
 #home .home-title h1{font-size:clamp(46px,14.4vw,62px)}
 @media(max-height:700px){#home .home-title h1{font-size:46px}}
 @media(max-height:600px){#home .home-title h1{font-size:44px}}
+#game .dialogue-text{margin-bottom:8px}

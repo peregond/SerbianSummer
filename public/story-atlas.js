@@ -1,6 +1,6 @@
 import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=1';
-import {t} from './i18n.js?v=0.16.1';
-import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.1-art9';
+import {t} from './i18n.js?v=0.16.8';
+import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.8';
 import {
   buildStoryAtlas,
   buildStoryGraph,
