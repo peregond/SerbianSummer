@@ -19,5 +19,5 @@ for(const limit of [30,35,40,45,50,55,60,70]){const parts=splitToFit(text,fitsIn
 assert.equal(splitToFit('Раз.\nДва.',fitsIn(100))[0],'Раз.\nДва.');
 assert.deepEqual(splitToFit('Супердлинноеслово ещё',fitsIn(5)).join(' '),'Супердлинноеслово ещё');
 // The box grows with the text size.
-assert.deepEqual([16,18,19,21,22,24].map(textLines),[4,4,5,5,6,6]);
+assert.deepEqual([16,18,19,21,22,24].map(textLines),[5,5,6,6,7,7]);
 console.log('Text fit: screens fit the box, keep every word, end on sentences, never leave a two-word tail.');

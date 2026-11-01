@@ -29,7 +29,7 @@ import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.8';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.8';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
-import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.7';
+import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.8';
 import {splitToFit} from './text-fit.js?v=0.16.7';
 import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
 import {panelToolButtons} from './panel-tools.js?v=0.16.7';
