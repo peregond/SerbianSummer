@@ -52,6 +52,7 @@ export function joinNames(names,and){return names.length<2?names.join(''):names.
 // A choice may carry a condition: {partner,stage} (stage null = nothing has happened yet) or {minPartners:{stage,count}}.
 export function choiceVisible(choice,flags={},ctx={}){
  const when=choice.when;if(!when)return true;
+ if(when.any)return when.any.some(each=>choiceVisible({when:each},flags,ctx));
  if(when.all)return when.all.every(each=>choiceVisible({when:each},flags,ctx));
  if(when.not&&choiceVisible({when:when.not},flags,ctx))return false;
  if(when.gender&&ctx.gender&&when.gender!==ctx.gender)return false;
@@ -79,6 +80,10 @@ export function applyRomanceEffect(flags,effect={}){
  const slot=flags.lastPartner;
  if(effect.loveStep&&SLOTS.includes(slot)&&(STAGE_RANK[effect.loveStep]??0)>(STAGE_RANK[stageOf(slot,flags)]??0))flags['love_'+slot]=effect.loveStep;
  if(effect.makeLover&&SLOTS.includes(slot)){flags['love_'+slot]='lover';addLover(flags,slot);}
+ if(effect.routeGroupConsent){
+  for(const id of [flags.companion,flags.host])if(id)flags['routeRel_'+id]=3;
+  for(const each of ['airport','owner']){flags['love_'+each]='lover';addLover(flags,each);}
+ }
  if(effect.groupBond)for(const each of partnersAt(flags,'kiss')){flags['love_'+each]='lover';addLover(flags,each);}
  for(const key of ['loveStep','makeLover','groupBond'])delete flags[key];
  return flags;

@@ -1,6 +1,6 @@
 // Bank chapter. The hero reads a simplified guide page on the phone, chooses a branch and goes in person on day 2.
 // Nothing here guarantees an account: the bank decides, and romance has no part in it.
-import {CHAPTERS} from './chapters.js?v=0.15.3';
+import {LEGACY_CHAPTERS as CHAPTERS} from './chapters.js?v=0.17.2';
 import {T} from './flat-data.js?v=1';
 import {BANK_FLAG,BANKS,BANK_KEYS} from './bank-data.js?v=1';
 

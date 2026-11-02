@@ -32,7 +32,7 @@ const frame=(id,index,flags={})=>presentationFor(NODES[id],NODES[id].pages[index
 assert.equal(frame('epilogue_leave',4).time,'Позже');
 assert.equal(frame('d20_nephew_end',0,{maskEnd:'spark'}).emotion,'shy');
 assert.equal(frame('d20_nephew_end',0,{maskEnd:'friend'}).emotion,'friendly','Friendship must not force a flirty portrait');
-assert.equal(frame('d20_nephew',0).character,'milos-uniform');
+assert.equal(frame('d20_nephew',0).character,'milos-masked');
 assert.equal(frame('d4_station_ask',0,{maskEnd:'spark'}).character,'milos-masked','A later romance must not unmask an earlier scene');
 assert.equal(frame('d17_bank_talk',1,{bankSpark:'teodora'}).character,'teodora');
 assert.equal(frame('d20_mup_talk',1,{mupSpark:'ivana'}).character,'ivana');

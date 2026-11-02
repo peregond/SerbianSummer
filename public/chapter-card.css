@@ -5,7 +5,7 @@
 .chapter-card-number{font-size:68px;line-height:1.02;font-weight:700;letter-spacing:-.5px;margin:0}
 .chapter-card-title{font-size:26px;line-height:1.22;color:#ffe39a}
 .chapter-card-description{font-size:16px;line-height:1.5;color:#e9efe8;max-width:34ch}
-.chapter-card-progress{display:grid;grid-template-columns:repeat(30,1fr);gap:3px;margin:14px 0 6px}
+.chapter-card-progress{display:grid;grid-template-columns:repeat(15,1fr);gap:3px;margin:14px 0 6px}
 .chapter-card-progress span{height:6px;border-radius:3px;background:#ffffff33}
 .chapter-card-progress .done{background:#ffe39a}
 .chapter-card-progress .current{background:#fff7e6;box-shadow:0 0 0 2px #ffe39a66}

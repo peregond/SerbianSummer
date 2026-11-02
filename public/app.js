@@ -1,50 +1,51 @@
-import {rentalRedirect} from './rental-story.js?v=2';
-import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
-import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.16.1';
-import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=0.16.8';
+import {mountPixelTram} from './pixel-tram.js?v=0.17.2';
+import {rentalRedirect} from './rental-story.js?v=0.17.2';
+import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=0.17.2';
+import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.17.2';
+import {renderHomeHero} from './home-hero.js?v=0.17.2';
+import {renderEpisodeContact} from './episode-contact.js?v=0.17.2';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.16.8';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.8';
-import {mountRoomInteraction} from './room-interaction.js?v=0.16.8';
-import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.16.8';
-import {mountBankGuide} from './bank-guide.js?v=0.16.8';
+import {drawChapterMap} from './chapter-map.js?v=0.17.2';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.17.2';
+import {mountRoomInteraction} from './room-interaction.js?v=0.17.2';
+import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.17.2';
+import {mountBankGuide} from './bank-guide.js?v=0.17.2';
 import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
-import {renderArrivalPhone} from './arrival-phone.js?v=0.16.8';
-import {mountMessenger} from './messenger.js?v=0.16.8';
-import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.16.1-chat3';
+import {renderArrivalPhone} from './arrival-phone.js?v=0.17.2';
+import {mountMessenger} from './messenger.js?v=0.17.2';
+import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.17.2';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-nikola-hug1';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.8';
-import {STAGES} from './days.js?v=0.16.1';
-import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
-import {cueFor} from './music-cues.js?v=0.16.6';
-import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
-import {setAmbience,playSting} from './sfx.js?v=0.16.7';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
-import {drawBeatAction} from './beat-action.js?v=0.16.8';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.8';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.8';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.17.2';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.17.2';
+import {STAGES} from './days.js?v=0.17.2';
+import {MAX_LOG_RECORDS} from './save-limits.js?v=0.17.2';
+import {cueFor} from './music-cues.js?v=0.17.2';
+import {ambienceFor,stingFor} from './sound-cues.js?v=0.17.2';
+import {setAmbience,playSting} from './sfx.js?v=0.17.2';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.17.2';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.17.2';
+import {drawBeatAction} from './beat-action.js?v=0.17.2';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.2';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.2';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
-import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
-import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.8';
-import {splitToFit} from './text-fit.js?v=0.16.7';
-import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
-import {panelToolButtons} from './panel-tools.js?v=0.16.7';
-import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
-import {mountNamePicker} from './name-picker.js?v=0.16.7';
-import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.16.7';
-import {setSfxVolume} from './sfx.js?v=0.16.7';
-import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.8';
-import { CloudProgress } from './cloud.js?v=0.9.0';
+import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.17.2';
+import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.17.2';
+import {splitToFit} from './text-fit.js?v=0.17.2';
+import {THEME_ICONS} from './theme-icons.js?v=0.17.2';
+import {panelToolButtons} from './panel-tools.js?v=0.17.2';
+import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.17.2';
+import {mountNamePicker} from './name-picker.js?v=0.17.2';
+import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.17.2';
+import {setSfxVolume} from './sfx.js?v=0.17.2';
+import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.17.2';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.17.2';
+import { CloudProgress } from './cloud.js?v=0.17.2';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
-import {appendChoiceContents} from './choice-ui.js?v=0.16.8';
-import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.8';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.17.2';
+import {appendChoiceContents} from './choice-ui.js?v=0.17.2';
+import {mountBaggageInteraction} from './interaction.js?v=0.17.2';
+import {APP_VERSION} from './release.js?v=0.17.2';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -124,7 +125,7 @@ function preloadSprite(character,emotion='friendly') {
 function named(profile) { return catalog.genders[profile.gender]?.names.find(n=>n.id===profile.nameId); }
 function validProfile(profile) { return profile && ['male','female'].includes(profile.gender) && !!named(profile); }
 function validateSave(input) {
-  if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл сохранения не подходит к версии пролога.');
+  if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл относится к другой версии истории. Для маршрута на 15 дней начни новую игру.');
   if (input.node!=='end' && !Object.hasOwn(NODES,input.node)) throw new Error('Неизвестная сцена в сохранении.');
   if (!Number.isInteger(input.index) || input.index<0 || (input.node!=='end' && input.index>=NODES[input.node].pages.length)) throw new Error('Не удалось восстановить реплику.');
   if (!Array.isArray(input.log) || input.log.length>MAX_LOG_RECORDS || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
@@ -321,7 +322,7 @@ function showChapterLock(){
   const root=$('chapter-card');root.replaceChildren();
   const box=document.createElement('div');box.className='chapter-card-inner';
   const title=document.createElement('h2');title.textContent=t('Продолжение пока закрыто');
-  const copy=document.createElement('p');copy.textContent=t('Открыты пролог и дни 1–5. Дальнейшие главы доступны по промокоду. Твой прогресс сохранён.');
+  const copy=document.createElement('p');copy.textContent=t('Открыты дни 1–5. Дальнейшие главы доступны по промокоду. Твой прогресс сохранён.');
   const settingsButton=document.createElement('button');settingsButton.className='primary';settingsButton.textContent=t('Ввести промокод');settingsButton.onclick=()=>openPanel('settings');
   const menu=document.createElement('button');menu.className='secondary';menu.textContent=t('На главный экран');menu.onclick=home;
   box.append(title,copy,settingsButton,menu);root.append(box);
@@ -335,6 +336,7 @@ function renderGame({skipMessenger=false}={}) {
   const node=NODES[state.node],page=currentPage();
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
   if(node.map)return openDistrictMap();
+  if(page.action?.quest==='pixel-tram')return openPixelTram();
   if(page.action?.quest==='viewing')return openViewingQuest();
   if(page.action?.quest==='bank-guide')return openBankGuide();
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
@@ -415,6 +417,7 @@ function renderGame({skipMessenger=false}={}) {
   const shownChoices=isChoice?node.choices.filter(each=>choiceVisible(each,state.flags,state.profile)):[];
   // four or more choices get slimmer buttons, so the picture does not shrink too much
   $('choices').dataset.compact=String(shownChoices.length>=4);
+  $('choices').dataset.scrollable=String(shownChoices.length>6);
   if(isChoice)for(const choice of shownChoices) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
@@ -474,13 +477,13 @@ function drawChapterCard(previous,next){
   const inner=document.createElement('div');inner.className='chapter-card-inner';
   const add=(tag,className,text)=>{const element=document.createElement(tag);element.className=className;element.textContent=text;inner.append(element);return element;};
   if(previous?.day||previous?.id==='arrival')add('p','chapter-card-done','✓ '+t(previous.number)+' '+t('завершён')+' · '+t(previous.title));
-  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 30')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
+  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 15')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
   const heading=add('h2','chapter-card-number',t(next.number));heading.id='chapter-card-title';
   add('p','chapter-card-title',t(next.title));
   add('p','chapter-card-description',t(next.description));
   if(next.day){
-    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 30')}`);
-    for(let day=1;day<=30;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
+    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 15')}`);
+    for(let day=1;day<=15;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
     inner.append(progress);
   }
   if(isGuest())inner.append(drawSavePrompt());
@@ -548,6 +551,11 @@ function openDistrictMap(){
   showScreen('scene-quest');
   const node=NODES[state.node];
   questDispose=mountDistrictMap($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),flags:state.flags,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openPixelTram(){
+  showScreen('scene-quest');
+  questDispose=mountPixelTram($('scene-quest'),{canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onComplete:()=>{showScreen('game');performBeat({effect:{routePixel:true}});}});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openViewingQuest(){

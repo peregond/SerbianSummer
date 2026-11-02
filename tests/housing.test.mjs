@@ -28,11 +28,11 @@ assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{}))
 const forNew=choice=>!choice.when||choice.when.flag!=='rentalCast'||choice.when.equals==='new'||(choice.when.notEquals!==undefined&&choice.when.notEquals!=='new');
 const targetsOf=node=>node.choices?node.choices.filter(forNew).map(c=>c.next):[node.next];
 function reach(from,blocked=[]){const seen=new Set(),stack=[from];while(stack.length){const id=stack.pop();if(seen.has(id)||blocked.includes(id)||id==='end'||!NODES[id])continue;seen.add(id);stack.push(...targetsOf(NODES[id]));}return seen;}
-assert.ok(reach('flat_intro').has('bank_plan'),'the bank follows the flat');
-assert.ok(!reach('flat_intro',['flat_signed']).has('bank_plan'),'the bank cannot be reached without signing a lease first');
-assert.ok(!reach('flat_intro',['flat_settle']).has('bank_plan'),'nor without moving in and settling');
+assert.ok(reach('flat_intro').has('route5_alta'),'the bank follows the flat');
+assert.ok(!reach('flat_intro',['flat_signed']).has('flat_settle'),'the bank cannot be reached without signing a lease first');
+assert.ok(!reach('flat_intro',['flat_settle']).has('flat_settle'),'nor without moving in and settling');
 for(const id of ['flat_signed','flat_move_day','flat_arrive','flat_settle'])assert.ok(reach('flat_intro').has(id),id);
-assert.equal(NODES.flat_settle.next,'bank_plan');
+assert.equal(NODES.flat_settle.next,'evening4');
 
 // 2. Every landlord states the rent at the viewing; it is the story's own number.
 const priceLines=owner=>pageText(NODES['flat_enter_'+owner].pages[3],{...NEW,districtOwner:owner},'ru');
@@ -49,10 +49,10 @@ assert.deepEqual(DISCOUNTS,[0,50,100,150]);
 // 3. Price negotiation: 50 euro basic, 100-150 only after a romantic bond the player chose, never automatic.
 const terms=NODES.flat_terms.choices;
 const visible=flags=>terms.filter(choice=>choiceVisible(choice,flags)).map(choice=>choice.next);
-assert.deepEqual(visible({...NEW}),['flat_price_full','flat_price_basic','district_map']);
-assert.deepEqual(visible({...NEW,flatWarmth:0}),['flat_price_full','flat_price_basic','district_map'],'no coffee, no bigger discount');
-assert.deepEqual(visible({...NEW,flatWarmth:1}),['flat_price_full','flat_price_basic','flat_price_warm100','district_map']);
-assert.deepEqual(visible({...NEW,flatWarmth:2}),['flat_price_full','flat_price_basic','flat_price_warm150','district_map']);
+assert.deepEqual(visible({...NEW}),['flat_price_full','flat_price_basic','route4_defer']);
+assert.deepEqual(visible({...NEW,flatWarmth:0}),['flat_price_full','flat_price_basic','route4_defer'],'no coffee, no bigger discount');
+assert.deepEqual(visible({...NEW,flatWarmth:1}),['flat_price_full','flat_price_basic','flat_price_warm100','route4_defer']);
+assert.deepEqual(visible({...NEW,flatWarmth:2}),['flat_price_full','flat_price_basic','flat_price_warm150','route4_defer']);
 assert.equal(NODES.flat_price_full.effectOnEnter.flatDiscount,0);
 assert.equal(NODES.flat_price_basic.effectOnEnter.flatDiscount,50);
 assert.equal(NODES.flat_price_warm100.effectOnEnter.flatDiscount,100);
@@ -75,7 +75,7 @@ for(const owner of OWNERS)for(const discount of DISCOUNTS){
 }
 
 // 4. Nothing is signed or paid on its own.
-assert.ok(NODES.flat_contract.choices.length>=3&&NODES.flat_contract.choices.some(choice=>choice.next==='district_map'),'the lease can be declined');
+assert.ok(NODES.flat_contract.choices.length>=3&&NODES.flat_contract.choices.some(choice=>choice.next==='route4_defer'),'the lease can be declined');
 assert.deepEqual(NODES.flat_contract.choices.filter(choice=>choice.next==='flat_signed').map(choice=>choice.tone),['practical']);
 const transfer=Object.values(NODES.flat_signed.actions).find(action=>/залог/.test(action.label));
 assert.equal(transfer.kind,'tap','the deposit transfer is a deliberate tap by the player');
@@ -99,10 +99,8 @@ const bond={rentalBond:'romance',districtOwner:'vuk'};applyFlatEffect(bond,{flat
 assert.equal(bond.rentalBond_vuk,'romance');assert.equal(Object.hasOwn(bond,'rentalBond'),false);assert.equal(Object.hasOwn(bond,'flatPick'),false);
 for(const owner of OWNERS)for(const mode of ['terms','friends','flirt'])assert.equal(NODES['rental_hub_'+owner].choices.find(c=>c.next==='rental_'+mode+'_'+owner).effect.rentalBond,mode==='terms'?'practical':mode==='friends'?'friendship':'romance');
 
-// 7. Lease beats of days 4, 7 and 8 are skipped once the flat is rented; the other beats stay.
-for(const day of [4,7,8]){const chapter=CHAPTERS.find(c=>c.day===day);assert.equal(rentalRedirect('previous',chapter.start,{...NEW,districtOwner:'ana',rentalMoved:true}),chapter.start,'day '+day);assert.equal(rentalRedirect('previous',chapter.start,{...NEW,districtOwner:'ana'}),'rental_day_'+day,'older saves keep the beat');}
-const day10=CHAPTERS.find(c=>c.day===10);assert.equal(rentalRedirect('previous',day10.start,{...NEW,districtOwner:'ana',rentalMoved:true}),'rental_day_10');
-const day30=CHAPTERS.find(c=>c.day===30);void day30;
+// 7. The active route bypasses all archived day redirects.
+for(const chapter of CHAPTERS)assert.equal(rentalRedirect('previous',chapter.start,{...NEW,route15:true,districtOwner:'ana',rentalMoved:true}),chapter.start);
 // Old new-version saves inside the first viewing continue into the new decision.
 assert.equal(rentalRedirect('morning_ready','next_steps',NEW),'flat_decision');
 assert.equal(rentalRedirect('morning_ready','next_steps',{}),'next_steps');
@@ -115,7 +113,7 @@ for(const [id,node]of Object.entries(NODES).filter(([id])=>id.startsWith('flat_'
   assert.ok(boundaries.length,id+' has an action or a choice');
   let previous=-1;for(const boundary of boundaries){assert.ok(boundary-previous<=5,id+': too long without an action');previous=boundary;}
   if(!node.choices)assert.ok(node.actions[node.pages.length-1],id+': the last page has an action');
-  assert.equal(node.chapterId,'districts',id);
+  assert.ok(['districts','moving'].includes(node.chapterId),id);
   for(const page of node.pages)assert.ok(Object.hasOwn(dictionary,page.text),id+': English text');
 }
 

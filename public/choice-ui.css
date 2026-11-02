@@ -9,3 +9,6 @@
 .choice[data-recipient-gender=female] .choice-icon{color:var(--choice-female)}
 .choice[data-recipient-gender=male] .choice-icon{color:var(--choice-male)}
 .choice .choice-label{display:block;min-width:0;font-size:14px;line-height:1.45;font-weight:600;overflow-wrap:break-word}
+
+/* Long contact and travel lists stay inside the phone screen. */
+.choices[data-scrollable="true"]{max-height:calc(var(--app-height,100dvh)*.42);overflow-y:auto;overscroll-behavior:contain;grid-auto-rows:max-content;scrollbar-gutter:stable}

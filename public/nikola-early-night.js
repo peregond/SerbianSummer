@@ -3,7 +3,7 @@
 // Friendly refusal at any step returns to chapter_three_close without penalty.
 // Scene IDs keep the nikola_park_* prefix so they never collide with prologue nikola_invite / nikola_phone / …
 // Flow: stay by the river → invite home → flat. No park detour. Full-bleed CGs never stack the standing sprite.
-import {T} from './days.js?v=0.16.1';
+import {T} from './days.js?v=0.17.2';
 
 const RIVER_BG='riverside-evening';
 const HOME_BG='nikola-apartment-night-v1';

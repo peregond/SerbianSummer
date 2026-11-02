@@ -6,7 +6,7 @@ import { buildArtCatalog } from '../public/workshop-model.js';
 
 const files = JSON.parse(fs.readFileSync(new URL('../public/art-assets.json', import.meta.url)));
 const catalog = buildArtCatalog(files, CHARACTER_SPRITES, BACKGROUNDS);
-assert.equal(STORY_VERSION, 1);
+assert.equal(STORY_VERSION, 2);
 assert.equal(Object.keys(EXPANDED_BACKGROUNDS).length, 4);
 for (const [bg, ids] of Object.entries(BACKGROUND_SCENES)) {
   assert.ok(files.includes(bg + '.webp'), bg);
@@ -28,4 +28,4 @@ for (const person of catalog.people.filter(p => p.id !== 'nikola')) {
     assert.equal(art.status, 'draft');
   }
 }
-console.log('Four backgrounds stage correctly across district variants; ten heroes have separate shy and surprised drafts; save format remains version 1.');
+console.log('Four backgrounds stage correctly across district variants; ten heroes have separate shy and surprised drafts; story version 2 keeps the existing artwork registry.');

@@ -1,6 +1,6 @@
 // Presentation only. Scene IDs, dialogue order, choices and save fields stay as they are.
 // New pictures cover the prologue, day 0 (chapter 1, "Своя дверь") and day 1 (chapter 2, "Район для жизни").
-import {EVENING_NODES} from './host-evening.js?v=2';
+import {EVENING_NODES} from './host-evening.js?v=0.17.2';
 
 export const EARLY_BACKGROUNDS = {
   'belgrade-taxi-blocks-v1': {label:'БЕЛГРАД · БАЛКОНЫ', description:'Жилые дома с балконами и бельём на верёвке, вид из такси', position:'50% 42%'},

@@ -46,7 +46,7 @@ for(const id of scenes){
 }
 for(const stage of [1,2,3])for(const k of [1,2,3])assert.match(JSON.stringify(NODES[`love${stage}_${k}_${stage===1?'airport':'airport'}`].pages),/можно передумать|«Можно взять тебя за руку\?»|любой ответ здесь будет принят/);
 // Legacy intimate passages stay short, non-explicit and optional; the early Nikola park night is an explicit opt-in branch.
-const fadeAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&!id.startsWith('nikola_park_'));
+const fadeAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&!NODES[id].activeRoute&&!id.startsWith('nikola_park_'));
 const earlyAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&id.startsWith('nikola_park_'));
 assert.equal(fadeAdult.length,5,'three night scenes, the group scene and the airport scene');
 assert.ok(earlyAdult.length>=5,'early Nikola park night adds explicit adult scenes');

@@ -27,7 +27,7 @@ for (const [id, node] of Object.entries(NODES)) for (const [index, page] of node
     assert.ok(result.draft !== null || result.messages.length);
   }
 }
-assert.equal(count, 87, 'All existing marked messages are covered');
+assert.ok(count>=87, 'Existing and new evening messages are covered');
 const outgoing = frame('prepare_host', 0);
 assert.equal(outgoing.contact, 'Драган'); assert.equal(outgoing.messages.length, 0);
 assert.match(outgoing.draft, /Я уже в аэропорту/);

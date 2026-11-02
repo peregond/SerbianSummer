@@ -12,7 +12,7 @@ const BY_BG={
 };
 const isLate=node=>{const hour=parseInt(String(node.time||'').slice(0,2),10);return hour>=20&&hour<=23;};
 export function ambienceFor(node){
- if(!AMBIENCE_CHAPTERS.includes(node.chapterId)||!node.bg)return null;
+ if((!node.routeDay&&!AMBIENCE_CHAPTERS.includes(node.chapterId))||!node.bg)return null;
  if(node.bg.startsWith('ada-'))return 'river';
  if(node.bg.startsWith('nikola-'))return 'night';
  if(BY_BG[node.bg])return BY_BG[node.bg];

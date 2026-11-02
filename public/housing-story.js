@@ -1,7 +1,7 @@
 // Flat hunting, negotiation, moving in. Only the new story version (rentalCast "new") walks this path:
 // older saves keep the original district scenes, which stay in the graph with their IDs and page positions.
 // Rents, the deposit and discounts are conditions of this fictional story, not a rule of the Serbian rental market.
-import {CHAPTERS} from './chapters.js?v=0.15.3';
+import {LEGACY_CHAPTERS as CHAPTERS} from './chapters.js?v=0.17.2';
 import {FLATS,OWNERS,DISCOUNTS,DISTRICT_FIRST,QUEST_FLAG,SEEN_BIT,T,HOUSING_EN} from './flat-data.js?v=1';
 export {HOUSING_EN};
 const rentOf=(owner,discount=0)=>FLATS[owner].rent-discount;

@@ -1,4 +1,4 @@
-import {EMOTIONS} from './workshop-model.js?v=14';
+import {EMOTIONS} from './workshop-model.js?v=0.17.2';
 
 export function filterWorkshopEntries(entries, filters={}, people=[], translate=value=>value) {
   const {view='characters',person='all',status='current',look='all',category='all',query='',characterIds=[]}=filters;

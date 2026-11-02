@@ -1,7 +1,7 @@
-import {unlockPreview} from './chapter-access.js?v=0.16.1';
-import { t, getLanguage } from './i18n.js?v=0.16.8';
-import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=14';
-import { mountStoryAtlas } from './story-atlas.js?v=0.16.8';
+import {unlockPreview} from './chapter-access.js?v=0.17.2';
+import { t, getLanguage } from './i18n.js?v=0.17.2';
+import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=0.17.2';
+import { mountStoryAtlas } from './story-atlas.js?v=0.17.2';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -9,7 +9,7 @@ const el = (tag, text, className) => {
   if (className) node.className = className;
   return node;
 };
-import { filterWorkshopEntries, paginateWorkshopEntries } from './workshop-library.js?v=1';
+import { filterWorkshopEntries, paginateWorkshopEntries } from './workshop-library.js?v=0.17.2';
 
 const statusLabel = { active: 'В игре', archive: 'Прежняя версия', draft: 'Эскиз · не подключено', asset: 'Ресурс' };
 

@@ -1,7 +1,7 @@
 import {BAGGAGE_ITEMS} from './baggage-model.js?v=1';
-import {HOME_PORTRAITS,HOME_BACKGROUNDS} from './home-hero-model.js?v=1';
+import {HOME_PORTRAITS,HOME_BACKGROUNDS} from './home-hero-model.js?v=0.17.2';
 import {EPISODIC_PEOPLE} from './episodic-cast.js?v=2';
-import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from './nikola-early-night.js?v=0.16.1';
+import {NIKOLA_EARLY_NIGHT_BACKGROUNDS} from './nikola-early-night.js?v=0.17.2';
 export const PEOPLE = {
   milica: 'Милица', nikola: 'Никола', dragan: 'Драган', jelena: 'Йелена',
   asya: 'Ася', luka: 'Лука', lazar: 'Лазар', teodora: 'Теодора',

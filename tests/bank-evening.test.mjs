@@ -33,18 +33,18 @@ assert.equal(rentalRedirect('third_morning','bank_visit',{}),'bank_visit');
 assert.equal(rentalRedirect('bank_plan','bank_visit',{bankChoice:'api'}),'bank_visit');
 const staffOf=id=>new Set(NODES[id].pages.map(page=>page.speaker).filter(name=>!['narrator','player','contact'].includes(name)));
 const branches={api:['bank_visit_api'],alta:['bank_visit_alta'],adriatic:['bank_visit_adriatic']};
-function reachFrom(start){const seen=new Set(),stack=[start];while(stack.length){const id=stack.pop();if(seen.has(id)||id==='bank_followup')continue;seen.add(id);const node=NODES[id];stack.push(...(node.choices?node.choices.map(c=>c.next):[node.next]));}return seen;}
+function reachFrom(start){const seen=new Set(),stack=[start];while(stack.length){const id=stack.pop();if(seen.has(id)||id==='bank_followup'||id==='route5_bank_done')continue;seen.add(id);const node=NODES[id];stack.push(...(node.choices?node.choices.map(c=>c.next):[node.next]));}return seen;}
 const names=new Set();
 for(const [bank,[start]]of Object.entries(branches)){
   const nodes=reachFrom(start);
   assert.ok(nodes.size>=3,bank);
-  for(const id of nodes)assert.equal(NODES[id].chapterId,'work',id);
+  for(const id of nodes)assert.equal(NODES[id].chapterId,bank==='api'?'papers':'work',id);
   for(const id of nodes){const node=NODES[id];assert.ok(!(node.choices?node.choices.map(c=>c.next):[node.next]).includes('end'));}
   const staff=[...nodes].flatMap(id=>[...staffOf(id)]);assert.equal(new Set(staff).size,1,bank+': one employee per branch');names.add(staff[0]);
   const text=[...nodes].flatMap(id=>NODES[id].pages.map(page=>JSON.stringify(page))).join(' ');
   assert.ok(!/счёт (открыт|одобрен)|карт[ауы] выдан|открыли счёт/i.test(text.replace(/Это ещё не|ещё не «счёт открыт»|«счёт открыт» yet/g,'')),bank+': no automatic account');
   assert.ok(!/(Лазар|Теодора|Ивана|Страхиня|Милош)/.test(text),'romance partners are not the day-2 branch staff');
-  assert.ok(reach(start).has('bank_followup'),bank+': every branch leads on');
+  assert.ok(reach(start).has(bank==='api'?'route5_bank_done':'bank_followup'),bank+': every branch leads on');
 }
 function reach(start){const seen=new Set(),stack=[start];while(stack.length){const id=stack.pop();if(seen.has(id)||!NODES[id])continue;seen.add(id);const node=NODES[id];stack.push(...(node.choices?node.choices.map(c=>c.next):[node.next]));}return seen;}
 assert.equal(names.size,3,'different staff at different branches');

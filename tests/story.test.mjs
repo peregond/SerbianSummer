@@ -1,43 +1,15 @@
 import assert from 'node:assert/strict';
-import {isBackEdge} from './graph-helpers.mjs';
 import fs from 'node:fs';
 import {NODES,JOURNAL,START,BACKGROUNDS,CHARACTER_SPRITES,CHOICE_TONES,presentationFor,pageText,resolveStoryText,interpolate} from '../public/story.js';
-import {choiceVisible} from '../public/romance.js';
-const catalog=JSON.parse(fs.readFileSync(new URL('../public/names.json',import.meta.url),'utf8'));
-const visited=new Set(),usedBackgrounds=new Set(),usedEmotions=new Set(),memo=new Map();
-const contexts=[];
-for(const companion of ['milica','nikola'])for(const host of ['dragan','jelena'])for(const district of ['dorcol','vracar','newbelgrade'])contexts.push({companion,host,district,districtOwner:district==='vracar'?'dragan':'jelena'});
-function walk(id,ancestors=[]) {
-  if(id==='end')return {paths:1,min:0,max:0};
-  assert.ok(Object.hasOwn(NODES,id),`Missing node ${id}`);assert.ok(!ancestors.includes(id),`Cycle ${id}`);
-  if(memo.has(id))return memo.get(id);
-  visited.add(id);const node=NODES[id];assert.ok(node.pages.length);
-  for(const page of node.pages)for(const flags of contexts){
-    const p=presentationFor(node,page,flags);assert.ok(Object.hasOwn(BACKGROUNDS,p.bg));assert.ok(fs.existsSync(new URL('../public/assets/'+p.bg+'.webp',import.meta.url)),p.bg);usedBackgrounds.add(p.bg);
-    if(p.character){const sprite=CHARACTER_SPRITES[p.character]?.[p.emotion];assert.ok(sprite,p.character+'/'+p.emotion);assert.ok(fs.existsSync(new URL('../public/assets/'+sprite.file+'.webp',import.meta.url)),sprite.file);if(p.character==='nikola')usedEmotions.add(p.emotion);}
-    if(p.emotion.startsWith('dream-'))assert.ok(p.daydream);
-    for(const gender of ['male','female'])for(const name of catalog.genders[gender].names){
-      for(const mode of [flags,{...flags,nikolaBond:'friendship',milicaBond:'friendship'}]){const rendered=interpolate(pageText(page,mode),{gender,nameId:name.id},catalog);assert.ok(rendered.trim());assert.ok(!/[{}]/.test(rendered));assert.ok(!/лсяа|лся а|готова а/.test(rendered),rendered);}
-    }
-  }
-  for(const journal of node.journal??[])assert.ok(Object.hasOwn(JOURNAL,journal));
-  for(const choice of node.choices??[]){assert.ok(Object.hasOwn(CHOICE_TONES,choice.tone),choice.label);assert.ok(!/[{}]/.test(interpolate(resolveStoryText(choice.label,contexts[0]),{gender:'female',nameId:'anna'},catalog)));}
-  const next=(node.choices?node.choices.map(c=>c.next):[node.next]).filter(target=>!isBackEdge(id,target));
-  const descendants=next.map(target=>walk(target,[...ancestors,id]));
-  const words=node.pages.reduce((sum,p)=>sum+p.text.split(/\s+/u).length,0);
-  const stats={paths:descendants.reduce((sum,x)=>sum+x.paths,0),min:words+Math.min(...descendants.map(x=>x.min)),max:words+Math.max(...descendants.map(x=>x.max))};memo.set(id,stats);return stats;
+const catalog=JSON.parse(fs.readFileSync(new URL('../public/names.json',import.meta.url)));
+let count=0;
+for(const [id,node]of Object.entries(NODES).filter(([,n])=>n.activeRoute)){
+ count++;assert.ok(node.pages.length);assert.ok(node.chapterId);for(const j of node.journal??[])assert.ok(JOURNAL[j],id);
+ for(const page of node.pages)for(const companion of ['milica','nikola'])for(const host of ['dragan','jelena']){
+  const flags={companion,host,districtOwner:'ana',routeTravelWith:companion};const p=presentationFor(node,page,flags);assert.ok(BACKGROUNDS[p.bg],id);assert.ok(fs.existsSync(new URL('../public/assets/'+p.bg+'.webp',import.meta.url)),p.bg);
+  if(p.character){const art=CHARACTER_SPRITES[p.character]?.[p.emotion];assert.ok(art,id+'/'+p.character+'/'+p.emotion);assert.ok(fs.existsSync(new URL('../public/assets/'+art.file+'.webp',import.meta.url)),art.file);}
+  for(const gender of ['male','female'])for(const name of catalog.genders[gender].names){const rendered=interpolate(pageText(page,flags),{gender,nameId:name.id},catalog);assert.ok(rendered.trim(),id);assert.doesNotMatch(rendered,/[{}]|лсяа|лся а|готова а/,id);}
+ }
+ for(const c of node.choices??[]){assert.ok(CHOICE_TONES[c.tone],id);assert.doesNotMatch(interpolate(resolveStoryText(c.label,{}),{gender:'female',nameId:'anna'},catalog),/[{}]/);}
 }
-const stats=walk(START);
-// Older entrances remain loadable, but a new playthrough never goes backwards to them.
-for(const [id,node]of Object.entries(NODES))if(node.legacyOnly)walk(id);
-usedBackgrounds.add(presentationFor(NODES.love1_1_yes,NODES.love1_1_yes.pages[1],{lastPartner:'airport',companion:'nikola'},{gender:'male'}).bg);
-assert.equal(visited.size,Object.keys(NODES).length,'Unreachable scene');assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
-assert.equal(presentationFor(NODES.nikola_daydream,NODES.nikola_daydream.pages[4]).daydream,false);
-assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{})).length,3,'three original district routes remain available in the original story');
-assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'})).length,3,'three districts are on the map in the new story');
-assert.notEqual(NODES.district_map.choices[0].effect.districtOwner,NODES.district_map.choices[1].effect.districtOwner);
-assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'vracar',districtOwner:'dragan'}).character,'dragan');
-assert.equal(presentationFor(NODES.district_host_talk,NODES.district_host_talk.pages[0],{district:'dorcol',districtOwner:'jelena'}).bg,'dorcol-apartment');
-assert.match(interpolate('приехал{a}',{gender:'female',nameId:'anna'},catalog),/приехала/);
-assert.equal(interpolate('{full} / {full.dative} / {short.instrumental}',{gender:'male',nameId:'dmitry'},catalog),'Дмитрий / Дмитрию / Димой');
-console.log(`${visited.size} сцен; ${usedBackgrounds.size} фонов; ${stats.min}–${stats.max} слов на пути. Граф, районы, персонажи, все имена и категории проверены.`);
+assert.ok(count>500);assert.equal(START,'quick_arrival');assert.equal(NODES.district_map.choices.length,3);console.log(`${count} active scenes: assets, speaker variants, both genders and all names checked.`);

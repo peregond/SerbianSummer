@@ -1,6 +1,6 @@
-import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=1';
-import {t} from './i18n.js?v=0.16.8';
-import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.8';
+import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=0.17.2';
+import {t} from './i18n.js?v=0.17.2';
+import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.17.2';
 import {
   buildStoryAtlas,
   buildStoryGraph,
@@ -10,7 +10,7 @@ import {
   graphEdgeLabelPoint,
   scaleStoryGraph,
   scenePreviewLines
-} from './story-atlas-model.js?v=4';
+} from './story-atlas-model.js?v=0.17.2';
 
 const PREVIEW_FLAGS={companion:'nikola',host:'dragan',districtOwner:'jelena',district:'dorcol',rentalCast:'new'};
 const PREVIEW_PROFILE={gender:'female',nameId:'alexandra'};

@@ -1,11 +1,12 @@
-import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=3';
-import {extendHousing} from './housing-story.js?v=1';
-import {extendBank} from './bank-story.js?v=2';
-import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=2';
-import {applyEarlyCityArt} from './early-city-art.js?v=1';
-import {extendAdaEpisode,adaCompany} from './ada-episode.js?v=1';
-import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=3';
-import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=5';
+import {rebuildFifteenDays} from './fifteen-days.js?v=0.17.2';
+import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=0.17.2';
+import {extendHousing} from './housing-story.js?v=0.17.2';
+import {extendBank} from './bank-story.js?v=0.17.2';
+import {extendHostEvening,EVENING_NODES} from './host-evening.js?v=0.17.2';
+import {applyEarlyCityArt} from './early-city-art.js?v=0.17.2';
+import {extendAdaEpisode,adaCompany} from './ada-episode.js?v=0.17.2';
+import {registerRentalPortraits,rentalOwner,rentalCounterpart} from './rental-people.js?v=0.17.2';
+import {registerKitchenLayers,kitchenPresentation,rememberKitchenNodes} from './kitchen-layers.js?v=0.17.2';
 import {registerPrologueVisuals,prologueVisualFor} from './prologue-visuals.js?v=0.16.1';
 import {applyEpisodicCast,episodicPresentationFor} from './episodic-cast.js?v=2';
 import {applyAbundantArt,extraVisualFor,hasRestagedLocation} from './abundant-art.js?v=2';
@@ -15,26 +16,26 @@ import {registerLukaSport} from './luka-redesign.js?v=0.16.1';
 import {extendFifthChapter} from './chapter-five.js?v=0.16.1';
 import {extendSixthChapter} from './chapter-six.js?v=0.16.1';
 import {extendSeventhChapter} from './chapter-seven.js?v=0.16.1';
-import {extendCast,dayFor} from './days.js?v=0.16.1';
-import {extendFirstHalf} from './day-scenes.js?v=0.16.1';
-import {extendSecondHalf} from './day-scenes-late.js?v=0.16.1';
-import {extendOfficeRomance} from './day-office.js?v=0.16.1';
-import {extendMaskedPatrol} from './day-mask.js?v=0.16.1';
-import {extendRomance} from './romance-scenes.js?v=0.16.1';
-import {SLOTS,identityOf,SPRITES,callsByShortName} from './romance.js?v=0.16.1';
+import {extendCast,legacyDayFor as dayFor} from './days.js?v=0.17.2';
+import {extendFirstHalf} from './day-scenes.js?v=0.17.2';
+import {extendSecondHalf} from './day-scenes-late.js?v=0.17.2';
+import {extendOfficeRomance} from './day-office.js?v=0.17.2';
+import {extendMaskedPatrol} from './day-mask.js?v=0.17.2';
+import {extendRomance} from './romance-scenes.js?v=0.17.2';
+import {SLOTS,identityOf,SPRITES,callsByShortName} from './romance.js?v=0.17.2';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.16.1';
-import {extendFourthChapter} from './chapter-four.js?v=0.16.1';
-import {extendHostCoffee} from './host-coffee.js?v=0.16.1-art3';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.16.8';
-import {assignChapters} from './chapters.js?v=0.16.1';
-import {extendNextChapter} from './chapter-three.js?v=0.16.1';
-import {extendNikolaEarlyNight} from './nikola-early-night.js?v=0.16.1';
-import {extendFastPrologue} from './prologue-fast.js?v=0.16.1';
-import {editPrologue} from './prologue-edit.js?v=0.16.1';
+import {extendFourthChapter} from './chapter-four.js?v=0.17.2';
+import {extendHostCoffee} from './host-coffee.js?v=0.17.2';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.17.2';
+import {assignChapters,LEGACY_CHAPTERS} from './chapters.js?v=0.17.2';
+import {extendNextChapter} from './chapter-three.js?v=0.17.2';
+import {extendNikolaEarlyNight} from './nikola-early-night.js?v=0.17.2';
+import {extendFastPrologue} from './prologue-fast.js?v=0.17.2';
+import {editPrologue} from './prologue-edit.js?v=0.17.2';
 import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.16.1';
-import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.16.1';
+import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.17.2';
 export {beatActionAt};
-import {extendChapter} from './chapter-one.js?v=0.16.1';
+import {extendChapter} from './chapter-one.js?v=0.17.2';
 // Original story for the playable prototype. Text is kept separate from the player.
 const n = text => ({ speaker: 'narrator', text });
 const m = text => ({ speaker: 'milica', text });
@@ -45,7 +46,7 @@ const scene = (pages, next, extra = {}) => ({ bg: 'arrivals-hall', location: 'А
 const coffee = (pages, next, extra = {}) => scene(pages, next, { bg: 'airport-cafe', portrait: true, location: 'АЭРОПОРТ · У ОКНА', time: '17:24', ...extra });
 const bakery = (pages, next, extra = {}) => scene(pages, next, { bg: 'bakery', character: 'nikola', location: 'ХЛЕБ & КИФЛЕ · АЭРОПОРТ', time: '17:25', ...extra });
 
-export const STORY_VERSION = 1;
+export {STORY_VERSION} from './story-version.js?v=0.17.2';
 export const START = 'quick_arrival';
 // Positions are chosen for the shorter illustration area above a phone's dialogue panel.
 export const BACKGROUNDS = {
@@ -719,7 +720,8 @@ applyArtExpansion(NODES,BACKGROUNDS);
 applyLivingArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyAbundantArt(NODES,BACKGROUNDS,CHARACTER_SPRITES);
 applyEpisodicCast(NODES,CHARACTER_SPRITES);
-assignChapters(NODES);
+
+assignChapters(NODES,LEGACY_CHAPTERS);
 registerRentalBeats(NODES,scene);
 extendHousing({NODES,JOURNAL});
 extendBank({NODES,JOURNAL});
@@ -743,6 +745,9 @@ if(NODES.nikola_park_morning&&NODES.third_morning){
  NODES.nikola_park_morning.next='third_morning';
  NODES.nikola_park_morning.effectOnEnter={...NODES.nikola_park_morning.effectOnEnter,chapterThreeComplete:true};
 }
+
+rebuildFifteenDays({NODES,JOURNAL,CHARACTER_SPRITES});
+assignChapters(NODES);
 
 export function resolveStoryText(text,flags={},locale=getLanguage()) { return resolvePeople(text,flags,locale); }
 // Day scenes carry text for the first hosts (dragan/jelena). A new landlord speaks, or is answered by a counterpart of the other
@@ -794,7 +799,9 @@ export function presentationFor(node,page,flags={},profile={}) {
   const episode=episodicPresentationFor(page);
   const extraPortrait=extra.character??additionalPortrait(page,flags)??(page.speaker==='Милош'?(node.chapterId==='day-27'?'milos':'milos-uniform'):null);
   const company=node.adaPortrait?adaCompany(flags):null;
-  const character=hug||nikolaHug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??company??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null));
+  const travelCharacter=page.routeTravel?({nikola:'nikola-evening',milica:'milica',dragan:'dragan',jelena:'jelena',asya:'asya',luka:'luka',ana:'ana',stefan:'stefan',marko:'marko',vuk:'vuk',lazar:'lazar',teodora:'teodora',ivana:'ivana',strahinya:'strahinja',milos:'milos-masked'}[flags.routeTravelWith]??null):null;
+  let character=travelCharacter??(hug||nikolaHug||visual?.composite?null:episode?.mode==='contact'?null:episode?.mode==='scene'?episode.character:kitchenStage||seated||page.portrait===false?null:((previousHostKitchen&&page.speaker==='districtHost'?(flags.host??'dragan'):null)??cameo??extraPortrait??company??page.character??node.character??dynamicCharacter??((page.portrait??node.portrait)?'milica':null)));
+  if(['milos','milos-uniform'].includes(character))character='milos-masked';
   const eveningMood=character==='dragan'&&EVENING_NODES.some(id=>NODES[id]===node)?'evening-'+(['friendly','thoughtful','laughing','flirty'].includes(page.emotion)?page.emotion:'friendly'):null;
   const rentalMood=rentalOwner({districtOwner:character})&&page===node.pages[0]
     ? (node===NODES['rental_flirt_'+character]?'flirty':node===NODES['rental_friends_'+character]?'laughing':node===NODES['rental_terms_'+character]?'thoughtful':null)

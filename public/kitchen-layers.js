@@ -1,4 +1,4 @@
-import {rentalOwner} from './rental-people.js?v=2';
+import {rentalOwner} from './rental-people.js?v=0.17.2';
 const STAGES=['waiting','spill','comfort','soft','dry','borrowed'];
 export function registerKitchenLayers(backgrounds,sprites){
  for(const person of ['dragan','jelena'])for(const stage of ['coffee','spill','comfort','soft','dry','borrowed'])delete backgrounds[`${person}-kitchen-${stage}`];
