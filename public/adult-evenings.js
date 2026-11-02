@@ -3,8 +3,8 @@
 // IDs: evening{day}_{person}_{kiss_ask|kiss|night_ask|home|door|fade|prep|sex|cum_*|afterglow|morning}
 // Day 4 group: route4_group_{ask|fade|morning}. Male player POV (same gate as the Nikola park night).
 import {T,DAYS} from './days.js?v=0.16.1';
-import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.16.10';
-import {maleSexBeats,femaleSexBeats} from './adult-sex-copy.js?v=0.16.10';
+import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.16.11';
+import {maleSexBeats,femaleSexBeats} from './adult-sex-copy.js?v=0.16.11';
 const DAY_META=Object.fromEntries(DAYS.map(d=>[d.n,d]));
 
 const maleGate={gender:'male'};
@@ -16,16 +16,23 @@ function himHer(c){return c.gender==='m'?['него','him']:['неё','her'];}
 function hisHer(c){return c.gender==='m'?['его','his']:['её','her'];}
 function spriteOf(person){return SPRITE_ID[person]??person;}
 
+// Scene flex sits above the dialogue panel; cover crops top tools + bottom ~20–35%.
+// Bias to 35% so head/torso/speedo stay in the visible band (same as nikola seductive/briefs).
+const ADULT_CG_POSITION='50% 35%';
+
 function buildBg(BACKGROUNDS,person,beat,labelRu,labelEn,descRu,descEn){
  const key=artKey(person,beat);
  if(!BACKGROUNDS[key]){
   BACKGROUNDS[key]={
    label:T(labelRu,labelEn),
    description:T(descRu,descEn),
-   position:'50% 40%',
+   position:ADULT_CG_POSITION,
    file:key,
    optional:true
   };
+ }else{
+  // Keep adult night CGs on the UI-safe bias even if a prior registry set another position.
+  BACKGROUNDS[key].position=ADULT_CG_POSITION;
  }
  return key;
 }
@@ -214,11 +221,11 @@ function registerGroup(N,J,helpers,morningNext){
  ]});
 
  N[`${pref}_fade`]=scene([
-  note('Мы смеёмся, как неловко рассаживаемся на кровати — голые торсы, трусы, чужие руки. Потом смех стихает, и каждый спрашивает глазами: можно?','We laugh at how awkwardly we find places on the bed — bare torsos, briefs, unfamiliar hands. Then the laughter fades, and each asks with their eyes: may I?'),
-  note('Я целую одного в рот, пока второй гладит мой стояк через ткань. Потом меняемся: губы на шее, ладонь в чужих брифах, влажный холм под пальцами. Кто-то шепчет «ещё», кто-то «подожди» — оба ответа принимаются.','I kiss one on the mouth while the second strokes my hard-on through the cloth. Then we switch: lips on a neck, a palm inside someone else’s briefs, a wet bulge under my fingers. Someone whispers “more”, someone “wait” — both answers are accepted.'),
+  note('Мы смеёмся, как неловко рассаживаемся на кровати — голые торсы, узкие speedo, чужие руки. Потом смех стихает, и каждый спрашивает глазами: можно?','We laugh at how awkwardly we find places on the bed — bare torsos, tight speedos, unfamiliar hands. Then the laughter fades, and each asks with their eyes: may I?'),
+  note('Я целую одного в рот, пока второй гладит мой стояк через ткань. Потом меняемся: губы на шее, ладонь в чужом speedo, влажный холм под пальцами. Кто-то шепчет «ещё», кто-то «подожди» — оба ответа принимаются.','I kiss one on the mouth while the second strokes my hard-on through the cloth. Then we switch: lips on a neck, a palm inside someone else’s speedos, a wet bulge under my fingers. Someone whispers “more”, someone “wait” — both answers are accepted.'),
   note('Я вхожу в одного сзади, держа другого за руку у себя на члене. Смазка хлюпает, кровать стучит. Потом наоборот: тот, кто смотрел, теперь стонет в подушку, а второй целует меня, пока я двигаюсь.','I push into one from behind while the other holds my cock. Lube squelches, the bed knocks. Then the other way round: the one who was watching now moans into the pillow, and the second kisses me while I thrust.'),
   me('Всё хорошо? Скажите, если стоп.','Is everyone all right? Say so if it is stop.'),
-  note('Оба кивают. Финиш общий: я кончаю в одного, второй кончает мне на живот и на чужие джоки; кто-то смеётся хрипло: «Да. Ещё можно — потом.» Мы падаем в кучу горячих тел.','Both nod. The finish is shared: I cum inside one, the second cums on my stomach and on someone else’s jock; someone laughs roughly: “Yes. More is welcome — later.” We fall into a heap of hot bodies.')
+  note('Оба кивают. Финиш общий: я кончаю в одного, второй кончает мне на живот и на чужие speedo; кто-то смеётся хрипло: «Да. Ещё можно — потом.» Мы падаем в кучу горячих тел.','Both nod. The finish is shared: I cum inside one, the second cums on my stomach and on someone else’s speedos; someone laughs roughly: “Yes. More is welcome — later.” We fall into a heap of hot bodies.')
  ],`${pref}_morning`,{...place('НОЧЬ · ВТРОЁМ','NIGHT · THREE','23:20','room-window'),adult:true,skipTo:`${pref}_morning`,journal:['adult_night_group']});
 
  N[`${pref}_morning`]=scene([

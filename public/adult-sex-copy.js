@@ -21,43 +21,43 @@ export function maleSexBeats(c){
      `“Bedroom. I want to see you moan with no walls between us.”`)
   ],
   fade:[
-   p(`Он скидывает рубашку на пол — без футболки, голый торс. ${c.body[0][0].toUpperCase()+c.body[0].slice(1)} блестит в свете лампы. На нём только ${cloth}: узкая резинка, ткань спереди уже тёмная от смазки. Толстый член натягивает трусы так, что виден рельеф головки и ствола.`,
-     `He drops the shirt on the floor — no T-shirt, bare torso. ${c.body[1][0].toUpperCase()+c.body[1].slice(1)} gleams in the lamp light. He wears only ${clothEn}: a narrow waistband, the fabric in front already dark with precum. His thick cock stretches the briefs so the outline of the head and shaft shows.`),
+   p(`Он скидывает рубашку на пол — без футболки, голый торс. ${c.body[0][0].toUpperCase()+c.body[0].slice(1)} блестит в свете лампы. На нём только ${cloth}: узкая резинка, ткань спереди уже тёмная от смазки. Толстый член натягивает speedo так, что виден рельеф головки и ствола.`,
+     `He drops the shirt on the floor — no T-shirt, bare torso. ${c.body[1][0].toUpperCase()+c.body[1].slice(1)} gleams in the lamp light. He wears only ${clothEn}: a narrow waistband, the fabric in front already dark with precum. His thick cock stretches the speedos so the outline of the head and shaft shows.`),
    p(...c.touchLine),
-   p(`Я провожу ладонью по натянутому холму. Он дёргается под пальцами, стонет сквозь зубы. Я сжимаю сильнее — жар, пульс, яйца поджаты в хлопке. Большим пальцем даю по головке через ткань: ${n} дёргает бёдрами вперёд.`,
-     `I run my palm over the stretched bulge. It twitches under my fingers; he moans through his teeth. I squeeze harder — heat, pulse, his balls drawn tight in the cotton. With my thumb I press the head through the fabric: ${nEn} jerks his hips forward.`),
+   p(`Я провожу ладонью по натянутому холму. Он дёргается под пальцами, стонет сквозь зубы. Я сжимаю сильнее — жар, пульс, яйца поджаты в speedo. Большим пальцем даю по головке через ткань: ${n} дёргает бёдрами вперёд.`,
+     `I run my palm over the stretched bulge. It twitches under my fingers; he moans through his teeth. I squeeze harder — heat, pulse, his balls drawn tight in the speedo. With my thumb I press the head through the fabric: ${nEn} jerks his hips forward.`),
    p(`«На колени. Сними их… нет, стой. Сначала ${ready}. Хочу тебя в ${ready}, когда буду входить.»`,
      `“On your knees. Take them off… no, wait. ${readyEn} first. I want you in ${readyEn} when I push in.”`),
    p(`Он кивает, голос сиплый: «Секунду… они в ящике.» Руки дрожат, когда тянется к тумбочке.`,
      `He nods, voice hoarse: “One second… they are in the drawer.” His hands shake as he reaches for the nightstand.`)
   ],
   prep:[
-   p(`Он натягивает ${ready}: узкий пояс, мешочек держит тяжёлые яйца и стоящий член, ягодицы полностью открыты — круглые, плотные. Между щёк уже блестит, когда он встаёт на четвереньки на простыне и оглядывается через плечо.`,
-     `He pulls on ${readyEn}: a narrow waistband, the pouch holding heavy balls and his hard cock, his ass fully bare — round, firm. Between the cheeks it already gleams as he gets on all fours on the sheet and looks back over his shoulder.`),
+   p(`Он натягивает ${ready}: узкий пояс, ткань держит тяжёлые яйца и стояк; когда speedo спущены под ягодицы, зад полностью открыт — круглые, плотные. Между щёк уже блестит, когда он встаёт на четвереньки на простыне и оглядывается через плечо.`,
+     `He pulls on ${readyEn}: a narrow waistband, the fabric holding heavy balls and his hard cock; with the speedos under his ass, his rear is fully bare — round, firm. Between the cheeks it already gleams as he gets on all fours on the sheet and looks back over his shoulder.`),
    p(...c.prepAsk),
    p(`Я обливаю пальцы смазкой, кружу по сжатому кольцу, вхожу одним — жарко, узко. ${n} роняет голову в подушку, подаётся назад. «Ещё…» Второй палец. Он матерится по-сербски и по-русски сразу, дышит рвано.`,
      `I pour lube on my fingers, circle his tight ring, push one in — hot, narrow. ${nEn} drops his head into the pillow and pushes back. “More…” Second finger. He swears in Serbian and Russian at once, breathing ragged.`),
-   p(`Я развожу пальцы, растягиваю его медленно, свободной рукой глажу поясницу и мешочек джоков. Он мокрый спереди от собственной смазки.`,
-     `I scissor my fingers, stretch him slowly, stroke his lower back and the jock pouch with my free hand. He is wet in front from his own precum.`),
+   p(`Я развожу пальцы, растягиваю его медленно, свободной рукой глажу поясницу и speedo. Он мокрый спереди от собственной смазки.`,
+     `I scissor my fingers, stretch him slowly, stroke his lower back and the speedo pouch with my free hand. He is wet in front from his own precum.`),
    p(`«Сейчас войду. Скажи «да».» — «${c.yesIn[0]}»`,
      `“I am going in now. Say ‘yes’.” — “${c.yesIn[1]}”`)
   ],
   sex:[
-   p(`Головка упирается, проходит — он орёт в подушку, потом рвано смеётся. Я держу его за бёдра и медленно вхожу целиком: ${ready} натянуты на яйцах, спина выгибается, мышцы на пояснице ходят.`,
-     `The head presses, slips in — he cries into the pillow, then laughs roughly. I hold his hips and slowly bury myself to the hilt: the ${readyEn} tight on his balls, his back arching, the muscles along his spine working.`),
+   p(`Головка упирается, проходит — он орёт в подушку, потом рвано смеётся. Я держу его за бёдра и медленно вхожу целиком: ${ready} натянуты на бёдрах, спина выгибается, мышцы на пояснице ходят.`,
+     `The head presses, slips in — he cries into the pillow, then laughs roughly. I hold his hips and slowly bury myself to the hilt: the ${readyEn} tight around his thighs, his back arching, the muscles along his spine working.`),
    p(`Первые толчки короткие. Я даю ему привыкнуть, целую лопатку, шепчу «хорошо?» — он кивает и подаётся назад сам, насаживаясь глубже.`,
      `The first thrusts are short. I let him adjust, kiss his shoulder blade, whisper “all right?” — he nods and pushes back himself, taking me deeper.`),
    p(`Когда я начинаю двигаться жёстче, мошонка шлёпает о его, смазка хлюпает, кровать стучит о стену. Пахнет ${smell}, потом и сексом.`,
      `When I start thrusting harder, my sack slaps his, lube squelches, the bed knocks the wall. It smells of ${smellEn}, then of sex too.`),
    p(...c.during),
-   p(`Я ускоряюсь. Он встречает каждый толчок, джоки мокрые спереди, голос срывается на стон. «${c.warn[0]}»`,
-     `I speed up. He meets every thrust, the jock wet in front, his voice breaking into a moan. “${c.warn[1]}”`)
+   p(`Я ускоряюсь. Он встречает каждый толчок, speedo мокрые спереди, голос срывается на стон. «${c.warn[0]}»`,
+     `I speed up. He meets every thrust, the speedo wet in front, his voice breaking into a moan. “${c.warn[1]}”`)
   ],
   sexDeep:[
    p(`Я прижимаю его грудью к матрасу, меняю угол — и он всхлипывает уже без слов. Член ходит в нём легко, горячо; я чувствую, как он пульсирует вокруг меня.`,
      `I press his chest into the mattress, change the angle — and he gasps without words. My cock moves in him easy and hot; I feel him pulse around me.`),
-   p(`Одной рукой я обхватываю мешочек джоков, сжимаю его стояк через ткань в такт толчкам. ${n} дрожит бёдрами и шепчет моё имя между стонами.`,
-     `With one hand I cup the jock pouch, squeeze his hard-on through the fabric in time with the thrusts. ${nEn} shakes his hips and whispers my name between moans.`),
+   p(`Одной рукой я обхватываю speedo, сжимаю его стояк через ткань в такт толчкам. ${n} дрожит бёдрами и шепчет моё имя между стонами.`,
+     `With one hand I cup the speedo pouch, squeeze his hard-on through the fabric in time with the thrusts. ${nEn} shakes his hips and whispers my name between moans.`),
    p(`«Не останавливайся… ещё, глубже.» Я вколачиваюсь до упора, потом почти выхожу — и снова. Простыня сбита, лампа качает тень по стене.`,
      `“Do not stop… more, deeper.” I slam in to the hilt, then almost pull out — and again. The sheet is rumpled, the lamp swings shadow across the wall.`),
    p(`Он сжимается сильнее. Я чувствую, что близко — и он тоже: дыхание рваное, пальцы вцепились в простыню.`,
@@ -66,11 +66,11 @@ export function maleSexBeats(c){
      `“Where do I finish?” I ask roughly. He looks back over his shoulder, eyes wet, smile crooked: “Wherever you say. Just warn me.”`)
   ],
   cumInside:[
-   p(`Я вколачиваюсь до упора и кончаю в него — густыми толчками, удерживая бёдра. ${n} сжимается вокруг члена так сильно, что в глазах темнеет; его собственный стояк дёргается в мешочке, и он кончает следом, заливая ткань изнутри тёплым.`,
-     `I slam in to the hilt and cum inside him — thick pulses, gripping his hips. ${nEn} clamps around my cock so hard my vision darkens; his own erection jerks in the pouch and he cums right after, flooding the fabric from inside with heat.`),
+   p(`Я вколачиваюсь до упора и кончаю в него — густыми толчками, удерживая бёдра. ${n} сжимается вокруг члена так сильно, что в глазах темнеет; его собственный стояк дёргается в speedo, и он кончает следом, заливая ткань изнутри тёплым.`,
+     `I slam in to the hilt and cum inside him — thick pulses, gripping his hips. ${nEn} clamps around my cock so hard my vision darkens; his own erection jerks in the speedo and he cums right after, flooding the fabric from inside with heat.`),
    p(...c.cumIn),
-   p(`Когда я медленно выхожу, сперма тянется нитью из его раскрытой дырки и капает на простыню между разведённых колен. Джоки мокрые спереди. Он дрожит и смеётся в голос.`,
-     `When I slowly pull out, cum stretches in a string from his open hole and drips onto the sheet between his spread knees. The jock is soaked in front. He trembles and laughs out loud.`),
+   p(`Когда я медленно выхожу, сперма тянется нитью из его раскрытой дырки и капает на простыню между разведённых колен. Speedo мокрые спереди. Он дрожит и смеётся в голос.`,
+     `When I slowly pull out, cum stretches in a string from his open hole and drips onto the sheet between his spread knees. The speedo is soaked in front. He trembles and laughs out loud.`),
    p(`Я глажу его поясницу, собираю каплю пальцем. Он ловит мой взгляд и кивает: останься рядом.`,
      `I stroke his lower back, gather a drop on my finger. He catches my eye and nods: stay close.`)
   ],
@@ -84,11 +84,11 @@ export function maleSexBeats(c){
      `I press my chest to his back, kiss his neck. He laughs roughly: “Filthy. And right.”`)
   ],
   cumChest:[
-   p(`Я вытаскиваю, переворачиваю его на спину. Джоки сбиты набок, член шлёпает о живот. Я сажусь ему на бёдра и кончаю на широкую грудь — белые полосы по коже, на соски, на шею, одна капля на нижнюю губу.`,
-     `I pull out and flip him onto his back. The jock is shoved aside, his cock slaps his stomach. I straddle his thighs and cum on his broad chest — white stripes across the skin, on his nipples, on his throat, one drop on his lower lip.`),
+   p(`Я вытаскиваю, переворачиваю его на спину. Speedo сбиты набок, член шлёпает о живот. Я сажусь ему на бёдра и кончаю на широкую грудь — белые полосы по коже, на соски, на шею, одна капля на нижнюю губу.`,
+     `I pull out and flip him onto his back. The speedo is shoved aside, his cock slaps his stomach. I straddle his thighs and cum on his broad chest — white stripes across the skin, on his nipples, on his throat, one drop on his lower lip.`),
    p(...c.cumChest),
-   p(`Он тянет меня в поцелуй, размазывая сперму между нами. Под джоками его член всё ещё твёрдый; я сжимаю мешочек ладонью, и он кончает себе на живот, добавляя к моим следам.`,
-     `He pulls me into a kiss, smearing cum between us. Under the jock his cock is still hard; I squeeze the pouch in my palm and he cums onto his own stomach, adding to my marks.`),
+   p(`Он тянет меня в поцелуй, размазывая сперму между нами. Под speedo его член всё ещё твёрдый; я сжимаю мешочек ладонью, и он кончает себе на живот, добавляя к моим следам.`,
+     `He pulls me into a kiss, smearing cum between us. Under the speedo his cock is still hard; I squeeze the pouch in my palm and he cums onto his own stomach, adding to my marks.`),
    p(`Мы дышим в одном ритме. Лампа качает тень. Пахнет ${smell} и нами.`,
      `We breathe in one rhythm. The lamp swings its shadow. It smells of ${smellEn} and of us.`)
   ]
