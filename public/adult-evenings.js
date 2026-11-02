@@ -3,7 +3,8 @@
 // IDs: evening{day}_{person}_{kiss_ask|kiss|night_ask|home|door|fade|prep|sex|cum_*|afterglow|morning}
 // Day 4 group: route4_group_{ask|fade|morning}. Male player POV (same gate as the Nikola park night).
 import {T,DAYS} from './days.js?v=0.16.1';
-import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.16.9';
+import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.16.10';
+import {maleSexBeats,femaleSexBeats} from './adult-sex-copy.js?v=0.16.10';
 const DAY_META=Object.fromEntries(DAYS.map(d=>[d.n,d]));
 
 const maleGate={gender:'male'};
@@ -112,107 +113,76 @@ function registerPersonNight(N,J,BACKGROUNDS,helpers,person,day,morningNext){
   note(`${heShe(c,'Он кивает','Она кивает')}. Остаётся только янтарный свет.`,` ${heShe(c,'He nods','She nods')}. Only amber light remains.`.trim())
  ],`${pref}_door`,{...place(...[`КОРИДОР · ${c.place[0]}`,`HALL · ${c.place[1]}`],'21:35',art.home),character:spriteOf(person),emotion:'shy',portrait:true,journal:[journalKey]});
 
+ const beats=c.gender==='m'?maleSexBeats(c):femaleSexBeats(c);
+ const narr=(pair,bg)=>({speaker:'narrator',text:T(...pair),portrait:false,...(bg?{bg}:{})});
+ const himLabel=c.gender==='m'
+  ?{inside:T('Кончить в него глубоко','Cum deep inside him'),cloth:T('Вытащить и кончить на бельё','Pull out and cum on the underwear'),chest:T('Перевернуть и кончить на грудь','Flip him and cum on his chest')}
+  :{inside:T('Кончить в неё глубоко','Cum deep inside her'),cloth:T('Вытащить и кончить на бельё','Pull out and cum on the lingerie'),chest:T('Кончить ей на грудь','Cum on her chest')};
+
  N[`${pref}_door`]=scene([
-  cg(note(c.gender==='m'
-   ?`Я прижимаю ${himRu} к двери. ${heShe(c,'Он','Она')} податлив${c.gender==='m'?'ый':'ая'}: раскрывает рот под поцелуем, трётся о бедро через бельё, тяжело дышит мне в шею.`
-   :`Я прижимаю ${himRu} к двери. Она податливая: раскрывает рот под поцелуем, прижимается бёдрами, тяжело дышит мне в шею.`,
-   c.gender==='m'
-   ?`I pin ${himEn} to the door. ${heShe(c,'He','She')} is pliant: opens ${hisEn} mouth under the kiss, rubs against my thigh through underwear, breathes hard into my neck.`
-   :`I pin ${himEn} to the door. She is pliant: opens her mouth under the kiss, presses her hips to me, breathes hard into my neck.`)),
-  cg(say(c.id,...c.doorLine,'flirty')),
-  cg(me('Договорились. В спальню.','Agreed. Bedroom.'))
+  narr(beats.door[0]),
+  {...say(c.id,...beats.door[1],'flirty'),portrait:false},
+  narr(beats.door[2]),
+  narr(beats.door[3])
  ],`${pref}_fade`,{...place(...[`ДВЕРЬ · ${c.place[0]}`,`DOOR · ${c.place[1]}`],'21:40',art.door)});
 
- // fade = first adult beat (briefs/lingerie), like nikola_park_closer
- if(c.gender==='m'){
-  N[`${pref}_fade`]=scene([
-   cg(note(`Он скидывает рубашку. Остаётся в ${c.cloth[0]}. Ткань спереди уже тёмная от смазки: толстый член натягивает бельё так, что виден рельеф.` ,`He drops the shirt. He is left in ${c.cloth[1]}. The fabric in front is already dark with precum: his thick cock stretches the cloth so the outline shows.`)),
-   cg({...say(c.id,...c.touchLine,'shy'),bg:art.seductive}),
-   cg({...note(`Я провожу ладонью по натянутому холму. Он дёргается под пальцами, стонет сквозь зубы. Жар, пульс, яйца поджаты в ткани.` ,`I run my palm over the stretched bulge. It twitches under my fingers; he moans through his teeth. Heat, pulse, his balls drawn tight in the fabric.`),bg:art.touch}),
-   cg(me(`На колени. Сначала ${c.ready[0].replace(/^в /,'')}. Хочу тебя в ${c.ready[0]}, когда буду входить.` ,`On your knees. ${c.ready[1]} first. I want you in ${c.ready[1]} when I push in.`)),
-   cg(say(c.id,'Секунду… они здесь.','One second… they are here.','flirty'))
-  ],`${pref}_prep`,{...place(...[`КРОВАТЬ · ${c.place[0]}`,`BED · ${c.place[1]}`],'21:50',art.briefs),adult:true,skipTo:`${pref}_morning`});
+ // fade = first adult beat (shirtless + briefs / lingerie), like nikola_park_closer
+ N[`${pref}_fade`]=scene([
+  narr(beats.fade[0],art.briefs),
+  {...say(c.id,...beats.fade[1],'shy'),portrait:false,bg:art.seductive},
+  narr(beats.fade[2],art.touch),
+  narr(beats.fade[3]),
+  narr(beats.fade[4])
+ ],`${pref}_prep`,{...place(...[`КРОВАТЬ · ${c.place[0]}`,`BED · ${c.place[1]}`],'21:50',art.briefs),adult:true,skipTo:`${pref}_morning`});
 
-  N[`${pref}_prep`]=scene([
-   cg({...note(`Он натягивает ${c.ready[0]}: мешочек держит тяжёлые яйца и стояк, ягодицы открыты. Между щёк уже блестит, когда он встаёт на четвереньки.` ,`He pulls on ${c.ready[1]}: the pouch holds heavy balls and his hard cock, his ass bare. Between the cheeks it already gleams as he gets on all fours.`),bg:art.ready}),
-   cg(say(c.id,...c.prepAsk,'flirty')),
-   cg(note(`Я обливаю пальцы, кружу по сжатому кольцу, вхожу одним — жарко, узко. ${c.name[0]} роняет голову в подушку, подаётся назад. Второй палец.` ,`I pour lube on my fingers, circle his tight ring, push one in — hot, narrow. ${c.name[1]} drops his head into the pillow and pushes back. Second finger.`)),
-   cg(me('Сейчас войду. Скажи «да».','I am going in now. Say “yes”.')),
-   cg(say(c.id,...c.yesIn,'flirty'))
-  ],`${pref}_sex`,{...place(...[`ПОДГОТОВКА · ${c.place[0]}`,`PREP · ${c.place[1]}`],'22:05',art.ready),adult:true,skipTo:`${pref}_morning`});
+ N[`${pref}_prep`]=scene([
+  narr(beats.prep[0],art.ready),
+  {...say(c.id,...beats.prep[1],'flirty'),portrait:false},
+  narr(beats.prep[2]),
+  narr(beats.prep[3]),
+  narr(beats.prep[4])
+ ],`${pref}_sex`,{...place(...[`ПОДГОТОВКА · ${c.place[0]}`,`PREP · ${c.place[1]}`],'22:05',art.ready),adult:true,skipTo:`${pref}_morning`});
 
-  N[`${pref}_sex`]=scene([
-   cg({...note(`Головка упирается, проходит — он стонет в подушку, потом рвано смеётся. Я держу его за бёдра и вхожу целиком. Когда двигаюсь жёстче, смазка хлюпает, кровать стучит о стену.` ,`The head presses, slips in — he moans into the pillow, then laughs roughly. I hold his hips and bury myself to the hilt. When I thrust harder, lube squelches, the bed knocks the wall.`),bg:art.sex}),
-   cg({...say(c.id,...c.during,'flirty'),bg:art.climax}),
-   cg(note(`Я ускоряюсь. Он подаётся навстречу. ${c.warn[0]}`,`I speed up. He meets every thrust. ${c.warn[1]}`))
-  ],null,{...place(...[`НОЧЬ · ${c.place[0]}`,`NIGHT · ${c.place[1]}`],'22:20',art.sex),adult:true,skipTo:`${pref}_morning`,choices:[
-   {label:T('Кончить в него глубоко','Cum deep inside him'),tone:'romance',next:`${pref}_cum_inside`,effect:{[c.finishFlag]:'inside'}},
-   {label:T('Вытащить и кончить на бельё','Pull out and cum on the underwear'),tone:'romance',next:`${pref}_cum_cloth`,effect:{[c.finishFlag]:'cloth'}},
-   {label:T('Перевернуть и кончить на грудь','Flip him and cum on his chest'),tone:'romance',next:`${pref}_cum_chest`,effect:{[c.finishFlag]:'chest'}}
-  ]});
+ N[`${pref}_sex`]=scene([
+  narr(beats.sex[0],art.sex),
+  narr(beats.sex[1]),
+  narr(beats.sex[2]),
+  {...say(c.id,...beats.sex[3],'flirty'),portrait:false,bg:art.climax},
+  narr(beats.sex[4])
+ ],`${pref}_sex_deep`,{...place(...[`НОЧЬ · ${c.place[0]}`,`NIGHT · ${c.place[1]}`],'22:20',art.sex),adult:true,skipTo:`${pref}_morning`});
 
-  N[`${pref}_cum_inside`]=scene([
-   cg(note(`Я вколачиваюсь до упора и кончаю в него — густыми толчками. Он сжимается вокруг члена; его собственный стояк дёргается в мешочке, и он кончает следом.` ,`I slam in to the hilt and cum inside him — thick pulses. He clamps around my cock; his own erection jerks in the pouch and he cums right after.`)),
-   cg(say(c.id,...c.cumIn,'shy')),
-   cg(note(`Когда я медленно выхожу, сперма тянется нитью и капает на простыню. Он дрожит и смеётся.` ,`When I slowly pull out, cum stretches in a string and drips onto the sheet. He trembles and laughs.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumInside),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
+ N[`${pref}_sex_deep`]=scene([
+  narr(beats.sexDeep[0],art.sex),
+  narr(beats.sexDeep[1]),
+  narr(beats.sexDeep[2]),
+  narr(beats.sexDeep[3]),
+  narr(beats.sexDeep[4])
+ ],null,{...place(...[`НОЧЬ · ГЛУБЖЕ`,`NIGHT · DEEPER`],'22:28',art.sex),adult:true,skipTo:`${pref}_morning`,choices:[
+  {label:himLabel.inside,tone:'romance',next:`${pref}_cum_inside`,effect:{[c.finishFlag]:'inside'}},
+  {label:himLabel.cloth,tone:'romance',next:`${pref}_cum_cloth`,effect:{[c.finishFlag]:'cloth'}},
+  {label:himLabel.chest,tone:'romance',next:`${pref}_cum_chest`,effect:{[c.finishFlag]:'chest'}}
+ ]});
 
-  N[`${pref}_cum_cloth`]=scene([
-   cg(note(`Я вытаскиваю в последний момент и дрочу над ним. Он подставляет зад — и я крою ${c.ready[0]} густыми струями.` ,`I pull out at the last second and stroke over him. He offers his ass — and I paint ${c.ready[1]} with thick ropes.`)),
-   cg(say(c.id,...c.cumCloth,'laughing')),
-   cg(note(`Он проводит пальцем по ткани, собирает каплю и облизывает, глядя на меня.` ,`He runs a finger over the fabric, gathers a drop and licks it while looking at me.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumCloth),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
+ N[`${pref}_cum_inside`]=scene([
+  narr(beats.cumInside[0],art.cumInside),
+  {...say(c.id,...beats.cumInside[1],'shy'),portrait:false},
+  narr(beats.cumInside[2]),
+  narr(beats.cumInside[3])
+ ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumInside),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
 
-  N[`${pref}_cum_chest`]=scene([
-   cg(note(`Я вытаскиваю, переворачиваю его на спину и кончаю на широкую грудь — белые полосы, на соски, на шею.` ,`I pull out, flip him onto his back and cum on his broad chest — white stripes, on his nipples, on his throat.`)),
-   cg(say(c.id,...c.cumChest,'flirty')),
-   cg(note(`Он тянет меня в поцелуй. Я сжимаю мешочек ладонью — и он кончает себе на живот.` ,`He pulls me into a kiss. I squeeze the pouch in my palm — and he cums onto his own stomach.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumChest),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
- }else{
-  N[`${pref}_fade`]=scene([
-   cg(note(`Она скидывает одежду. Остаётся в ${c.cloth[0]}. Соски просвечивают сквозь ткань; между ног уже влажно.` ,`She drops her clothes. She is left in ${c.cloth[1]}. Her nipples show through the fabric; she is already wet between her legs.`)),
-   cg({...say(c.id,...c.touchLine,'shy'),bg:art.seductive}),
-   cg({...note(`Я провожу ладонью по груди, ниже — по кружеву. Она всхлипывает и разводит колени.` ,`I run my palm over her chest, then lower over the lace. She gasps and parts her knees.`),bg:art.touch}),
-   cg(me('Ложись. Хочу видеть тебя, когда буду входить.','Lie back. I want to see you when I push in.')),
-   cg(say(c.id,'Иди ко мне.','Come to me.','flirty'))
-  ],`${pref}_prep`,{...place(...[`КРОВАТЬ · ${c.place[0]}`,`BED · ${c.place[1]}`],'21:50',art.briefs),adult:true,skipTo:`${pref}_morning`});
+ N[`${pref}_cum_cloth`]=scene([
+  narr(beats.cumCloth[0],art.cumCloth),
+  {...say(c.id,...beats.cumCloth[1],'laughing'),portrait:false},
+  narr(beats.cumCloth[2]),
+  narr(beats.cumCloth[3])
+ ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumCloth),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
 
-  N[`${pref}_prep`]=scene([
-   cg({...note(`Она в ${c.ready[0]}. Я обливаю пальцы смазкой, кружу по клитору, вхожу одним — жарко, узко. Она роняет голову в подушку.` ,`She is in ${c.ready[1]}. I pour lube on my fingers, circle her clit, push one in — hot, narrow. She drops her head into the pillow.`),bg:art.ready}),
-   cg(say(c.id,...c.prepAsk,'flirty')),
-   cg(note(`Второй палец. Она подаётся навстречу и шепчет «да».` ,`Second finger. She pushes back and whispers “yes”.`)),
-   cg(me('Сейчас войду. Скажи «да».','I am going in now. Say “yes”.')),
-   cg(say(c.id,...c.yesIn,'flirty'))
-  ],`${pref}_sex`,{...place(...[`ПОДГОТОВКА · ${c.place[0]}`,`PREP · ${c.place[1]}`],'22:05',art.ready),adult:true,skipTo:`${pref}_morning`});
-
-  N[`${pref}_sex`]=scene([
-   cg({...note(`Головка упирается, проходит — она стонет и цепляется за простыню. Я вхожу медленно до конца. Когда двигаюсь жёстче, кровать стучит о стену.` ,`The head presses, slips in — she moans and grips the sheet. I push in slowly to the hilt. When I thrust harder, the bed knocks the wall.`),bg:art.sex}),
-   cg({...say(c.id,...c.during,'flirty'),bg:art.climax}),
-   cg(note(`Я ускоряюсь. Она встречает каждый толчок. ${c.warn[0]}` ,`I speed up. She meets every thrust. ${c.warn[1]}`))
-  ],null,{...place(...[`НОЧЬ · ${c.place[0]}`,`NIGHT · ${c.place[1]}`],'22:20',art.sex),adult:true,skipTo:`${pref}_morning`,choices:[
-   {label:T('Кончить в неё глубоко','Cum deep inside her'),tone:'romance',next:`${pref}_cum_inside`,effect:{[c.finishFlag]:'inside'}},
-   {label:T('Вытащить и кончить на бельё','Pull out and cum on the lingerie'),tone:'romance',next:`${pref}_cum_cloth`,effect:{[c.finishFlag]:'cloth'}},
-   {label:T('Кончить ей на грудь','Cum on her chest'),tone:'romance',next:`${pref}_cum_chest`,effect:{[c.finishFlag]:'chest'}}
-  ]});
-
-  N[`${pref}_cum_inside`]=scene([
-   cg(note(`Я вколачиваюсь до упора и кончаю в неё — густыми толчками. Она сжимается вокруг члена и кончает следом, дрожа.` ,`I slam in to the hilt and cum inside her — thick pulses. She clamps around my cock and cums right after, shaking.`)),
-   cg(say(c.id,...c.cumIn,'shy')),
-   cg(note(`Когда я медленно выхожу, сперма тянется нитью на простыню между разведённых колен.` ,`When I slowly pull out, cum stretches in a string onto the sheet between her spread knees.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumInside),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
-
-  N[`${pref}_cum_cloth`]=scene([
-   cg(note(`Я вытаскиваю в последний момент и кончаю на ${c.ready[0]} — густые струи на кружево и живот.` ,`I pull out at the last second and cum on ${c.ready[1]} — thick ropes on the lace and her stomach.`)),
-   cg(say(c.id,...c.cumCloth,'laughing')),
-   cg(note(`Она проводит пальцем по ткани и смотрит на меня.` ,`She runs a finger over the fabric and looks at me.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumCloth),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
-
-  N[`${pref}_cum_chest`]=scene([
-   cg(note(`Я кончаю ей на грудь — белые полосы на коже, на соски, капля на ключице.` ,`I cum on her chest — white stripes on her skin, on her nipples, a drop on her collarbone.`)),
-   cg(say(c.id,...c.cumChest,'flirty')),
-   cg(note(`Она тянет меня в поцелуй, размазывая тепло между нами.` ,`She pulls me into a kiss, smearing the heat between us.`))
-  ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumChest),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
- }
+ N[`${pref}_cum_chest`]=scene([
+  narr(beats.cumChest[0],art.cumChest),
+  {...say(c.id,...beats.cumChest[1],'flirty'),portrait:false},
+  narr(beats.cumChest[2]),
+  narr(beats.cumChest[3])
+ ],`${pref}_afterglow`,{...place(...[`ФИНИШ · ${c.place[0]}`,`FINISH · ${c.place[1]}`],'22:35',art.cumChest),adult:true,skipTo:`${pref}_morning`,journal:[journalKey]});
 
  N[`${pref}_afterglow`]=scene([
   cg(note(`Мы лежим под одним одеялом. Лампа всё ещё горит.` ,`We lie under one blanket. The lamp is still on.`)),
@@ -244,11 +214,11 @@ function registerGroup(N,J,helpers,morningNext){
  ]});
 
  N[`${pref}_fade`]=scene([
-  cg(note('Мы смеёмся, как неловко рассаживаемся на кровати. Потом смех стихает, и каждый спрашивает глазами: можно?','We laugh at how awkwardly we find places on the bed. Then the laughter fades, and each asks with their eyes: may I?')),
-  cg(note('Руки, рты, бёдра — медленно, с паузами. Кто-то шепчет «ещё», кто-то «подожди», и оба ответа принимаются. Я целую одного, пока другой гладит меня; потом меняемся, пока ткань не сползает, пока стоны не перекрывают уличный шум.','Hands, mouths, hips — slowly, with pauses. Someone whispers “more”, someone “wait”, and both answers are accepted. I kiss one while the other strokes me; then we switch, until cloth slips, until moans cover the street noise.')),
-  cg(note('Я вхожу в одного, держа другого за руку; потом наоборот. Финиш — общий: кто-то кончает мне на живот, кто-то сжимается вокруг члена, и мы падаем в кучу горячих тел под одним одеялом.','I push into one while holding the other’s hand; then the other way round. The finish is shared: someone cums on my stomach, someone clamps around my cock, and we fall into a heap of hot bodies under one blanket.')),
-  cg(me('Всё хорошо?','Is everyone all right?')),
-  cg(note('Оба кивают. Кто-то смеётся хрипло: «Да. Ещё можно — потом».','Both nod. Someone laughs roughly: “Yes. More is welcome — later.”'))
+  note('Мы смеёмся, как неловко рассаживаемся на кровати — голые торсы, трусы, чужие руки. Потом смех стихает, и каждый спрашивает глазами: можно?','We laugh at how awkwardly we find places on the bed — bare torsos, briefs, unfamiliar hands. Then the laughter fades, and each asks with their eyes: may I?'),
+  note('Я целую одного в рот, пока второй гладит мой стояк через ткань. Потом меняемся: губы на шее, ладонь в чужих брифах, влажный холм под пальцами. Кто-то шепчет «ещё», кто-то «подожди» — оба ответа принимаются.','I kiss one on the mouth while the second strokes my hard-on through the cloth. Then we switch: lips on a neck, a palm inside someone else’s briefs, a wet bulge under my fingers. Someone whispers “more”, someone “wait” — both answers are accepted.'),
+  note('Я вхожу в одного сзади, держа другого за руку у себя на члене. Смазка хлюпает, кровать стучит. Потом наоборот: тот, кто смотрел, теперь стонет в подушку, а второй целует меня, пока я двигаюсь.','I push into one from behind while the other holds my cock. Lube squelches, the bed knocks. Then the other way round: the one who was watching now moans into the pillow, and the second kisses me while I thrust.'),
+  me('Всё хорошо? Скажите, если стоп.','Is everyone all right? Say so if it is stop.'),
+  note('Оба кивают. Финиш общий: я кончаю в одного, второй кончает мне на живот и на чужие джоки; кто-то смеётся хрипло: «Да. Ещё можно — потом.» Мы падаем в кучу горячих тел.','Both nod. The finish is shared: I cum inside one, the second cums on my stomach and on someone else’s jock; someone laughs roughly: “Yes. More is welcome — later.” We fall into a heap of hot bodies.')
  ],`${pref}_morning`,{...place('НОЧЬ · ВТРОЁМ','NIGHT · THREE','23:20','room-window'),adult:true,skipTo:`${pref}_morning`,journal:['adult_night_group']});
 
  N[`${pref}_morning`]=scene([

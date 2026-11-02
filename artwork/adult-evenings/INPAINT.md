@@ -1,6 +1,8 @@
 # Постельные CG · сториборды под inpaint
 
-Генератор Cursor режет откровенные кадры (см. `artwork/romance-wardrobe/AUDIT.md`, `artwork/nikola-early-night/INPAINT.md`). Для 14 партнёров (кроме Николы) в `public/assets/{person}-night-{beat}-v1.webp` лежат **сториборды**: силуэт, лампа, чёрная плашка зоны inpaint.
+Генератор Cursor режет откровенные кадры (см. `artwork/romance-wardrobe/AUDIT.md`, `artwork/nikola-early-night/INPAINT.md`). Для 14 партнёров (кроме Николы) в `public/assets/{person}-night-{beat}-v1.webp` лежат **сториборды** или промежуточные генерации.
+
+**Мужчины:** целевой образ — **голый торс + непрозрачные трусы** (как у Николы). Cursor часто блокирует слово briefs; часть кадров временно в athletic short-shorts без футболки (`luka/dragan/stefan/milos/vuk/lazar/strahinya-night-{seductive,briefs,door}`). Плашки и shorts → inpaint в брифы локально.
 
 Никола продолжает использовать готовый набор `nikola-*-v1` из ранней ночи у реки.
 

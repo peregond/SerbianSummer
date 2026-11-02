@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {NODES} from '../public/story.js';
 import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE} from '../public/adult-cast.js';
 
-const beats=['kiss_ask','kiss','night_ask','home','door','fade','prep','sex','cum_inside','cum_cloth','cum_chest','afterglow','morning'];
+const beats=['kiss_ask','kiss','night_ask','home','door','fade','prep','sex','sex_deep','cum_inside','cum_cloth','cum_chest','afterglow','morning'];
 
 assert.equal(ADULT_PEOPLE.length,15);
 assert.deepEqual(ADULT_DAYS_ROUTE,[6,7,8,9,10,11,12,13,14,15]);
@@ -15,7 +15,10 @@ for(const person of ['nikola','milica']){
  }
  assert.equal(NODES[`evening1_${person}_fade`].adult,true);
  assert.equal(NODES[`evening1_${person}_fade`].skipTo,`evening1_${person}_morning`);
- assert.ok(NODES[`evening1_${person}_fade`].pages.length>=3,'Nikola-style multi-beat fade: '+person);
+ assert.ok(NODES[`evening1_${person}_fade`].pages.length>=4,'Nikola-style multi-beat fade: '+person);
+ assert.ok(NODES[`evening1_${person}_sex`].pages.length>=4,'dense sex beat: '+person);
+ assert.ok(NODES[`evening1_${person}_sex_deep`].choices.length>=3,'finish choices after sex_deep');
+ assert.match(JSON.stringify(NODES[`evening1_${person}_sex`].pages),/член|толч|вхожу|cock|thrust/i);
 }
 
 // Days 6–15 × full cast
@@ -26,7 +29,8 @@ for(const day of ADULT_DAYS_ROUTE){
   assert.ok(NODES[`evening${day}_${person}_kiss_ask`]);
   assert.ok(NODES[`evening${day}_${person}_kiss`]);
   assert.equal(NODES[`evening${day}_${person}_sex`].adult,true);
-  assert.ok((NODES[`evening${day}_${person}_sex`].choices??[]).length>=3,'finish choices');
+  assert.equal(NODES[`evening${day}_${person}_sex_deep`].adult,true);
+  assert.ok((NODES[`evening${day}_${person}_sex_deep`].choices??[]).length>=3,'finish choices');
  }
 }
 
