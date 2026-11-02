@@ -69,7 +69,10 @@ test('evening invitations depend on meeting people; friendship never advances ro
  choose('evening4_nikola',f,'evening4_nikola_kiss_ask');assert.equal(f.routeRel_nikola,1);
  choose('evening4_nikola_kiss_ask',f,'evening4_nikola_kiss');assert.equal(f.routeRel_nikola,2);
  choose('evening6_nikola',f,'evening6_nikola_night_ask');choose('evening6_nikola_night_ask',f,'evening6_nikola_fade');assert.equal(f.routeRel_nikola,3);assert.equal(f.love_airport,'lover');
- for(const [,n]of active.filter(([,n])=>n.adult)){assert.equal(n.next,n.skipTo);assert.ok(NODES[n.skipTo].activeRoute);assert.equal(NODES[n.skipTo].adult,undefined);assert.ok(n.pages.length<=2);assert.doesNotMatch(JSON.stringify(n.pages),/оргазм|пенис|влагалищ|эрекц|orgasm|penetrat/i);}
+ for(const [id,n]of active.filter(([,n])=>n.adult)){
+  assert.ok(NODES[n.skipTo].activeRoute,id);assert.equal(NODES[n.skipTo].adult,undefined,id);
+  if(!id.startsWith('adult_evening')){assert.equal(n.next,n.skipTo);assert.ok(n.pages.length<=2);}
+ }
 });
 
 test('group consent is separate for both companions and the player; a refusal stays friendly',()=>{

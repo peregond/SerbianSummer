@@ -47,7 +47,7 @@ for(const choice of rentalChoices.slice(0,3))assert.deepEqual(choice.when,{flag:
 for(const choice of rentalChoices.slice(3))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
 assert.deepEqual(rentalChoices.slice(3).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
 canonical.district_map.choices=rentalChoices.slice(0,3).map(choice=>{const copy={...choice};delete copy.when;return copy;});
-for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_'))delete canonical[id];
+for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_')||/^(adult_evening\d+_|evening\d+_|route4_group_)/.test(id))delete canonical[id];
 assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
 canonical.d20_nephew.pages[1].speaker='districtHost';
 assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');

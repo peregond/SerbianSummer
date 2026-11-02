@@ -1,5 +1,5 @@
-import { t } from './i18n.js?v=0.17.2';
-import { appendChoiceContents } from './choice-ui.js?v=0.17.2';
+import { t } from './i18n.js?v=0.17.3';
+import { appendChoiceContents } from './choice-ui.js?v=0.17.3';
 import { MESSENGER_CONFIG } from './messenger-config.js?v=0.16.1';
 
 const icons = {
