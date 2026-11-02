@@ -30,8 +30,15 @@ function walk(id,ancestors=[]) {
 const stats=walk(START);
 // Older entrances remain loadable, but a new playthrough never goes backwards to them.
 for(const [id,node]of Object.entries(NODES))if(node.legacyOnly)walk(id);
+// Optional 18+ evening registry (evening{day}_* / route4_group_*): not on the main path; spot-check one pack per person.
+const adultRegistry=id=>/^(evening\d+_|route4_group_)/.test(id);
+const {ADULT_PEOPLE}=await import('../public/adult-cast.js');
+for(const person of ADULT_PEOPLE)walk(`evening6_${person}_night_ask`);
+walk('evening1_nikola_night_ask');walk('evening1_milica_night_ask');walk('route4_group_ask');
 usedBackgrounds.add(presentationFor(NODES.love1_1_yes,NODES.love1_1_yes.pages[1],{lastPartner:'airport',companion:'nikola'},{gender:'male'}).bg);
-assert.equal(visited.size,Object.keys(NODES).length,'Unreachable scene');assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
+const mainScenes=Object.keys(NODES).filter(id=>!adultRegistry(id));
+assert.equal([...visited].filter(id=>!adultRegistry(id)).length,mainScenes.length,'Unreachable scene');
+assert.equal(usedBackgrounds.size,Object.keys(BACKGROUNDS).length,'Unstaged background');assert.equal(usedEmotions.size,Object.keys(CHARACTER_SPRITES.nikola).length);
 assert.equal(presentationFor(NODES.nikola_daydream,NODES.nikola_daydream.pages[4]).daydream,false);
 assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{})).length,3,'three original district routes remain available in the original story');
 assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{rentalCast:'new'})).length,3,'three districts are on the map in the new story');
