@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=0.16.8';
+import {t} from './i18n.js?v=0.16.9';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.8';
 export function drawBeatAction(container,hotspots,action,{text,perform,tones,node,flags}){
   container.replaceChildren();hotspots.replaceChildren();container.hidden=!action||action.kind==='tap';hotspots.hidden=true;

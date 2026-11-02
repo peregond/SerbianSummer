@@ -1,4 +1,4 @@
-import {t} from './i18n.js?v=0.16.8';
+import {t} from './i18n.js?v=0.16.9';
 // A visual insert only: the original narration, baggage action and save index stay in place.
 export function renderArrivalPhone(scene,nodeId,index){
  let card=scene.querySelector('.arrival-phone');

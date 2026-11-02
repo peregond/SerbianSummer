@@ -16,7 +16,7 @@ import {mountMessenger} from './messenger.js?v=0.16.8';
 import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.16.1-chat3';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-nikola-hug1';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.8';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.9';
 import {STAGES} from './days.js?v=0.16.1';
 import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
 import {cueFor} from './music-cues.js?v=0.16.6';
@@ -26,7 +26,7 @@ import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
 import {drawBeatAction} from './beat-action.js?v=0.16.8';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.8';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.8';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.9';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
 import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.8';
@@ -44,7 +44,7 @@ import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
 import {appendChoiceContents} from './choice-ui.js?v=0.16.8';
 import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.8';
+import {APP_VERSION} from './release.js?v=0.16.9';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;

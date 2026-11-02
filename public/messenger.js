@@ -1,4 +1,4 @@
-import { t } from './i18n.js?v=0.16.8';
+import { t } from './i18n.js?v=0.16.9';
 import { appendChoiceContents } from './choice-ui.js?v=0.16.8';
 import { MESSENGER_CONFIG } from './messenger-config.js?v=0.16.1';
 

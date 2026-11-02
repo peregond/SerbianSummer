@@ -1,0 +1,34 @@
+{
+  "style": "semi-realistic hand-painted visual novel, delicate contours, warm bedroom lamp, adult fictional characters from Serbian Summer, natural adult proportions, no UI no watermark, TRUE transparent or bedroom set as noted",
+  "note": "Cursor GenerateImage rejects explicit sexual content. Use storyboard WebP stubs (black bars) + local ComfyUI / inpaint like artwork/nikola-early-night/. Nikola reuses existing nikola-*-v1 riverside-night CGs.",
+  "beats": {
+    "seductive": "Partner alone on bed, underwear/lingerie only, seductive look at viewer, head fully in frame",
+    "door": "Partner pinned/leaning at bedroom door in underwear, flushed, wanting",
+    "briefs": "On bed in named underwear, clear outline through fabric, smile",
+    "touch": "Eyes closed or biting lip while bulge/lingerie is touched (hand optional)",
+    "ready": "Male: all fours or kneeling in jock looking back. Female: on back, lingerie aside, inviting",
+    "sex": "During sex, moan, head back — black-bar storyboard until inpaint",
+    "climax": "Close-up face at climax",
+    "cum-inside": "Afterglow bliss after finish inside",
+    "cum-cloth": "Finish on underwear/lingerie, laughing",
+    "cum-chest": "Finish on chest, tender look",
+    "afterglow": "Soft smile after, underwear, under sheet"
+  },
+  "people": {
+    "milica": "adult woman 27, warm brown eyes, dark chestnut hair, burgundy lace set",
+    "dragan": "adult man late 40s, salt-and-pepper, dark beard, dark grey briefs / dark jock",
+    "jelena": "adult woman late 30s, green eyes, auburn braid, freckles, cream silk lingerie",
+    "asya": "adult woman 29, black shag with green streak, black lace set",
+    "luka": "adult man, athletic, very short dark hair, short beard, dark blue boxers / jock",
+    "ana": "adult woman, calm photographer, soft beige lingerie",
+    "stefan": "adult man craftsman hands, plain black briefs / jock",
+    "marko": "adult man composed, grey cotton briefs / jock",
+    "vuk": "adult tall man, black briefs / jock",
+    "lazar": "adult man, black cotton briefs / jock",
+    "teodora": "adult woman, light lace set",
+    "ivana": "adult woman freckles, soft cotton lingerie",
+    "strahinya": "adult man, dark cotton briefs / jock",
+    "milos": "adult man open face without balaclava, dark briefs / jock"
+  },
+  "inpaint_template": "Replace ONLY the black rectangle with {beat detail}. Keep exact face identity from reference portrait, warm lamp light, semi-realistic VN style, no text, no watermark."
+}
