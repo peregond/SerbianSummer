@@ -15,9 +15,8 @@ test('day outfits follow the scene day and never replace a uniform or a daydream
 });
 
 test('apartment inspection uses owner-specific art only where it fits',()=>{
- for(const key of ['ana:water','ana:windows','stefan:water','marko:water','marko:windows','vuk:water','vuk:windows']){
+ for(const key of ['ana:water','ana:windows','ana:internet','stefan:water','stefan:windows','stefan:internet','marko:water','marko:windows','marko:internet','vuk:water','vuk:windows','vuk:internet']){
   assert.ok(!STATION_ART[key].includes('-common-'),key);
   assert.ok(fs.existsSync(new URL(`../public/assets/${STATION_ART[key]}.webp`,import.meta.url)),key);
  }
- for(const key of ['ana:internet','stefan:internet','stefan:windows','marko:internet','vuk:internet'])assert.match(STATION_ART[key],/-common-/);
 });

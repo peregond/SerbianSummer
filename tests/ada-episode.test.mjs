@@ -5,7 +5,7 @@ import {choiceVisible} from '../public/romance.js';
 
 const ids = ['ada_tired','ada_arrive','ada_pick','ada_pebbles','ada_bridge','ada_melon_pebbles','ada_melon_bridge','ada_home'];
 for (const id of ids) {
-  assert.equal(NODES[id].chapterId, 'districts', id);
+  assert.equal(NODES[id].chapterId, 'ada', id);
   assert.ok(NODES[id].pages.length <= 5, id);
   assert.ok(fs.existsSync(new URL('../public/assets/' + NODES[id].bg + '.webp', import.meta.url)), NODES[id].bg);
 }
@@ -17,7 +17,7 @@ for (const id of ['date_kiss','date_hand']) {
   assert.ok(NODES[id].choices.some(choice => choice.next === 'nikola_park'));
   assert.ok(NODES[id].choices.some(choice => choice.next === 'ada_tired'));
 }
-assert.equal(NODES.ada_home.next, 'chapter_three_close');
+assert.equal(NODES.ada_home.next, 'evening7');
 assert.equal(NODES.chapter_three_close.next, 'third_morning');
 assert.equal(NODES.ada_pebbles.next, 'ada_melon_pebbles');
 assert.equal(NODES.ada_bridge.next, 'ada_melon_bridge');

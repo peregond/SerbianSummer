@@ -3,9 +3,10 @@
 // Friendly refusal at any step returns to chapter_three_close without penalty.
 // Scene IDs keep the nikola_park_* prefix so they never collide with prologue nikola_invite / nikola_phone / …
 // Flow: stay by the river → invite home → flat. No park detour. Full-bleed CGs never stack the standing sprite.
-import {T} from './days.js?v=0.16.1';
+import {T} from './days.js?v=0.17.2';
 
 const RIVER_BG='riverside-evening';
+const TRAM_BG='belgrade-tram-stop-evening-v1';
 const HOME_BG='nikola-apartment-night-v1';
 const SCENE={
  seductive:'nikola-bedroom-seductive-v1',
@@ -23,6 +24,7 @@ const SCENE={
 };
 
 export const NIKOLA_EARLY_NIGHT_BACKGROUNDS={
+ [TRAM_BG]:{label:T('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP'),description:T('Вечерняя остановка трамвая у реки','An evening tram stop by the river'),position:'50% 48%'},
  [HOME_BG]:{label:T('КВАРТИРА НИКОЛЫ · НОЧЬ','NIKOLA’S FLAT · NIGHT'),description:T('Небольшая спальня: лампа, простыни, подоконник с корицей','A small bedroom: lamp, sheets, cinnamon on the windowsill'),position:'50% 40%'},
  [SCENE.seductive]:{label:T('НИКОЛА · ВЗГЛЯД','NIKOLA · LOOK'),description:T('Никола в белых трусах, соблазнительная улыбка','Nikola in white briefs, a seductive smile'),position:'50% 35%'},
  [SCENE.door]:{label:T('НИКОЛА · У ДВЕРИ','NIKOLA · AT THE DOOR'),description:T('Никола в белых трусах у двери','Nikola in white briefs at the door'),position:'50% 40%'},
@@ -84,7 +86,7 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,scene}){
   note('У остановки трамвая Никола останавливается. Ключи в кармане звякают — он сжимает их сильнее, чем нужно.','At the tram stop Nikola stops. Keys jingle in his pocket — he grips them harder than he needs to.'),
   nik('Моя квартира в двух остановках. Можем просто посидеть. Или… если хочешь остаться на ночь — я хочу. Скажи прямо.','My flat is two stops away. We can just sit. Or… if you want to stay the night — I want that. Say it straight.','flirty'),
   note('Он смотрит мне в глаза и ждёт. Без шутки про кифлу — только вопрос.','He looks me in the eye and waits. No kifla joke — only the question.')
- ],null,{...place('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP','20:20',RIVER_BG),character:'nikola-evening',emotion:'flirty',portrait:true,choices:[
+ ],null,{...place('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP','20:20',TRAM_BG),character:'nikola-evening',emotion:'flirty',portrait:true,choices:[
   {label:T('«Да. Хочу трахнуть тебя у тебя дома»','“Yes. I want to fuck you at your place”'),tone:'romance',next:'nikola_park_home',effect:{nikolaPark:'yes'}},
   {label:T('«Не сегодня. Проводи меня до трамвая»','“Not tonight. Walk me to the tram”'),tone:'friendship',next:'nikola_park_decline',effect:{nikolaPark:'later'}}
  ]});
@@ -92,7 +94,7 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,scene}){
  N.nikola_park_decline=scene([
   nik('Хорошо. Спасибо, что сказал честно. Завтра всё равно испеку тебе кифлу.','All right. Thank you for saying it honestly. Tomorrow I will still bake you a kifla.','friendly'),
   note('Он провожает меня до дверей трамвая. Поцелуй на прощание короткий и тёплый — без обиды.','He walks me to the tram doors. The goodbye kiss is short and warm — without hurt.')
- ],'chapter_three_close',{...place('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP','20:35',RIVER_BG),character:'nikola-evening',emotion:'friendly',portrait:true});
+ ],'chapter_three_close',{...place('БЕЛГРАД · ОСТАНОВКА','BELGRADE · TRAM STOP','20:35',TRAM_BG),character:'nikola-evening',emotion:'friendly',portrait:true});
  // next rewritten to ada_tired after that scene exists (extendAdaEpisode).
 
  // 3. Home + consent (split for mobile pacing: ≤5 lines between actions)
@@ -121,7 +123,7 @@ export function extendNikolaEarlyNight({NODES:N,JOURNAL:J,BACKGROUNDS,n,scene}){
  // 5a. Prep — jock + fingers
  N.nikola_park_prep=scene([
   cg({...note('Он натягивает белые джоки Calvin Klein: узкий пояс, мешочек держит тяжёлые яйца и стоящий член, ягодицы полностью открыты — круглые, плотные, с лёгким загаром. Между щёк уже блестит, когда он встаёт на четвереньки на простыне.','He pulls on white Calvin Klein jockstraps: a narrow waistband, the pouch holding heavy balls and his hard cock, his ass fully bare — round, firm, lightly tanned. Between the cheeks it already gleams as he gets on all fours on the sheet.'),bg:SCENE.jock}),
-  cg(nik('Пальцы сначала? У меня есть смазка. Не хочу, чтобы было больно — хочу, чтобы ты ебал глубоко.','Fingers first? I have lube. I do not want it to hurt — I want you to fuck me deep.','flirty')),
+  cg(nik('Пожёстче. Мне так нравится.','Harder. I like it.','flirty')),
   cg(note('Я обливаю пальцы, кружу по сжатому кольцу, вхожу одним — жарко, узко. Никола роняет голову в подушку, подаётся назад. Второй палец. Он матерится по-сербски и по-русски сразу: «Jebi… да, ещё».','I pour lube on my fingers, circle his tight ring, push one in — hot, narrow. Nikola drops his head into the pillow and pushes back. Second finger. He swears in Serbian and Russian at once: “Jebi… yes, more.”')),
   cg(me('Сейчас войду. Скажи «да».','I am going in now. Say “yes”.')),
   cg(nik('Да. Трахай меня. Хочу чувствовать твой член до упора.','Yes. Fuck me. I want to feel your cock all the way.','flirty'))

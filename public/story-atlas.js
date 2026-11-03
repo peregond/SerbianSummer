@@ -1,6 +1,6 @@
-import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=1';
-import {t} from './i18n.js?v=0.16.11';
-import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.16.11';
+import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=0.17.2';
+import {t} from './i18n.js?v=0.17.23';
+import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.17.23';
 import {
   buildStoryAtlas,
   buildStoryGraph,
@@ -10,7 +10,7 @@ import {
   graphEdgeLabelPoint,
   scaleStoryGraph,
   scenePreviewLines
-} from './story-atlas-model.js?v=4';
+} from './story-atlas-model.js?v=0.17.2';
 
 const PREVIEW_FLAGS={companion:'nikola',host:'dragan',districtOwner:'jelena',district:'dorcol',rentalCast:'new'};
 const PREVIEW_PROFILE={gender:'female',nameId:'alexandra'};
@@ -61,7 +61,7 @@ async function copyText(value){
   }
 }
 
-export function mountStoryAtlas(container,{nodes,chapters,start,status,initialScene}){
+export function mountStoryAtlas(container,{nodes,chapters,start,status,initialScene,onTestScene}){
   const atlas=buildStoryAtlas(nodes,chapters,start,{
     presentationFor,
     sprites:CHARACTER_SPRITES,
@@ -255,6 +255,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
     const copyLink=el('button',t('Скопировать ссылку'),'secondary');
     copyLink.type='button';copyLink.onclick=async()=>{if(await copyText(sceneLink(scene.id,location.href)))setStatus(t('Ссылка скопирована'));};
     idRow.append(code,copyId,copyLink,copyNote);
+    if(onTestScene){const test=el('button','Запустить сцену','primary');test.type='button';test.classList.add('story-atlas-test');test.onclick=()=>onTestScene(scene.id);idRow.append(test);}
     head.append(idRow);
     if(scene.chapter)head.append(el('p',scene.chapter,'story-atlas-meta'));
     const chips=el('div','','story-atlas-chips');
@@ -488,7 +489,6 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
   fitBtn.onclick=()=>centerOn(selected);
 
   schemaViewport.addEventListener('pointerdown',event=>{
-    if(event.target.closest('.story-atlas-node'))return;
     dragging=true;
     dragOrigin={x:event.clientX-panX,y:event.clientY-panY};
     schemaViewport.classList.add('is-panning');
@@ -511,6 +511,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
       event.preventDefault();
       setZoom(scale+(event.deltaY>0?-0.08:0.08));
     }else{
+      event.preventDefault();
       panX-=event.deltaX;
       panY-=event.deltaY;
       applyPan();

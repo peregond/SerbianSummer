@@ -21,7 +21,7 @@ function apply(){
  if(live()&&desired&&Object.hasOwn(AMBIENCE,desired)){
   if(!loops.has(desired))loops.set(desired,make(AMBIENCE[desired],true));
   const audio=loops.get(desired);
-  if(audio.paused)Promise.resolve(audio.play()).catch(()=>{});
+  if(audio.paused){const key=desired;Promise.resolve(audio.play()).then(()=>{if(!live()||desired!==key)audio.pause();}).catch(()=>{});}
  }
  if(!live()){for(const audio of loops.values()){audio.pause();audio.volume=0;}for(const audio of shots.values())audio.pause();}
  if(live()&&loops.size&&!timer)timer=setInterval(step,STEP_MS);

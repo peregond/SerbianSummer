@@ -1,57 +1,63 @@
-import {rentalRedirect} from './rental-story.js?v=2';
-import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=2';
-import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.16.1';
-import {renderHomeHero} from './home-hero.js?v=1';
-import {renderEpisodeContact} from './episode-contact.js?v=0.16.11';
+import {mountCoinCatch} from './coin-catch.js?v=0.17.23';
+import {mountFlatSettleQuest} from './flat-settle-quest.js?v=0.17.23';
+import {mountWhiteCard} from './white-card.js?v=0.17.23';
+import {arrivalPhoneFrame,ARRIVAL_PHONE_TEXT} from './arrival-phone.js?v=0.17.23';
+import {mountPixelTram} from './pixel-tram.js?v=0.17.23';
+import {rentalRedirect} from './rental-story.js?v=0.17.2';
+import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=0.17.2';
+import {chapterAvailable,hasPreviewAccess,hasChapterDebugAccess} from './chapter-access.js?v=0.17.2';
+import {renderHomeHero} from './home-hero.js?v=0.17.2';
+import {renderEpisodeContact} from './episode-contact.js?v=0.17.23';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.16.11';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.16.11';
-import {mountRoomInteraction} from './room-interaction.js?v=0.16.11';
-import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.16.11';
-import {mountBankGuide} from './bank-guide.js?v=0.16.11';
+import {drawChapterMap} from './chapter-map.js?v=0.17.23';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.17.23';
+import {mountRoomInteraction} from './room-interaction.js?v=0.17.23';
+import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.17.23';
+import {mountBankGuide} from './bank-guide.js?v=0.17.23';
 import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
-import {renderArrivalPhone} from './arrival-phone.js?v=0.16.11';
-import {mountMessenger} from './messenger.js?v=0.16.11';
-import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.16.1-chat3';
+import {renderArrivalPhone} from './arrival-phone.js?v=0.17.23';
+import {mountMessenger} from './messenger.js?v=0.17.23';
+import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.17.2';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
-import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.16.1-nikola-hug1';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.16.11';
-import {STAGES} from './days.js?v=0.16.1';
-import {MAX_LOG_RECORDS} from './save-limits.js?v=0.16.6';
-import {cueFor} from './music-cues.js?v=0.16.6';
-import {ambienceFor,stingFor} from './sound-cues.js?v=0.16.6';
-import {setAmbience,playSting} from './sfx.js?v=0.16.7';
-import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.16.1';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.16.1';
-import {drawBeatAction} from './beat-action.js?v=0.16.11';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.16.11';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.16.11';
+import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.17.2';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.17.23';
+import {STAGES} from './days.js?v=0.17.2';
+import {MAX_LOG_RECORDS} from './save-limits.js?v=0.17.2';
+import {cueFor} from './music-cues.js?v=0.17.2';
+import {ambienceFor,stingFor} from './sound-cues.js?v=0.17.2';
+import {setAmbience,playSting} from './sfx.js?v=0.17.2';
+import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.17.2';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,jumpToChapter,continuationFor} from './chapters.js?v=0.17.2';
+import {drawBeatAction} from './beat-action.js?v=0.17.23';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.23';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.23';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
-import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.16.7';
-import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.16.8';
-import {splitToFit} from './text-fit.js?v=0.16.7';
-import {THEME_ICONS} from './theme-icons.js?v=0.16.7';
-import {panelToolButtons} from './panel-tools.js?v=0.16.7';
-import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.16.7';
-import {mountNamePicker} from './name-picker.js?v=0.16.7';
-import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.16.7';
-import {setSfxVolume} from './sfx.js?v=0.16.7';
-import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.16.7';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.16.11';
-import { CloudProgress } from './cloud.js?v=0.9.0';
+import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.17.2';
+import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.17.2';
+import {splitToFit} from './text-fit.js?v=0.17.2';
+import {THEME_ICONS} from './theme-icons.js?v=0.17.2';
+import {panelToolButtons} from './panel-tools.js?v=0.17.2';
+import {LOOKS,lookFor,defaultLook,avatarMarkup} from './hero-looks.js?v=0.17.2';
+import {mountNamePicker} from './name-picker.js?v=0.17.2';
+import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.17.2';
+import {setSfxVolume} from './sfx.js?v=0.17.2';
+import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.17.2';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.17.23';
+import { CloudProgress } from './cloud.js?v=0.17.2';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
-import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.16.1';
-import {appendChoiceContents} from './choice-ui.js?v=0.16.11';
-import {mountBaggageInteraction} from './interaction.js?v=0.16.1-baggage3';
-import {APP_VERSION} from './release.js?v=0.16.11';
+import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.17.2';
+import {appendChoiceContents} from './choice-ui.js?v=0.17.23';
+import {mountBaggageInteraction} from './interaction.js?v=0.17.2';
+import {APP_VERSION} from './release.js?v=0.17.24';
+import {startUpdateChecks} from './update-check.js?v=0.17.24';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
 try{await initialiseLanguage();translationsReady=true;}catch{setLanguage('ru');}
 const applyStaticLanguage=captureStaticUi(document);
 applyStaticLanguage();
-function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
+function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION+' · '+t('История обновлений'));label.title=t('История обновлений');});}
 updateLanguageUi();
 const catalog = await fetch('./names.json').then(r => { if(!r.ok) throw new Error('Не удалось загрузить имена'); return r.json(); });
 const settings = readLocal('settings', { textSize:18, music:false, volume:.55 });
@@ -68,6 +74,7 @@ setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
 document.documentElement.style.setProperty('--text-lines', String(textLines(settings.textSize)));
 let saved = null, state = null, view = 'home', creationStep = 0, transitionLock = false;
+let sceneTest=null;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 // Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
@@ -81,6 +88,11 @@ function setPanelTools(items){panelTools.replaceChildren(...panelToolButtons(ite
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
+let arrivalPhoneNarration=false;
+const ASYA_FIRST_THOUGHT='Вот и Ася, которая помогала мне с переездом. Интересно наконец увидеть её вживую: тёмная одежда, небрежные волосы — настоящий петербургский альтернативный образ.';
+const CHAT_SWITCH_THOUGHT='Я закрываю переписку и вижу новое сообщение от Аси.';
+const showChatSwitchThought=()=>state?.node==='chapter_four_close'&&state.index===2&&!state.flags.chapterFourChatTransition;
+const showAsyaFirstThought=()=>/^flat_enter_(ana|stefan|marko|vuk)$/.test(state?.node??'')&&state.index===4&&!state.flags.asyaInPerson&&((state.flags.flatQuest??0)&15).toString(2).replaceAll('0','').length<=1;
 let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
 // A line longer than the dialogue box is shown in several screens: textChunks, the one on view is chunkIndex.
 let textChunks=[''],chunkIndex=0,chunkKey='',chunkWidth=0,showLastChunk=false;
@@ -124,7 +136,7 @@ function preloadSprite(character,emotion='friendly') {
 function named(profile) { return catalog.genders[profile.gender]?.names.find(n=>n.id===profile.nameId); }
 function validProfile(profile) { return profile && ['male','female'].includes(profile.gender) && !!named(profile); }
 function validateSave(input) {
-  if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл сохранения не подходит к версии пролога.');
+  if (!input || input.formatVersion!==1 || input.storyVersion!==STORY_VERSION || !validProfile(input.profile)) throw new Error('Этот файл относится к другой версии истории. Для маршрута на 15 дней начни новую игру.');
   if (input.node!=='end' && !Object.hasOwn(NODES,input.node)) throw new Error('Неизвестная сцена в сохранении.');
   if (!Number.isInteger(input.index) || input.index<0 || (input.node!=='end' && input.index>=NODES[input.node].pages.length)) throw new Error('Не удалось восстановить реплику.');
   if (!Array.isArray(input.log) || input.log.length>MAX_LOG_RECORDS || !input.log.every(e=>e && typeof e.speaker==='string' && e.speaker.length<100 && typeof e.text==='string' && e.text.length<4000)) throw new Error('Повреждена история реплик.');
@@ -162,8 +174,10 @@ function showInstallGuide() {
   if(panel.open)panel.close();
   $('panel-title').textContent=t('Игра на весь экран');
   const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  const android=/Android/i.test(navigator.userAgent);
   $('panel-content').innerHTML=html(standalone
     ? '<p class="install-copy">Игра уже открыта с домашнего экрана. Панели Safari скрыты — можно погружаться в историю.</p>'
+    : android?'<p class="install-copy">В Chrome открой меню ⋮ и выбери «Установить приложение» или «Добавить на главный экран». Затем запусти игру с новой иконки.</p>'
     : '<p class="install-copy">На iPhone игра открывается без адресной панели, когда запускается с домашнего экрана.</p><ol class="install-steps"><li>Открой эту страницу в Safari и нажми «Поделиться».</li><li>Выбери «На экран Домой». Если пункт спрятан, открой «Ещё».</li><li>Оставь включённым «Открывать как веб-приложение», если этот переключатель есть, и нажми «Добавить».</li></ol><p class="install-copy">Затем запусти «Сербское лето» с новой иконки. Чтобы перенести текущий прогресс, скачай сохранение в настройках и загрузи его после запуска.</p>');
   panel.showModal();
 }
@@ -206,7 +220,7 @@ function home() {
   showScreen('home');fitScene();
 }
 function save() {
-  if(!state) return;
+  if(!state||sceneTest) return;
   state.updatedAt=Date.now(); saved=structuredClone(state);
   cloud?.queue(state);
   const at=state.updatedAt;
@@ -304,7 +318,7 @@ function speakerName(page,locale=getLanguage()) {
   return t(familySpeaker(oldHost?names.host:(names[page.speaker]??page.speaker)),locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
-function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
+function recordPage() {const page=currentPage(),chat=messageAt(state.node,NODES[state.node],state.index,state.flags);state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:chat?'message':dialogueVoice(page),...(chat?{chatContact:chat.contact,chatDirection:chat.direction,chatScene:state.node,chatTime:chat.time,chatIndex:state.index,chatKind:'page'}:{})});}
 function enterNode(id) {
   id=rentalRedirect(state?.node,id,state?.flags);
   // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
@@ -321,7 +335,7 @@ function showChapterLock(){
   const root=$('chapter-card');root.replaceChildren();
   const box=document.createElement('div');box.className='chapter-card-inner';
   const title=document.createElement('h2');title.textContent=t('Продолжение пока закрыто');
-  const copy=document.createElement('p');copy.textContent=t('Открыты пролог и дни 1–5. Дальнейшие главы доступны по промокоду. Твой прогресс сохранён.');
+  const copy=document.createElement('p');copy.textContent=t('Открыты дни 1–5. Дальнейшие главы доступны по промокоду. Твой прогресс сохранён.');
   const settingsButton=document.createElement('button');settingsButton.className='primary';settingsButton.textContent=t('Ввести промокод');settingsButton.onclick=()=>openPanel('settings');
   const menu=document.createElement('button');menu.className='secondary';menu.textContent=t('На главный экран');menu.onclick=home;
   box.append(title,copy,settingsButton,menu);root.append(box);
@@ -329,34 +343,50 @@ function showChapterLock(){
 function renderGame({skipMessenger=false}={}) {
   state.index=visibleMessagePage(state.node,state.index);
   if(pendingLabel){labelKey=state.node+'|'+state.index;pendingLabel=false;}
-  if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
+  if(!sceneTest&&!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
-  const node=NODES[state.node],page=currentPage();
+  const node=NODES[state.node],asyaIntro=showAsyaFirstThought(),chatTransition=showChatSwitchThought(),page=asyaIntro?{speaker:'narrator',text:ASYA_FIRST_THOUGHT,character:'asya',emotion:'friendly'}:chatTransition?{speaker:'narrator',text:CHAT_SWITCH_THOUGHT}:currentPage();
+  const presentation=presentationFor(node,page,state.flags,state.profile);
+  const soundScene={...node,bg:presentation.bg,time:presentation.time};
+  setMusicScene(cueFor(soundScene));setAmbience(ambienceFor(soundScene));
+  if(state.node!=='quick_arrival'||state.index!==2)arrivalPhoneNarration=false;
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
+  if(state.node==='flat_settle'&&state.index===2)return openFlatSettleQuest();
+  if(state.node==='host_terrace'&&state.index===node.pages.length-1)return openMealMenu();
   if(node.map)return openDistrictMap();
+  if(page.action?.quest==='coin-catch')return openCoinCatch();
+  if(page.action?.quest==='white-card')return openWhiteCard();
+  if(page.action?.quest==='pixel-tram')return openPixelTram();
   if(page.action?.quest==='viewing')return openViewingQuest();
   if(page.action?.quest==='bank-guide')return openBankGuide();
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
-  setMusicScene(cueFor(node));setAmbience(ambienceFor(node));
   if(state.node!==lastStingNode){lastStingNode=state.node;const sting=stingFor(state.node);if(sting)playSting(sting);}
-  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
+  if(state.node==='quick_arrival'&&state.index===2&&!arrivalPhoneNarration){
+    showScreen('messenger');messengerDispose=mountMessenger($('messenger'),arrivalPhoneFrame(),{
+      canRewind:!!state.rewind?.length,onBack:goBack,onMenu:()=>openPanel('game-menu'),onSettings:()=>openPanel('settings'),onSend:()=>false,
+      onContinue:()=>{arrivalPhoneNarration=true;if(!state.log.some(entry=>entry.chatPhoto==='arrival-door')){state.log.push({speaker:'Драган',text:ARRIVAL_PHONE_TEXT,choice:false,voice:'message',chatContact:'Драган',chatDirection:'incoming',chatScene:'arrival-phone',chatPhoto:'arrival-door'});save();}renderGame();}
+    });return;
+  }
+  const frame=!skipMessenger&&!chatTransition&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,log:state.log,historyText:value=>translateHistory(familyText(value),state.profile,catalog),profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
     if(cardWanted&&previousChapter&&(previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0||previousChapter!==chapter.id&&state.node==='rental_day_'+chapter.day&&state.index===0))showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
     return;
   }
   showScreen('game');
-  const presentation=presentationFor(node,page,state.flags,state.profile);
   const sceneElement=$('scene');
-  renderArrivalPhone(sceneElement,state.node,state.index);
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
   sceneElement.style.backgroundPosition=presentation.position;
   sceneElement.dataset.background=presentation.bg;
   sceneElement.classList.toggle('is-daydream',presentation.daydream);
+  let carrierSign=sceneElement.querySelector('.carrier-sign');
+  if(node.carrierBrand&&!carrierSign){carrierSign=document.createElement('div');carrierSign.className='carrier-sign';sceneElement.append(carrierSign);}
+  if(carrierSign){carrierSign.hidden=!node.carrierBrand;carrierSign.textContent=node.carrierBrand??'';carrierSign.dataset.carrier=(node.carrierBrand??'').toLowerCase();}
   sceneElement.classList.toggle('is-night',node.lighting==='night');
+  sceneElement.classList.toggle('dragan-date',node.lighting==='night'&&(state.flags.host??'dragan')==='dragan'&&EVENING_NODES.includes(state.node));
   sceneElement.classList.toggle('is-map',!!node.map);
   sceneElement.classList.toggle('is-insert',presentation.insert);
   sceneElement.classList.toggle('is-seated',presentation.seated);
@@ -398,14 +428,14 @@ function renderGame({skipMessenger=false}={}) {
   $('voice-label').hidden=!$('voice-label').textContent;
   const text=$('dialogue-text');text.classList.toggle('message',!!page.message);
   const full=t(interpolate(pageText(page,state.flags),state.profile,catalog));
-  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0].join('|');
+  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0,asyaIntro?1:0].join('|');
   const fresh=key!==chunkKey;
   if(fresh){chunkKey=key;chunkWidth=text.clientWidth;textChunks=splitToFit(full,candidate=>{text.textContent=candidate;return text.scrollHeight<=text.clientHeight+1;});chunkIndex=showLastChunk?textChunks.length-1:0;}
   showLastChunk=false;chunkIndex=Math.min(chunkIndex,textChunks.length-1);text.textContent=textChunks[chunkIndex];
   // choices and actions wait for the last screen of the line
   const lastChunk=chunkIndex===textChunks.length-1;
   const isChoice=lastChunk&&state.index===node.pages.length-1&&!!node.choices;
-  const action=lastChunk?beatActionAt(node,state.index):null;
+  const action=lastChunk&&!asyaIntro?beatActionAt(node,state.index):null;
   const inlineAction=!!action&&action.kind!=='tap';
   $('game').classList.toggle('has-beat',inlineAction);
   drawBeatAction($('beat-action'),$('beat-hotspots'),action,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),perform:performBeat,tones:CHOICE_TONES,node,flags:state.flags});
@@ -415,6 +445,7 @@ function renderGame({skipMessenger=false}={}) {
   const shownChoices=isChoice?node.choices.filter(each=>choiceVisible(each,state.flags,state.profile)):[];
   // four or more choices get slimmer buttons, so the picture does not shrink too much
   $('choices').dataset.compact=String(shownChoices.length>=4);
+  $('choices').dataset.scrollable=String(shownChoices.length>6);
   if(isChoice)for(const choice of shownChoices) {
     const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.tone=choice.tone;
     appendChoiceContents(button,choice,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),tones:CHOICE_TONES,node,flags:state.flags});
@@ -474,13 +505,13 @@ function drawChapterCard(previous,next){
   const inner=document.createElement('div');inner.className='chapter-card-inner';
   const add=(tag,className,text)=>{const element=document.createElement(tag);element.className=className;element.textContent=text;inner.append(element);return element;};
   if(previous?.day||previous?.id==='arrival')add('p','chapter-card-done','✓ '+t(previous.number)+' '+t('завершён')+' · '+t(previous.title));
-  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 30')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
+  add('p','chapter-card-eyebrow',next.day?`${t('ДЕНЬ')} ${next.day} ${t('ИЗ 15')} · ${t(STAGES[next.stage]).toUpperCase()}`:t(next.id==='arrival'?'ПЕРЕД ПЕРВЫМ ДНЁМ':'ПРОЛОГ'));
   const heading=add('h2','chapter-card-number',t(next.number));heading.id='chapter-card-title';
   add('p','chapter-card-title',t(next.title));
   add('p','chapter-card-description',t(next.description));
   if(next.day){
-    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 30')}`);
-    for(let day=1;day<=30;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
+    const progress=document.createElement('div');progress.className='chapter-card-progress';progress.setAttribute('role','img');progress.setAttribute('aria-label',`${t('День')} ${next.day} ${t('из 15')}`);
+    for(let day=1;day<=15;day++){const dot=document.createElement('span');if(day<next.day)dot.className='done';else if(day===next.day)dot.className='current';progress.append(dot);}
     inner.append(progress);
   }
   if(isGuest())inner.append(drawSavePrompt());
@@ -502,7 +533,8 @@ function renderMessenger(frame) {
     onMenu:()=>openPanel('game-menu'),
     onSettings:()=>openPanel('settings'),
     onSend:reply=>{
-      const ok=reply?(frame.replyKind==='inline'?advance({render:false,message:reply.option.label}):frame.replyKind==='action'?performBeat(reply.option,{render:false}):choose(reply.option,{render:false})):advance({render:false});
+      const chat=reply?{contact:frame.contact,text:state.node==='courtyard_arrival'&&state.index===2?(reply.option.next==='meet_dragan'?'Подожду вас во дворе. До встречи!':'Тогда попрошу Йелену встретить меня сейчас. Спасибо!'):reply.option.chatText??reply.option.label}:null;
+      const ok=reply?(frame.replyKind==='inline'?advance({render:false,message:reply.option.label,chat}):frame.replyKind==='action'?performBeat(reply.option,{render:false,chat}):choose(reply.option,{render:false,chat})):advance({render:false});
       committed=!!ok;return committed;
     },
     onContinue:()=>{
@@ -524,25 +556,57 @@ function fitScene() {
     if(!$('scene-cg').hidden)positionArtwork($('scene-cg'),$('scene'),currentArtFrame,{top:parseFloat(getComputedStyle(document.querySelector('.game-header')).paddingTop)+2,bottom:8,left:8,right:8});
   });
 }
-function advance({render=true,message=null}={}) {
+function advance({render=true,message=null,chat=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   // a long line goes on to its next screen first
   if(view==='game'&&chunkIndex<textChunks.length-1){chunkIndex++;if(render)renderGame();return true;}
+  if(view==='game'&&showAsyaFirstThought()){
+    rememberStep(state);state.flags.asyaInPerson=true;
+    state.log.splice(Math.max(0,state.log.length-1),0,{speaker:speakerName({speaker:'narrator'},'ru'),text:ASYA_FIRST_THOUGHT,choice:false,voice:'thought'});
+    save();if(render)renderGame();return true;
+  }
+  if(view==='game'&&showChatSwitchThought()){
+    rememberStep(state);state.flags.chapterFourChatTransition=true;
+    state.log.splice(Math.max(0,state.log.length-1),0,{speaker:speakerName({speaker:'narrator'},'ru'),text:CHAT_SWITCH_THOUGHT,choice:false,voice:'thought'});
+    save();if(render)renderGame();return true;
+  }
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
   if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
   if((state.index===node.pages.length-1&&node.choices)||action)return;
   rememberStep(state);
-  if(message)state.log.push({speaker:speakerName({speaker:'player'},'ru'),text:interpolate(resolveStoryText(message,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:'message'});
+  if(message)state.log.push({speaker:speakerName({speaker:'player'},'ru'),text:interpolate(resolveStoryText(message,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:'message',chatContact:chat?.contact,chatDirection:'outgoing',chatScene:state.node,chatIndex:state.index,chatKind:'reply'});
   transitionLock=true;setTimeout(()=>transitionLock=false,120);
-  if(state.index<node.pages.length-1)state.index++;
+  if(state.index<node.pages.length-1)state.index=visibleMessagePage(state.node,state.index+((state.node==='afternoon_invite'&&state.index===0&&state.flags.eveningIntroShown)?2:1));
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
   wantCard=true;save();if(render)renderGame();return true;
 }
 function openRoomInteraction(mode='arrival'){
+  const maskKey=mode==='bedtime'?'nightSettlingMask':'roomSettlingMask', versionKey=mode==='bedtime'?'nightQuestVersion':'roomQuestVersion';
+  if(!state.flags[versionKey]){if(state.flags[maskKey]===7)state.flags[maskKey]=0;state.flags[versionKey]=2;save();}
   showScreen('room-interaction');
-  roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});toast(mode==='bedtime'?'Всё готово ко сну.':'Теперь можно выдохнуть. Всё на своих местах.');}});
+  roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});}});
+}
+function openCoinCatch(){
+  showScreen('scene-quest');
+  questDispose=mountCoinCatch($('scene-quest'),{gender:state.profile.gender,losses:state.flags.coinGameLosses??0,onLoss:count=>{state.flags.coinGameLosses=count;save();},canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),isPaused:()=>panel.open,onComplete:()=>{showScreen('game');performBeat();}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openWhiteCard(){
+  showScreen('scene-quest');
+  questDispose=mountWhiteCard($('scene-quest'),{owner:state.flags.districtOwner,step:state.flags.whiteCardStep??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:step=>{state.flags.whiteCardStep=step;save();},onComplete:()=>{showScreen('game');performBeat();}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openFlatSettleQuest(){
+  showScreen('room-interaction');
+  roomDispose=mountFlatSettleQuest($('room-interaction'),{district:state.flags.district??'dorcol',mask:state.flags.flatSettleMask??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags.flatSettleMask=mask;save();},onComplete:()=>{showScreen('game');performBeat();}});
+}
+function openMealMenu(){
+  showScreen('scene-quest');
+  const node=NODES[state.node];
+  questDispose=mountMealMenu($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
+  $('scene-quest-title').focus({preventScroll:true});
 }
 function openDistrictMap(){
   showScreen('scene-quest');
@@ -550,9 +614,14 @@ function openDistrictMap(){
   questDispose=mountDistrictMap($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),flags:state.flags,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
   $('scene-quest-title').focus({preventScroll:true});
 }
+function openPixelTram(){
+  showScreen('scene-quest');
+  questDispose=mountPixelTram($('scene-quest'),{canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onComplete:()=>{showScreen('game');performBeat({effect:{routePixel:true}});}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
 function openViewingQuest(){
   showScreen('scene-quest');
-  questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat({feedback:'Осмотр закончен.'});}});
+  questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),isPaused:()=>panel.open,onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat();}});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openBankGuide(){
@@ -583,26 +652,25 @@ function applyEffects(effect={}) {
   if(effect.rentalStep&&rentalOwner(state.flags)){state.flags['rentalStep_'+rentalOwner(state.flags)]=effect.rentalStep;delete state.flags.rentalStep;}
   applyRomanceEffect(state.flags,effect);
 }
-function performBeat(option={}, {render=true}={}) {
+function performBeat(option={}, {render=true,chat=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   const node=NODES[state.node],action=beatActionAt(node,state.index);if(!action)return;
   rememberStep(state);transitionLock=true;setTimeout(()=>transitionLock=false,160);
   const label=option.label??action.label;
-  state.log.push({speaker:'Действие',text:interpolate(resolveStoryText(label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
+  state.log.push({speaker:'Действие',text:interpolate(resolveStoryText(label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true,...(chat?{voice:'message',chatContact:chat.contact,chatDirection:'outgoing',chatScene:state.node,chatText:interpolate(resolveStoryText(chat.text,state.flags,'ru'),state.profile,catalog,'ru')}:{})});
   applyEffects(action.effect);applyEffects(option.effect);
   for(const entry of action.journal??[])if(!state.journal.includes(entry))state.journal.push(entry);
   if(option.next??action.next)enterNode(option.next??action.next);
   else if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();wantCard=true;save();if(render)renderGame();
-  if(option.feedback??action.feedback)toast(option.feedback??action.feedback);
   return true;
 }
-function choose(choice, {render=true}={}) {
+function choose(choice, {render=true,chat=null}={}) {
   if(transitionLock||panel.open||!['game','messenger','scene-quest'].includes(view)||!choiceVisible(choice,state.flags,state.profile))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
-  state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
+  state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true,...(chat?{voice:'message',chatContact:chat.contact,chatDirection:'outgoing',chatScene:state.node,chatText:interpolate(resolveStoryText(chat.text,state.flags,'ru'),state.profile,catalog,'ru')}:{})});
   applyEffects(choice.effect);enterNode(choice.next);recordPage();wantCard=true;save();if(render)renderGame();return true;
 }
 function renderEnding() {
@@ -645,7 +713,7 @@ function openChapters() {
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const current=source?chapterFor(source,NODES):null;
-  drawChapterMap(content,{chapters:CHAPTERS,source,current,isAvailable:chapter=>chapterAvailable(chapter,hasPreviewAccess()),onSelect:chapter=>confirmChapter(chapter,source)});
+  drawChapterMap(content,{chapters:CHAPTERS,source,current,debugAccess:hasChapterDebugAccess(),isAvailable:chapter=>chapterAvailable(chapter,hasPreviewAccess()),onSelect:chapter=>confirmChapter(chapter,source)});
   panel.classList.add('chapter-map');panel.showModal();
   requestAnimationFrame(()=>{const active=content.querySelector('[aria-current="step"]');if(active)active.scrollIntoView({block:'center'});else content.scrollTop=0;});
 }
@@ -654,10 +722,11 @@ function confirmChapter(chapter,source){
   panel.classList.remove('chapter-map');
   $('panel-title').textContent=t('Вернуться к главе?');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
-  const p=document.createElement('p');p.className='confirm-copy';p.textContent=t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
+  const debug=hasChapterDebugAccess();
+  const p=document.createElement('p');p.className='confirm-copy';p.textContent=debug?t('Режим проверки: переход изменит текущее сохранение. Прежние выборы сохранятся, но пропущенные события не будут разыграны. Для возврата сначала скачай текущую историю.'):t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
   const actions=document.createElement('div');actions.className='confirm-actions';
   const start=document.createElement('button');start.className='primary';start.textContent=t('Перейти к главе');start.addEventListener('click',()=>{
-    const restored=structuredClone(source);if(!restartChapter(restored,chapter.id,NODES))return;
+    const restored=structuredClone(source);if(!(debug?jumpToChapter(restored,chapter.id,NODES):restartChapter(restored,chapter.id,NODES)))return;
     state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);pendingLabel=true;renderGame();
   });
   const download=document.createElement('button');download.className='secondary';download.textContent=t('Скачать текущую историю');download.addEventListener('click',exportSave);
@@ -669,10 +738,20 @@ function openPanel(kind) {
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
-  if(kind==='game-menu') {
+  if(kind==='release-notes') {
+    $('panel-title').textContent=t('История обновлений');
+    const intro=document.createElement('p');intro.className='release-intro';intro.textContent=t('Что изменилось в игре');content.append(intro);
+    for(const [version,ru,en] of RELEASE_NOTES){
+      const item=document.createElement('article');item.className='release-entry';
+      const heading=document.createElement('h3');heading.textContent=t('Версия ')+version;
+      const description=document.createElement('p');description.textContent=getLanguage()==='en'?en:ru;
+      item.append(heading,description);content.append(item);
+    }
+  } else if(kind==='game-menu') {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
-    for(const [label,run]of [['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
+    const menuItems=sceneTest?[['Продолжить игру',()=>panel.close()],['Вернуться в мастерскую',returnFromSceneTest]]:[['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]];
+    for(const [label,run]of menuItems){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
     const details=document.createElement('details');details.className='reading-details more-settings';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
     const reading=document.createElement('div');reading.className='settings-actions';
     for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});reading.append(button);}
@@ -696,7 +775,9 @@ function openPanel(kind) {
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
     bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
     bindStepper(content,{id:'sfx-vol',volume:settings.sfxVolume,onChange:value=>{settings.sfxVolume=value;setSfxVolume(value);playSting('ding');writeLocal('settings',settings);}});
-    setPanelTools([{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
+    setPanelTools(sceneTest?[]:[{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
+    if(sceneTest){$('export-save').disabled=true;$('import-save').disabled=true;}
+    $('install-guide').textContent=t('Установить на главный экран');
     $('screen-info').addEventListener('click',showScreenInfo);
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
@@ -707,13 +788,35 @@ function openPanel(kind) {
     }
     mountWorkshopEntry(content,()=>{
       $('panel-title').textContent=t('Мастерская');
-      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:new URL(location.href).searchParams.get('scene'),back:()=>{
+      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:new URL(location.href).searchParams.get('scene'),onTestScene:configureSceneTest,back:()=>{
         content.classList.remove('workshop');panel.classList.remove('workshop-wide');panel.close();openPanel('settings');
       }});
     },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
   }
   panel.showModal();
   if(kind==='history')requestAnimationFrame(()=>panel.scrollTop=panel.scrollHeight);
+}
+function configureSceneTest(id){
+ if(!NODES[id])return;
+ const source=state??saved,content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();$('panel-title').textContent=t('Тест сцены');
+ const info=document.createElement('p');info.textContent=t('Тест не изменяет сохранение. Выберите условия сцены.');content.append(info);
+ const select=(label,options,value)=>{const wrap=document.createElement('label');wrap.className='setting';wrap.append(document.createTextNode(t(label)));const input=document.createElement('select');for(const [key,name] of options){const opt=document.createElement('option');opt.value=key;opt.textContent=t(name);input.append(opt);}input.value=value;wrap.append(input);content.append(wrap);return input;};
+ const gender=select('Герой',[['female','Женщина'],['male','Мужчина']],source?.profile?.gender??'female');
+ const companion=select('Спутник',[['milica','Милица'],['nikola','Никола']],source?.flags?.companion??'milica');
+ const owner=select('Владелец квартиры',[['ana','Ана'],['stefan','Стефан'],['marko','Марко'],['vuk','Вук']],source?.flags?.districtOwner??'ana');
+ const launch=document.createElement('button');launch.className='primary';launch.textContent=t('Начать тест');launch.onclick=()=>{
+  const profile=source?.profile?.gender===gender.value?structuredClone(source.profile):{gender:gender.value,nameId:catalog.genders[gender.value].names[0].id,namesCatalogVersion:catalog.version};
+  const flags={...(source?.flags??{}),companion:companion.value,districtOwner:owner.value,district:({ana:'dorcol',stefan:'dorcol',marko:'vracar',vuk:'newbelgrade'})[owner.value]??'dorcol',rentalCast:'new'};
+  sceneTest={id,previousState:state,previousView:view};state={formatVersion:1,storyVersion:STORY_VERSION,profile,node:id,index:0,flags,journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
+  if(NODES[id].adult&&!settings.adult&&NODES[id].skipTo)state.node=NODES[id].skipTo;
+  Object.assign(state.flags,NODES[state.node].effectOnEnter??{});recordPage();panel.close();
+  const exit=document.createElement('button');exit.id='scene-test-exit';exit.className='scene-test-exit';exit.textContent=t('Вернуться в мастерскую');exit.onclick=returnFromSceneTest;document.body.append(exit);renderGame();
+ };content.append(launch);
+}
+function returnFromSceneTest(){
+ if(!sceneTest)return;const test=sceneTest;sceneTest=null;state=test.previousState;document.getElementById('scene-test-exit')?.remove();
+ if(panel.open)panel.close();showScreen(test.previousView);const content=$('panel-content');$('panel-title').textContent=t('Мастерская');
+ mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:test.id,onTestScene:configureSceneTest,back:()=>{panel.close();openPanel('settings');}});panel.showModal();
 }
 function saveDescription(progress) {
   if(!progress)return 'Пока нет сохранения';
@@ -799,7 +902,7 @@ home();
 fitScene();
 refreshMusicControls();
 
-cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{saved=validateSave(input);state=structuredClone(saved);await writeSave(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
+cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{if(sceneTest)return;saved=validateSave(input);await writeSave(saved);state=structuredClone(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
 cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account')){history.replaceState(null,'',location.pathname);openAccount();}});
 
 // Reference links open the read-only workshop gate, never restore a scene into a save.
@@ -808,3 +911,22 @@ if(new URL(location.href).searchParams.has('scene'))openPanel('settings');
 let resizeTimer=0;
 window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(view==='game'&&state&&$('dialogue-text').clientWidth!==chunkWidth)renderGame();},200);});
 document.fonts?.ready.then(()=>{if(view==='game'&&state)renderGame();});
+
+// Check again after returning to the game and while it remains open.
+startUpdateChecks({current:APP_VERSION,onUpdate:version=>{
+ const dialog=document.createElement('dialog');dialog.className='update-dialog';dialog.setAttribute('aria-labelledby','update-title');
+ const box=document.createElement('div');box.className='update-dialog-content';
+ const title=document.createElement('h2');title.id='update-title';title.textContent=t('Доступно обновление');
+ const text=document.createElement('p');text.textContent=t('Вышла новая версия игры. Обнови её, чтобы увидеть последние изменения.');
+ const label=document.createElement('p');label.className='update-version';label.textContent=t('Версия ')+version;
+ const error=document.createElement('p');error.className='update-error';error.hidden=true;
+ const update=document.createElement('button');update.className='primary';update.textContent=t('Обновить');
+ const later=document.createElement('button');later.className='secondary';later.textContent=t('Позже');
+ update.addEventListener('click',async()=>{
+  update.disabled=true;later.disabled=true;
+  if(state && !await writeSave(state)){error.textContent=t('Не удалось сохранить прогресс. Попробуй ещё раз или скачай сохранение в настройках.');error.hidden=false;update.disabled=false;later.disabled=false;return;}
+  location.reload();
+ });
+ later.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>dialog.remove());
+ box.append(title,text,label,error,update,later);dialog.append(box);document.body.append(dialog);dialog.showModal();
+}});

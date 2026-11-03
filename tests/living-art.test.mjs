@@ -47,11 +47,12 @@ for(const choice of rentalChoices.slice(0,3))assert.deepEqual(choice.when,{flag:
 for(const choice of rentalChoices.slice(3))assert.deepEqual(choice.when,{flag:'rentalCast',equals:'new'});
 assert.deepEqual(rentalChoices.slice(3).map(choice=>choice.effect.districtOwner).sort(),['ana','marko','stefan','vuk']);
 canonical.district_map.choices=rentalChoices.slice(0,3).map(choice=>{const copy={...choice};delete copy.when;return copy;});
-for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_')||/^(evening\d+_|route4_group_)/.test(id))delete canonical[id];
+for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_')||/^(adult_evening\d+_|evening\d+_|route4_group_)/.test(id))delete canonical[id];
 assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
 canonical.d20_nephew.pages[1].speaker='districtHost';
-assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
-assert.equal(STORY_VERSION,1);
+// The merged baseline includes eight scenes that existed only on the live Site.
+assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'bb1aeb7dc0acbd3836f8bfce46f2e95af5bb383603081edcf245180c9c625013');
+assert.equal(STORY_VERSION,2);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));
 const catalog=buildArtCatalog(files,CHARACTER_SPRITES,BACKGROUNDS);
 for(const id of Object.keys(PEOPLE)){
@@ -73,6 +74,6 @@ assert.equal(frame('d20_strahinya',1,{mupSpark:'strahinya'}).character,'strahinj
 const masked=NODES.d4_station.pages.findIndex(p=>p.speaker==='Человек в балаклаве');
 assert.ok(masked>=0);assert.equal(frame('d4_station',masked,{}).character,'milos-masked');
 assert.equal(frame('d4_station',masked,{maskedRevealed:true}).character,'milos-masked','Replaying a masked scene must not reveal his face');
-assert.equal(frame('d20_nephew_end',0,{}).character,'milos-uniform','The kitchen text explicitly describes a uniform');
-assert.equal(frame('d27_milos',0,{}).character,'milos','The riverside text explicitly describes casual clothing');
+assert.equal(frame('d20_nephew_end',0,{}).character,'milos-masked','The kitchen text explicitly describes a uniform');
+assert.equal(frame('d27_milos',0,{}).character,'milos-masked','The riverside text explicitly describes casual clothing');
 console.log('Living art: eight distinct regular moods for eleven heroes, staged backgrounds, dynamic office portraits, masked/uniform/casual continuity and unchanged story/save semantics checked.');

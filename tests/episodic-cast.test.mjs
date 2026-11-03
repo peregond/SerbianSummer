@@ -8,10 +8,10 @@ import{messageAt}from'../public/messenger-model.js';
 const before=JSON.stringify(NODES);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));
 const catalog=buildArtCatalog(files,CHARACTER_SPRITES,BACKGROUNDS);
-assert.equal(Object.keys(EPISODIC_CAST).length,17);
+assert.equal(Object.keys(EPISODIC_CAST).length,18);
 assert.equal(catalog.people.length,11,'Supporting cast must not change the romance cast');
-assert.equal(catalog.supporting.length,17);
-assert.equal(new Set(Object.values(EPISODIC_CAST).map(person=>person.name)).size,17);
+assert.equal(catalog.supporting.length,18);
+assert.equal(new Set(Object.values(EPISODIC_CAST).map(person=>person.name)).size,18);
 for(const[id,person]of Object.entries(EPISODIC_CAST)){
  const entry=catalog.supporting.find(p=>p.id===id);assert.deepEqual(entry.missing,[],id);
  assert.deepEqual(Object.keys(CHARACTER_SPRITES[id]),['friendly'],id);
@@ -25,10 +25,12 @@ for(const[id,index,character,mode,channel]of EPISODIC_STAGES){
  }else if(mode==='contact'){
   assert.equal(frame.character,null,id+': remote speakers must not stand in the player’s location');
   assert.equal(frame.contactPortrait.character,character);assert.equal(frame.contactPortrait.channel,channel);assert.ok(files.includes(frame.contactPortrait.file));
+ }else if(id==='d3_m1'&&index===1){assert.equal(frame.character,'milica','The companion returns after the bakery purchase');
  }else if(id==='nikola_questions'){assert.equal(frame.character,null);assert.equal(frame.bg,'nikola-elder-bread-handover-v1');assert.ok(frame.composite);
  }else{assert.equal(frame.character,character,id+':'+index);assert.equal(frame.emotion,'friendly');assert.equal(frame.contactPortrait,null);}
 }
-assert.equal(presentationFor(NODES.d3_o2,NODES.d3_o2.pages[1]).character,null,'The kiosk seller must not follow the player to the bus stop');
+assert.equal(presentationFor(NODES.d3_o2,NODES.d3_o2.pages[1],{companion:'milica'}).character,'milica','The companion explains free city transport');
+assert.equal(presentationFor(NODES.d3_o2,NODES.d3_o2.pages[1],{companion:'nikola'}).character,'nikola-evening');
 assert.equal(presentationFor(NODES.nikola_questions,NODES.nikola_questions.pages[2]).character,'nikola','Return to Nikola after the customer leaves');
 assert.equal(presentationFor(NODES.d10_o3,NODES.d10_o3.pages[0]).contactPortrait,null,'Do not show a translator before a reply arrives');
 assert.equal(presentationFor(NODES.d18_start,NODES.d18_start.pages[1]).contactPortrait,null,'Do not invent a call before the agreed meeting');

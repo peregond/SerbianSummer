@@ -1,5 +1,5 @@
-import {RENTAL_NAMES,rentalOwner} from './rental-people.js?v=2';
-import {SLOTS,nameOf,nameCase,loveNames,joinNames} from './romance.js?v=0.16.1';
+import {RENTAL_NAMES,rentalOwner} from './rental-people.js?v=0.17.2';
+import {SLOTS,nameOf,nameCase,loveNames,joinNames} from './romance.js?v=0.17.2';
 // Russian remains the canonical language of story data and saves.
 // Only rendered strings change, so language never changes choices or checkpoints.
 // The state lives on globalThis, so every copy of this module (the browser loads one per distinct ?v= address) shares one language and one dictionary.
@@ -28,7 +28,7 @@ export function t(value,locale=shared.language){
 export async function initialiseLanguage(){
   let saved;try{saved=JSON.parse(localStorage.getItem('ss-language'));}catch{}
   const chosen=detectLanguage(saved,navigator.languages?.length?navigator.languages:[navigator.language]);
-  const response=await fetch('./locales/en.json?v=0.16.10');
+  const response=await fetch('./locales/en.json?v=0.17.23');
   if(!response.ok)throw Error('Translation unavailable');
   configureTranslations(await response.json());setLanguage(chosen);
   return chosen;

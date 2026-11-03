@@ -19,7 +19,7 @@ for(const file of ['nikola-bedroom-seductive-v1.webp','nikola-briefs-touch-v2.we
 const intimacyDraft=entry('workshop/nikola-intimacy/nikola-intimacy-v1.png');
 assert.equal(intimacyDraft.character,'nikola');assert.equal(intimacyDraft.look,'Интимные сцены · 18+');assert.equal(intimacyDraft.status,'draft');assert.equal(intimacyDraft.emotion,null);
 assert.equal(entry('nikola-apartment-night-v1.webp').category,'backgrounds');
-for(const [file,person,look] of [['ana-camera-v1.webp','ana','Сюжетная поза'],['ana-swim-v1.webp','ana','У воды'],['marko-door-v1.webp','marko','Сюжетная поза'],['stefan-workshop-v1.webp','stefan','Сюжетная поза'],['vuk-headphones-v1.webp','vuk','Сюжетная поза']]){
+for(const [file,person,look] of [['ana-camera-v1.webp','ana','Сюжетная поза'],['ana-swim-v1.webp','ana','У воды'],['marko-door-v1.webp','marko','Сюжетная поза'],['stefan-workshop-v1.webp','stefan','Сюжетная поза'],['vuk-headphones-v2.webp','vuk','Сюжетная поза']]){
   assert.equal(entry(file).character,person);assert.equal(entry(file).status,'active');assert.equal(entry(file).look,look);assert.equal(entry(file).emotion,null);
 }
 assert.equal(entry('luka-reference-friendly-v3.webp').status, 'active');

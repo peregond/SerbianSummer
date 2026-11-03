@@ -1,5 +1,6 @@
+import {STORY_VERSION} from './story-version.js?v=0.17.2';
 import {readLocal,writeLocal} from './storage.js';
-const fingerprint=save=>save?JSON.stringify([save.profile,save.node,save.index,save.flags,save.journal,save.log,save.rewind,save.chapterMarks]):null;
+const fingerprint=save=>save?JSON.stringify([save.storyVersion,save.profile,save.node,save.index,save.flags,save.journal,save.log,save.rewind,save.chapterMarks]):null;
 export class CloudProgress {
   constructor({getLocal,restore,changed}){Object.assign(this,{getLocal,restore,changed,user:null,ready:false,revision:null,syncedAt:null,pending:null,conflict:null,busy:false,message:'Проверяем аккаунт…'});window.addEventListener('online',()=>this.refresh());}
   emit(){this.changed();}
@@ -12,6 +13,13 @@ export class CloudProgress {
       const remoteResponse=await fetch('/api/progress',{cache:'no-store'});if(!remoteResponse.ok)throw Error();
       const remote=await remoteResponse.json(),local=this.getLocal(),link=readLocal('cloud-link',null);
       this.revision=remote.revision;this.syncedAt=remote.syncedAt;
+      const olderStory=!!remote.progress&&remote.progress.storyVersion!==STORY_VERSION;
+      if(olderStory){
+        // Keep a device backup before a new playthrough replaces an older cloud revision.
+        writeLocal('previous-story-progress',remote.progress);
+        remote.progress=null;
+        if(!local){this.message='Доступна новая история на 15 дней. Начни новую игру.';this.emit();return;}
+      }
       if(!remote.progress){if(local&&link?.userId&&link.userId!==this.user.id){this.conflict=remote;this.message='Подтверди перенос прогресса';}else{this.message=local?'Синхронизируем…':'Аккаунт готов';if(local)this.queue(local);}}
       else if(!local){await this.restore(remote.progress);this.link(remote.progress);this.message='Загружено из аккаунта';}
       else if(fingerprint(local)===fingerprint(remote.progress)){this.link(local);this.message='Прогресс в аккаунте';}

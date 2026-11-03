@@ -17,7 +17,7 @@
 | 40–65% | Торс, резинка и мешочек speedo / бельё |
 | 65–100% | Только простыня/атмосфера — это уйдёт под crop диалога |
 
-Пересборка заглушек с направляющими: `python3 tools/art/make-adult-storyboards.py`.  
+Пересборка заглушек с направляющими: `python3 tools/art/make-adult-storyboards.py`.
 Нормализация фото-CG в locked 1080×1920 с подъёмом субъекта: `python3 tools/art/normalize-adult-night-frames.py`.
 
 ## Биты (как у Николы)

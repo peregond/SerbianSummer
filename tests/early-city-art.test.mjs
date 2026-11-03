@@ -8,7 +8,7 @@ for (const id of Object.keys(EARLY_BACKGROUNDS)) {
   assert.equal(BACKGROUNDS[id].label, EARLY_BACKGROUNDS[id].label);
   assert.ok(fs.existsSync(new URL('../public/assets/' + id + '.webp', import.meta.url)), id);
 }
-assert.equal(frame('road_start', 2).bg, 'belgrade-taxi-blocks-v1');
+assert.equal(frame('road_start', 2).bg, 'belgrade-taxi-blocks-v2');
 assert.equal(frame('road_start', 3).bg, 'belgrade-taxi-sava-glare-v1');
 assert.equal(frame('road_start', 3).location, 'БЕЛГРАД · САВА');
 assert.equal(frame('road_window', 2).bg, 'belgrade-slavija-drive-v1');
@@ -31,6 +31,9 @@ assert.equal(frame('flat_enter_ana', 0, {districtOwner:'ana'}).bg, 'dorcol-kalem
 assert.equal(frame('flat_enter_stefan', 0, {districtOwner:'stefan'}).bg, 'dorcol-workshop-court-v1');
 assert.equal(frame('flat_enter_marko', 0, {districtOwner:'marko'}).bg, 'vracar-saint-sava-v1');
 assert.equal(frame('flat_enter_vuk', 0, {districtOwner:'vuk'}).bg, 'new-belgrade-blocks-v1');
+assert.equal(frame('flat_enter_vuk', 0, {districtOwner:'vuk'}).emotion, 'arrival','Vuk wears headphones when the narration describes them');
+assert.equal(CHARACTER_SPRITES.vuk.arrival.file,'vuk-headphones-v2','Both arrival frames use the matching Adidas shirt');
+assert.ok(fs.existsSync(new URL('../public/assets/vuk-headphones-v2.webp',import.meta.url)));
 assert.equal(frame('flat_enter_ana', 1, {districtOwner:'ana'}).character, 'ana');
 assert.equal(frame('flat_enter_ana', 1, {districtOwner:'ana'}).emotion, 'arrival');
 assert.equal(frame('flat_enter_stefan', 1, {districtOwner:'stefan'}).emotion, 'arrival');
@@ -54,3 +57,5 @@ for (const file of ['nikola-guide-buzz-v3','nikola-napkin-buzz-v3','milica-show-
   assert.ok(fs.existsSync(new URL('../public/assets/' + file + '.webp', import.meta.url)), file);
 }
 console.log('Early city art: 12 Belgrade backgrounds and 15 poses are staged in the prologue, day 0 and day 1.');
+
+for(const owner of ['ana','stefan','marko','vuk']){const node=NODES['flat_enter_'+owner];const intro=presentationFor(node,{speaker:'narrator',text:'Вот и Ася',character:'asya',emotion:'friendly'},{districtOwner:owner});assert.equal(intro.character,'asya','Asya appears during her first introduction');assert.ok(CHARACTER_SPRITES.asya[intro.emotion]);}

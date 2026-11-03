@@ -1,5 +1,5 @@
 // Text size as -/+ taps with a live preview of how a line of dialogue will look at that size.
-import {stepperMarkup,bindStepper} from './stepper.js?v=0.16.7';
+import {stepperMarkup,bindStepper} from './stepper.js?v=0.17.2';
 export const MIN_SIZE=16,MAX_SIZE=24,DEFAULT_SIZE=18;
 // Height of the dialogue box in lines: the bigger the text, the more lines. Measured on all 2125 lines of the story: at 18 px five lines
 // leave about 1 % of the lines continuing on a second screen (four lines: 8 %).

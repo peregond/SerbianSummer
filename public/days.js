@@ -14,15 +14,15 @@ export const STAGES={
  waiting:T('Жизнь в ожидании','Life while waiting'),
  decision:T('Решение','The decision')
 };
-export const PRELUDE=[
+export const LEGACY_PRELUDE=[
  {id:'prologue',number:'Пролог',title:'Жара на посадке',start:'quick_arrival',description:'Аэропорт, кофе и первое знакомство.'},
  {id:'arrival',number:'День 0',title:'Своя дверь',start:'road_start',description:'Ключи, новый двор и первый вечер.'}
 ];
 // status 'written' = a full day exists (it may be shared with an older chapter); 'skeleton' = a short playable day still to be expanded.
-export const DAYS=[
+export const LEGACY_DAYS=[
  {n:1,id:'districts',title:'Район для жизни',start:'morning_start',stage:'arrival',status:'written',description:'Карта Белграда, квартира, первый план по счёту и работе и вечер после.'},
  {n:2,id:'work',title:'Счёт и своё дело',start:'third_morning',stage:'arrival',status:'written',description:'Визит в банк, знакомство с Асей и Лукой, рабочее направление.'},
- {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'written',description:'Местная связь, проездная карта и обмен денег.'},
+ {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'written',description:'Местная связь, городской транспорт и обмен денег.'},
  {n:4,id:'day-4',title:'Регистрация места пребывания',start:'d4_start',stage:'arrival',status:'written',description:'Подтверждение регистрации и заявление хозяина о жилье.'},
  {n:5,id:'day-5',title:'Сколько у меня дней',start:'d5_start',stage:'clock',status:'written',description:'Срок пребывания без заявления и тридцатый день как дедлайн.'},
  {n:6,id:'day-6',title:'Выбор основания',start:'d6_start',stage:'basis',status:'written',description:'На каком основании просить временное проживание.'},
@@ -54,7 +54,7 @@ export const DAYS=[
 const EN={
  1:['A District for Living','Belgrade’s map, a flat, a first plan for the account and work, and an evening afterwards.'],
  2:['An Account and My Own Work','A visit to the bank, meeting Asya and Luka, a working direction.'],
- 3:['Phone, Transport, Money','Local mobile service, a transport card and changing money.'],
+ 3:['Phone, Transport, Money','Local mobile service, city transport and changing money.'],
  4:['Registering My Address','Confirmation of registration and the owner’s statement about the housing.'],
  5:['How Many Days I Have','The stay allowed without an application, and day thirty as a deadline.'],
  6:['Choosing a Basis','On what basis to ask for temporary residence.'],
@@ -83,9 +83,9 @@ const EN={
  29:['What I Want to Keep','Three papers on the table and the question of what matters most.'],
  30:['An Answer for the Summer','A last evening and your decision: stay, leave or return by a plan.']
 };
-for(const d of DAYS){const [title,description]=EN[d.n];T(d.title,title);T(d.description,description);T('День '+d.n,'Day '+d.n);T('День '+d.n+' · '+d.title,'Day '+d.n+' · '+title);T('ДЕНЬ '+d.n,'DAY '+d.n);T('Продолжить · День '+d.n,'Continue · Day '+d.n);T('БЕЛГРАД · '+d.title.toUpperCase(),'BELGRADE · '+title.toUpperCase());T('ДЕНЬ '+d.n+' · '+STAGES[d.stage].toUpperCase(),'DAY '+d.n+' · '+DAYS_TRANSLATIONS[STAGES[d.stage]].toUpperCase());}
+for(const d of LEGACY_DAYS){const [title,description]=EN[d.n];T(d.title,title);T(d.description,description);T('День '+d.n,'Day '+d.n);T('День '+d.n+' · '+d.title,'Day '+d.n+' · '+title);T('ДЕНЬ '+d.n,'DAY '+d.n);T('Продолжить · День '+d.n,'Continue · Day '+d.n);T('БЕЛГРАД · '+d.title.toUpperCase(),'BELGRADE · '+title.toUpperCase());T('ДЕНЬ '+d.n+' · '+STAGES[d.stage].toUpperCase(),'DAY '+d.n+' · '+DAYS_TRANSLATIONS[STAGES[d.stage]].toUpperCase());}
 T('День 0','Day 0');T('День 0 · Своя дверь','Day 0 · My Own Door');
-export const dayFor=n=>DAYS.find(d=>d.n===n);
+export const legacyDayFor=n=>LEGACY_DAYS.find(d=>d.n===n);
 
 // Cast helpers for the day scenes. Every day has two speaking people of different genders: Asya and Luka, the airport
 // person and their counterpart (Nikola/Milica), or the flat's owner and their counterpart (Dragan/Jelena).
@@ -128,3 +128,25 @@ export function extendCast({NODES:N}){
  const messages=[A('Это не обещание, а стул: он стоит во дворе, пока ты решаешь.','This is not a promise but a chair: it stands in the courtyard while you decide.'),L('Расстояние оказывается меньше, чем кажется. Но это уже не вопрос.','The distance turns out to be shorter than it seems. But that is not a question any more.')];
  for(const id of ['epilogue_stay','epilogue_leave','epilogue_return']){const pages=N[id].pages;pages.splice(pages.length-1,0,...messages);}
 }
+
+// Active route: day number and chapter number are identical. Legacy metadata is only used to assemble archived scenes.
+export const PRELUDE=[];
+export const DAYS=[
+ {n:1,id:'arrival',title:T('Прилёт','Arrival'),start:'quick_arrival',stage:'arrival',status:'written',description:T('Багаж, кофе и первое знакомство.','Baggage, coffee and a first acquaintance.')},
+ {n:2,id:'temporary',title:T('Временная дверь','A Temporary Door'),start:'road_start',stage:'arrival',status:'written',description:T('Комната, обустройство и регистрация временного адреса.','A room, settling in and registering the temporary address.')},
+ {n:3,id:'districts',title:T('Поиск квартиры','Flat Hunting'),start:'morning_start',stage:'arrival',status:'written',description:T('Ася, четыре владельца и карта районов.','Asya, four landlords and the district map.')},
+ {n:4,id:'moving',title:T('Свои ключи','My Own Keys'),start:'route4_start',stage:'arrival',status:'written',description:T('Договор, переезд и вечер по общему согласию.','The lease, moving and an evening by mutual consent.')},
+ {n:5,id:'papers',title:T('Новый адрес и банк','A New Address and a Bank'),start:'route5_start',stage:'arrival',status:'written',description:T('Повторная регистрация и выбор банка после Alta.','Registering the new address and choosing a bank after Alta.')},
+ {n:6,id:'city',title:T('Город на связи','Connected to the City'),start:'route6_start',stage:'waiting',status:'written',description:T('Связь, бесплатный транспорт, кофе и пиксельная игра.','Phone service, free transport, coffee and a pixel game.')},
+ {n:7,id:'ada',title:T('Ада и арбуз','Ada and Watermelon'),start:'ada_tired',stage:'waiting',status:'written',description:T('Вода, отдых и холодная лубеница.','Water, rest and cold watermelon.')},
+ {n:8,id:'friends',title:T('Компания Аси','Asya’s Friends'),start:'route8_start',stage:'waiting',status:'written',description:T('Лука, новые знакомые и общий стол.','Luka, new acquaintances and a shared table.')},
+ {n:9,id:'courtyard',title:T('Свет во дворе','Light in the Courtyard'),start:'courtyard_invite',stage:'waiting',status:'written',description:T('Подготовка и дворовый кинопоказ.','Preparing a courtyard film screening.')},
+ {n:10,id:'novisad',title:T('Поезд в Нови-Сад','A Train to Novi Sad'),start:'route10_start',stage:'waiting',status:'written',description:T('Поездка с выбранным спутником.','A trip with a companion of my choice.')},
+ {n:11,id:'masked',title:T('Знакомый голос','A Familiar Voice'),start:'route11_start',stage:'waiting',status:'written',description:T('Новая встреча с сотрудником в маске.','Another meeting with the masked officer.')},
+ {n:12,id:'border',title:T('Туда и обратно','There and Back'),start:'route12_start',stage:'waiting',status:'written',description:T('Поездка за границу с самостоятельной проверкой условий въезда.','A trip abroad with an independent check of entry conditions.')},
+ {n:13,id:'misunderstanding',title:T('Не то сообщение','The Wrong Message'),start:'route13_start',stage:'decision',status:'written',description:T('Недоразумение между друзьями и честный разговор.','A misunderstanding between friends and an honest talk.')},
+ {n:14,id:'last-evening',title:T('Последний вечер лета','The Last Summer Evening'),start:'route14_start',stage:'decision',status:'written',description:T('Встречи, переписка и время для себя.','Meetings, messages and time for myself.')},
+ {n:15,id:'answer',title:T('Ответ на лето','An Answer for the Summer'),start:'route15_start',stage:'decision',status:'written',description:T('Моё решение о будущем и эпилоги.','My decision about the future and the epilogues.')},
+];
+export const dayFor=n=>DAYS.find(d=>d.n===n);
+for(const d of DAYS){T('День '+d.n,'Day '+d.n);T('День '+d.n+' · '+d.title,'Day '+d.n+' · '+DAYS_TRANSLATIONS[d.title]);T('Продолжить · День '+d.n,'Continue · Day '+d.n);}

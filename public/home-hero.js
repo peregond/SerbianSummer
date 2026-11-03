@@ -1,4 +1,4 @@
-import{HOME_PORTRAITS,selectHomeComposition}from'./home-hero-model.js?v=1';
+import{HOME_PORTRAITS,selectHomeComposition}from'./home-hero-model.js?v=0.17.2';
 const visitSeed=Date.now();
 export function renderHomeHero(home,background,cast,saved,{date=new Date(),seed=visitSeed}={}){
  const composition=selectHomeComposition(saved,{seed,hour:date.getHours()});

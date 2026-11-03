@@ -4,7 +4,7 @@ import {handleProgress} from '../lib/progress-api.js';
 const sqlite=new DatabaseSync(':memory:');
 sqlite.exec('CREATE TABLE game_progress (user_id TEXT PRIMARY KEY, save_json TEXT NOT NULL, revision INTEGER NOT NULL DEFAULT 1, updated_at INTEGER NOT NULL)');
 const db={prepare(sql){return {bind(...values){return {async first(){return sqlite.prepare(sql).get(...values)??null;}};}};}};
-const initial={formatVersion:1,storyVersion:1,profile:{gender:'female',nameId:'anna'},node:'road_start',index:0,flags:{companion:'nikola'},journal:['address'],log:[{speaker:'Ты',text:'В пути'}],rewind:[],updatedAt:1};
+const initial={formatVersion:1,storyVersion:2,profile:{gender:'female',nameId:'anna'},node:'road_start',index:0,flags:{companion:'nikola'},journal:['address'],log:[{speaker:'Ты',text:'В пути'}],rewind:[],updatedAt:1};
 const request=(progress,baseRevision=null,origin='https://game.test')=>new Request('https://game.test/api/progress',{method:'PUT',headers:{'Content-Type':'application/json',Origin:origin},body:JSON.stringify({progress,baseRevision})});
 assert.equal((await handleProgress(new Request('https://game.test/api/progress'),db,null)).status,401);
 assert.equal((await handleProgress(request(initial),db,'alice')).status,200);
@@ -26,3 +26,7 @@ const voiced={...initial,log:[{speaker:'Анна',text:'Надо выдохну�
 assert.equal((await handleProgress(request(voiced),db,'voice-test')).status,200);
 const restoredVoice=await (await handleProgress(new Request('https://game.test/api/progress'),db,'voice-test')).json();
 assert.deepEqual(restoredVoice.progress.log.map(entry=>entry.voice),['thought','speech',undefined]);
+const chatEntry={speaker:'Ася',text:'Привет',voice:'message',chatContact:'Ася',chatDirection:'incoming',chatScene:'asya_test',chatTime:'09:05'};
+assert.equal((await handleProgress(request({...initial,log:[chatEntry]}),db,'chat-test')).status,200);
+const restoredChat=await (await handleProgress(new Request('https://game.test/api/progress'),db,'chat-test')).json();
+assert.deepEqual(restoredChat.progress.log[0],{...chatEntry,choice:false},'Cloud saves retain chat identity and ordering data');

@@ -1,5 +1,5 @@
-import { t } from './i18n.js?v=0.16.11';
-import { appendChoiceContents } from './choice-ui.js?v=0.16.11';
+import { t } from './i18n.js?v=0.17.23';
+import { appendChoiceContents } from './choice-ui.js?v=0.17.23';
 import { MESSENGER_CONFIG } from './messenger-config.js?v=0.16.1';
 
 const icons = {
@@ -59,13 +59,14 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
   header.append(back, identity, calls, menu);
   const feed = el('div', '', 'chat-feed'); feed.setAttribute('role', 'log'); feed.setAttribute('aria-label', t('Переписка')); feed.setAttribute('aria-live', 'polite');
   const bubble = message => {
+    if(message.isNew){const marker=el('div','Новое','chat-new-divider');marker.setAttribute('role','separator');marker.setAttribute('aria-label',t('Новое'));feed.append(marker);}
     const row = el('div', '', 'chat-row ' + message.direction);
     const article = el('article', '', 'chat-bubble ' + message.direction);
     article.setAttribute('aria-label', t(message.direction === 'outgoing' ? 'Исходящее сообщение' : 'Входящее сообщение'));
     if (message.quote) {
       const quote = el('blockquote', '', 'chat-quote'); quote.append(el('strong', message.quote.author ?? frame.contact), el('p', message.quote.text)); article.append(quote);
     }
-    if(message.photo){const photo=doc.createElement('img');photo.className='chat-photo';photo.src=message.photo.src;photo.alt=t(message.photo.alt);photo.loading='lazy';article.append(photo);}
+    if(message.photo){const photo=doc.createElement('img');photo.className='chat-photo'+(message.photo.src.includes('courtyard-door.webp')?' chat-photo-entry':'');photo.src=message.photo.src;photo.alt=t(message.photo.alt);photo.loading='lazy';article.append(photo);}
     if(message.attachment){const attachment=el('div','','chat-attachment');attachment.append(icon('photo'),el('strong',message.attachment.label),el('small',message.attachment.description));article.append(attachment);}
     article.append(el('p', message.text));
     const meta = el('span', '', 'chat-meta');
@@ -115,7 +116,7 @@ export function mountMessenger(root, frame, { onSend, onContinue, onBack, onMenu
       const typing=el('div','','chat-row incoming');
       const indicator=el('div',frame.typingLabel,'chat-bubble incoming chat-typing');indicator.setAttribute('role','status');
       typing.append(indicator);feed.append(typing);
-      photoTimer=setTimeout(()=>{typing.remove();bubble({direction:'incoming',text:'',photo:frame.delayedPhoto,time:frame.time});next.disabled=false;feed.scrollTop=feed.scrollHeight;},1500);
+      photoTimer=setTimeout(()=>{typing.remove();bubble({direction:'incoming',text:'',photo:frame.delayedPhoto,time:frame.time,isNew:true});next.disabled=false;feed.scrollTop=feed.scrollHeight;},1500);
     }
   }
   footer.append(notice); root.append(header, feed, footer);
