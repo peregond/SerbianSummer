@@ -1,4 +1,5 @@
-const KEY = 'serbian-summer-save-v1';
+const KEY = 'serbian-summer-save-v2';
+const AUTO_KEY='auto-v2';
 let dbPromise;
 function database() {
   if (!dbPromise) dbPromise = new Promise((resolve, reject) => {
@@ -14,7 +15,7 @@ function database() {
 async function readDB() {
   const db = await database();
   return new Promise((resolve, reject) => {
-    const request = db.transaction('saves').objectStore('saves').get('auto');
+    const request = db.transaction('saves').objectStore('saves').get(AUTO_KEY);
     request.onsuccess = () => resolve(request.result ?? null);
     request.onerror = () => reject(request.error);
   });
@@ -34,7 +35,7 @@ export function writeSave(state) {
     const db = await database();
     return new Promise((resolve,reject) => {
       const tx = db.transaction('saves','readwrite');
-      tx.objectStore('saves').put(snapshot,'auto');
+      tx.objectStore('saves').put(snapshot,AUTO_KEY);
       tx.oncomplete = () => resolve(true);
       tx.onerror = () => reject(tx.error);
       tx.onabort = () => reject(tx.error);

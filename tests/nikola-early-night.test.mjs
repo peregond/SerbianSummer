@@ -15,7 +15,8 @@ assert.equal(choiceVisible(parkChoice,{companion:'nikola'},{gender:'female'}),fa
 assert.equal(choiceVisible(parkChoice,{companion:'milica'},{gender:'male'}),false);
 assert.equal(choiceVisible(homeChoice,{companion:'milica'},{gender:'female'}),true);
 assert.equal(NODES.nikola_park.bg,'riverside-evening');
-assert.equal(NODES.nikola_park_invite.bg,'riverside-evening');
+assert.equal(NODES.nikola_park_invite.bg,'belgrade-tram-stop-evening-v1');
+assert.equal(NODES.nikola_park_decline.bg,'belgrade-tram-stop-evening-v1');
 assert.match(JOURNAL.nikola_early_night.text,/у реки|riverside/i);
 
 const chain=['nikola_park','nikola_park_invite','nikola_park_home','nikola_park_door','nikola_park_closer','nikola_park_prep','nikola_park_sex','nikola_park_cum_inside','nikola_park_cum_jock','nikola_park_cum_chest','nikola_park_afterglow','nikola_park_morning','nikola_park_decline'];

@@ -1,8 +1,8 @@
 // Bank chapter. The hero reads a simplified guide page on the phone, chooses a branch and goes in person on day 2.
 // Nothing here guarantees an account: the bank decides, and romance has no part in it.
-import {CHAPTERS} from './chapters.js?v=0.15.3';
+import {LEGACY_CHAPTERS as CHAPTERS} from './chapters.js?v=0.17.2';
 import {T} from './flat-data.js?v=1';
-import {BANK_FLAG,BANKS,BANK_KEYS} from './bank-data.js?v=1';
+import {BANK_FLAG,BANKS,BANK_KEYS} from './bank-data.js?v=0.17.0';
 
 const N=(ru,en,extra={})=>({speaker:'narrator',text:T(ru,en),...extra});
 const P=(ru,en,extra={})=>({speaker:'player',text:T(ru,en),...extra});
@@ -26,6 +26,21 @@ export function extendBank({NODES,JOURNAL}){
 
   // The hero plans the visit instead of calling the bank.
   const plan=NODES.bank_plan;
+  const workChapter=NODES.work_business;
+  finish('bank_evening_pause',[structuredClone(NODES.afternoon_invite.pages[1])],
+    'afternoon_invite',{bg:'room-window',location:T('БЕЛГРАД · ВЕЧЕР ДОМА','BELGRADE · EVENING AT HOME'),time:'18:40',day:workChapter.day,chapterId:workChapter.chapterId,chapter:workChapter.chapter,effectOnEnter:{eveningIntroShown:true}});
+  for(const id of ['work_business','work_employment','work_explore'])NODES[id].next='bank_evening_pause';
+  finish('bank_helper',[
+    N('Борис появляется в малиновом пиджаке с телефоном в руке. Говорит быстро, будто у каждого вопроса уже есть готовый ответ.','Boris appears in a raspberry blazer, phone in hand. He speaks quickly, as if he already has an answer for every question.',{character:'guest-bank-helper',emotion:'friendly'}),
+    S('Борис','Привет! Я помогу подготовить вопросы, документы и запись. Но счёт открывает только банк; никаких гарантий я дать не могу.','Hi! I can help prepare questions, papers and an appointment. But only the bank opens accounts; I cannot guarantee anything.',{character:'guest-bank-helper',emotion:'friendly'}),
+    S('Борис','Сначала уточним условия и стоимость моих услуг. Паспорт и подтверждение адреса пригодятся; точный список нужно проверить в выбранном банке.','First let’s clarify the terms and my fee. A passport and proof of address will help; check the exact list with your chosen bank.',{character:'guest-bank-helper',emotion:'friendly'}),
+    N('Предложение звучит гладко. Я могу задать вопросы, выбрать отделение или вернуться к гайду Олега.','The pitch sounds smooth. I can ask questions, choose a branch, or return to Oleg’s guide.',{character:'guest-bank-helper',emotion:'friendly'})
+  ],null,{bg:'room-window',location:T('БЕЛГРАД · ПОМОЩНИК','BELGRADE · ASSISTANT'),time:'16:20',day:plan.day,chapterId:plan.chapterId,chapter:plan.chapter,choices:[
+    choice('С Борисом: API Bank','With Boris: API Bank','bank_call','practical',{bankChoice:'api'}),
+    choice('С Борисом: Alta Bank','With Boris: Alta Bank','bank_call','practical',{bankChoice:'alta'}),
+    choice('С Борисом: Adriatic Bank','With Boris: Adriatic Bank','bank_call','practical',{bankChoice:'adriatic'}),
+    choice('Вместо этого открыть гайд Олега','Open Oleg’s guide instead','bank_plan','personal',{bankHelp:'guide'})
+  ]});
   plan.time='16:20';
   plan.pages[0]={...plan.pages[0],text:T('В своей квартире становится тихо, и я открываю в телефоне следующую вкладку: банк. На этот раз это страница, оформленная как гид.','The flat goes quiet and I open the next tab on my phone: the bank. This time it is a page laid out like a guide.'),byFlag:{flag:'rentalMoved',text:{true:T('В своей квартире становится тихо, и я открываю в телефоне следующую вкладку: банк. На этот раз это страница, оформленная как гид.','The flat goes quiet and I open the next tab on my phone: the bank. This time it is a page laid out like a guide.'),default:T('За столом временной комнаты я открываю в телефоне следующую вкладку: банк. На этот раз это страница, оформленная как гид.','At the desk of my temporary room I open the next tab on my phone: the bank. This time it is a page laid out like a guide.')}}};
   plan.pages[1]={...plan.pages[1],text:T('«Не собирай документы по чужой удачной истории. Банки решают сами, а условия меняются. Сравни варианты, потом решим, куда идти лично».','“Do not gather papers based on someone else’s lucky story. Banks decide for themselves, and conditions change. Compare the options, then we will decide where to go in person.”')};
@@ -130,7 +145,10 @@ export function extendBank({NODES,JOURNAL}){
 
 // Day 2: the chosen branch replaces the generic visit. Older saves without a choice keep the original scenes.
 export function bankRedirect(from,target,flags={}){
-  if(from==='third_morning'&&target==='bank_visit'&&BANK_KEYS.slice(0,3).includes(flags.bankChoice))return 'bank_visit_'+flags.bankChoice;
+  if(from==='flat_settle'&&target==='bank_path')return flags.bankHelp==='helper'?'bank_helper':'bank_plan';
+  if(from==='flat_registration'&&target==='bank_path')return flags.bankHelp==='helper'?'bank_helper':'bank_plan';
+  if(from==='third_morning'&&target==='bank_visit'&&flags.rentalMoved===true&&flags.rentalCast==='new'&&flags.whiteCardDone!==true)return 'white_card_visit';
+  if(['third_morning','white_card_visit'].includes(from)&&target==='bank_visit'&&BANK_KEYS.slice(0,3).includes(flags.bankChoice))return 'bank_visit_'+flags.bankChoice;
   return target;
 }
 export {BANK_FLAG,BANKS};

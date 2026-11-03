@@ -1,6 +1,6 @@
 // Character packs for optional 18+ evening nights (male player POV, consent at every step).
 // Scene IDs: evening{day}_{id}_* and route4_group_*. Art keys fall back until CG files exist.
-import {T} from './days.js?v=0.16.1';
+import {T} from './days.js?v=0.17.2';
 
 const pair=(ru,en)=>[ru,en];
 

@@ -9,8 +9,9 @@ for(const saved of [null,{}, {journal:['masked_patrol'],flags:{dayDone:30,masked
  assert.deepEqual(eligibleHomeCast(saved),HOME_BASE_CAST);
  for(let seed=0;seed<200;seed++)assert.deepEqual([...selectHomeComposition(saved,{seed}).people].sort(),[...HOME_BASE_CAST].sort());
 }
-for(const maskEnd of ['spark','friend','secret'])assert.ok(eligibleHomeCast({flags:{maskEnd}}).includes('milos'));
-const save={journal:['asya','luka','masked_patrol'],flags:{maskEnd:'friend'}};
+assert.ok(eligibleHomeCast({flags:{maskMet:true}}).includes('milos'));
+assert.match(HOME_PORTRAITS.milos.file,/masked/);
+const save={journal:['asya','luka','masked_patrol'],flags:{maskMet:true}};
 const before=structuredClone(save),seen=new Set(),orders=new Set();
 for(let seed=0;seed<200;seed++){
  const selection=selectHomeComposition(save,{seed});assert.equal(selection.people.length,5);assert.equal(new Set(selection.people).size,5);

@@ -2,9 +2,9 @@
 // Modelled on public/nikola-early-night.js: consent aloud, adult:true beats skip to morning when 18+ is off.
 // IDs: evening{day}_{person}_{kiss_ask|kiss|night_ask|home|door|fade|prep|sex|cum_*|afterglow|morning}
 // Day 4 group: route4_group_{ask|fade|morning}. Male player POV (same gate as the Nikola park night).
-import {T,DAYS} from './days.js?v=0.16.1';
-import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.16.11';
-import {maleSexBeats,femaleSexBeats} from './adult-sex-copy.js?v=0.16.11';
+import {T,DAYS} from './days.js?v=0.17.2';
+import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE,ADULT_GROUP_ID,artKey} from './adult-cast.js?v=0.17.3';
+import {maleSexBeats,femaleSexBeats} from './adult-sex-copy.js?v=0.17.3';
 const DAY_META=Object.fromEntries(DAYS.map(d=>[d.n,d]));
 
 const maleGate={gender:'male'};

@@ -1,4 +1,4 @@
-import {syncSfx} from './sfx.js?v=0.16.7';
+import {syncSfx} from './sfx.js?v=0.17.2';
 // Original local cues. Audio is enabled only after the player's explicit gesture.
 let context,master,active=false,volume=.55,desired='prologue',current=null,revision=0;
 const players=new Map();

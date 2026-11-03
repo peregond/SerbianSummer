@@ -1,59 +1,33 @@
 import assert from 'node:assert/strict';
+import {test} from 'node:test';
 import {NODES} from '../public/story.js';
-import {ADULT_CAST,ADULT_PEOPLE,ADULT_DAYS_ROUTE} from '../public/adult-cast.js';
+import {choiceVisible} from '../public/romance.js';
+import {ADULT_PEOPLE,ADULT_DAYS_ROUTE} from '../public/adult-cast.js?v=0.17.2';
 
-const beats=['kiss_ask','kiss','night_ask','home','door','fade','prep','sex','sex_deep','cum_inside','cum_cloth','cum_chest','afterglow','morning'];
-
-assert.equal(ADULT_PEOPLE.length,15);
-assert.deepEqual(ADULT_DAYS_ROUTE,[6,7,8,9,10,11,12,13,14,15]);
-
-// Day 1: Nikola + Milica
-for(const person of ['nikola','milica']){
- for(const beat of beats){
-  const id=`evening1_${person}_${beat}`;
-  assert.ok(NODES[id],id);
+test('compatible nights require a deliberate choice and return to the current day',()=>{
+ for(const day of [1,...ADULT_DAYS_ROUTE])for(const person of (day===1?['nikola','milica']:ADULT_PEOPLE)){
+  const ask=NODES[`evening${day}_${person}_night_ask`];
+  const full=ask.choices.find(c=>c.next===`adult_evening${day}_${person}_home`);
+  if(person==='milos'){assert.equal(full,undefined);continue;}
+  assert.ok(full);assert.equal(choiceVisible(full,{}, {gender:'male'}),true);
+  assert.equal(choiceVisible(full,{}, {gender:'female'}),false);
+  for(const beat of ['home','door','fade','prep','sex','sex_deep','cum_inside','cum_cloth','cum_chest','afterglow']){
+   const node=NODES[`adult_evening${day}_${person}_${beat}`];
+   assert.ok(node.activeRoute);assert.equal(node.routeDay,day);assert.equal(node.adult,true);
+   assert.equal(node.skipTo,`route${day}_close`);
+  }
+  assert.equal(NODES[`adult_evening${day}_${person}_morning`].next,`route${day}_close`);
  }
- assert.equal(NODES[`evening1_${person}_fade`].adult,true);
- assert.equal(NODES[`evening1_${person}_fade`].skipTo,`evening1_${person}_morning`);
- assert.ok(NODES[`evening1_${person}_fade`].pages.length>=4,'Nikola-style multi-beat fade: '+person);
- assert.ok(NODES[`evening1_${person}_sex`].pages.length>=4,'dense sex beat: '+person);
- assert.ok(NODES[`evening1_${person}_sex_deep`].choices.length>=3,'finish choices after sex_deep');
- assert.match(JSON.stringify(NODES[`evening1_${person}_sex`].pages),/член|толч|вхожу|cock|thrust/i);
-}
+});
 
-// Days 6–15 × full cast
-for(const day of ADULT_DAYS_ROUTE){
- for(const person of ADULT_PEOPLE){
-  assert.ok(NODES[`evening${day}_${person}_fade`],`evening${day}_${person}_fade`);
-  assert.ok(NODES[`evening${day}_${person}_night_ask`]);
-  assert.ok(NODES[`evening${day}_${person}_kiss_ask`]);
-  assert.ok(NODES[`evening${day}_${person}_kiss`]);
-  assert.equal(NODES[`evening${day}_${person}_sex`].adult,true);
-  assert.equal(NODES[`evening${day}_${person}_sex_deep`].adult,true);
-  assert.ok((NODES[`evening${day}_${person}_sex_deep`].choices??[]).length>=3,'finish choices');
+test('the short route uses finished art and preserves the masked identity',()=>{
+ for(const person of ['nikola','milica','dragan','jelena','asya','luka','ana','stefan','marko','lazar','strahinya','milos']){
+  for(const day of [6,15]){
+   const node=NODES[`evening${day}_${person}_fade`];
+   assert.equal(node.bg,person==='nikola'?'nikola-afterglow-smile-v1':`${person}-night-afterglow-v1`);
+   assert.equal(node.adult,true);
+   assert.equal(node.skipTo,`route${day}_close`);
+  }
  }
-}
-
-// Day 4 group
-assert.ok(NODES.route4_group_ask);
-assert.equal(NODES.route4_group_fade.adult,true);
-assert.equal(NODES.route4_group_fade.skipTo,'route4_group_morning');
-assert.match(JSON.stringify(NODES.route4_group_ask.pages),/«Нет» здесь всегда хороший ответ/);
-
-// Every adult beat in the new registry skips to a non-adult morning
-const eveningAdult=Object.keys(NODES).filter(id=>NODES[id].adult&&(/^(evening\d+_|route4_group_)/.test(id)));
-assert.ok(eveningAdult.length>50,'registry ships many adult beats');
-for(const id of eveningAdult){
- const skip=NODES[id].skipTo;
- assert.ok(NODES[skip],id+' skipTo');
- assert.ok(!NODES[skip].adult,id+' skips to non-adult');
-}
-
-// Cast copy present for each person
-for(const id of ADULT_PEOPLE){
- const c=ADULT_CAST[id];
- assert.ok(c.askNight[0]&&c.yesIn[0]&&c.morning[0],id);
- assert.ok(c.gender==='m'||c.gender==='f',id);
-}
-
-console.log('Adult evenings: day 1 Nikola/Milica, day 4 group, days 6–15 × 15 people, consent + skipTo mornings.');
+ assert.notEqual(NODES.evening6_vuk_fade.bg,'vuk-night-afterglow-v1');
+});

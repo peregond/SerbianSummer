@@ -1,11 +1,11 @@
 // The original poster already introduced these four faces; only later additions
 // require evidence that the player has met them in the current saved timeline.
 export const HOME_BASE_CAST=['milica','nikola','dragan','jelena'];
-export const HOME_PORTRAITS=Object.fromEntries([...HOME_BASE_CAST,'asya','luka','milos'].map(id=>[id,{file:'home/'+id+'-casual.webp'}]));
+export const HOME_PORTRAITS=Object.fromEntries([...HOME_BASE_CAST,'asya','luka','milos'].map(id=>[id,{file:id==='milos'?'workshop/milos-masked-friendly-v2-draft.webp':'home/'+id+'-casual.webp'}]));
 export const HOME_BACKGROUNDS={morning:'home/belgrade-morning.webp',day:'home/belgrade-day.webp',evening:'home/belgrade-evening.webp'};
 export function eligibleHomeCast(saved){
  const journal=Array.isArray(saved?.journal)?saved.journal:[];const flags=saved?.flags??{};
- return [...HOME_BASE_CAST,...(journal.includes('asya')?['asya']:[]),...(journal.includes('luka')?['luka']:[]),...(['spark','friend','secret'].includes(flags.maskEnd)?['milos']:[])];
+ return [...HOME_BASE_CAST,...(journal.includes('asya')?['asya']:[]),...(journal.includes('luka')?['luka']:[]),...(flags.maskMet?['milos']:[])];
 }
 export function selectHomeComposition(saved,{seed=0,hour=12}={}){
  const period=hour>=6&&hour<11?'morning':hour>=11&&hour<19?'day':'evening';

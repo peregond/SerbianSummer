@@ -4,7 +4,7 @@
 // Rules of these threads: closeness is the player's choice and always has a friendly or purely professional alternative; nobody
 // who handles the player's papers decides anything; the staff say so plainly, and the application is decided elsewhere.
 // In-person portraits are selected by bankSpark/mupSpark in living-art.js; messages use the messenger template.
-import {T,castHelpers} from './days.js?v=0.16.1';
+import {T,castHelpers} from './days.js?v=0.17.2';
 export function extendOfficeRomance({NODES:N,JOURNAL:J,n,scene}){
  const {note}=castHelpers(n);
  const out=label=>({kind:'tap',label,object:label});
@@ -129,4 +129,57 @@ export function extendOfficeRomance({NODES:N,JOURNAL:J,n,scene}){
   by('mupStaff','mupFuture',{dinner:['Если вам правда хочется, в пятницу вечером. Но я предупреждаю заранее: что бы ни ответила служба по вашему делу, это не изменит ни нашего ужина, ни дела.','If you really want to, on Friday evening. But I say in advance: whatever the service answers about your case, it will change neither our dinner nor the case.'],friend:['Спасибо, у меня всё хорошо. Приятно, когда по ту сторону окна помнят твоё имя.','Thank you, I am well. It is pleasant when people on the other side of the window remember your name.'],default:['Хорошо. Если нужно, обращайтесь по любому вопросу.','Good. If you need anything, come with any question.']}),
   note('Я выхожу из управления и остаюсь на крыльце, пока не успокоится сердце. Что бы ни ждало дальше, у меня есть порядок действий и человек, который говорит честно.','I leave the administration and stand on the steps until my heart calms down. Whatever lies ahead, I have a course of action and a person who speaks honestly.')
  ],'d26_mid',place('УПРАВЛЕНИЕ · КРЫЛЬЦО','ADMINISTRATION · THE STEPS','11:00','registry-lobby'));
+}
+
+// Independent identities in the fifteen-day route: meeting one never replaces another's contact or relationship.
+export const OFFICE_PEOPLE=[
+ {id:'lazar',name:'Лазар',en:'Lazar',sprite:'lazar',kind:'bank',
+  introduction:['Лазар снимает очки и отодвигает распечатку: «С вопросами по условиям закончили? Тогда можно просто познакомиться».','Lazar takes off his glasses and sets the printout aside: “Finished with the questions about terms? Then we can simply introduce ourselves.”'],
+  personal:['Без стойки между нами я немного теряюсь. Расскажи, какое место в городе уже стало твоим.','Without a counter between us I feel a little lost. Tell me which place in the city already feels like yours.'],
+  travel:['Лазар складывает билет пополам и убирает телефон: «Сегодня никаких процентов. Хочу просто посмотреть в окно».','Lazar folds his ticket and puts his phone away: “No percentages today. I just want to watch the view.”']},
+ {id:'teodora',name:'Теодора',en:'Teodora',sprite:'teodora',kind:'bank',
+  introduction:['Теодора закрывает рабочую папку. Говорит быстро, но, заметив мою улыбку, останавливается: «Теперь можно без банковских терминов».','Teodora closes her work folder. She speaks quickly, then pauses when she notices my smile: “Now we can leave the banking terms behind.”'],
+  personal:['Сегодня без калькулятора. Я хочу узнать, что тебе нравится, когда ничего не нужно решать.','No calculator today. I want to know what you enjoy when nothing needs deciding.'],
+  travel:['Теодора выбирает кафе без таблицы рейтингов: «В этот раз доверимся запаху кофе».','Teodora chooses a café without a ratings table: “This time let us trust the smell of coffee.”']},
+ {id:'ivana',name:'Ивана',en:'Ivana',sprite:'ivana',kind:'mup',
+  introduction:['Ивана кладёт карандаш рядом с готовым подтверждением. Три коротких удара по стойке, пауза: «Вот теперь всё. Есть ещё вопросы?»','Ivana puts her pencil beside the completed confirmation. Three short taps on the counter, a pause: “That is everything. Any more questions?”'],
+  personal:['После смены я всё ещё ищу карандаш, даже когда записывать нечего. Давай сегодня запомним прогулку без записей.','After my shift I still look for a pencil even when there is nothing to write down. Let us remember today’s walk without notes.'],
+  travel:['Ивана рисует маршрут на салфетке и смеётся: «Не инструкция. Просто чтобы осталось на память».','Ivana sketches the route on a napkin and laughs: “Not an instruction. Just a keepsake.”']},
+ {id:'strahinya',name:'Страхиня',en:'Strahinja',sprite:'strahinja',kind:'mup',
+  introduction:['Страхиня сверяет последнюю строку и откладывает карандаш: «С документами закончили. Можно выдохнуть».','Strahinja checks the last line and sets down his pencil: “Finished with the papers. You can breathe out.”'],
+  personal:['У меня дома карандаши во всех стаканах, а чай пить не из чего. Сегодня хорошо просто сидеть с настоящей чашкой.','At home every glass holds pencils, leaving nothing for tea. Today it feels good simply to sit with a real cup.'],
+  travel:['Страхиня собирается сверить время, но убирает часы: «До обратного рейса успеваем. Давай ещё посидим у воды».','Strahinja starts to check the time, then puts his watch away: “There is time before we head back. Let us sit by the water a little longer.”']}
+];
+
+export function extendFifteenOfficeRomance({NODES:N,add,note,say,choice}){
+ const eq=(flag,equals)=>({flag,equals});
+ // Temporary registration introduces the reception staff; day 5 offers another opportunity if it was skipped.
+ for(const {day,kind,from,back} of [
+  {day:2,kind:'mup',from:'route2_registered',back:'keys_room'},
+  {day:5,kind:'mup',from:'route5_registration_done',back:'route5_alta'},
+  {day:5,kind:'bank',from:'route5_bank_done',back:'evening5'}
+ ]){
+  const hub=`route${day}_${kind}_people`,people=OFFICE_PEOPLE.filter(p=>p.kind===kind);
+  N[from].next=hub;
+  const base={bg:kind==='bank'?'bank-consultation':'registry-lobby',time:day===2?'18:32':kind==='bank'?'14:15':'11:15',location:kind==='bank'?T('БАНК · ПОСЛЕ КОНСУЛЬТАЦИИ','BANK · AFTER THE CONSULTATION'):T('ПРИЁМНАЯ · ПОСЛЕ РЕГИСТРАЦИИ','RECEPTION · AFTER REGISTRATION')};
+  add(hub,[note(kind==='bank'?'Вопросы по счёту на сегодня закончены. У стойки ещё Лазар и Теодора; можно познакомиться или уйти по своим делам.':'Подтверждение уже в папке. В приёмной Ивана и Страхиня заканчивают работу с бумагами. Можно познакомиться или идти дальше.',kind==='bank'?'Today’s account questions are finished. Lazar and Teodora are still by the counter; I can introduce myself or go about my day.':'The confirmation is already in my folder. Ivana and Strahinja are finishing with the papers at reception. I can introduce myself or move on.')],null,{...base,choices:[
+   ...people.map(p=>choice('Познакомиться: '+p.name,'Meet: '+p.en,hub+'_'+p.id,'friendship',{}, {not:eq('routeOfficeMet_'+p.id,true)})),
+   choice('Продолжить свои дела','Continue my day',back,'practical')
+  ]});
+  for(const p of people){
+   const root=hub+'_'+p.id,met='routeOfficeMet_'+p.id,contact='routeOfficeContact_'+p.id,bond='routeOfficeBond_'+p.id;
+   const person=(ru,en)=>say(p.name,ru,en,{character:p.sprite});
+   add(root,[note(...p.introduction),person(kind==='bank'?'Я консультирую по условиям. Если мы сблизимся, я смогу лично помочь с заявкой — но решать, принимать ли помощь, тебе.':'Я принимаю документы. Если мы станем близки, я смогу помочь разобраться с ними лично. Решать тебе.',kind==='bank'?'I explain the terms. If we grow close, I can personally help with the application, but accepting is your choice.':'I receive documents. If we grow close, I can personally help with them. The choice is yours.')],null,{...base,effectOnEnter:{[met]:true},journal:[kind==='bank'?'bank_acquaintance':'mup_acquaintance'],choices:[
+    choice('Поблагодарить и остаться на деловом тоне','Thank them and keep things professional',hub,'practical'),
+    choice('Предложить общаться как друзья','Suggest keeping in touch as friends',root+'_contact','friendship',{[bond]:'friendship'}),
+    choice('Предложить встретиться после смены — как свидание','Suggest meeting after the shift — as a date',root+'_contact','romance',{[bond]:'romance'})
+   ]});
+   add(root+'_contact',[person('Да, я тоже хочу продолжить разговор после смены. Можно обменяться личными контактами. Если передумаешь, просто скажи.','Yes, I would like to continue talking after my shift too. We can exchange personal contacts. If you change your mind, just say so.'),note('Это отдельный разговор, когда рабочие вопросы уже закончены. Теперь личное знакомство может повлиять на помощь с бумагами.','This is a separate conversation after the work questions are finished. A personal connection may now affect help with the paperwork.')],null,{...base,choices:[
+    choice('Обменяться личными контактами','Exchange personal contacts',root+'_saved','friendship',{[contact]:true}),
+    choice('Пока не обмениваться контактами','Do not exchange contacts yet',hub,'personal',{[bond]:'professional'})
+   ]});
+   add(root+'_saved',[person(...p.personal),note('Мы договариваемся писать только по желанию. Рабочие вопросы остаются в официальном канале.','We agree to write only when we want to. Work questions stay in the official channel.')],hub,base);
+  }
+ }
+ for(const day of [10,12])for(const p of OFFICE_PEOPLE)N[`route${day}_rest`].pages[0].byFlag.text[p.id]=T(...p.travel);
 }

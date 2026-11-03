@@ -76,8 +76,8 @@ export function extendHostEvening({NODES,JOURNAL}){
   const mealText=Object.fromEntries(Object.entries(meals).map(([key,pair])=>[key,T(...pair)]));
   finish('host_terrace_meal',[
     N(...meals.cevapi,{byFlag:{flag:'hostMeal',text:{...mealText,default:mealText.cevapi}}}),
-    P('Очень вкусно. А как здесь едят: руками или вилкой?','It is delicious. How do people eat here, with their hands or a fork?',{emotion:'friendly'}),
-    H('Как удобнее. Единственное правило: отламывай хлеб и никуда не торопись. Polako.','Whichever is easier. The only rule is to tear the bread and not to hurry. Polako.',{emotion:'friendly'}),
+    P('Очень вкусно. Ты часто сюда приходишь?','This is delicious. Do you come here often?',{emotion:'friendly'}),
+    H('Когда хочется спокойно поужинать. Здесь меня уже знают и никогда не торопят. Polako.','When I want a peaceful dinner. They know me here and never rush me. Polako.',{emotion:'friendly'}),
     both('host',['Давно не было вечера, когда никуда не нужно спешить. Рад, что ты рядом.','It has been a while since an evening when I did not have to hurry anywhere. I am glad you are here.'],['Давно не было вечера, когда никуда не нужно спешить. Рада, что ты рядом.','It has been a while since an evening when I did not have to hurry anywhere. I am glad you are here.'],{emotion:'thoughtful'})
   ],null,{time:'21:10',bg:'belgrade-cafe-twilight',choices:[
     choice('«Я надеюсь, это не последняя такая прогулка»','“I hope this is not the last walk like this”','host_evening_close','romance',{hostEvening:'close'}),

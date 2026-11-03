@@ -4,7 +4,7 @@
 // the tune of four notes and the signet ring that the owner has at home. The reveal is on day 20 in the owner's kitchen.
 // He is an ordinary patrol officer: he does not decide cases and never offers favours. The mask is part of the street uniform;
 // he is friendly, the player can leave the mystery alone, and every step toward closeness is the player's choice.
-import {T} from './days.js?v=0.16.1';
+import {T} from './days.js?v=0.17.2';
 export function extendMaskedPatrol({NODES:N,JOURNAL:J,n,scene}){
  const out=label=>({kind:'tap',label,object:label});
  const note=(ru,en)=>n(T(ru,en));
@@ -24,7 +24,8 @@ export function extendMaskedPatrol({NODES:N,JOURNAL:J,n,scene}){
  N.d4_turn.pages.push(note('Кофе на этой кухне варят с кардамоном, а владелец по привычке напевает короткий мотив из четырёх нот. На мизинце у владельца старый перстень-печатка с двумя буквами.','Coffee in this kitchen is made with cardamom, and the owner hums a short tune of four notes out of habit. On the owner’s little finger is an old signet ring with two letters.'));
 
  // Day 4, first meeting: going to the police station for the white card.
- add('d4_start',choice(['Сходить в отделение за белым картоном','Go to the police station for the white card'],'practical','d4_station',{}));
+ add('d4_start',{...choice(['Сходить в отделение за белым картоном','Go to the police station for the white card'],'practical','d4_station',{}),when:{flag:'whiteCardDone',notEquals:true}});
+ add('d4_start',{...choice(['Зайти в отделение уточнить вопрос об адресе','Visit the station to ask about the address'],'practical','d4_station',{}),when:{flag:'whiteCardDone',equals:true}});
  N.d4_station=scene([
   note('Белый картон — подтверждение регистрации места пребывания. Я решаю забрать его в отделении за углом: так будет спокойнее, чем ждать, пока кто-то передаст.','The white card is the confirmation that my place of stay is registered. I decide to collect it at the police station round the corner: that will be calmer than waiting for someone to pass it on.'),
   note('Отделение в двух кварталах. У забора есть место для перерывов: лавка, урна и жестяная банка. На лавке сидит полицейский в форме и чёрной балаклаве, натянутой так, что видны только глаза, и пьёт кофе из бумажного стакана.','The station is two blocks away. By the fence there is a place for breaks: a bench, a bin and a tin can. On the bench sits a police officer in uniform and a black balaclava pulled so that only his eyes show, drinking coffee from a paper cup.'),
@@ -33,12 +34,15 @@ export function extendMaskedPatrol({NODES:N,JOURNAL:J,n,scene}){
  ],null,{...place('ОТДЕЛЕНИЕ · МЕСТО ДЛЯ ПЕРЕРЫВОВ','STATION · THE BREAK SPOT','10:30','belgrade-courtyard'),journal:['masked_patrol'],choices:[
   choice(['Спросить, почему он в балаклаве','Ask why he wears a balaclava'],'explore','d4_station_ask',{maskMet:true,maskAsked:true}),
   choice(['Поблагодарить и пойти к окну','Thank him and go to the window'],'practical','d4_mid',{maskMet:true})]});
+ N.d4_station.pages[0].byFlag={flag:'whiteCardDone',text:{true:T('Белый картон уже лежит в папке. Я захожу в отделение уточнить вопрос о подтверждении адреса.','My white card is already in my folder. I stop by the station to ask about proof of address.'),default:N.d4_station.pages[0].text}};
+ N.d4_station.pages[2].byFlag={flag:'whiteCardDone',text:{true:T('Вам к окну номер три. Там подскажут по подтверждению адреса. Проводил бы, но у меня перерыв.','You want window number three. They can help with proof of address. I would walk you, but I am on a break.'),default:N.d4_station.pages[2].text}};
  N.d4_station_ask=scene([
   say('Положено на уличной смене. Лицо моё вам ни к чему, а вот картон — другое дело: возьмёте его у окна, как все. Тут у всех одни правила.','It is required on street duty. My face is of no use to you, but the card is another matter: you take it at the window, like everyone. Here everyone has the same rules.'),
   note('Он говорит без обиды. От стакана пахнет кофе с кардамоном, и этот запах странно уютный.','He speaks without offence. The cup smells of coffee with cardamom, and the smell is strangely cosy.')
  ],null,{...place('ОТДЕЛЕНИЕ · МЕСТО ДЛЯ ПЕРЕРЫВОВ','STATION · THE BREAK SPOT','10:35','belgrade-courtyard'),journal:['masked_patrol'],choices:[
   choice(['Запомнить запах кардамона','Remember the smell of cardamom'],'explore','d4_mid',{maskClue1:true}),
   choice(['Пойти к окну','Go to the window'],'practical','d4_mid',{})]});
+ N.d4_station_ask.pages[0].byFlag={flag:'whiteCardDone',text:{true:T('Положено на уличной смене. А по адресу вам ответят у окна, как всем. Тут у всех одни правила.','It is required on street duty. For the address question, ask at the window, like everyone. Here everyone has the same rules.'),default:N.d4_station_ask.pages[0].text}};
 
  // Day 9: back at the station to ask about address confirmations.
  add('d9_start',choice(['Зайти в отделение и спросить про подтверждение адреса','Go to the police station and ask about address confirmations'],'practical','d9_station',{}));

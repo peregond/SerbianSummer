@@ -12,6 +12,9 @@
 
 /* Ready-to-send replies: one visible vertical stack, with no input or carousel. */
 .chat-feed{padding-bottom:calc(var(--chat-footer-height,86px) + 14px)}
+.chat-new-divider{display:flex;align-items:center;gap:10px;margin:12px 0 8px;color:#7656b4;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.chat-new-divider::before,.chat-new-divider::after{content:'';height:1px;flex:1;background:currentColor;opacity:.45}
+:root[data-theme=dark] .chat-new-divider{color:#c9adff}
 .chat-replies{display:grid;grid-template-columns:1fr;gap:8px;width:100%;max-height:none;overflow:visible;margin:0;padding:0}
 .chat-reply{display:flex;align-items:center;gap:10px;flex:none;width:100%;min-height:49px;padding:11px 14px;border:1px solid #c9bee5;border-radius:17px;background:var(--chat-incoming);color:var(--chat-ink);font-size:16px;line-height:1.35;box-shadow:0 2px 8px #35204d0a;animation:chat-arrive .16s ease-out}
 .chat-reply-icon{display:grid;place-items:center;flex:none;width:23px;color:var(--chat-accent);font-size:23px;line-height:1}
@@ -24,10 +27,16 @@
 
 .chat-reply .choice-icon{width:23px;height:23px;flex:none;color:var(--chat-accent)}
 .chat-reply[data-tone=romance] .choice-icon{color:#c95686}
+.chat-reply[data-tone=friendship] .choice-icon{color:#bf8721}
+.chat-reply[data-tone=dream] .choice-icon{color:#9566c8}
+.chat-reply[data-tone=explore] .choice-icon{color:#367fb5}
+.chat-reply[data-tone=practical] .choice-icon{color:#238b6e}
+.chat-reply[data-tone=personal] .choice-icon{color:#b86539}
 .chat-reply .choice-label{min-width:0;overflow-wrap:anywhere}
 
 .chat-attachment{display:grid;grid-template-columns:25px 1fr;gap:4px 8px;margin:0 0 8px;padding:12px;border-radius:10px;background:#ffffff22;border:1px solid #ffffff55}.chat-attachment svg{grid-row:span 2}.chat-attachment strong{font-size:14px}.chat-attachment small{font-size:12px;line-height:1.35;opacity:.85}
 
+.chat-photo-entry{max-height:30dvh;object-fit:cover!important;object-position:center 48%}
 .chat-photo{display:block;width:min(100%,280px);height:auto;border-radius:12px;object-fit:contain}
 .chat-next:disabled{opacity:.55}
 

@@ -1,5 +1,5 @@
 // Volume as taps on a phone: - and + in ten steps instead of a slider (fingers cannot hit a 1% target anyway).
-import {stepperMarkup as markup,bindStepper as bind} from './stepper.js?v=0.16.7';
+import {stepperMarkup as markup,bindStepper as bind} from './stepper.js?v=0.17.2';
 export const LEVELS=10;
 const clamp=value=>Math.max(0,Math.min(1,Number(value)));
 export const toLevel=value=>Number.isFinite(Number(value))?Math.round(clamp(value)*LEVELS):null;

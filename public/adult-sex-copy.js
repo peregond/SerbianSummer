@@ -1,6 +1,6 @@
 // Dense sex narration for evening packs (male player POV), in the register of nikola-early-night.js.
 // Kept separate so adult-cast.js stays about voice/setting; this file is the physical beat.
-import {T} from './days.js?v=0.16.1';
+import {T} from './days.js?v=0.17.2';
 
 const p=(ru,en)=>[ru,en];
 

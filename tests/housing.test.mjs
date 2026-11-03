@@ -28,11 +28,11 @@ assert.equal(NODES.district_map.choices.filter(choice=>choiceVisible(choice,{}))
 const forNew=choice=>!choice.when||choice.when.flag!=='rentalCast'||choice.when.equals==='new'||(choice.when.notEquals!==undefined&&choice.when.notEquals!=='new');
 const targetsOf=node=>node.choices?node.choices.filter(forNew).map(c=>c.next):[node.next];
 function reach(from,blocked=[]){const seen=new Set(),stack=[from];while(stack.length){const id=stack.pop();if(seen.has(id)||blocked.includes(id)||id==='end'||!NODES[id])continue;seen.add(id);stack.push(...targetsOf(NODES[id]));}return seen;}
-assert.ok(reach('flat_intro').has('bank_plan'),'the bank follows the flat');
-assert.ok(!reach('flat_intro',['flat_signed']).has('bank_plan'),'the bank cannot be reached without signing a lease first');
-assert.ok(!reach('flat_intro',['flat_settle']).has('bank_plan'),'nor without moving in and settling');
+assert.ok(reach('flat_intro').has('route5_alta'),'the bank follows the flat');
+assert.ok(!reach('flat_intro',['flat_signed']).has('flat_settle'),'the bank cannot be reached without signing a lease first');
+assert.ok(!reach('flat_intro',['flat_settle']).has('flat_settle'),'nor without moving in and settling');
 for(const id of ['flat_signed','flat_move_day','flat_arrive','flat_settle'])assert.ok(reach('flat_intro').has(id),id);
-assert.equal(NODES.flat_settle.next,'bank_plan');
+assert.equal(NODES.flat_settle.next,'evening4');
 
 // 2. Every landlord states the rent at the viewing; it is the story's own number.
 const priceLines=owner=>pageText(NODES['flat_enter_'+owner].pages[3],{...NEW,districtOwner:owner},'ru');
@@ -49,10 +49,10 @@ assert.deepEqual(DISCOUNTS,[0,50,100,150]);
 // 3. Price negotiation: 50 euro basic, 100-150 only after a romantic bond the player chose, never automatic.
 const terms=NODES.flat_terms.choices;
 const visible=flags=>terms.filter(choice=>choiceVisible(choice,flags)).map(choice=>choice.next);
-assert.deepEqual(visible({...NEW}),['flat_price_full','flat_price_basic','district_map']);
-assert.deepEqual(visible({...NEW,flatWarmth:0}),['flat_price_full','flat_price_basic','district_map'],'no coffee, no bigger discount');
-assert.deepEqual(visible({...NEW,flatWarmth:1}),['flat_price_full','flat_price_basic','flat_price_warm100','district_map']);
-assert.deepEqual(visible({...NEW,flatWarmth:2}),['flat_price_full','flat_price_basic','flat_price_warm150','district_map']);
+assert.deepEqual(visible({...NEW}),['flat_price_full','flat_price_basic','route4_defer']);
+assert.deepEqual(visible({...NEW,flatWarmth:0}),['flat_price_full','flat_price_basic','route4_defer'],'no coffee, no bigger discount');
+assert.deepEqual(visible({...NEW,flatWarmth:1}),['flat_price_full','flat_price_basic','flat_price_warm100','route4_defer']);
+assert.deepEqual(visible({...NEW,flatWarmth:2}),['flat_price_full','flat_price_basic','flat_price_warm150','route4_defer']);
 assert.equal(NODES.flat_price_full.effectOnEnter.flatDiscount,0);
 assert.equal(NODES.flat_price_basic.effectOnEnter.flatDiscount,50);
 assert.equal(NODES.flat_price_warm100.effectOnEnter.flatDiscount,100);
@@ -75,11 +75,14 @@ for(const owner of OWNERS)for(const discount of DISCOUNTS){
 }
 
 // 4. Nothing is signed or paid on its own.
-assert.ok(NODES.flat_contract.choices.length>=3&&NODES.flat_contract.choices.some(choice=>choice.next==='district_map'),'the lease can be declined');
+assert.ok(NODES.flat_contract.choices.length>=3&&NODES.flat_contract.choices.some(choice=>choice.next==='route4_defer'),'the lease can be declined');
 assert.deepEqual(NODES.flat_contract.choices.filter(choice=>choice.next==='flat_signed').map(choice=>choice.tone),['practical']);
 const transfer=Object.values(NODES.flat_signed.actions).find(action=>/залог/.test(action.label));
 assert.equal(transfer.kind,'tap','the deposit transfer is a deliberate tap by the player');
-assert.ok(NODES.flat_contract.pages.some(page=>/Деньги переводи только после подписи/.test(page.text)));
+assert.ok(NODES.flat_contract.pages.some(page=>/Передавай наличные только после подписи и попроси расписку/.test(page.text)));
+assert.match(transfer.label,/наличными/,'The deposit is paid in cash by an explicit action');
+assert.equal(NODES.rental_hub_vuk.choices[2].label,'Предложить выпить кофе на кухне');
+assert.equal(presentationFor(NODES.flat_coffee,NODES.flat_coffee.pages[0],{rentalCast:'new',districtOwner:'vuk'}).emotion,'coffee');
 
 // 5. Decision scene: other districts, the second Dorćol flat, going back.
 const decision=NODES.flat_decision.choices;
@@ -99,10 +102,8 @@ const bond={rentalBond:'romance',districtOwner:'vuk'};applyFlatEffect(bond,{flat
 assert.equal(bond.rentalBond_vuk,'romance');assert.equal(Object.hasOwn(bond,'rentalBond'),false);assert.equal(Object.hasOwn(bond,'flatPick'),false);
 for(const owner of OWNERS)for(const mode of ['terms','friends','flirt'])assert.equal(NODES['rental_hub_'+owner].choices.find(c=>c.next==='rental_'+mode+'_'+owner).effect.rentalBond,mode==='terms'?'practical':mode==='friends'?'friendship':'romance');
 
-// 7. Lease beats of days 4, 7 and 8 are skipped once the flat is rented; the other beats stay.
-for(const day of [4,7,8]){const chapter=CHAPTERS.find(c=>c.day===day);assert.equal(rentalRedirect('previous',chapter.start,{...NEW,districtOwner:'ana',rentalMoved:true}),chapter.start,'day '+day);assert.equal(rentalRedirect('previous',chapter.start,{...NEW,districtOwner:'ana'}),'rental_day_'+day,'older saves keep the beat');}
-const day10=CHAPTERS.find(c=>c.day===10);assert.equal(rentalRedirect('previous',day10.start,{...NEW,districtOwner:'ana',rentalMoved:true}),'rental_day_10');
-const day30=CHAPTERS.find(c=>c.day===30);void day30;
+// 7. The active route bypasses all archived day redirects.
+for(const chapter of CHAPTERS)assert.equal(rentalRedirect('previous',chapter.start,{...NEW,route15:true,districtOwner:'ana',rentalMoved:true}),chapter.start);
 // Old new-version saves inside the first viewing continue into the new decision.
 assert.equal(rentalRedirect('morning_ready','next_steps',NEW),'flat_decision');
 assert.equal(rentalRedirect('morning_ready','next_steps',{}),'next_steps');
@@ -115,7 +116,7 @@ for(const [id,node]of Object.entries(NODES).filter(([id])=>id.startsWith('flat_'
   assert.ok(boundaries.length,id+' has an action or a choice');
   let previous=-1;for(const boundary of boundaries){assert.ok(boundary-previous<=5,id+': too long without an action');previous=boundary;}
   if(!node.choices)assert.ok(node.actions[node.pages.length-1],id+': the last page has an action');
-  assert.equal(node.chapterId,'districts',id);
+  assert.ok(['districts','moving'].includes(node.chapterId),id);
   for(const page of node.pages)assert.ok(Object.hasOwn(dictionary,page.text),id+': English text');
 }
 
@@ -135,20 +136,22 @@ for(const owner of OWNERS)assert.ok(!/\{[^a}]/.test(FLATS[owner].voice[0]));
   pins[1].click();assert.equal(chosen.next,'flat_enter_marko');
   assert.equal(withClass(root,'dialogue').length,0,'no dialogue window on the map screen');
 }
-// 11. The viewing quest: six checks in any order, progress survives a reload, finishing needs all of them.
+// 11. Full-screen viewing: two objects per room, automatic progression, and resume.
 {
-  const doc=makeDocument(),root=doc.createElement('section');const saved=[];let done=0;
-  const dispose=mountViewingQuest(root,{owner:'vuk',mask:0,canRewind:true,onBack(){},onSettings(){},onChange:mask=>saved.push(mask),onComplete:()=>{done++;}});
-  const finish=withClass(root,'viewing-finish')[0];assert.equal(finish.disabled,true);
-  const tabs=withClass(root,'viewing-tab'),targets=withClass(root,'viewing-target');assert.equal(tabs.length,3);assert.equal(targets.length,2);
-  for(const index of [2,0,1]){tabs[index].click();targets[1].click();targets[0].click();targets[0].click();}
-  assert.deepEqual(saved,[0b100000,0b110000,0b110010,0b110011,0b111011,0b111111],'any order, and repeated taps change nothing');
-  assert.equal(finish.disabled,false);finish.click();finish.click();assert.equal(done,1,'finishing happens once');
-  dispose();
-  const again=makeDocument().createElement('section');
-  mountViewingQuest(again,{owner:'vuk',mask:0b001111,canRewind:false,onBack(){},onSettings(){},onChange(){},onComplete(){}});
-  assert.equal(withClass(again,'viewing-finish')[0].disabled,true,'a reload with four checks done still needs the last two');
-  assert.ok(withClass(again,'viewing-tab').filter(tab=>tab.dataset.done==='true').length===2);
+  const doc=makeDocument(),root=doc.createElement('section');const saved=[];let done=0,scheduled=[];
+  const schedule=fn=>{scheduled.push(fn);return scheduled.length;},cancel=()=>{};
+  const dispose=mountViewingQuest(root,{owner:'vuk',mask:0,canRewind:true,onBack(){},onSettings(){},onChange:mask=>saved.push(mask),onComplete:()=>{done++;},schedule,cancel});
+  assert.equal(withClass(root,'viewing-tab').length,0,'No manual room tabs');
+  const spots=withClass(root,'viewing-object');assert.equal(spots.length,2);
+  spots[1].click();assert.match(withClass(root,'viewing-full-art')[0].src,/water-shower-v1/,'Tapping the shower displays running water');
+  spots[0].click();assert.match(withClass(root,'viewing-full-art')[0].src,/water-tap-v1/,'Tapping the tap displays running water');assert.equal(scheduled.length,1);scheduled.shift()();
+  spots[0].click();spots[1].click();scheduled.shift()();
+  spots[1].click();spots[0].click();scheduled.shift()();
+  assert.deepEqual(saved,[2,3,19,51,59,63],'Both objects work in either order and retain the existing save bits');
+  assert.equal(done,1,'The final room finishes automatically');dispose();
+  const again=makeDocument().createElement('section');let next=[];
+  mountViewingQuest(again,{owner:'vuk',mask:0b110011,canRewind:false,onBack(){},onSettings(){},onChange(){},onComplete(){},schedule:fn=>{next.push(fn);return 1;},cancel(){}});
+  assert.equal(withClass(again,'quest-title')[0].textContent,'Окна','Reload resumes at the first unfinished room');
 }
 // 12. Gendered forms of the hero survive in the new scenes.
 for(const id of ['flat_contract','flat_signed','flat_move_day'])for(const page of NODES[id].pages)assert.ok(!/\{(?!a\}|districtHost\}|host\})[^}]*\}/.test(page.text)||Object.hasOwn(dictionary,page.text),id);

@@ -34,6 +34,7 @@ for(const tone of ['explore','romance','friendship','practical','dream','persona
   assert.equal(button.children.length,2);
   assert.equal(button.children[0].tagName,'svg');
   assert.equal(button.children[0].attributes['aria-hidden'],'true');
+  assert.equal(button.children[0].attributes.fill,'currentColor','The action icon is filled and picks up its category colour');
   assert.equal(button.children[1].textContent,'<не разметка>');
   assert.equal(button.dataset.recipientGender,'male');
   assert.equal(button.attributes['aria-label'],result.accessibleLabel);
