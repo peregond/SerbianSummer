@@ -1,6 +1,6 @@
 import {sceneCode,sceneLink,resolveSceneReference} from './scene-reference.js?v=0.17.2';
-import {t} from './i18n.js?v=0.17.4';
-import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.17.4';
+import {t} from './i18n.js?v=0.17.23';
+import {presentationFor,CHARACTER_SPRITES} from './story.js?v=0.17.23';
 import {
   buildStoryAtlas,
   buildStoryGraph,
@@ -61,7 +61,7 @@ async function copyText(value){
   }
 }
 
-export function mountStoryAtlas(container,{nodes,chapters,start,status,initialScene}){
+export function mountStoryAtlas(container,{nodes,chapters,start,status,initialScene,onTestScene}){
   const atlas=buildStoryAtlas(nodes,chapters,start,{
     presentationFor,
     sprites:CHARACTER_SPRITES,
@@ -255,6 +255,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
     const copyLink=el('button',t('Скопировать ссылку'),'secondary');
     copyLink.type='button';copyLink.onclick=async()=>{if(await copyText(sceneLink(scene.id,location.href)))setStatus(t('Ссылка скопирована'));};
     idRow.append(code,copyId,copyLink,copyNote);
+    if(onTestScene){const test=el('button','Запустить сцену','primary');test.type='button';test.classList.add('story-atlas-test');test.onclick=()=>onTestScene(scene.id);idRow.append(test);}
     head.append(idRow);
     if(scene.chapter)head.append(el('p',scene.chapter,'story-atlas-meta'));
     const chips=el('div','','story-atlas-chips');

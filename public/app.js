@@ -1,23 +1,23 @@
-import {mountPixelTram} from './pixel-tram.js?v=0.17.4';
+import {mountPixelTram} from './pixel-tram.js?v=0.17.23';
 import {rentalRedirect} from './rental-story.js?v=0.17.2';
 import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=0.17.2';
 import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.17.2';
 import {renderHomeHero} from './home-hero.js?v=0.17.2';
-import {renderEpisodeContact} from './episode-contact.js?v=0.17.4';
+import {renderEpisodeContact} from './episode-contact.js?v=0.17.23';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
-import {drawChapterMap} from './chapter-map.js?v=0.17.4';
-import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.17.4';
-import {mountRoomInteraction} from './room-interaction.js?v=0.17.4';
-import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.17.4';
-import {mountBankGuide} from './bank-guide.js?v=0.17.4';
+import {drawChapterMap} from './chapter-map.js?v=0.17.23';
+import {mountWorkshopEntry,mountWorkshop} from './workshop.js?v=0.17.23';
+import {mountRoomInteraction} from './room-interaction.js?v=0.17.23';
+import {mountDistrictMap,mountViewingQuest} from './scene-quests.js?v=0.17.23';
+import {mountBankGuide} from './bank-guide.js?v=0.17.23';
 import {BANK_FLAG} from './bank-data.js?v=1';
 import {applyFlatEffect,viewMaskOf,setViewMask} from './flat-data.js?v=1';
-import {renderArrivalPhone} from './arrival-phone.js?v=0.17.4';
-import {mountMessenger} from './messenger.js?v=0.17.4';
+import {renderArrivalPhone} from './arrival-phone.js?v=0.17.23';
+import {mountMessenger} from './messenger.js?v=0.17.23';
 import {messengerFrame,messageAt,visibleMessagePage} from './messenger-model.js?v=0.17.2';
 import {MESSENGER_CONFIG} from './messenger-config.js?v=0.16.1';
 import {ART_FRAMES,positionArtwork} from './art-framing.js?v=0.17.2';
-import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.17.4';
+import {t,html,initialiseLanguage,getLanguage,setLanguage,captureStaticUi,translateHistory} from './i18n.js?v=0.17.23';
 import {STAGES} from './days.js?v=0.17.2';
 import {MAX_LOG_RECORDS} from './save-limits.js?v=0.17.2';
 import {cueFor} from './music-cues.js?v=0.17.2';
@@ -25,9 +25,9 @@ import {ambienceFor,stingFor} from './sound-cues.js?v=0.17.2';
 import {setAmbience,playSting} from './sfx.js?v=0.17.2';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.17.2';
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.17.2';
-import {drawBeatAction} from './beat-action.js?v=0.17.4';
-import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.4';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.4';
+import {drawBeatAction} from './beat-action.js?v=0.17.23';
+import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.23';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.23';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.17.2';
 import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.17.2';
@@ -39,13 +39,13 @@ import {mountNamePicker} from './name-picker.js?v=0.17.2';
 import {LANGUAGES,mountLanguageSwitch,markActiveLanguage} from './language-switch.js?v=0.17.2';
 import {setSfxVolume} from './sfx.js?v=0.17.2';
 import { setMusic, setVolume, setMusicScene } from './audio.js?v=0.17.2';
-import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.17.4';
+import {renderDistrictMap as drawDistrictMap} from './district-map.js?v=0.17.23';
 import { CloudProgress } from './cloud.js?v=0.17.2';
 import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.17.2';
-import {appendChoiceContents} from './choice-ui.js?v=0.17.4';
+import {appendChoiceContents} from './choice-ui.js?v=0.17.23';
 import {mountBaggageInteraction} from './interaction.js?v=0.17.2';
-import {APP_VERSION} from './release.js?v=0.17.4';
+import {APP_VERSION} from './release.js?v=0.17.23';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
@@ -69,6 +69,7 @@ setVolume(settings.volume);setSfxVolume(settings.sfxVolume);
 document.documentElement.style.setProperty('--text-size', settings.textSize+'px');
 document.documentElement.style.setProperty('--text-lines', String(textLines(settings.textSize)));
 let saved = null, state = null, view = 'home', creationStep = 0, transitionLock = false;
+let sceneTest=null;
 let draft = readLocal('draft', { gender:null, nameId:null });
 const panel=$('panel');
 // Icon buttons in the panel header (settings only): they stay for exactly one showModal() and are dropped by every other panel.
@@ -163,8 +164,10 @@ function showInstallGuide() {
   if(panel.open)panel.close();
   $('panel-title').textContent=t('Игра на весь экран');
   const standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  const android=/Android/i.test(navigator.userAgent);
   $('panel-content').innerHTML=html(standalone
     ? '<p class="install-copy">Игра уже открыта с домашнего экрана. Панели Safari скрыты — можно погружаться в историю.</p>'
+    : android?'<p class="install-copy">В Chrome открой меню ⋮ и выбери «Установить приложение» или «Добавить на главный экран». Затем запусти игру с новой иконки.</p>'
     : '<p class="install-copy">На iPhone игра открывается без адресной панели, когда запускается с домашнего экрана.</p><ol class="install-steps"><li>Открой эту страницу в Safari и нажми «Поделиться».</li><li>Выбери «На экран Домой». Если пункт спрятан, открой «Ещё».</li><li>Оставь включённым «Открывать как веб-приложение», если этот переключатель есть, и нажми «Добавить».</li></ol><p class="install-copy">Затем запусти «Сербское лето» с новой иконки. Чтобы перенести текущий прогресс, скачай сохранение в настройках и загрузи его после запуска.</p>');
   panel.showModal();
 }
@@ -207,7 +210,7 @@ function home() {
   showScreen('home');fitScene();
 }
 function save() {
-  if(!state) return;
+  if(!state||sceneTest) return;
   state.updatedAt=Date.now(); saved=structuredClone(state);
   cloud?.queue(state);
   const at=state.updatedAt;
@@ -330,7 +333,7 @@ function showChapterLock(){
 function renderGame({skipMessenger=false}={}) {
   state.index=visibleMessagePage(state.node,state.index);
   if(pendingLabel){labelKey=state.node+'|'+state.index;pendingLabel=false;}
-  if(!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
+  if(!sceneTest&&!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
   const node=NODES[state.node],page=currentPage();
@@ -680,7 +683,8 @@ function openPanel(kind) {
   if(kind==='game-menu') {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
-    for(const [label,run]of [['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
+    const menuItems=sceneTest?[['Продолжить игру',()=>panel.close()],['Вернуться в мастерскую',returnFromSceneTest]]:[['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]];
+    for(const [label,run]of menuItems){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',run);actions.append(button);}
     const details=document.createElement('details');details.className='reading-details more-settings';const summary=document.createElement('summary');summary.textContent=t('Реплики и заметки');details.append(summary);
     const reading=document.createElement('div');reading.className='settings-actions';
     for(const [label,kind]of [['Прочитанные реплики','history'],['Заметки о людях и планах','journal']]){const button=document.createElement('button');button.className='secondary';button.textContent=t(label);button.addEventListener('click',()=>{panel.close();openPanel(kind);});reading.append(button);}
@@ -704,7 +708,9 @@ function openPanel(kind) {
     $('adult-toggle').addEventListener('change',event=>{settings.adult=event.target.checked;writeLocal('settings',settings);});
     bindStepper(content,{id:'music-vol',volume:settings.volume,onChange:value=>{settings.volume=value;setVolume(value);writeLocal('settings',settings);}});
     bindStepper(content,{id:'sfx-vol',volume:settings.sfxVolume,onChange:value=>{settings.sfxVolume=value;setSfxVolume(value);playSting('ding');writeLocal('settings',settings);}});
-    setPanelTools([{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
+    setPanelTools(sceneTest?[]:[{id:'account-settings',icon:'account',label:'Мой прогресс · аккаунт',run:()=>{panel.close();openAccount();}},{id:'menu-home',icon:'home',label:'На главный экран',run:()=>{panel.close();home();}}]);
+    if(sceneTest){$('export-save').disabled=true;$('import-save').disabled=true;}
+    $('install-guide').textContent=t('Установить на главный экран');
     $('screen-info').addEventListener('click',showScreenInfo);
     $('install-guide').addEventListener('click',showInstallGuide);
     $('export-save').addEventListener('click',exportSave);$('import-save').addEventListener('change',importSave);
@@ -715,13 +721,35 @@ function openPanel(kind) {
     }
     mountWorkshopEntry(content,()=>{
       $('panel-title').textContent=t('Мастерская');
-      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:new URL(location.href).searchParams.get('scene'),back:()=>{
+      mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:new URL(location.href).searchParams.get('scene'),onTestScene:configureSceneTest,back:()=>{
         content.classList.remove('workshop');panel.classList.remove('workshop-wide');panel.close();openPanel('settings');
       }});
     },()=>{if(view==='chapter-card'&&state&&!chapterAvailable(chapterFor(state,NODES),false)){cardContext=null;panel.close();renderGame();}});
   }
   panel.showModal();
   if(kind==='history')requestAnimationFrame(()=>panel.scrollTop=panel.scrollHeight);
+}
+function configureSceneTest(id){
+ if(!NODES[id])return;
+ const source=state??saved,content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();$('panel-title').textContent=t('Тест сцены');
+ const info=document.createElement('p');info.textContent=t('Тест не изменяет сохранение. Выберите условия сцены.');content.append(info);
+ const select=(label,options,value)=>{const wrap=document.createElement('label');wrap.className='setting';wrap.append(document.createTextNode(t(label)));const input=document.createElement('select');for(const [key,name] of options){const opt=document.createElement('option');opt.value=key;opt.textContent=t(name);input.append(opt);}input.value=value;wrap.append(input);content.append(wrap);return input;};
+ const gender=select('Герой',[['female','Женщина'],['male','Мужчина']],source?.profile?.gender??'female');
+ const companion=select('Спутник',[['milica','Милица'],['nikola','Никола']],source?.flags?.companion??'milica');
+ const owner=select('Владелец квартиры',[['ana','Ана'],['stefan','Стефан'],['marko','Марко'],['vuk','Вук']],source?.flags?.districtOwner??'ana');
+ const launch=document.createElement('button');launch.className='primary';launch.textContent=t('Начать тест');launch.onclick=()=>{
+  const profile=source?.profile?.gender===gender.value?structuredClone(source.profile):{gender:gender.value,nameId:catalog.genders[gender.value].names[0].id,namesCatalogVersion:catalog.version};
+  const flags={...(source?.flags??{}),companion:companion.value,districtOwner:owner.value,district:({ana:'dorcol',stefan:'dorcol',marko:'vracar',vuk:'newbelgrade'})[owner.value]??'dorcol',rentalCast:'new'};
+  sceneTest={id,previousState:state,previousView:view};state={formatVersion:1,storyVersion:STORY_VERSION,profile,node:id,index:0,flags,journal:[],log:[],rewind:[],completed:false,updatedAt:Date.now()};
+  if(NODES[id].adult&&!settings.adult&&NODES[id].skipTo)state.node=NODES[id].skipTo;
+  Object.assign(state.flags,NODES[state.node].effectOnEnter??{});recordPage();panel.close();
+  const exit=document.createElement('button');exit.id='scene-test-exit';exit.className='scene-test-exit';exit.textContent=t('Вернуться в мастерскую');exit.onclick=returnFromSceneTest;document.body.append(exit);renderGame();
+ };content.append(launch);
+}
+function returnFromSceneTest(){
+ if(!sceneTest)return;const test=sceneTest;sceneTest=null;state=test.previousState;document.getElementById('scene-test-exit')?.remove();
+ if(panel.open)panel.close();showScreen(test.previousView);const content=$('panel-content');$('panel-title').textContent=t('Мастерская');
+ mountWorkshop(content,{sprites:CHARACTER_SPRITES,backgrounds:BACKGROUNDS,nodes:NODES,chapters:CHAPTERS,start:START,initialScene:test.id,onTestScene:configureSceneTest,back:()=>{panel.close();openPanel('settings');}});panel.showModal();
 }
 function saveDescription(progress) {
   if(!progress)return 'Пока нет сохранения';
@@ -807,7 +835,7 @@ home();
 fitScene();
 refreshMusicControls();
 
-cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{saved=validateSave(input);state=structuredClone(saved);await writeSave(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
+cloud=new CloudProgress({getLocal:()=>saved,restore:async input=>{if(sceneTest)return;saved=validateSave(input);await writeSave(saved);state=structuredClone(saved);if(['game','messenger','ending'].includes(view))renderGame();else home();},changed:()=>{if($('panel-title').textContent===t('Мой прогресс')&&panel.open&&!$('account-auth-form'))requestAnimationFrame(()=>{if(panel.open&&$('panel-title').textContent===t('Мой прогресс'))openAccount();});}});
 cloud.refresh().then(()=>{if(new URL(location.href).searchParams.has('account')){history.replaceState(null,'',location.pathname);openAccount();}});
 
 // Reference links open the read-only workshop gate, never restore a scene into a save.

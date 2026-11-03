@@ -1,7 +1,7 @@
 import {unlockPreview} from './chapter-access.js?v=0.17.2';
-import { t, getLanguage } from './i18n.js?v=0.17.4';
+import { t, getLanguage } from './i18n.js?v=0.17.23';
 import { acceptsWorkshopCode, buildArtCatalog, EMOTIONS, CORE_EMOTIONS } from './workshop-model.js?v=0.17.2';
-import { mountStoryAtlas } from './story-atlas.js?v=0.17.4';
+import { mountStoryAtlas } from './story-atlas.js?v=0.17.23';
 
 const el = (tag, text, className) => {
   const node = document.createElement(tag);
@@ -53,7 +53,7 @@ function selectControl(label, options) {
   return select;
 }
 
-export async function mountWorkshop(container, { sprites, backgrounds, nodes, chapters, start, back, initialScene }) {
+export async function mountWorkshop(container, { sprites, backgrounds, nodes, chapters, start, back, initialScene, onTestScene }) {
   container.classList.add('workshop');
   const panel=container.closest('dialog')||document.getElementById('panel');
   panel?.classList.add('workshop-wide');
@@ -171,7 +171,7 @@ export async function mountWorkshop(container, { sprites, backgrounds, nodes, ch
     for(const b of nav.children){const active=b.dataset.view===view;b.dataset.active=String(active);b.setAttribute('aria-pressed',String(active));}
     toolbar.hidden=view==='story'||view==='gaps';person.hidden=!['characters','supporting'].includes(view);look.hidden=person.hidden;category.hidden=view!=='assets';
     renderPeople();results.replaceChildren();status.textContent='';more.hidden=true;
-    if(view==='story'){if(nodes&&chapters)mountStoryAtlas(results,{nodes,chapters,start,status,initialScene});else results.append(el('p',t('Карта сюжета недоступна в этой сборке.'),'ws-empty'));return;}
+    if(view==='story'){if(nodes&&chapters)mountStoryAtlas(results,{nodes,chapters,start,status,initialScene,onTestScene});else results.append(el('p',t('Карта сюжета недоступна в этой сборке.'),'ws-empty'));return;}
     if(view==='gaps'){renderCoverage();return;}
     filtered=filterWorkshopEntries(catalog.entries,{view,person:person.value,status:statusFilter.value,look:look.value,category:category.value,query:search.value,characterIds:(view==='supporting'?catalog.supporting:mainPeople).map(p=>p.id)},people,t);
     const page=paginateWorkshopEntries(filtered,limit);const grid=el('div','','ws-grid');for(const entry of page.items)grid.append(card(entry));results.append(grid);

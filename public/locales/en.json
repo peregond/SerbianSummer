@@ -6365,5 +6365,17 @@
   "УТРО · ВТРОЁМ": "MORNING · THREE",
   "Остаться вместе · подробная сцена": "Stay together · detailed scene",
   "ВЕЧЕР · ПОСЛЕ": "EVENING · AFTER",
-  "Человек в балаклаве отдыхает": "The masked person rests"
+  "Человек в балаклаве отдыхает": "The masked person rests",
+  "ВЕЧЕР · ВСТРЕЧА": "EVENING · MEETING",
+  "Вечерняя встреча": "An evening together",
+  "Запустить сцену": "Test scene",
+  "Тест сцены": "Scene test",
+  "Тест не изменяет сохранение. Выберите условия сцены.": "Testing does not change your save. Choose the scene settings.",
+  "Герой": "Player",
+  "Спутник": "Companion",
+  "Владелец квартиры": "Flat owner",
+  "Начать тест": "Start test",
+  "Вернуться в мастерскую": "Return to workshop",
+  "Установить на главный экран": "Install on the home screen",
+  "В Chrome открой меню ⋮ и выбери «Установить приложение» или «Добавить на главный экран». Затем запусти игру с новой иконки.": "In Chrome, open the ⋮ menu and choose “Install app” or “Add to Home screen”. Then launch the game from the new icon."
 }

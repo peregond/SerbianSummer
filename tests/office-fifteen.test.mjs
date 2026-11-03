@@ -53,7 +53,8 @@ test('portraits, messenger contacts, travel and all endings retain each personâ€
  for(const p of OFFICE_PEOPLE){
   const flags={routeOfficeContact_lazar:true,routeOfficeContact_teodora:true,routeOfficeContact_ivana:true,routeOfficeContact_strahinya:true,routeTravelWith:p.id,routeEndingWith:p.id,bankSpark:'other',mupSpark:'other'};
   const message=NODES['evening5_'+p.id+'_message'];assert.equal(messageAt('evening5_'+p.id+'_message',message,1,flags).contact,p.name);
-  const node=NODES['evening5_'+p.id];assert.equal(presentationFor(node,node.pages[0],flags).character,p.sprite);
+  const node=NODES['evening5_'+p.id],visual=presentationFor(node,node.pages[0],flags);
+  if(['teodora','ivana'].includes(p.id)){assert.equal(visual.character,null);assert.equal(visual.bg,`${p.id}-evening-arrival-v1`);}else assert.equal(visual.character,p.sprite);
   for(const day of [10,12]){
    const c=NODES[`route${day}_start`].choices.find(c=>c.effect.routeTravelWith===p.id);assert.ok(c&&choiceVisible(c,flags));
    const rest=NODES[`route${day}_rest`];assert.equal(pageText(rest.pages[0],flags),p.travel[0]);assert.equal(presentationFor(rest,rest.pages[0],flags).character,p.sprite);

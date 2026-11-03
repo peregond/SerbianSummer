@@ -41,4 +41,15 @@ export function integrateAdultEvenings({NODES,JOURNAL,BACKGROUNDS,n,scene}) {
    if(node){node.bg=art;node.portrait=false;}
   }
  }
+ // Original, fully clothed evening art is shared by all player profiles.
+ // Use composite backgrounds without a second portrait over the character.
+ for(const person of ['teodora','ivana','vuk']){
+  const poses=person==='vuk'?['soft']:['arrival','conversation','soft'];
+  for(const pose of poses){const art=`${person}-evening-${pose}-v1`;BACKGROUNDS[art]={label:T('ВЕЧЕР · ВСТРЕЧА','EVENING · MEETING'),description:T('Вечерняя встреча','An evening together'),file:art,position:'50% 35%',optional:true};}
+  for(let day=1;day<=15;day++)for(const [suffix,pose] of (person==='vuk'?[['_fade','soft']]:[['','arrival'],['_friend','conversation'],['_fade','soft']])){
+   const node=NODES[`evening${day}_${person}${suffix}`];if(!node)continue;
+   node.bg=`${person}-evening-${pose}-v1`;node.portrait=false;
+   for(const page of node.pages)page.portrait=false;
+  }
+ }
 }
