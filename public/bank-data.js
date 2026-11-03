@@ -5,6 +5,10 @@ import {T} from './flat-data.js?v=1';
 export const BANK_FLAG='bankRead';
 export const BANK_KEYS=['api','alta','adriatic','other'];
 export const GUIDE={
+  helperName:T('Волчонок Вучко','Vučko the wolf'),
+  helperHello:T('Привет! Я Вучко. Давай без сложных таблиц: выбери банк, а я расскажу, что взять с собой и о чём спросить.','Hi! I’m Vučko. Let’s skip the complicated tables: choose a bank and I’ll explain what to bring and what to ask.'),
+  helperSelected:T('Вот что стоит знать перед визитом. Условия могут измениться, поэтому лучше уточнить их в банке.','Here is what to know before your visit. Conditions can change, so it is best to check with the bank.'),
+  more:T('Подробнее о визите и проверках','More about the visit and checks'),
   title:T('Какой банк выбрать для счёта','Which bank to pick for an account'),
   badge:T('Игровая страница · по мотивам материалов SRB.GUIDE','Game page · inspired by the SRB.GUIDE material'),
   intro:T('Счёт нужен для оплаты жилья, связи и работы. В игре страница упрощена: условия меняются, а решение всегда принимает банк.','An account is needed for rent, phone service and work. The page is simplified for the game: conditions change, and the bank always makes the decision.'),

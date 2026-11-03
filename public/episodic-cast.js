@@ -1,5 +1,6 @@
 // Supporting roles have a base portrait, not a romance/emotion collection.
 export const EPISODIC_CAST={
+ 'guest-bank-helper':{name:'Борис',alt:'Борис в малиновом пиджаке'},
  'guest-bank-nevena':{name:'Невена',alt:'Невена'},
  'guest-bank-bogdan':{name:'Богдан',alt:'Богдан'},
  'guest-mom':{name:'Мама',alt:'Мама: женщина с седеющими каштановыми волосами в голубом кардигане'},
@@ -24,8 +25,6 @@ export const EPISODIC_AVATARS=Object.fromEntries(Object.entries(EPISODIC_CAST).m
 export const EPISODIC_STAGES=[
  ...['bank_visit','bank_documents','bank_cost'].flatMap(id=>[0,1,2].map(index=>[id,index,'guest-bank-staff','scene'])),
  ['bank_approved',2,'guest-bank-staff','scene'],
- ...[0,1].map(index=>['d3_o1',index,'guest-mobile-staff','scene']),
- ['d3_o2',0,'guest-kiosk-seller','scene'],
  ...[0,1].map(index=>['d3_m1',index,'guest-bakery-seller','scene']),
  ['d10_o3',1,'guest-translator','contact','На связи'],
  ...[0,1].map(index=>['d13_m1',index,'guest-support-operator','contact','Звонок']),

@@ -39,4 +39,13 @@ export function restartChapter(state,id,nodes){
  Object.assign(state,{node:mark.node,index:mark.index,flags:{...mark.flags},journal:[...mark.journal],log:state.log.slice(0,mark.logLength),rewind:[],completed:false});
  rememberChapter(state,nodes);return true;
 }
+// Developer jump preserves the current choices as a starting approximation. It
+// does not invent earlier events or erase the player's existing chapter marks.
+export function jumpToChapter(state,id,nodes){
+ const chapter=CHAPTERS.find(c=>c.id===id),node=chapter&&nodes[chapter.start];if(!node)return false;
+ state.node=chapter.start;state.index=0;state.flags={...state.flags,...(node.effectOnEnter??{})};
+ if(chapter.day&&!Object.hasOwn(node.effectOnEnter??{},'dayDone'))state.flags.dayDone=chapter.day-1;
+ state.journal=[...new Set([...state.journal,...(node.journal??[])])];state.rewind=[];state.completed=false;
+ rememberChapter(state,nodes);return true;
+}
 export function continuationFor(state){const done=dayProgress(state?.flags);return done>=DAYS.length?null:DAYS[done].start;}

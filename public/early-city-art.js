@@ -3,7 +3,7 @@
 import {EVENING_NODES} from './host-evening.js?v=0.17.2';
 
 export const EARLY_BACKGROUNDS = {
-  'belgrade-taxi-blocks-v1': {label:'БЕЛГРАД · БАЛКОНЫ', description:'Жилые дома с балконами и бельём на верёвке, вид из такси', position:'50% 42%'},
+  'belgrade-taxi-blocks-v2': {label:'БЕЛГРАД · БАЛКОНЫ', description:'Историческая улица Белграда с балконами и бельём, вид из такси', position:'50% 42%'},
   'belgrade-taxi-sava-glare-v1': {label:'БЕЛГРАД · САВА', description:'Бранков мост и слепящая река из окна машины', position:'50% 40%'},
   'belgrade-slavija-drive-v1': {label:'БЕЛГРАД · СЛАВИЯ', description:'Кольцо Славии с фонтаном, вид из машины', position:'50% 42%'},
   'skadarlija-evening-v1': {label:'БЕЛГРАД · СКАДАРЛИЯ', description:'Вечерняя брусчатка Скадарлии, кафе и фонари', position:'50% 46%'},
@@ -30,14 +30,15 @@ export function applyEarlyCityArt(nodes, backgrounds, sprites) {
   sprites['nikola-evening'].wave = {file:'nikola-evening-wave-buzz-v3', alt:'Никола после смены машет рукой'};
   sprites.asya.pointing = {file:'asya-pointing-v1', alt:'Ася показывает дорогу'};
   const arrival = {ana:'Ана с камерой на плече', stefan:'Стефан вытирает опилки с рук', marko:'Марко придерживает дверь', vuk:'Вук снимает наушники'};
-  const arrivalFile = {ana:'ana-camera-v1', stefan:'stefan-workshop-v1', marko:'marko-door-v1', vuk:'vuk-headphones-v1'};
+  const arrivalFile = {ana:'ana-camera-v1', stefan:'stefan-workshop-v1', marko:'marko-door-v1', vuk:'vuk-headphones-v2'};
   for (const id of Object.keys(arrival)) sprites[id].arrival = {file:arrivalFile[id], alt:arrival[id]};
+  sprites.vuk.coffee={file:'vuk-coffee-v1',alt:'Вук с чашкой кофе'};
   for (const mood of ['friendly','thoughtful','laughing','flirty']) {
     const look = {friendly:'тёплая улыбка', thoughtful:'слушает', laughing:'смеётся', flirty:'заинтересованный взгляд'}[mood];
     sprites.jelena['evening-'+mood] = {file:'jelena-stroll-'+mood+'-v1', alt:'Йелена вечером: '+look};
   }
 
-  nodes.road_start.pages[2].bg = 'belgrade-taxi-blocks-v1';
+  nodes.road_start.pages[2].bg = 'belgrade-taxi-blocks-v2';
   nodes.road_start.pages[3].bg = 'belgrade-taxi-sava-glare-v1';
   nodes.road_window.pages[2].bg = 'belgrade-slavija-drive-v1';
   paint(nodes, 'host_old_town', 'skadarlija-evening-v1');
@@ -58,6 +59,7 @@ export function applyEarlyCityArt(nodes, backgrounds, sprites) {
   nodes.flat_enter_stefan.pages[0].bg = 'dorcol-workshop-court-v1';
   nodes.flat_enter_marko.pages[0].bg = 'vracar-saint-sava-v1';
   nodes.flat_enter_vuk.pages[0].bg = 'new-belgrade-blocks-v1';
+  react(nodes.flat_enter_vuk.pages[0], {vuk:'arrival'});
   nodes.flat_move_day.pages.at(-1).bg = 'belgrade-waterfront-taxi-v1';
 
   react(nodes.nikola_directions.pages[1], {nikola:'guide'});

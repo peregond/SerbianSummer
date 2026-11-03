@@ -26,3 +26,7 @@ const voiced={...initial,log:[{speaker:'Анна',text:'Надо выдохну�
 assert.equal((await handleProgress(request(voiced),db,'voice-test')).status,200);
 const restoredVoice=await (await handleProgress(new Request('https://game.test/api/progress'),db,'voice-test')).json();
 assert.deepEqual(restoredVoice.progress.log.map(entry=>entry.voice),['thought','speech',undefined]);
+const chatEntry={speaker:'Ася',text:'Привет',voice:'message',chatContact:'Ася',chatDirection:'incoming',chatScene:'asya_test',chatTime:'09:05'};
+assert.equal((await handleProgress(request({...initial,log:[chatEntry]}),db,'chat-test')).status,200);
+const restoredChat=await (await handleProgress(new Request('https://game.test/api/progress'),db,'chat-test')).json();
+assert.deepEqual(restoredChat.progress.log[0],{...chatEntry,choice:false},'Cloud saves retain chat identity and ordering data');

@@ -43,7 +43,7 @@ export function extendHousing({NODES,JOURNAL}){
   Object.assign(JOURNAL,{
     flat_districts:{title:T('Три района','Three districts'),tag:T('ДЕНЬ 1 · КВАРТИРА','DAY 1 · THE FLAT'),text:T('Ася выбрала три района: Дорћол, Врачар и Новый Белград. Выбирать можно по настроению и без спешки: просмотр ничего не обещает.','Asya picked three districts: Dorćol, Vračar and New Belgrade. I can choose by mood and without rushing: a viewing promises nothing.')},
     flat_check:{title:T('Что видно только вживую','What only shows in person'),tag:T('ДЕНЬ 1 · КВАРТИРА','DAY 1 · THE FLAT'),text:T('Вода, окна и интернет проверены своими руками. Фотографии этого не показывали.','I checked the water, the windows and the internet with my own hands. The photographs did not show it.')},
-    flat_deal:{title:T('Квартира выбрана','A flat chosen'),tag:T('ДЕНЬ 1 · ДОГОВОР','DAY 1 · THE LEASE'),text:T('Договор прочитан, скидка обсуждена открыто, подпись и перевод залога сделаны по моему решению. Это условия этой вымышленной истории: в жизни залог, скидки и сроки у каждого хозяина свои, и их нужно проверять в договоре.','I read the lease, talked about the discount openly, and signed and paid the deposit on my own decision. These are the conditions of this fictional story: in real life the deposit, discounts and terms differ between landlords and must be checked in the lease.')},
+    flat_deal:{title:T('Квартира выбрана','A flat chosen'),tag:T('ДЕНЬ 1 · ДОГОВОР','DAY 1 · THE LEASE'),text:T('Договор прочитан, скидка обсуждена открыто, я подписал{a} договор и по своему решению передал{a} залог наличными. Это условия этой вымышленной истории: в жизни залог, скидки и сроки у каждого хозяина свои, и их нужно проверять в договоре.','I read the lease, talked about the discount openly, and chose to sign and pay the deposit in cash. These are the conditions of this fictional story: in real life the deposit, discounts and terms differ between landlords and must be checked in the lease.')},
     flat_home:{title:T('Новый адрес','A new address'),tag:T('ДЕНЬ 1 · ПЕРЕЕЗД','DAY 1 · MOVING'),text:T('Переехал{a} в свою квартиру. Ключ, роутер и чемодан на своих местах. Банк — завтра, сначала дом.','I moved into my own flat. The key, the router and the suitcase are in their places. The bank is tomorrow; home comes first.')}
   });
 
@@ -86,28 +86,30 @@ export function extendHousing({NODES,JOURNAL}){
     hub.location=T('БЕЛГРАД · ПРОСМОТР','BELGRADE · VIEWING');hub.districtBg=false;
     // While viewing, the bond is a generic flag; it becomes the landlord's own once the lease is signed.
     for(const [index,mode]of ['practical','friendship','romance'].entries())hub.choices[index].effect={rentalBond:mode};
+    hub.choices[2].label=T('Предложить выпить кофе на кухне','Suggest having coffee in the kitchen');
     for(const mode of ['terms','friends'])NODES[`rental_${mode}_${owner}`].next='flat_decision';
     NODES['rental_flirt_'+owner].next='flat_coffee';
+    NODES['rental_flirt_'+owner].bg='kitchen-common-layer-v1';NODES['rental_flirt_'+owner].districtBg=false;
     for(const mode of ['terms','friends','flirt']){const node=NODES[`rental_${mode}_${owner}`];node.location=T('БЕЛГРАД · ПРОСМОТР','BELGRADE · VIEWING');}
   }
 
-  // 3b. Coffee after the viewing: closeness is optional and always asked for aloud.
+  // 3b. Coffee during the viewing: closeness is optional and always asked for aloud.
   finish('flat_coffee',[
     N('Ася выходит позвонить, и мы остаёмся вдвоём за маленьким столом с двумя чашками кофе.','Asya steps out to make a call, and the two of us sit at a small table with two cups of coffee.'),
     H('Расскажи, что тебя сюда привело. Не по документам, а по-настоящему.','Tell me what brought you here. Not for the paperwork, but for real.'),
     P('Хотелось начать заново, и чтобы рядом было тепло. Но торопиться я не хочу.','I wanted to start again, with some warmth around me. But I do not want to rush.')
-  ],null,{time:'12:05',music:'encounter',choices:[
+  ],null,{time:'12:05',music:'encounter',bg:'kitchen-common-layer-v1',districtBg:false,choices:[
     choice('Спросить: «Можно взять тебя за руку? Если нет — так и скажи»','Ask: “May I take your hand? If not, just say so”','flat_coffee_warm','romance',{flatWarmth:2}),
     choice('Спокойно допить кофе и остаться на дружеской ноте','Quietly finish the coffee and keep things friendly','flat_coffee_calm','friendship',{flatWarmth:1})
   ]});
   finish('flat_coffee_warm',[
     H('Можно. И спасибо, что спросил{a} вслух.','Yes, you may. And thank you for asking aloud.'),
     N('Рука тёплая, пальцы чуть дрожат. Это ничего не обещает: мы просто посидели так минуту и отпустили.','The hand is warm and the fingers tremble a little. It promises nothing: we sat like that for a minute and let go.')
-  ],'flat_decision',{time:'12:10',music:'encounter',exitAction:tap('Вернуться к разговору о квартире','Return to talking about the flat')});
+  ],'flat_decision',{time:'12:10',music:'encounter',bg:'kitchen-common-layer-v1',districtBg:false,exitAction:tap('Вернуться к разговору о квартире','Return to talking about the flat')});
   finish('flat_coffee_calm',[
     H('Мне тоже спокойно. И спешить не будем.','I feel calm too. And we will not rush.'),
     N('Кофе остывает, разговор не торопится. Рядом оказывается человек, с которым легко молчать.','The coffee cools and the conversation takes its time. Beside me is someone it is easy to be quiet with.')
-  ],'flat_decision',{time:'12:10',exitAction:tap('Вернуться к разговору о квартире','Return to talking about the flat')});
+  ],'flat_decision',{time:'12:10',bg:'kitchen-common-layer-v1',districtBg:false,exitAction:tap('Вернуться к разговору о квартире','Return to talking about the flat')});
 
   // 4. Decision: take this one, see other districts, or the second Dorćol flat.
   const here=owner=>({all:[owned(owner)]});
@@ -161,7 +163,7 @@ export function extendHousing({NODES,JOURNAL}){
   finish('flat_contract',[
     N('Проект договора приходит файлом в чат. Я читаю пункт за пунктом и ставлю карандашные пометки на полях.','The draft lease arrives as a file in the chat. I read it point by point and make pencil notes in the margin.'),
     priced('districtHost',(owner,rent)=>fill(['Вот проект: {rent} евро в месяц, залог — один месячный платёж, срок — шесть месяцев с продлением, коммунальные по счётчикам. Подпишем, когда будешь готов{a}.','Here is the draft: {rent} euros a month, a deposit of one month’s payment, a six-month term with renewal, utilities by meter. We will sign when you are ready.'],rent),{message:true}),
-    AM('Сверь опись мебели и регистрацию проживания. Деньги переводи только после подписи и только сам{a}.','Check the furniture inventory and the residence registration. Transfer money only after signing, and only yourself.')
+    AM('Сверь опись мебели и регистрацию проживания. Передавай наличные только после подписи и попроси расписку.','Check the furniture inventory and the residence registration. Hand over cash only after signing and ask for a receipt.')
   ],null,{time:'12:50',choices:signChoices});
   finish('flat_questions',[
     P('Кто помогает с регистрацией проживания? И что будет, если я решу съехать раньше?','Who helps with the residence registration? And what happens if I decide to move out earlier?'),
@@ -170,8 +172,8 @@ export function extendHousing({NODES,JOURNAL}){
   ],null,{time:'12:55',choices:signChoices.filter(c=>c.next!=='flat_questions')});
   finish('flat_signed',[
     N('Ручка тяжёлая, как будто знает, что подпись останется надолго. Я подписываю оба экземпляра и отдаю один хозяину.','The pen is heavy, as if it knows the signature will stay for a while. I sign both copies and hand one to the host.'),
-    priced('districtHost',(owner,rent)=>fill(['Спасибо. Теперь залог: {rent} евро по реквизитам из договора. Переведи сам{a}, когда будешь готов{a}. Я пока подготовлю опись.','Thank you. Now the deposit: {rent} euros using the details in the lease. Transfer it yourself when you are ready. I will prepare the inventory meanwhile.'],rent)),
-    N('Деньги уйдут только после моего нажатия. Я проверяю сумму дважды.','The money leaves only after I tap. I check the amount twice.',{action:tap('Перевести залог самостоятельно','Transfer the deposit myself')})
+    priced('districtHost',(owner,rent)=>fill(['Спасибо. Теперь залог: {rent} евро наличными. Передай, когда будешь готов{a}; я напишу расписку и подготовлю опись.','Thank you. Now the deposit: {rent} euros in cash. Hand it over when you are ready; I will write a receipt and prepare the inventory.'],rent)),
+    N('Я пересчитываю наличные и проверяю сумму дважды. Передам залог лично и получу расписку.','I count the cash and check the amount twice. I will hand over the deposit in person and receive a receipt.',{action:tap('Передать залог наличными','Hand over the deposit in cash')})
   ],'flat_move_day',{time:'13:10',journal:['flat_deal'],effectOnEnter:{flatPick:true}});
 
   // 7. Moving: say goodbye to the temporary room, arrive, settle in.
@@ -192,14 +194,28 @@ export function extendHousing({NODES,JOURNAL}){
     N('Дверь новой квартиры открывается моим ключом. Он тяжелее ключа от временной комнаты.','The door of the new flat opens with my own key. It is heavier than the key to the temporary room.',{portrait:false}),
     H('Вот опись. Пройдём по комнатам: мебель, счётчики, ключи. Если что-то записано неверно, скажи, и исправим.','Here is the inventory. Let us walk through the rooms: furniture, meters, keys. If something is written wrongly, say so and we will correct it.'),
     {speaker:'ownerCounterpart',cameo:true,emotion:'friendly',text:T(...counterpartLines.ana),districtText:Object.fromEntries(Object.entries(counterpartLines).map(([owner,pair])=>[owner,T(...pair)]))},
-    AM('Поздравляю с новым адресом! Гид по банкам можно вечером, а в отделение — завтра. Сначала дом.','Congratulations on the new address! The bank guide can wait until evening, and the branch until tomorrow. Home comes first.'),
+    AM('Поздравляю с новым адресом! Для банка есть классный гайд Олега: там всё понятно. Или могу познакомить с Борисом — он помогает с банками, хотя продаёт свои услуги очень уж уверенно. Что выбираешь?','Congratulations on the new address! Oleg has a great bank guide: it explains everything clearly. Or I can introduce Boris, who helps with banks, though he is very confident when selling his services. Which would you prefer?',{action:{kind:'reply',label:T('Ответить Асе','Reply to Asya'),options:[choice('Покажи гайд Олега','Show me Oleg’s guide',null,'practical',{bankHelp:'guide'}),choice('Познакомь с Борисом','Introduce me to Boris',null,'personal',{bankHelp:'helper'})]}}),
     N('{districtHost} уходит, оставив мне ключи. Квартира впервые полностью моя.','{districtHost} leaves me the keys. The flat is entirely mine for the first time.')
   ],'flat_settle',{time:'15:20',exitAction:tap('Осмотреться в своей квартире','Look around my own flat')});
   finish('flat_settle',[
-    N('Чемодан раскрывается на кровати. Рубашки на плечики, документы в верхний ящик, зарядка к розетке у стола.','The suitcase opens on the bed. Shirts onto hangers, documents into the top drawer, the charger to the socket by the desk.'),
-    N('Роутер мигает зелёным. Я ввожу пароль, и телефон сообщает, что сеть теперь моя.','The router blinks green. I type the password and the phone says the network is mine now.'),
-    N('Над дверью появляется крючок для ключей. Сегодня у моих вещей впервые есть постоянные места.','A hook for keys goes up by the door. Today my things have permanent places for the first time.',{action:{kind:'checklist',label:T('Обустроиться в новой квартире','Settle into the new flat'),items:[T('Разобрать чемодан','Unpack the suitcase'),T('Подключить роутер','Connect the router'),T('Повесить ключ у двери','Hang the key by the door')],effect:{rentalContract:'yes',rentalMoved:true,chapterOneComplete:true},feedback:T('Теперь это мой дом.','This is my home now.')}})
-  ],'bank_plan',{time:'16:00',journal:['flat_home'],bg:'room-window',districtPortrait:false});
+    N('Чемодан ждёт посреди комнаты. Пора найти место вещам и наконец обжиться.','The suitcase waits in the middle of the room. It is time to find places for my things and settle in.'),
+    N('Роутер тоже ждёт своего часа. Осталось подключить его и проверить связь.','The router is waiting too. I just need to connect it and check the connection.'),
+    N('Осталось разобрать чемодан, подключить роутер и повесить ключ.','All that is left is to unpack the suitcase, connect the router and hang up the key.',{action:{kind:'checklist',label:T('Обустроиться в новой квартире','Settle into the new flat'),items:[T('Разобрать чемодан','Unpack the suitcase'),T('Подключить роутер','Connect the router'),T('Повесить ключ у двери','Hang the key by the door')],effect:{rentalContract:'yes',rentalMoved:true,chapterOneComplete:true},feedback:T('Теперь это мой дом.','This is my home now.')}})
+  ],'bank_path',{time:'16:00',journal:['flat_home'],bg:'room-window',districtPortrait:false});
+  finish('flat_registration',[
+    N('Перед банком мы с хозяином идём уточнить регистрацию проживания — тот самый «белый картон». Я беру паспорт и договор.','Before the bank, my host and I go to check my stay registration, the so-called white card. I take my passport and lease.'),
+    H('Пойдём вместе. Что именно потребуется в этом случае, уточним у сотрудника на месте.','Let’s go together. We will check with the officer what is needed in this case.'),
+    N('В отделении мы показываем документы и сверяем данные. Сотрудник объясняет, как подтвердить регистрацию по этому адресу.','At the office we show our documents and check the details. The officer explains how to confirm registration at this address.'),
+    N('Подтверждение регистрации у меня на руках. Я убираю его в папку с договором и благодарю хозяина за помощь.','I have the registration confirmation in hand. I put it in the folder with my lease and thank my host for helping.')
+  ],'bank_path',{time:'16:10',bg:'bank-consultation',districtBg:false,legacyOnly:true,exitAction:tap('Вернуться домой','Return home',{effect:{whiteCardDone:true}})});
+  const nextDay=CHAPTERS.find(c=>c.day===2);
+  finish('white_card_visit',[
+    N('На следующее утро после переезда мы с владельцем квартиры встречаемся у отделения полиции. У меня паспорт и договор; адрес будем сверять вместе.','The morning after moving, the flat owner and I meet at the police station. I have my passport and lease; we will check the address together.'),
+    H('Пойдём к окну вместе. Если сотруднику понадобится что-то ещё, спросим на месте.','Let’s go to the counter together. If the officer needs anything else, we will ask there.'),
+    N('За стеклом ждут бланк, стопка документов и штамп. Самое время проверить каждую строчку.','Behind the glass are a form, a stack of documents and a stamp. Time to check every line.',{action:tap('Оформить белый картон','Complete the white card',{quest:'white-card',effect:{whiteCardDone:true}})})
+  ],'bank_visit',{time:'09:00',day:'ДЕНЬ 2',chapterId:nextDay.id,chapter:nextDay.number+' · '+nextDay.title,bg:'police-station-break',districtBg:false,location:T('БЕЛГРАД · ОТДЕЛЕНИЕ ПОЛИЦИИ','BELGRADE · POLICE STATION'),exitAction:tap('Оформить белый картон','Complete the white card',{quest:'white-card',effect:{whiteCardDone:true}})});
+  // A graph-visible junction; bankRedirect follows the choice already made in chat.
+  finish('bank_path',[N('Пора разобраться с банковским счётом.','It is time to look into a bank account.')],null,{bg:'room-window',districtBg:false,districtPortrait:false,choices:[choice('Открыть гайд Олега','Open Oleg’s guide','bank_plan','practical'),choice('Встретиться с Борисом','Meet Boris','bank_helper','personal')]});
 }
 
 // Redirects for the new story version: the viewing path replaces the older one-step viewing,

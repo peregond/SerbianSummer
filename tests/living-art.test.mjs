@@ -50,7 +50,8 @@ canonical.district_map.choices=rentalChoices.slice(0,3).map(choice=>{const copy=
 for(const id of Object.keys(canonical))if(id.startsWith('rental_')||id.startsWith('flat_')||/^(adult_evening\d+_|evening\d+_|route4_group_)/.test(id))delete canonical[id];
 assert.equal(canonical.d20_nephew.pages[1].speaker,'host','Miloš remains related to the first host');
 canonical.d20_nephew.pages[1].speaker='districtHost';
-assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'87085f9faacdbe60e9ad7f4201389dcaee8e082de34fee97fe82f13e181459c7');
+// The merged baseline includes eight scenes that existed only on the live Site.
+assert.equal(createHash('sha256').update(JSON.stringify(canonical)).digest('hex'),'bb1aeb7dc0acbd3836f8bfce46f2e95af5bb383603081edcf245180c9c625013');
 assert.equal(STORY_VERSION,2);
 const files=JSON.parse(fs.readFileSync(new URL('../public/art-assets.json',import.meta.url)));
 const catalog=buildArtCatalog(files,CHARACTER_SPRITES,BACKGROUNDS);

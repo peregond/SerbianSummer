@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import {NODES,presentationFor} from '../public/story.js';
 const scene=(id,i,flags={})=>presentationFor(NODES[id],NODES[id].pages[i],flags);
+assert.notEqual(scene('nikola_phone',4).emotion,'phone');
+for(let i=5;i<NODES.nikola_phone.pages.length;i++)assert.equal(scene('nikola_phone',i).emotion,'phone','Nikola keeps the phone after taking it out');
+assert.equal(scene('quick_arrival',2).bg,'baggage-claim','The narration after Dragan’s chat stays in the airport');
 for(const id of ['nikola_daydream','nikola_dream_cream','nikola_dream_coffee']) {
   for(const page of NODES[id].pages) {
     const frame=presentationFor(NODES[id],page,{});

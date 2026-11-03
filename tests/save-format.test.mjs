@@ -10,6 +10,9 @@ bad({flags:Object.fromEntries(Array.from({length:MAX_FLAGS+1},(_,i)=>['f'+i,true
 bad({log:Array.from({length:MAX_LOG_RECORDS+1},()=>({speaker:'a',text:'b'}))});bad({log:[{speaker:'a'.repeat(101),text:'b'}]});bad({log:[{speaker:'a',text:'b'.repeat(4001)}]});
 assert.equal(normalizeProgress({...base,log:Array.from({length:MAX_LOG_RECORDS},()=>({speaker:'a',text:'b'}))}).log.length,MAX_LOG_RECORDS);
 assert.equal(normalizeProgress({...base,node:'end',index:42}).index,0,'A finished save always resumes at index 0');
+const message={speaker:'Ася',text:'Привет',voice:'message',chatContact:'Ася',chatDirection:'incoming',chatScene:'hello',chatTime:'09:05'};
+assert.deepEqual(normalizeProgress({...base,log:[message]}).log[0],{...message,choice:false},'Cloud save keeps conversation identity and time');
+assert.equal(normalizeProgress({...base,log:[{...message,chatContact:'x'.repeat(101)}]}).log[0].chatContact,undefined,'Oversized chat metadata is discarded');
 // Saves that were at the old limits stay valid.
 assert.equal(normalizeProgress({...base,flags:Object.fromEntries(Array.from({length:150},(_,i)=>['f'+i,true]))}).node,'quick_arrival');
 assert.ok(MAX_FLAGS>=150&&MAX_LOG_RECORDS>=1500);

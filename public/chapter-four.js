@@ -14,7 +14,7 @@ export function extendFourthChapter({NODES:N,JOURNAL:J,BACKGROUNDS:B,CHARACTER_S
   ['workshop-office',T('БЕЛГРАД · РАБОЧАЯ МАСТЕРСКАЯ','BELGRADE · SHARED WORKSPACE'),T('Небольшая рабочая мастерская с книжными полками, растениями и большим столом','A small shared workspace with bookshelves, plants and a large table')],
   ['belgrade-rain-cafe',T('БЕЛГРАД · КАФЕ ПОСЛЕ ДОЖДЯ','BELGRADE · CAFÉ AFTER THE RAIN'),T('Уютное кафе у мокрой белградской улицы, отражения фонарей и тёплый свет','A cosy café beside a wet Belgrade street, with reflected lamps and warm light')],
   ['zemun-cobbles-v1',T('ЗЕМУН · СТАРЫЕ УЛИЦЫ','ZEMUN · OLD STREETS'),T('Брусчатая улица старого Земуна, низкие дома и красные крыши','A cobbled street in old Zemun, low houses and red roofs')],
-  ['zemun-gardos-v1',T('ЗЕМУН · ГАРДОШ','ZEMUN · GARDOŠ'),T('Каменная башня на холме Гардош над крышами и Дунаем','The stone tower on Gardoš hill above the roofs and the Danube')],
+  ['zemun-gardos-v2',T('ЗЕМУН · ГАРДОШ','ZEMUN · GARDOŠ'),T('Каменная башня на холме Гардош над крышами и Дунаем','The stone tower on Gardoš hill above the roofs and the Danube')],
   ['zemun-quay-v1',T('ЗЕМУН · КЕЙ','ZEMUN · THE QUAY'),T('Променад на Дунае, ресторанные баржи и террасы у воды','The Danube promenade, restaurant barges and terraces by the water')]
  ])B[id]={label,description,position:'50% 42%'};
  for(const [id,name,look]of [
@@ -145,7 +145,7 @@ export function extendFourthChapter({NODES:N,JOURNAL:J,BACKGROUNDS:B,CHARACTER_S
    l(T('Её поставили, чтобы помнить тысячу лет. Отсюда Дунай похож на дорогу, а не на графу в анкете.','It was built to remember a thousand years. From here the Danube looks like a road, not a line on a form.')),
    a(T('Только не делай из этого метафору про разрешение на проживание. Просто смотри.','Just do not turn this into a metaphor about a residence permit. Simply look.')),
    y(T('Смотрю. Впервые за день город больше моего списка.','I am looking. For the first time today the city is bigger than my list.'))
-  ],'zemun_quay',{bg:'zemun-gardos-v1',location:T('ЗЕМУН · ГАРДОШ','ZEMUN · GARDOŠ'),time:'13:40',exitAction:out(T('Спуститься к Дунаю','Go down to the Danube'))}),
+  ],'zemun_quay',{bg:'zemun-gardos-v2',location:T('ЗЕМУН · ГАРДОШ','ZEMUN · GARDOŠ'),time:'13:40',exitAction:out(T('Спуститься к Дунаю','Go down to the Danube'))}),
   zemun_quay:s([
    n(T('Внизу на кее Дунай широкий. Вдоль прогулки стоят рестораны и баржи с уже накрытыми столами.','Down on the quay the Danube is wide. Restaurants and barges with tables already laid line the walk.')),
    a(T('Кафе — одна из этих террас. Если сядем раньше неба, стол будет наш.','The café is one of these terraces. If we sit down before the sky does, the table is ours.')),

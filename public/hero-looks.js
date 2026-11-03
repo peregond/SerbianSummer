@@ -1,19 +1,19 @@
-// Preset looks for the player's hero: five per gender, drawn as simple vector busts until real portraits exist.
+// Preset looks for the player: five illustrated portraits per gender.
 // To switch a look to an illustration, put the file in public/assets/heroes/ and set its `image` (see artwork/hero-looks/PROMPTS.json).
 export const LOOKS={
  male:[
-  {id:'m1',label:'Короткая стрижка',skin:'#f1c9a5',hair:'#2f2a28',top:'#4a6fa5',style:'short',image:null},
-  {id:'m2',label:'Волнистые волосы',skin:'#e0ac7e',hair:'#6b4423',top:'#2f7d6d',style:'wavy',image:null},
-  {id:'m3',label:'Светлые волосы',skin:'#f6d7bd',hair:'#d6b25e',top:'#c0442d',style:'buzz',image:null},
-  {id:'m4',label:'Борода',skin:'#c68d63',hair:'#1f1b1a',top:'#6a5a8c',style:'short',beard:true,image:null},
-  {id:'m5',label:'Кудри',skin:'#8a5a3c',hair:'#141010',top:'#d9a441',style:'curly',image:null}
+  {id:'m1',label:'Короткая стрижка',skin:'#f1c9a5',hair:'#2f2a28',top:'#4a6fa5',style:'short',image:'hero-m1.webp'},
+  {id:'m2',label:'Волнистые волосы',skin:'#e0ac7e',hair:'#6b4423',top:'#2f7d6d',style:'wavy',image:'hero-m2.webp'},
+  {id:'m3',label:'Светлые волосы',skin:'#f6d7bd',hair:'#d6b25e',top:'#c0442d',style:'buzz',image:'hero-m3.webp'},
+  {id:'m4',label:'Борода',skin:'#c68d63',hair:'#1f1b1a',top:'#6a5a8c',style:'short',beard:true,image:'hero-m4.webp'},
+  {id:'m5',label:'Кудри',skin:'#8a5a3c',hair:'#141010',top:'#d9a441',style:'curly',image:'hero-m5.webp'}
  ],
  female:[
-  {id:'f1',label:'Длинные волосы',skin:'#f1c9a5',hair:'#2b2220',top:'#c0442d',style:'long',image:null},
-  {id:'f2',label:'Каре',skin:'#e8b992',hair:'#8a3b24',top:'#4a6fa5',style:'bob',image:null},
-  {id:'f3',label:'Пучок',skin:'#f6d7bd',hair:'#d8b868',top:'#2f7d6d',style:'bun',image:null},
-  {id:'f4',label:'Кудри',skin:'#8a5a3c',hair:'#141010',top:'#8a5ca8',style:'curly',image:null},
-  {id:'f5',label:'Хвост',skin:'#d6a37a',hair:'#5a3a22',top:'#e08a3c',style:'ponytail',image:null}
+  {id:'f1',label:'Длинные волосы',skin:'#f1c9a5',hair:'#2b2220',top:'#c0442d',style:'long',image:'hero-f1.webp'},
+  {id:'f2',label:'Каре',skin:'#e8b992',hair:'#8a3b24',top:'#4a6fa5',style:'bob',image:'hero-f2.webp'},
+  {id:'f3',label:'Пучок',skin:'#f6d7bd',hair:'#d8b868',top:'#2f7d6d',style:'bun',image:'hero-f3.webp'},
+  {id:'f4',label:'Кудри',skin:'#8a5a3c',hair:'#141010',top:'#8a5ca8',style:'curly',image:'hero-f4.webp'},
+  {id:'f5',label:'Хвост',skin:'#d6a37a',hair:'#5a3a22',top:'#e08a3c',style:'ponytail',image:'hero-f5.webp'}
  ]
 };
 export const lookFor=(gender,id)=>(LOOKS[gender]??[]).find(look=>look.id===id)??null;

@@ -1,4 +1,11 @@
 import {t} from './i18n.js?v=0.17.23';
+// A presentation step before the narration; the saved story page stays unchanged.
+export const ARRIVAL_PHONE_TEXT='Вот наш подъезд. Комната забронирована для вас. Напишите, когда будете рядом — встречу с ключами.';
+export const ARRIVAL_PHONE_PHOTO={src:'./assets/courtyard-door.webp',alt:'Фотография подъезда от Драгана'};
+export function arrivalPhoneFrame(){return {
+ contact:'Драган',hideAvatar:true,time:'',messages:[{direction:'incoming',text:ARRIVAL_PHONE_TEXT,photo:ARRIVAL_PHONE_PHOTO,isNew:true}],
+ draft:null,replies:[],physicalAction:false,delayedPhoto:null
+};}
 // A visual insert only: the original narration, baggage action and save index stay in place.
 export function renderArrivalPhone(scene,nodeId,index){
  let card=scene.querySelector('.arrival-phone');

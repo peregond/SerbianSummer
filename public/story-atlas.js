@@ -489,7 +489,6 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
   fitBtn.onclick=()=>centerOn(selected);
 
   schemaViewport.addEventListener('pointerdown',event=>{
-    if(event.target.closest('.story-atlas-node'))return;
     dragging=true;
     dragOrigin={x:event.clientX-panX,y:event.clientY-panY};
     schemaViewport.classList.add('is-panning');
@@ -512,6 +511,7 @@ export function mountStoryAtlas(container,{nodes,chapters,start,status,initialSc
       event.preventDefault();
       setZoom(scale+(event.deltaY>0?-0.08:0.08));
     }else{
+      event.preventDefault();
       panX-=event.deltaX;
       panY-=event.deltaY;
       applyPan();

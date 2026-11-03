@@ -1,7 +1,11 @@
+import {mountCoinCatch} from './coin-catch.js?v=0.17.23';
+import {mountFlatSettleQuest} from './flat-settle-quest.js?v=0.17.23';
+import {mountWhiteCard} from './white-card.js?v=0.17.23';
+import {arrivalPhoneFrame,ARRIVAL_PHONE_TEXT} from './arrival-phone.js?v=0.17.23';
 import {mountPixelTram} from './pixel-tram.js?v=0.17.23';
 import {rentalRedirect} from './rental-story.js?v=0.17.2';
 import {RENTAL_NAMES,rentalOwner,rentalCounterpart} from './rental-people.js?v=0.17.2';
-import {chapterAvailable,hasPreviewAccess} from './chapter-access.js?v=0.17.2';
+import {chapterAvailable,hasPreviewAccess,hasChapterDebugAccess} from './chapter-access.js?v=0.17.2';
 import {renderHomeHero} from './home-hero.js?v=0.17.2';
 import {renderEpisodeContact} from './episode-contact.js?v=0.17.23';
 import {familySpeaker,familyText} from './family-contact.js?v=1';
@@ -24,7 +28,7 @@ import {cueFor} from './music-cues.js?v=0.17.2';
 import {ambienceFor,stingFor} from './sound-cues.js?v=0.17.2';
 import {setAmbience,playSting} from './sfx.js?v=0.17.2';
 import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.17.2';
-import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,continuationFor} from './chapters.js?v=0.17.2';
+import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,jumpToChapter,continuationFor} from './chapters.js?v=0.17.2';
 import {drawBeatAction} from './beat-action.js?v=0.17.23';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.23';
 import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.23';
@@ -45,14 +49,15 @@ import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.17.2';
 import {appendChoiceContents} from './choice-ui.js?v=0.17.23';
 import {mountBaggageInteraction} from './interaction.js?v=0.17.2';
-import {APP_VERSION} from './release.js?v=0.17.23';
+import {APP_VERSION} from './release.js?v=0.17.24';
+import {startUpdateChecks} from './update-check.js?v=0.17.24';
 
 const $ = id => document.getElementById(id);
 let translationsReady=false;
 try{await initialiseLanguage();translationsReady=true;}catch{setLanguage('ru');}
 const applyStaticLanguage=captureStaticUi(document);
 applyStaticLanguage();
-function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION);});}
+function updateLanguageUi(){document.documentElement.lang=getLanguage();document.querySelector('link[rel=manifest]').href=getLanguage()==='en'?'./manifest.en.webmanifest':'./manifest.webmanifest';document.title=t('Сербское лето — начало истории');markActiveLanguage(document,getLanguage());document.querySelectorAll('[data-app-version]').forEach(label=>{label.textContent=APP_VERSION;label.setAttribute('aria-label',t('Версия ')+APP_VERSION+' · '+t('История обновлений'));label.title=t('История обновлений');});}
 updateLanguageUi();
 const catalog = await fetch('./names.json').then(r => { if(!r.ok) throw new Error('Не удалось загрузить имена'); return r.json(); });
 const settings = readLocal('settings', { textSize:18, music:false, volume:.55 });
@@ -83,6 +88,11 @@ function setPanelTools(items){panelTools.replaceChildren(...panelToolButtons(ite
 let cloud,authMode='login',recoveryCodeOnce=null;
 let toastTimer;
 let interactionDispose=null,messengerDispose=null,roomDispose=null,questDispose=null;
+let arrivalPhoneNarration=false;
+const ASYA_FIRST_THOUGHT='Вот и Ася, которая помогала мне с переездом. Интересно наконец увидеть её вживую: тёмная одежда, небрежные волосы — настоящий петербургский альтернативный образ.';
+const CHAT_SWITCH_THOUGHT='Я закрываю переписку и вижу новое сообщение от Аси.';
+const showChatSwitchThought=()=>state?.node==='chapter_four_close'&&state.index===2&&!state.flags.chapterFourChatTransition;
+const showAsyaFirstThought=()=>/^flat_enter_(ana|stefan|marko|vuk)$/.test(state?.node??'')&&state.index===4&&!state.flags.asyaInPerson&&((state.flags.flatQuest??0)&15).toString(2).replaceAll('0','').length<=1;
 let lastChapterId=null,wantCard=false,cardContext=null,lastStingNode=null;
 // A line longer than the dialogue box is shown in several screens: textChunks, the one on view is chunkIndex.
 let textChunks=[''],chunkIndex=0,chunkKey='',chunkWidth=0,showLastChunk=false;
@@ -308,7 +318,7 @@ function speakerName(page,locale=getLanguage()) {
   return t(familySpeaker(oldHost?names.host:(names[page.speaker]??page.speaker)),locale);
 }
 function currentPage() {return NODES[state.node].pages[state.index];}
-function recordPage() {const page=currentPage();state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:messageAt(state.node,NODES[state.node],state.index,state.flags)?'message':dialogueVoice(page)});}
+function recordPage() {const page=currentPage(),chat=messageAt(state.node,NODES[state.node],state.index,state.flags);state.log.push({speaker:speakerName(page,'ru'),text:interpolate(pageText(page,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:chat?'message':dialogueVoice(page),...(chat?{chatContact:chat.contact,chatDirection:chat.direction,chatScene:state.node,chatTime:chat.time,chatIndex:state.index,chatKind:'page'}:{})});}
 function enterNode(id) {
   id=rentalRedirect(state?.node,id,state?.flags);
   // Intimate scenes are an option: with adult scenes switched off the story simply moves on to the morning.
@@ -336,32 +346,47 @@ function renderGame({skipMessenger=false}={}) {
   if(!sceneTest&&!chapterAvailable(chapterFor(state,NODES),hasPreviewAccess()))return showChapterLock();
   if(state.node==='end')return renderEnding();
   rememberChapter(state,NODES,true);
-  const node=NODES[state.node],page=currentPage();
+  const node=NODES[state.node],asyaIntro=showAsyaFirstThought(),chatTransition=showChatSwitchThought(),page=asyaIntro?{speaker:'narrator',text:ASYA_FIRST_THOUGHT,character:'asya',emotion:'friendly'}:chatTransition?{speaker:'narrator',text:CHAT_SWITCH_THOUGHT}:currentPage();
+  const presentation=presentationFor(node,page,state.flags,state.profile);
+  const soundScene={...node,bg:presentation.bg,time:presentation.time};
+  setMusicScene(cueFor(soundScene));setAmbience(ambienceFor(soundScene));
+  if(state.node!=='quick_arrival'||state.index!==2)arrivalPhoneNarration=false;
   if(state.node==='keys_room'&&state.index===3)return openRoomInteraction();
+  if(state.node==='flat_settle'&&state.index===2)return openFlatSettleQuest();
+  if(state.node==='host_terrace'&&state.index===node.pages.length-1)return openMealMenu();
   if(node.map)return openDistrictMap();
+  if(page.action?.quest==='coin-catch')return openCoinCatch();
+  if(page.action?.quest==='white-card')return openWhiteCard();
   if(page.action?.quest==='pixel-tram')return openPixelTram();
   if(page.action?.quest==='viewing')return openViewingQuest();
   if(page.action?.quest==='bank-guide')return openBankGuide();
   if(state.node==='night_messages'&&state.index===4)return openRoomInteraction('bedtime');
   const chapter=chapterFor(state,NODES);
   const cardWanted=wantCard,previousChapter=lastChapterId;wantCard=false;lastChapterId=chapter.id;
-  setMusicScene(cueFor(node));setAmbience(ambienceFor(node));
   if(state.node!==lastStingNode){lastStingNode=state.node;const sting=stingFor(state.node);if(sting)playSting(sting);}
-  const frame=!skipMessenger&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
+  if(state.node==='quick_arrival'&&state.index===2&&!arrivalPhoneNarration){
+    showScreen('messenger');messengerDispose=mountMessenger($('messenger'),arrivalPhoneFrame(),{
+      canRewind:!!state.rewind?.length,onBack:goBack,onMenu:()=>openPanel('game-menu'),onSettings:()=>openPanel('settings'),onSend:()=>false,
+      onContinue:()=>{arrivalPhoneNarration=true;if(!state.log.some(entry=>entry.chatPhoto==='arrival-door')){state.log.push({speaker:'Драган',text:ARRIVAL_PHONE_TEXT,choice:false,voice:'message',chatContact:'Драган',chatDirection:'incoming',chatScene:'arrival-phone',chatPhoto:'arrival-door'});save();}renderGame();}
+    });return;
+  }
+  const frame=!skipMessenger&&!chatTransition&&messengerFrame({sceneId:state.node,node,index:state.index,flags:state.flags,journal:state.journal,log:state.log,historyText:value=>translateHistory(familyText(value),state.profile,catalog),profile:state.profile,action:beatActionAt(node,state.index),text:p=>t(interpolate(pageText(p,state.flags),state.profile,catalog)),choiceText:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog)});
   if(frame){
     renderMessenger(frame);
     if(cardWanted&&previousChapter&&(previousChapter!==chapter.id&&state.node===chapter.start&&state.index===0||previousChapter!==chapter.id&&state.node==='rental_day_'+chapter.day&&state.index===0))showChapterCard(CHAPTERS.find(c=>c.id===previousChapter),chapter);
     return;
   }
   showScreen('game');
-  const presentation=presentationFor(node,page,state.flags,state.profile);
   const sceneElement=$('scene');
-  renderArrivalPhone(sceneElement,state.node,state.index);
   sceneElement.style.backgroundImage=`url('./assets/${presentation.bg}.webp')`;
   sceneElement.style.backgroundPosition=presentation.position;
   sceneElement.dataset.background=presentation.bg;
   sceneElement.classList.toggle('is-daydream',presentation.daydream);
+  let carrierSign=sceneElement.querySelector('.carrier-sign');
+  if(node.carrierBrand&&!carrierSign){carrierSign=document.createElement('div');carrierSign.className='carrier-sign';sceneElement.append(carrierSign);}
+  if(carrierSign){carrierSign.hidden=!node.carrierBrand;carrierSign.textContent=node.carrierBrand??'';carrierSign.dataset.carrier=(node.carrierBrand??'').toLowerCase();}
   sceneElement.classList.toggle('is-night',node.lighting==='night');
+  sceneElement.classList.toggle('dragan-date',node.lighting==='night'&&(state.flags.host??'dragan')==='dragan'&&EVENING_NODES.includes(state.node));
   sceneElement.classList.toggle('is-map',!!node.map);
   sceneElement.classList.toggle('is-insert',presentation.insert);
   sceneElement.classList.toggle('is-seated',presentation.seated);
@@ -403,14 +428,14 @@ function renderGame({skipMessenger=false}={}) {
   $('voice-label').hidden=!$('voice-label').textContent;
   const text=$('dialogue-text');text.classList.toggle('message',!!page.message);
   const full=t(interpolate(pageText(page,state.flags),state.profile,catalog));
-  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0].join('|');
+  const key=[state.node,state.index,getLanguage(),settings.textSize,text.clientWidth,page.message?1:0,asyaIntro?1:0].join('|');
   const fresh=key!==chunkKey;
   if(fresh){chunkKey=key;chunkWidth=text.clientWidth;textChunks=splitToFit(full,candidate=>{text.textContent=candidate;return text.scrollHeight<=text.clientHeight+1;});chunkIndex=showLastChunk?textChunks.length-1:0;}
   showLastChunk=false;chunkIndex=Math.min(chunkIndex,textChunks.length-1);text.textContent=textChunks[chunkIndex];
   // choices and actions wait for the last screen of the line
   const lastChunk=chunkIndex===textChunks.length-1;
   const isChoice=lastChunk&&state.index===node.pages.length-1&&!!node.choices;
-  const action=lastChunk?beatActionAt(node,state.index):null;
+  const action=lastChunk&&!asyaIntro?beatActionAt(node,state.index):null;
   const inlineAction=!!action&&action.kind!=='tap';
   $('game').classList.toggle('has-beat',inlineAction);
   drawBeatAction($('beat-action'),$('beat-hotspots'),action,{text:value=>interpolate(resolveStoryText(value,state.flags),state.profile,catalog),perform:performBeat,tones:CHOICE_TONES,node,flags:state.flags});
@@ -508,7 +533,8 @@ function renderMessenger(frame) {
     onMenu:()=>openPanel('game-menu'),
     onSettings:()=>openPanel('settings'),
     onSend:reply=>{
-      const ok=reply?(frame.replyKind==='inline'?advance({render:false,message:reply.option.label}):frame.replyKind==='action'?performBeat(reply.option,{render:false}):choose(reply.option,{render:false})):advance({render:false});
+      const chat=reply?{contact:frame.contact,text:state.node==='courtyard_arrival'&&state.index===2?(reply.option.next==='meet_dragan'?'Подожду вас во дворе. До встречи!':'Тогда попрошу Йелену встретить меня сейчас. Спасибо!'):reply.option.chatText??reply.option.label}:null;
+      const ok=reply?(frame.replyKind==='inline'?advance({render:false,message:reply.option.label,chat}):frame.replyKind==='action'?performBeat(reply.option,{render:false,chat}):choose(reply.option,{render:false,chat})):advance({render:false});
       committed=!!ok;return committed;
     },
     onContinue:()=>{
@@ -530,25 +556,57 @@ function fitScene() {
     if(!$('scene-cg').hidden)positionArtwork($('scene-cg'),$('scene'),currentArtFrame,{top:parseFloat(getComputedStyle(document.querySelector('.game-header')).paddingTop)+2,bottom:8,left:8,right:8});
   });
 }
-function advance({render=true,message=null}={}) {
+function advance({render=true,message=null,chat=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   // a long line goes on to its next screen first
   if(view==='game'&&chunkIndex<textChunks.length-1){chunkIndex++;if(render)renderGame();return true;}
+  if(view==='game'&&showAsyaFirstThought()){
+    rememberStep(state);state.flags.asyaInPerson=true;
+    state.log.splice(Math.max(0,state.log.length-1),0,{speaker:speakerName({speaker:'narrator'},'ru'),text:ASYA_FIRST_THOUGHT,choice:false,voice:'thought'});
+    save();if(render)renderGame();return true;
+  }
+  if(view==='game'&&showChatSwitchThought()){
+    rememberStep(state);state.flags.chapterFourChatTransition=true;
+    state.log.splice(Math.max(0,state.log.length-1),0,{speaker:speakerName({speaker:'narrator'},'ru'),text:CHAT_SWITCH_THOUGHT,choice:false,voice:'thought'});
+    save();if(render)renderGame();return true;
+  }
   const node=NODES[state.node];
   const action=beatActionAt(node,state.index);
   if(action?.kind==='tap')return action.interaction==='baggage'?openBaggage():performBeat({}, {render});
   if((state.index===node.pages.length-1&&node.choices)||action)return;
   rememberStep(state);
-  if(message)state.log.push({speaker:speakerName({speaker:'player'},'ru'),text:interpolate(resolveStoryText(message,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:'message'});
+  if(message)state.log.push({speaker:speakerName({speaker:'player'},'ru'),text:interpolate(resolveStoryText(message,state.flags,'ru'),state.profile,catalog,'ru'),choice:false,voice:'message',chatContact:chat?.contact,chatDirection:'outgoing',chatScene:state.node,chatIndex:state.index,chatKind:'reply'});
   transitionLock=true;setTimeout(()=>transitionLock=false,120);
-  if(state.index<node.pages.length-1)state.index++;
+  if(state.index<node.pages.length-1)state.index=visibleMessagePage(state.node,state.index+((state.node==='afternoon_invite'&&state.index===0&&state.flags.eveningIntroShown)?2:1));
   else enterNode(node.next);
   if(state.node!=='end')recordPage();
   wantCard=true;save();if(render)renderGame();return true;
 }
 function openRoomInteraction(mode='arrival'){
+  const maskKey=mode==='bedtime'?'nightSettlingMask':'roomSettlingMask', versionKey=mode==='bedtime'?'nightQuestVersion':'roomQuestVersion';
+  if(!state.flags[versionKey]){if(state.flags[maskKey]===7)state.flags[maskKey]=0;state.flags[versionKey]=2;save();}
   showScreen('room-interaction');
-  roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});toast(mode==='bedtime'?'Всё готово ко сну.':'Теперь можно выдохнуть. Всё на своих местах.');}});
+  roomDispose=mountRoomInteraction($('room-interaction'),{mode,mask:state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags[mode==='bedtime'?'nightSettlingMask':'roomSettlingMask']=mask;save();},onComplete:()=>{showScreen('game');performBeat({effect:mode==='bedtime'?{nightSettlingMask:7}:{roomSettlingMask:7}});}});
+}
+function openCoinCatch(){
+  showScreen('scene-quest');
+  questDispose=mountCoinCatch($('scene-quest'),{gender:state.profile.gender,losses:state.flags.coinGameLosses??0,onLoss:count=>{state.flags.coinGameLosses=count;save();},canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),isPaused:()=>panel.open,onComplete:()=>{showScreen('game');performBeat();}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openWhiteCard(){
+  showScreen('scene-quest');
+  questDispose=mountWhiteCard($('scene-quest'),{owner:state.flags.districtOwner,step:state.flags.whiteCardStep??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:step=>{state.flags.whiteCardStep=step;save();},onComplete:()=>{showScreen('game');performBeat();}});
+  $('scene-quest-title').focus({preventScroll:true});
+}
+function openFlatSettleQuest(){
+  showScreen('room-interaction');
+  roomDispose=mountFlatSettleQuest($('room-interaction'),{district:state.flags.district??'dorcol',mask:state.flags.flatSettleMask??0,canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{state.flags.flatSettleMask=mask;save();},onComplete:()=>{showScreen('game');performBeat();}});
+}
+function openMealMenu(){
+  showScreen('scene-quest');
+  const node=NODES[state.node];
+  questDispose=mountMealMenu($('scene-quest'),{choices:node.choices.filter(choice=>choiceVisible(choice,state.flags,state.profile)),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChoose:choice=>choose(choice)});
+  $('scene-quest-title').focus({preventScroll:true});
 }
 function openDistrictMap(){
   showScreen('scene-quest');
@@ -563,7 +621,7 @@ function openPixelTram(){
 }
 function openViewingQuest(){
   showScreen('scene-quest');
-  questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat({feedback:'Осмотр закончен.'});}});
+  questDispose=mountViewingQuest($('scene-quest'),{owner:state.flags.districtOwner,mask:viewMaskOf(state.flags),canRewind:!!state.rewind?.length,onBack:goBack,onSettings:()=>openPanel('settings'),isPaused:()=>panel.open,onChange:mask=>{setViewMask(state.flags,mask);save();},onComplete:()=>{showScreen('game');performBeat();}});
   $('scene-quest-title').focus({preventScroll:true});
 }
 function openBankGuide(){
@@ -594,26 +652,25 @@ function applyEffects(effect={}) {
   if(effect.rentalStep&&rentalOwner(state.flags)){state.flags['rentalStep_'+rentalOwner(state.flags)]=effect.rentalStep;delete state.flags.rentalStep;}
   applyRomanceEffect(state.flags,effect);
 }
-function performBeat(option={}, {render=true}={}) {
+function performBeat(option={}, {render=true,chat=null}={}) {
   if(!['game','messenger'].includes(view)||panel.open||transitionLock)return false;
   const node=NODES[state.node],action=beatActionAt(node,state.index);if(!action)return;
   rememberStep(state);transitionLock=true;setTimeout(()=>transitionLock=false,160);
   const label=option.label??action.label;
-  state.log.push({speaker:'Действие',text:interpolate(resolveStoryText(label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
+  state.log.push({speaker:'Действие',text:interpolate(resolveStoryText(label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true,...(chat?{voice:'message',chatContact:chat.contact,chatDirection:'outgoing',chatScene:state.node,chatText:interpolate(resolveStoryText(chat.text,state.flags,'ru'),state.profile,catalog,'ru')}:{})});
   applyEffects(action.effect);applyEffects(option.effect);
   for(const entry of action.journal??[])if(!state.journal.includes(entry))state.journal.push(entry);
   if(option.next??action.next)enterNode(option.next??action.next);
   else if(state.index<node.pages.length-1)state.index++;
   else enterNode(node.next);
   if(state.node!=='end')recordPage();wantCard=true;save();if(render)renderGame();
-  if(option.feedback??action.feedback)toast(option.feedback??action.feedback);
   return true;
 }
-function choose(choice, {render=true}={}) {
+function choose(choice, {render=true,chat=null}={}) {
   if(transitionLock||panel.open||!['game','messenger','scene-quest'].includes(view)||!choiceVisible(choice,state.flags,state.profile))return false;
   rememberStep(state);
   transitionLock=true;setTimeout(()=>transitionLock=false,160);
-  state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true});
+  state.log.push({speaker:'Твой выбор',text:interpolate(resolveStoryText(choice.label,state.flags,'ru'),state.profile,catalog,'ru'),choice:true,...(chat?{voice:'message',chatContact:chat.contact,chatDirection:'outgoing',chatScene:state.node,chatText:interpolate(resolveStoryText(chat.text,state.flags,'ru'),state.profile,catalog,'ru')}:{})});
   applyEffects(choice.effect);enterNode(choice.next);recordPage();wantCard=true;save();if(render)renderGame();return true;
 }
 function renderEnding() {
@@ -656,7 +713,7 @@ function openChapters() {
   $('panel-title').textContent=t('Главы');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
   const current=source?chapterFor(source,NODES):null;
-  drawChapterMap(content,{chapters:CHAPTERS,source,current,isAvailable:chapter=>chapterAvailable(chapter,hasPreviewAccess()),onSelect:chapter=>confirmChapter(chapter,source)});
+  drawChapterMap(content,{chapters:CHAPTERS,source,current,debugAccess:hasChapterDebugAccess(),isAvailable:chapter=>chapterAvailable(chapter,hasPreviewAccess()),onSelect:chapter=>confirmChapter(chapter,source)});
   panel.classList.add('chapter-map');panel.showModal();
   requestAnimationFrame(()=>{const active=content.querySelector('[aria-current="step"]');if(active)active.scrollIntoView({block:'center'});else content.scrollTop=0;});
 }
@@ -665,10 +722,11 @@ function confirmChapter(chapter,source){
   panel.classList.remove('chapter-map');
   $('panel-title').textContent=t('Вернуться к главе?');
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
-  const p=document.createElement('p');p.className='confirm-copy';p.textContent=t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
+  const debug=hasChapterDebugAccess();
+  const p=document.createElement('p');p.className='confirm-copy';p.textContent=debug?t('Режим проверки: переход изменит текущее сохранение. Прежние выборы сохранятся, но пропущенные события не будут разыграны. Для возврата сначала скачай текущую историю.'):t(chapter.number+' · '+chapter.title+'. Вернёмся к сохранённой точке главы. Выборы до неё сохранятся. Последующие события и отношения нужно будет пройти заново. Текущую историю можно сначала скачать.');
   const actions=document.createElement('div');actions.className='confirm-actions';
   const start=document.createElement('button');start.className='primary';start.textContent=t('Перейти к главе');start.addEventListener('click',()=>{
-    const restored=structuredClone(source);if(!restartChapter(restored,chapter.id,NODES))return;
+    const restored=structuredClone(source);if(!(debug?jumpToChapter(restored,chapter.id,NODES):restartChapter(restored,chapter.id,NODES)))return;
     state=restored;recordPage();save();panel.close();if(settings.music)applyMusic(true);pendingLabel=true;renderGame();
   });
   const download=document.createElement('button');download.className='secondary';download.textContent=t('Скачать текущую историю');download.addEventListener('click',exportSave);
@@ -680,7 +738,16 @@ function openPanel(kind) {
   if(kind==='account')return openAccount();
   if(kind==='chapters')return openChapters();
   const content=$('panel-content');content.classList.remove('workshop');content.replaceChildren();
-  if(kind==='game-menu') {
+  if(kind==='release-notes') {
+    $('panel-title').textContent=t('История обновлений');
+    const intro=document.createElement('p');intro.className='release-intro';intro.textContent=t('Что изменилось в игре');content.append(intro);
+    for(const [version,ru,en] of RELEASE_NOTES){
+      const item=document.createElement('article');item.className='release-entry';
+      const heading=document.createElement('h3');heading.textContent=t('Версия ')+version;
+      const description=document.createElement('p');description.textContent=getLanguage()==='en'?en:ru;
+      item.append(heading,description);content.append(item);
+    }
+  } else if(kind==='game-menu') {
     $('panel-title').textContent=t('Пауза');
     const actions=document.createElement('div');actions.className='confirm-actions';
     const menuItems=sceneTest?[['Продолжить игру',()=>panel.close()],['Вернуться в мастерскую',returnFromSceneTest]]:[['Продолжить игру',()=>panel.close()],['Выбрать главу',()=>{panel.close();openChapters();}],['На главный экран',()=>{panel.close();home();}]];
@@ -844,3 +911,22 @@ if(new URL(location.href).searchParams.has('scene'))openPanel('settings');
 let resizeTimer=0;
 window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(view==='game'&&state&&$('dialogue-text').clientWidth!==chunkWidth)renderGame();},200);});
 document.fonts?.ready.then(()=>{if(view==='game'&&state)renderGame();});
+
+// Check again after returning to the game and while it remains open.
+startUpdateChecks({current:APP_VERSION,onUpdate:version=>{
+ const dialog=document.createElement('dialog');dialog.className='update-dialog';dialog.setAttribute('aria-labelledby','update-title');
+ const box=document.createElement('div');box.className='update-dialog-content';
+ const title=document.createElement('h2');title.id='update-title';title.textContent=t('Доступно обновление');
+ const text=document.createElement('p');text.textContent=t('Вышла новая версия игры. Обнови её, чтобы увидеть последние изменения.');
+ const label=document.createElement('p');label.className='update-version';label.textContent=t('Версия ')+version;
+ const error=document.createElement('p');error.className='update-error';error.hidden=true;
+ const update=document.createElement('button');update.className='primary';update.textContent=t('Обновить');
+ const later=document.createElement('button');later.className='secondary';later.textContent=t('Позже');
+ update.addEventListener('click',async()=>{
+  update.disabled=true;later.disabled=true;
+  if(state && !await writeSave(state)){error.textContent=t('Не удалось сохранить прогресс. Попробуй ещё раз или скачай сохранение в настройках.');error.hidden=false;update.disabled=false;later.disabled=false;return;}
+  location.reload();
+ });
+ later.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>dialog.remove());
+ box.append(title,text,label,error,update,later);dialog.append(box);document.body.append(dialog);dialog.showModal();
+}});

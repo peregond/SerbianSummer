@@ -11,6 +11,14 @@ import {makeDocument,withClass,installBrowserStubs} from './fake-dom.mjs';
 installBrowserStubs();
 const catalog=JSON.parse(fs.readFileSync(new URL('../public/names.json',import.meta.url)));
 const dictionary=JSON.parse(fs.readFileSync(new URL('../public/locales/en.json',import.meta.url)));
+const helpReply=beatActionAt(NODES.flat_arrive,3);
+assert.equal(helpReply.kind,'reply');
+assert.deepEqual(helpReply.options.map(option=>option.effect.bankHelp),['guide','helper']);
+assert.equal(rentalRedirect('flat_registration','bank_path',{rentalCast:'new',bankHelp:'guide'}),'bank_plan');
+assert.equal(rentalRedirect('flat_registration','bank_path',{rentalCast:'new',bankHelp:'helper'}),'bank_helper');
+assert.equal(presentationFor(NODES.bank_helper,NODES.bank_helper.pages[1],{}).character,'guest-bank-helper');
+assert.equal(NODES.bank_helper.choices.filter(choice=>choice.effect?.bankChoice).length,3);
+assert.equal(NODES.bank_evening_pause.pages[0].text,NODES.afternoon_invite.pages[1].text,'The existing thought appears before the evening message');
 
 // ---- Bank chapter ----
 const plan=NODES.bank_plan;
@@ -134,8 +142,8 @@ for(const id of ['host_evening','host_old_town','host_terrace','host_terrace_mea
 // The tidy-up of the unpacked suitcase.
 assert.ok(!/Чемодан так и стоит у двери/.test(JSON.stringify(NODES.room_alone.pages)));
 assert.ok(!/чемодан/i.test(NODES.host_coffee_wait.pages[2].text+NODES.host_coffee_lend.pages[2].text));
-assert.match(NODES.night_messages.pages[1].text,/ты только приехал\{a\} в Белград\. Добро пожаловать/);
-assert.match(interpolate(pageText(NODES.night_messages.pages[1],{}),{gender:'female',nameId:'anna'},catalog,'ru'),/только приехала в Белград/);
+assert.match(NODES.night_messages.pages[1].text,/Я Ася, мне дали твой контакт/);
+assert.match(NODES.night_messages.pages[1].text,/помогу тебе с квартирой/);
 assert.ok(/^Во Врачаре/.test(NODES.district_vracar.pages[0].text)&&!/На Врачаре/.test(JSON.stringify(NODES)),'the preposition for Vračar');
 assert.ok(!/Обещаю не обижаться за стены/.test(JSON.stringify(NODES)));
 for(const id of ['housing_quiet','housing_work','housing_compare'])assert.ok(NODES[id]);

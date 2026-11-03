@@ -79,7 +79,10 @@ assert.ok(NODES.flat_contract.choices.length>=3&&NODES.flat_contract.choices.som
 assert.deepEqual(NODES.flat_contract.choices.filter(choice=>choice.next==='flat_signed').map(choice=>choice.tone),['practical']);
 const transfer=Object.values(NODES.flat_signed.actions).find(action=>/залог/.test(action.label));
 assert.equal(transfer.kind,'tap','the deposit transfer is a deliberate tap by the player');
-assert.ok(NODES.flat_contract.pages.some(page=>/Деньги переводи только после подписи/.test(page.text)));
+assert.ok(NODES.flat_contract.pages.some(page=>/Передавай наличные только после подписи и попроси расписку/.test(page.text)));
+assert.match(transfer.label,/наличными/,'The deposit is paid in cash by an explicit action');
+assert.equal(NODES.rental_hub_vuk.choices[2].label,'Предложить выпить кофе на кухне');
+assert.equal(presentationFor(NODES.flat_coffee,NODES.flat_coffee.pages[0],{rentalCast:'new',districtOwner:'vuk'}).emotion,'coffee');
 
 // 5. Decision scene: other districts, the second Dorćol flat, going back.
 const decision=NODES.flat_decision.choices;
@@ -133,20 +136,22 @@ for(const owner of OWNERS)assert.ok(!/\{[^a}]/.test(FLATS[owner].voice[0]));
   pins[1].click();assert.equal(chosen.next,'flat_enter_marko');
   assert.equal(withClass(root,'dialogue').length,0,'no dialogue window on the map screen');
 }
-// 11. The viewing quest: six checks in any order, progress survives a reload, finishing needs all of them.
+// 11. Full-screen viewing: two objects per room, automatic progression, and resume.
 {
-  const doc=makeDocument(),root=doc.createElement('section');const saved=[];let done=0;
-  const dispose=mountViewingQuest(root,{owner:'vuk',mask:0,canRewind:true,onBack(){},onSettings(){},onChange:mask=>saved.push(mask),onComplete:()=>{done++;}});
-  const finish=withClass(root,'viewing-finish')[0];assert.equal(finish.disabled,true);
-  const tabs=withClass(root,'viewing-tab'),targets=withClass(root,'viewing-target');assert.equal(tabs.length,3);assert.equal(targets.length,2);
-  for(const index of [2,0,1]){tabs[index].click();targets[1].click();targets[0].click();targets[0].click();}
-  assert.deepEqual(saved,[0b100000,0b110000,0b110010,0b110011,0b111011,0b111111],'any order, and repeated taps change nothing');
-  assert.equal(finish.disabled,false);finish.click();finish.click();assert.equal(done,1,'finishing happens once');
-  dispose();
-  const again=makeDocument().createElement('section');
-  mountViewingQuest(again,{owner:'vuk',mask:0b001111,canRewind:false,onBack(){},onSettings(){},onChange(){},onComplete(){}});
-  assert.equal(withClass(again,'viewing-finish')[0].disabled,true,'a reload with four checks done still needs the last two');
-  assert.ok(withClass(again,'viewing-tab').filter(tab=>tab.dataset.done==='true').length===2);
+  const doc=makeDocument(),root=doc.createElement('section');const saved=[];let done=0,scheduled=[];
+  const schedule=fn=>{scheduled.push(fn);return scheduled.length;},cancel=()=>{};
+  const dispose=mountViewingQuest(root,{owner:'vuk',mask:0,canRewind:true,onBack(){},onSettings(){},onChange:mask=>saved.push(mask),onComplete:()=>{done++;},schedule,cancel});
+  assert.equal(withClass(root,'viewing-tab').length,0,'No manual room tabs');
+  const spots=withClass(root,'viewing-object');assert.equal(spots.length,2);
+  spots[1].click();assert.match(withClass(root,'viewing-full-art')[0].src,/water-shower-v1/,'Tapping the shower displays running water');
+  spots[0].click();assert.match(withClass(root,'viewing-full-art')[0].src,/water-tap-v1/,'Tapping the tap displays running water');assert.equal(scheduled.length,1);scheduled.shift()();
+  spots[0].click();spots[1].click();scheduled.shift()();
+  spots[1].click();spots[0].click();scheduled.shift()();
+  assert.deepEqual(saved,[2,3,19,51,59,63],'Both objects work in either order and retain the existing save bits');
+  assert.equal(done,1,'The final room finishes automatically');dispose();
+  const again=makeDocument().createElement('section');let next=[];
+  mountViewingQuest(again,{owner:'vuk',mask:0b110011,canRewind:false,onBack(){},onSettings(){},onChange(){},onComplete(){},schedule:fn=>{next.push(fn);return 1;},cancel(){}});
+  assert.equal(withClass(again,'quest-title')[0].textContent,'Окна','Reload resumes at the first unfinished room');
 }
 // 12. Gendered forms of the hero survive in the new scenes.
 for(const id of ['flat_contract','flat_signed','flat_move_day'])for(const page of NODES[id].pages)assert.ok(!/\{(?!a\}|districtHost\}|host\})[^}]*\}/.test(page.text)||Object.hasOwn(dictionary,page.text),id);

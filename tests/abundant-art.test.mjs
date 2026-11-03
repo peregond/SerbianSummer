@@ -1,3 +1,4 @@
+import {MOBILE_CARRIERS} from '../public/mobile-carriers.js';
 import {RENTAL_NAMES} from '../public/rental-people.js';
 import {EPISODIC_CAST} from '../public/episodic-cast.js';
 import assert from 'node:assert/strict';
@@ -12,6 +13,7 @@ const looks=catalog.people.flatMap(person=>person.looks);
 assert.equal(looks.length,14,'Eleven people, Nikola after work and two additional police outfits');
 for(const look of looks){assert.deepEqual(look.missing,[],look.name);assert.deepEqual(look.missingInGame,[],look.name);assert.equal(look.activeCount,8,look.name);}
 for(const person of Object.keys(CHARACTER_SPRITES)){
+ if(MOBILE_CARRIERS.some(carrier=>carrier.portrait===person)){for(const mood of ['friendly','explaining'])assert.ok(files.includes(CHARACTER_SPRITES[person][mood].file+'.webp'));continue;}
  if(Object.hasOwn(RENTAL_NAMES,person))continue; // Rental portraits are works in progress, checked by rental-workshop.test.mjs.
  if(Object.hasOwn(EPISODIC_CAST,person)){
   assert.deepEqual(Object.keys(CHARACTER_SPRITES[person]),['friendly'],person+': supporting roles need a base portrait');
@@ -24,7 +26,7 @@ for(const person of Object.keys(CHARACTER_SPRITES)){
 assert.equal(catalog.entries.find(e=>e.file==='workshop/milos-masked-friendly-v2-draft.webp').status,'active','A registered draft must not be labelled disconnected');
 for(const[bg,ids]of Object.entries(EXTRA_BACKGROUND_SCENES))for(const id of ids){
  const pageIndex=PAGE_BACKGROUNDS.find(p=>p[0]===id&&p[1]===0)?1:0;
- const frame=presentationFor(NODES[id],NODES[id].pages[pageIndex]);assert.equal(frame.bg,bg,id);assert.equal(frame.location,BACKGROUNDS[bg].label,id+' location must follow the restaged image');
+ const page=NODES[id].pages[pageIndex],frame=presentationFor(NODES[id],page),expected=page.bg??bg;assert.equal(frame.bg,expected,id);assert.equal(frame.location,BACKGROUNDS[expected].label,id+' location must follow the restaged image');
 }
 for(const[id,index,bg]of PAGE_BACKGROUNDS)assert.equal(presentationFor(NODES[id],NODES[id].pages[index]).bg,bg,id+':'+index);
 for(const bg of Object.keys(EXTRA_BACKGROUNDS))assert.ok(files.includes(bg+'.webp'),bg);

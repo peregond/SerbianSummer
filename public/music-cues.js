@@ -6,7 +6,7 @@ const PLACE_CUES={
  'dorcol-apartment':'flat','vracar-apartment':'flat','new-belgrade-apartment':'flat',
  'riverside-evening':'evening','belgrade-courtyard-evening-v1':'evening','skadarlija-evening-v1':'evening','skadarlija-kafana-v1':'evening',
  'knez-mihailova-evening-v1':'evening','sava-branko-promenade-v1':'evening','asya-home-evening':'evening',
- 'zemun-cobbles-v1':'walk','zemun-gardos-v1':'walk','zemun-quay-v1':'walk','belgrade-kiosk-street':'walk','belgrade-park-bench':'walk',
+ 'zemun-cobbles-v1':'walk','zemun-gardos-v2':'walk','zemun-gardos-v1':'walk','zemun-quay-v1':'walk','belgrade-kiosk-street':'walk','belgrade-park-bench':'walk',
  'belgrade-room-night':'night'
 };
 // Chapters whose scenes follow the place-based cues above; later chapters keep the old rule until they get music of their own.

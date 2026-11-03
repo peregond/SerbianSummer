@@ -17,6 +17,8 @@ for(const [id,node] of Object.entries(NODES)){const key=ambienceFor(node);assert
 assert.equal(ambienceFor(NODES.rain_break),'rain');assert.equal(ambienceFor(NODES.quick_arrival),'airport');
 assert.equal(ambienceFor({chapterId:'day-8',bg:'riverside-evening',time:'20:00'}),null,'Later chapters stay silent for now');
 assert.equal(ambienceFor({chapterId:'districts',bg:'ada-lake-v1',time:'21:05'}),'river');assert.equal(ambienceFor({chapterId:'districts',bg:'first-room',time:'22:00'}),'night');
+assert.equal(ambienceFor({chapterId:'districts',bg:'ada-melon-cafe-v1',time:'21:40'}),'cafe','The beach cafe has cafe ambience instead of inheriting the water loop');
+assert.equal(ambienceFor({...NODES.ada_home,bg:'belgrade-room-night'}),'night','A page that leaves the lake uses its actual background');
 assert.equal(stingFor('flat_signed'),'signed');assert.equal(stingFor('morning_start'),null);
 // Playback follows the music switch, the volume and page visibility.
 const made=[];
@@ -31,6 +33,8 @@ assert.equal(playSting('key'),true);assert.ok(made[1].src.endsWith('key-sting.m4
 syncSfx({hidden:true});assert.ok(made.every(a=>a.paused));assert.equal(playSting('key'),false);
 syncSfx({hidden:false});assert.equal(made[0].paused,false);
 setAmbience(null);for(let i=0;i<40;i++)intervals.forEach(fn=>fn());assert.equal(made[0].paused,true,'Ambience fades out and pauses');
+setAmbience('river');const river=made.find(a=>a.src.endsWith('river-amb.m4a'));for(let i=0;i<40;i++)intervals.forEach(fn=>fn());assert.equal(river.paused,false);
+setAmbience('cafe');for(let i=0;i<40;i++)intervals.forEach(fn=>fn());assert.equal(river.paused,true,'Water fades out after moving to another location');
 syncSfx({enabled:false});assert.equal(playSting('ding'),false);
 syncSfx({enabled:true});setSfxVolume(.2);assert.equal(playSting('ding'),true);assert.ok(Math.abs(made.find(a=>a.src.endsWith('ding-sting.m4a')).volume-.17)<.001,'Sound volume is independent of the music volume');
 console.log('Sound effects: seven ambience loops and eight stingers exist, map to real scenes and follow the music switch.');

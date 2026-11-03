@@ -22,7 +22,7 @@ export const LEGACY_PRELUDE=[
 export const LEGACY_DAYS=[
  {n:1,id:'districts',title:'Район для жизни',start:'morning_start',stage:'arrival',status:'written',description:'Карта Белграда, квартира, первый план по счёту и работе и вечер после.'},
  {n:2,id:'work',title:'Счёт и своё дело',start:'third_morning',stage:'arrival',status:'written',description:'Визит в банк, знакомство с Асей и Лукой, рабочее направление.'},
- {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'written',description:'Местная связь, проездная карта и обмен денег.'},
+ {n:3,id:'day-3',title:'Связь, транспорт, деньги',start:'d3_start',stage:'arrival',status:'written',description:'Местная связь, городской транспорт и обмен денег.'},
  {n:4,id:'day-4',title:'Регистрация места пребывания',start:'d4_start',stage:'arrival',status:'written',description:'Подтверждение регистрации и заявление хозяина о жилье.'},
  {n:5,id:'day-5',title:'Сколько у меня дней',start:'d5_start',stage:'clock',status:'written',description:'Срок пребывания без заявления и тридцатый день как дедлайн.'},
  {n:6,id:'day-6',title:'Выбор основания',start:'d6_start',stage:'basis',status:'written',description:'На каком основании просить временное проживание.'},
@@ -54,7 +54,7 @@ export const LEGACY_DAYS=[
 const EN={
  1:['A District for Living','Belgrade’s map, a flat, a first plan for the account and work, and an evening afterwards.'],
  2:['An Account and My Own Work','A visit to the bank, meeting Asya and Luka, a working direction.'],
- 3:['Phone, Transport, Money','Local mobile service, a transport card and changing money.'],
+ 3:['Phone, Transport, Money','Local mobile service, city transport and changing money.'],
  4:['Registering My Address','Confirmation of registration and the owner’s statement about the housing.'],
  5:['How Many Days I Have','The stay allowed without an application, and day thirty as a deadline.'],
  6:['Choosing a Basis','On what basis to ask for temporary residence.'],

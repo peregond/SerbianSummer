@@ -10,12 +10,12 @@ for(const [gender,list] of Object.entries(LOOKS)){
  assert.equal(list.length,5,gender);
  for(const look of list){
   ids.push(look.id);assert.equal(lookFor(gender,look.id),look);assert.equal(lookFor(gender==='male'?'female':'male',look.id),null,'A look belongs to one gender');
-  const svg=avatarMarkup(gender,look.id);assert.match(svg,/^<svg[^>]*viewBox="0 0 64 64"/);assert.match(svg,new RegExp(look.skin));assert.ok(look.label&&look.image===null);
+  const portrait=avatarMarkup(gender,look.id);assert.match(portrait,/^<img /);assert.ok(look.label&&look.image);assert.ok(fs.existsSync(new URL('../public/assets/heroes/'+look.image,import.meta.url)),look.id+' portrait exists');
  }
  assert.equal(defaultLook(gender),list[0].id);
 }
 assert.equal(new Set(ids).size,10);assert.equal(avatarMarkup('male','nobody'),'');assert.equal(defaultLook('x'),null);
-LOOKS.male[0].image='x.webp';assert.match(avatarMarkup('male','m1',{size:40}),/^<img[^>]*src="\.\/assets\/heroes\/x\.webp"[^>]*width="40"/,'A set image replaces the placeholder');LOOKS.male[0].image=null;
+const portrait=LOOKS.male[0].image;LOOKS.male[0].image=null;assert.match(avatarMarkup('male','m1'),/^<svg/,'A vector fallback is still available');LOOKS.male[0].image=portrait;
 const prompts=JSON.parse(fs.readFileSync(new URL('../artwork/hero-looks/PROMPTS.json',import.meta.url)));
 assert.deepEqual(prompts.looks.map(l=>l.id).sort(),[...ids].sort());
 // Name matching: prefix first, then inside the name; ё/е and case ignored; only catalogue names; nothing for an empty query.

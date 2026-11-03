@@ -14,7 +14,7 @@ for (const [bg, ids] of Object.entries(BACKGROUND_SCENES)) {
   for (const id of ids) {
     for (const district of ['dorcol', 'vracar', 'newbelgrade']) {
       for (const page of NODES[id].pages) {
-        assert.equal(presentationFor(NODES[id], page, { district, districtOwner: 'jelena', host: 'dragan' }).bg, bg, id);
+        assert.equal(presentationFor(NODES[id], page, { district, districtOwner: 'jelena', host: 'dragan' }).bg, page.bg ?? bg, id);
       }
     }
   }
