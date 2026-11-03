@@ -1,5 +1,6 @@
 // Newest first. Add a player-facing entry whenever APP_VERSION changes.
 export const RELEASE_NOTES = [
+ ['0.17.25','В фантазиях в аэропорту снова появляются фон и образы Николы.','Nikola’s airport daydreams show their background and portraits again.'],
  ['0.17.24','Исправлена проверка обновлений при запуске игры.','Fixed the update check when the game starts.'],
  ['0.17.23','Новая сюжетная структура на пятнадцать дней, городские главы и оформление белого картона объединены в одной версии.','The fifteen-day story, city chapters and white card quest are together in one release.'],
  ['0.17.22','На следующий день после переезда хозяин помогает оформить белый картон в новой мини-игре с документами.','The day after moving in, the landlord helps obtain a white card in a new paperwork mini-game.'],

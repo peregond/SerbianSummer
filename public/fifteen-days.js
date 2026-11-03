@@ -26,7 +26,8 @@ export function rebuildFifteenDays({NODES:N,JOURNAL:J,CHARACTER_SPRITES:sprites}
  // Replace old explicit fantasies and night fragments on this route with brief non-explicit beats.
  for(const id of ['nikola_dream_cream','nikola_dream_coffee','nikola_daydream','nikola_daydream_early'])if(N[id]){
   const target=id==='nikola_daydream'||id==='nikola_dream_coffee'?'nikola_phone':'nikola_questions';
-  replace(id,[note('На секунду я представляю наше следующее свидание и улыбаюсь. Знакомство только начинается.','For a moment I picture our next date and smile. We are only beginning to know each other.')],target,{bg:'bakery'});
+  const emotion=id==='nikola_dream_cream'?'dream-cream':id==='nikola_dream_coffee'?'dream-coffee':'dream-confident';
+  replace(id,[note('На секунду я представляю наше следующее свидание и улыбаюсь. Знакомство только начинается.','For a moment I picture our next date and smile. We are only beginning to know each other.')],target,{bg:'bakery',character:'nikola',daydream:true,emotion});
  }
  N.road_start.pages[0]=note('После короткой гостиничной ночи у аэропорта я еду к временному жилью. Хозяин ждёт меня к вечеру; адрес уже сохранён.','After a short hotel night near the airport I head to the temporary home. The host expects me in the evening; the address is saved.');
  // Day 2: keep the host choice and room/bedtime interactions. Registration happens before the evening closes.

@@ -1,6 +1,6 @@
 import {extendTransitStory} from './transit-story.js?v=0.17.23';
 import {extendMobileCarriers} from './mobile-carriers.js?v=0.17.23';
-import {rebuildFifteenDays} from './fifteen-days.js?v=0.17.2';
+import {rebuildFifteenDays} from './fifteen-days.js?v=0.17.25';
 import {extendRentalStory,registerRentalBeats} from './rental-story.js?v=0.17.2';
 import {extendHousing} from './housing-story.js?v=0.17.2';
 import {extendBank} from './bank-story.js?v=0.17.2';
