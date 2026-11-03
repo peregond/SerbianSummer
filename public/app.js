@@ -31,7 +31,7 @@ import {choiceVisible,applyRomanceEffect,nameOf,SLOTS} from './romance.js?v=0.17
 import {CHAPTERS,chapterFor,readChapterMarks,rememberChapter,restartChapter,jumpToChapter,continuationFor} from './chapters.js?v=0.17.2';
 import {drawBeatAction} from './beat-action.js?v=0.17.23';
 import {drawAccountForm,drawRecoveryCode} from './account-form.js?v=0.17.23';
-import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.23';
+import { NODES, JOURNAL, START, STORY_VERSION, BACKGROUNDS, CHARACTER_SPRITES, CHOICE_TONES, beatActionAt, presentationFor, pageText, resolveStoryText, interpolate } from './story.js?v=0.17.25';
 import { loadSave, writeSave, readLocal, writeLocal } from './storage.js';
 import {snapVolume,stepperMarkup,bindStepper} from './volume-steps.js?v=0.17.2';
 import {clampSize,textLines,textSizeMarkup,bindTextSize} from './text-size.js?v=0.17.2';
@@ -49,7 +49,7 @@ import { rememberStep, rewindStep, readRewind } from './rewind.js?v=0.4.1';
 import {dialogueVoice,logVoice,speakerIdentity} from './dialogue-voice.js?v=0.17.2';
 import {appendChoiceContents} from './choice-ui.js?v=0.17.23';
 import {mountBaggageInteraction} from './interaction.js?v=0.17.2';
-import {APP_VERSION} from './release.js?v=0.17.24';
+import {APP_VERSION} from './release.js?v=0.17.25';
 import {startUpdateChecks} from './update-check.js?v=0.17.24';
 
 const $ = id => document.getElementById(id);
