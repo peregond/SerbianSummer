@@ -19,3 +19,15 @@ test('compatible nights require a deliberate choice and return to the current da
   assert.equal(NODES[`adult_evening${day}_${person}_morning`].next,`route${day}_close`);
  }
 });
+
+test('the short route uses finished art and preserves the masked identity',()=>{
+ for(const person of ['nikola','milica','dragan','jelena','asya','luka','ana','stefan','marko','lazar','strahinya','milos']){
+  for(const day of [6,15]){
+   const node=NODES[`evening${day}_${person}_fade`];
+   assert.equal(node.bg,person==='nikola'?'nikola-afterglow-smile-v1':`${person}-night-afterglow-v1`);
+   assert.equal(node.adult,true);
+   assert.equal(node.skipTo,`route${day}_close`);
+  }
+ }
+ assert.notEqual(NODES.evening6_vuk_fade.bg,'vuk-night-afterglow-v1');
+});

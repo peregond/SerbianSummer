@@ -30,4 +30,15 @@ export function integrateAdultEvenings({NODES,JOURNAL,BACKGROUNDS,n,scene}) {
   }
   ask.choices.splice(1,0,{...accepted,label:T('Остаться вместе · подробная сцена','Stay together · detailed scene'),next:`${prefix}_home`,when:{gender:'male'}});
  }
+ // Show completed, identity-checked afterglows on the shorter consensual
+ // route as well. Do not use unfinished storyboards or Vuk's mismatched face.
+ const completed=['nikola','milica','dragan','jelena','asya','luka','ana','stefan','marko','lazar','strahinya','milos'];
+ for(const person of completed){
+  const art=person==='nikola'?'nikola-afterglow-smile-v1':`${person}-night-afterglow-v1`;
+  if(person==='milos')BACKGROUNDS[art]={label:T('ВЕЧЕР · ПОСЛЕ','EVENING · AFTER'),description:T('Человек в балаклаве отдыхает','The masked person rests'),file:art,position:'50% 35%',optional:true};
+  for(let day=1;day<=15;day++){
+   const node=NODES[`evening${day}_${person}_fade`];
+   if(node){node.bg=art;node.portrait=false;}
+  }
+ }
 }

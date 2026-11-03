@@ -26,7 +26,7 @@ import {SLOTS,identityOf,SPRITES,callsByShortName} from './romance.js?v=0.17.2';
 import {registerNikolaRedesign} from './nikola-redesign.js?v=0.16.1';
 import {extendFourthChapter} from './chapter-four.js?v=0.17.2';
 import {extendHostCoffee} from './host-coffee.js?v=0.17.2';
-import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.17.3';
+import {resolvePeople,interpolateText,getLanguage} from './i18n.js?v=0.17.4';
 import {assignChapters,LEGACY_CHAPTERS} from './chapters.js?v=0.17.2';
 import {extendNextChapter} from './chapter-three.js?v=0.17.2';
 import {extendNikolaEarlyNight} from './nikola-early-night.js?v=0.17.2';
@@ -34,7 +34,7 @@ import {extendFastPrologue} from './prologue-fast.js?v=0.17.2';
 import {editPrologue} from './prologue-edit.js?v=0.17.2';
 import {registerPrologueArt,SEATED_MILICA_ART} from './prologue-art.js?v=0.16.1';
 import {applyMobilePacing,beatActionAt} from './mobile-pacing.js?v=0.17.2';
-import {integrateAdultEvenings} from './route-adult-integration.js?v=0.17.3';
+import {integrateAdultEvenings} from './route-adult-integration.js?v=0.17.4';
 export {beatActionAt};
 import {extendChapter} from './chapter-one.js?v=0.17.2';
 // Original story for the playable prototype. Text is kept separate from the player.
